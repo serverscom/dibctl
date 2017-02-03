@@ -140,7 +140,6 @@ class OSClient(object):
     @staticmethod
     def create_session(auth_version, auth_data, insecure, timeout=30):
         verify = not insecure
-        print auth_data, auth_version
         if auth_version == 'v2':
             auth = identity.v2.Password(**auth_data)
         elif auth_version == 'v3':

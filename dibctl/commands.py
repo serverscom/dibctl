@@ -6,6 +6,7 @@ import sys
 import osclient
 import do_tests
 
+
 class PrematureExitError(SystemExit):
     pass
 
@@ -113,7 +114,6 @@ class BuildCommand(GenericCommand):
 
     def _run(self):
         code = self.dib.run()
-        #import pdb; pdb.set_trace()
         if code != 0:
             print("Error: Failed to build image '%s', exit code is %s" % (self.args.imagelabel, code))
         else:
@@ -164,7 +164,7 @@ class TestCommand(GenericCommand):
         try:
             status = dt.run_all_tests()
         except do_tests.TestError as e:
-            print "Error while testing: %s" % e
+            print("Error while testing: %s" % e)
             return 1
         if status:
             return 0
@@ -197,13 +197,13 @@ class UploadCommand(GenericCommand):
             self.public,
             meta=self.meta
         )
-        print ("Image ''%s' uploaded to %s as %s" % (self.name, self.upload_env['os_auth_url'], self.uuid) )
+        print("Image ''%s' uploaded to %s as %s" % (self.name, self.upload_env['os_auth_url'], self.uuid))
 
     def obsolete_old_images(self):
         candidates = self.os.older_images(self.name, self.uuid)
         for img in candidates:
             obsolete_image = self.os.mark_image_obsolete(self.name, img)
-            print "Obsoleting %s" % obsolete_image.id
+            print("Obsoleting %s" % obsolete_image.id)
 
     def _command(self):
         self._prepare()
@@ -232,7 +232,7 @@ class ObsoleteCommand(GenericCommand):
     def _command(self):
         img = self.os.get_image(self.args.uuid)
         self.os.mark_image_obsolete(img.name, img)
-        print "Obsoleting %s (%s)" % (img.id, img.name)
+        print("Obsoleting %s (%s)" % (img.id, img.name))
 
 
 class TransferCommand(GenericCommand):
@@ -284,8 +284,10 @@ def main(line=None):
         code = -1
     sys.exit(code)
 
+
 def init():
     if __name__ == "__main__":
         main()
+
 
 init()

@@ -24,7 +24,7 @@ class Config (object):
 
     def __init__(self, config_file=None, overrides={}):
         self.config_file = self.set_conf_name(config_file)
-        print ("Using %s" % self.config_file)
+        print("Using %s" % self.config_file)
         self.config = self.read_and_validate_config(self.config_file)
         self._apply_overrides(**overrides)
 
@@ -64,12 +64,13 @@ class Config (object):
 
 class ImageConfig(Config):
 
-    DEFAULT_CONFIG_NAME = "images.yaml"  #TODO RENAME TO iamge.yaml
+    DEFAULT_CONFIG_NAME = "images.yaml"  # TODO RENAME TO iamge.yaml
 
     def _apply_overrides(self, filename=None):
         if filename:
             for img_key in self.config:
                 self.config[img_key].update(filename=filename)
+
 
 # This class is not used by itself
 class EnvConfig(Config):
@@ -91,8 +92,10 @@ class EnvConfig(Config):
         for env_key in self.config:
             self.config[env_key].update(env_override)
 
+
 class TestEnvConfig(EnvConfig):
     DEFAULT_CONFIG_NAME = "test.yaml"
+
 
 class UploadEnvConfig(EnvConfig):
     DEFAULT_CONFIG_NAME = "upload.yaml"

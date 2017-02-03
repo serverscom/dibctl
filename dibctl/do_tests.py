@@ -80,7 +80,6 @@ class DoTests(object):
             raise BadTestConfigError("No known runner names found in %s" % str(test))
         return name, runner, path
 
-
     def run_test(self, test, instance_config, vars):
         runner_name, runner, path = self.get_runner(test)
         print("Running tests %s: %s." % (runner_name, path))

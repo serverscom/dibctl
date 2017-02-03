@@ -1,8 +1,6 @@
 import sys
 import pytest
-import os
 import tempfile
-import timeout
 
 
 class DibCtlPlugin(object):
@@ -21,14 +19,8 @@ class DibCtlPlugin(object):
             import testinfra
             self.testinfra = testinfra
         except ImportError:
-            print "Warning: no testinfra installed, ssh_backend fixture is unavaiable"
+            print("Warning: no testinfra installed, ssh_backend fixture is unavaiable")
             self.testinfra = None
-
-#    def pytest_runtest_setup(self, item):#
-        #self.ssh['config'] = self.create_ssh_config()
-
-    #def pytest_runtest_teardown(self, item):
-    #    os.remove(self.ssh['config'])
 
     def create_ssh_config(self):
         f = tempfile.NamedTemporaryFile(prefix="dibtest_ssh_config_", delete=False)
@@ -78,12 +70,11 @@ class DibCtlPlugin(object):
     def wait_for_port(self, request):
         def wfp(port=None, timeout=None):
             if port is None:
-                port = 22  ## FIXME From image configuration!!!!
+                port = 22  # FIXME From image configuration!!!!
             if timeout is None:
-                timeout = 60 ## FIXME from image configuration!!!!
+                timeout = 60  # FIXME from image configuration!!!!
             return self.tos.wait_for_port(port, timeout)
         return wfp
-
 
     @pytest.fixture
     def ssh_backend(self, request):
@@ -104,7 +95,7 @@ class DibCtlPlugin(object):
     @pytest.fixture
     def port(self, request):
         raise NotImplementedError
-        return {'ip':0, 'port': 0, 'timeout': 0, delay:0.0}
+        return {'ip': 0, 'port': 0, 'timeout': 0, 'delay': 0.0}
 
 
 def runner(path, tos, environment_variables, timeout_val, continue_on_fail):
@@ -113,7 +104,7 @@ def runner(path, tos, environment_variables, timeout_val, continue_on_fail):
     sys.stdout.flush()
     if not continue_on_fail:
         cmdline.append('-x')
-    result =  pytest.main(cmdline, plugins=[dibctl_plugin])
+    result = pytest.main(cmdline, plugins=[dibctl_plugin])
     sys.stdout.flush()
     if result == 0:
         return True

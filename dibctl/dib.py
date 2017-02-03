@@ -4,12 +4,23 @@ import os
 import sys
 import pprint
 
+
 class NoElementsError(IndexError):
     pass
 
 
 class DIB():
-    def __init__(self, filename, elements, arch="amd64", exec_path=None, offline=False, tracing=False, additional_options=[], env={}):
+    def __init__(
+        self,
+        filename,
+        elements,
+        arch="amd64",
+        exec_path=None,
+        offline=False,
+        tracing=False,
+        additional_options=[],
+        env={}
+    ):
         if not elements:
             raise NoElementsError("No elements to build")
         self.elements = elements

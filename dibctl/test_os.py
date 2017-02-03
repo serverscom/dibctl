@@ -8,13 +8,13 @@ import os
 import json
 import tempfile
 
+
 class TimeoutError(EnvironmentError):
     pass
 
+
 class InstanceError(EnvironmentError):
     pass
-
-
 
 
 class TestOS(object):
@@ -149,7 +149,7 @@ class TestOS(object):
                 else:
                     print("Not removing %s." % name)
         except Exception as e:
-            print("Error while clear up %s: %s" %(name, e))
+            print("Error while clear up %s: %s" % (name, e))
 
     def cleanup_instance(self):
         self._cleanup(
@@ -190,18 +190,16 @@ class TestOS(object):
     def error_handler(self, signum, frame, timeout=True):
         if timeout:
             print("Timeout!")
-        print ("Clearing up due to error")
+        print("Clearing up due to error")
         self.cleanup()
         if timeout:
             raise TimeoutError("Timeout")
-
 
     def report_if_fail(self):
         if self.report and self.os_instance and not self.delete_instance:
             print("Instance %s is not removed. Please debug and remove it manually." % self.os_instance.id)
             print("Instance ip is %s" % self.ip)
             print("Private key file is %s" % self.os_key_private_file)
-
 
     def __enter__(self):
         try:
@@ -252,7 +250,6 @@ class TestOS(object):
     def network(self):
         return self.os_instance.interface_list()
 
-
     def wait_for_port(self, port=22, timeout=60):
         '''check if we can connect to given port. Wait for port
            up to timeout and then return error
@@ -263,8 +260,8 @@ class TestOS(object):
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # add source IP
             result = sock.connect_ex((self.ip, port))
             if result == 0:
-                time.sleep(1)  # in many cases there is a race between port
-                               # become availabe and actual service been available
+                time.sleep(1)   # in many cases there is a race between port
+                # become availabe and actual service been available
                 print("Instance accepts connections on port %s" % port)
                 return True
             time.sleep(3)
