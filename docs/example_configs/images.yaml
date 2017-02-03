@@ -1,0 +1,26 @@
+xenial:
+  filename: xenial.img.qcow2
+  glance:
+    name: 'lab'
+    upload_timeout: 900
+    properties:
+     display_priority: "4"
+     allowed_flavors: "[3,4,5,6]"
+    public: False
+  dib:
+   environment_variables:
+      DIB_APT_REPO: mirror.servers.com
+      DIB_NTP: 192.168.8.8
+      elements:
+        - ubuntu
+  tests:
+     wait_for_port: 22
+     port_wait_timeout: 30
+     environment_name: example_env
+     environment_variables:
+      ssh_username: cloud-user
+     tests_list:
+      - shell: docs/tests_examples/shell_examples.d/
+        timeout: 300
+      - pytest: docs/tests_examples/pytest_examples/example.py
+        timeout: 300

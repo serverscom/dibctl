@@ -1,0 +1,40 @@
+example_env:
+  ca_cert_path: /etc/ssl/ca
+  insecure: True
+  keystone:
+    api_version: 2
+    username: amarao
+    #password: secret
+    project_name: 'demotenant'
+    user_domain_id: 'default'
+    project_domain_id: 'default'
+    auth_url: https://auth.servers.nl01.cloud.servers.com:5000/v2.0
+  nova:
+    api_version: 2
+    create_timeout: 10
+    wait_for_active_timeout: 900
+    flavor: "30"
+    nics:
+     - net-id: 'fe2acef0-4383-4432-8fca-f9e23f835dd5'
+       fixed-ip: '192.168.0.1'
+    security_group:
+     - default
+     - allow_everything
+    availability_zone: nova
+    user-data: 'foo=bar'
+    user-data-file: /user/data/from/local/machine/where/dibctl/runs
+    hint:
+      key1: value1
+      key2: value2
+    config-drive: true
+  neutron:
+    is: not_implemented_yet
+  glance:
+    upload_timeout: 1666
+    api_version: 1 # 2 is not yet supported
+    property:
+      key1: value1
+      key2: value2
+    tag:
+     - tag1
+  main_nic_regexp: internet
