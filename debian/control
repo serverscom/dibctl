@@ -1,0 +1,22 @@
+Source: dibctl
+Maintainer: George Shuklin <george.shuklin@gmail.com>
+Section: contrib/python
+Priority: optional
+Build-Depends: python-setuptools, python-all, debhelper, dh-python, python-yaml, python-pytest, python-mock, python-glanceclient, python-keystoneclient, python-novaclient, python-testinfra, python-pytest-timeout
+X-Python-Version: >= 2.7
+Standards-Version: 3.9.8
+Homepage: https://github.com/amarao
+Vcs-Browser: https://github.com/amarao
+
+Package: python-dibctl
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, python-pkg-resources, python-diskimage-builder, python-glanceclient, python-keystoneclient, python-novaclient
+Recommends: python-testinfra, python-pytest-timeout
+Description: Diskimage-builder management utility
+ Dibctl allows one to manage images, integration tests,
+ uploads and rotation of older images.
+ It uses diskimage-builder to build images and provide
+ framework for running freshly-build images in specified
+ Openstack environments, uploading image with proper
+ metadata, marking as obsolete older versions and
+ removing unused obsolete images.
