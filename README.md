@@ -13,6 +13,38 @@ Image lifecycle
 BUILD -> TEST -> UPLOAD -> OBSOLETE -> ROTATE
 
 
+Configuration
+-------------
+There are three important conceptions in Dibctl:
+images, test environments and upload environments.
+Each of them have separate configuration file.
+
+## Images.yaml
+This file describes how to build image, which
+name and medata it should have in glance during upload,
+which *test_environment* to use to test this image,
+which tests should be ran during test stage.
+
+## test.yaml
+This file describes test environments. They may be
+referenced by images in `image.yaml`, or forced to
+be used during test from command line.
+It contains all openstack information for test
+purposes:
+- Where to upload image for test (OS credentials)
+  (images are upload for test independently from
+   actual 'upload' stage)
+- Which flavor, network(s), etc to use
+
+## upload.yaml
+This file contains configuration for upload.
+Each entry describes credentials and connection
+options for one openstack installation.
+
+During upload image uploaded to a given upload
+environemnt with metadata, name and properties
+specified in the images.yaml.
+
 
 Configs
 -------
