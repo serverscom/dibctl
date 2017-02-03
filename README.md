@@ -1,6 +1,18 @@
-[1. Elements are not images!
-2. Image configuration - separate repository
-3. Each image is separate entity (file or element in the dict):
+Dibctl
+------
+
+Dibctl is an automation software indendent to help with configuring
+diskimage-builder, maintain, test and upload images in consistent way.
+
+This readme is under construction, as well, as software itself.
+
+
+Image lifecycle
+---------------
+
+BUILD -> TEST -> UPLOAD -> OBSOLETE -> ROTATE
+
+
 
 Configs
 -------
