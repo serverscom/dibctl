@@ -17,7 +17,7 @@ class InstanceError(EnvironmentError):
     pass
 
 
-class TestOS(object):
+class PrepOS(object):
 
     'Provides test-specific image/instance/keypair with timeouts and cleanup at errors'
     LONG_OS_TIMEOUT = 360

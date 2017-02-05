@@ -1,4 +1,4 @@
-import test_os
+import prepare_os
 import pytest_runner
 import shell_runner
 
@@ -51,14 +51,14 @@ class DoTests(object):
             self.tests_list = []
         self.test_env = test_env
 
-    def check_if_keep_stuff_after_fail(self, tos):
+    def check_if_keep_stuff_after_fail(self, prep_os):
         if self.keep_failed_instance:
-            tos.delete_instance = False
-            tos.delete_keypair = False
-            tos.report = True
+            prep_os.delete_instance = False
+            prep_os.delete_keypair = False
+            prep_os.report = True
             print("Do not delete instance for failed tests")
         if self.keep_failed_image:
-            tos.delete_image = False
+            prep_os.delete_image = False
             print("Do not delete image for failed tests")
 
     @staticmethod
@@ -102,23 +102,23 @@ class DoTests(object):
             self.test_env["flavor"],
             self.test_env["os_auth_url"]
         ))
-        with test_os.TestOS(
+        with prepare_os.PrepOS(
             self.image,
             self.test_env,
             override_image=self.override_image_uuid,
             delete_image=self.delete_image
-        ) as tos:
+        ) as prep_os:
             port = self.image['tests'].get('wait_for_port', self.DEFAULT_PORT)
             port_wait_timeout = self.image['tests'].get('port_wait_timeout', self.DEFAULT_PORT_WAIT_TIMEOUT)
             if port:
-                port_available = tos.wait_for_port(port, port_wait_timeout)
+                port_available = prep_os.wait_for_port(port, port_wait_timeout)
                 if not port_available:
-                    self.check_if_keep_stuff_after_fail(tos)
+                    self.check_if_keep_stuff_after_fail(prep_os)
                     was_error = True
                     raise TestError("Timeout while waiting instance to accept connection on port %s." % port)
             for test in self.tests_list:
-                if self.run_test(test, tos, self.environment_variables) is not True:
-                    self.check_if_keep_stuff_after_fail(tos)
+                if self.run_test(test, prep_os, self.environment_variables) is not True:
+                    self.check_if_keep_stuff_after_fail(prep_os)
                     was_error = True
                     break
             if was_error:
