@@ -10,6 +10,58 @@ import re
 from functools import partial
 import requests
 import simplejson
+import copy
+
+
+class UnknownPolicy(ValueError):
+    pass
+
+
+# all those '_smart' functions should be somewhere in config part...
+def _smart_merge(target, key, orig1, orig2, policy='second'):
+    if key not in orig1 and key not in orig2:
+        return
+    v1 = orig1.get(key, None)
+    v2 = orig1.get(key, None)
+    if policy == 'first':  # orig1 have priority over orig2
+        if key in orig1:
+            target[key] = v1
+        elif key in orig2:
+            target[key] = v2
+    elif policy == 'second':  # orig2 have priority over orig1
+        if key in orig2:
+            target[key] = v2
+        elif key in orig1:
+            target[key] = v1
+    elif policy == 'mergelist':  # for lists
+        target[key] == orig1.get(key, []) + orig2.get(key, [])
+    elif policy == 'mergedict':  # for dicts
+        target[key] = copy.deepcopy(orig1.get(key, {}))
+        target[key].update(orig2.get(key, {}))
+    elif policy == 'max':  # (num types only), use the maximum value
+        target[key] = max(v1, v2)
+    else:
+        raise UnknownPolicy("Policy %s is unknown, can't merge" % policy)
+
+
+def smart_join_glance_config(img_conf, env_conf):
+    '''
+        join together two glance sections with
+        special logic for each field during merge.
+    '''
+    # default policy is 'second', so we'll join both, and than process special cases
+    common_config = copy.deepcopy(env_conf)
+    # should cover 'name' and 'public'
+    common_config.update(img_conf)
+    for key, policy in (
+        ('api_version', 'second'),  # test/upload_env has priority here
+        ('upload_timeout', 'max'),
+        ('properties', 'mergedict'),  # envs has priority on conflicting entries
+        ('tags', 'listjoin'),
+        ('endpoint', 'second'),  # envs has priority. I don't know why anyone wants to put endpoint into image config.
+    ):
+        _smart_merge(common_config, key, img_conf, env_conf, policy)
+    return common_config
 
 
 class OpenStackError(EnvironmentError):
@@ -121,7 +173,7 @@ class OSClient(object):
         }
     }
 
-    def new__init__(
+    def __init__(
         self,
         keystone_data,
         nova_data,
@@ -272,10 +324,7 @@ class OSClient(object):
             "password": os_password,
         }
         self.insecure = insecure
-        print self.os_creds, insecure
         self.new__init__(self.os_creds, {}, {}, {}, {}, insecure=insecure)
-
-    __init__ = transitional_init
 
     def old__init__(self, os_auth_url, os_tenant_name, os_username, os_password, insecure=False):
         self.os_creds = {

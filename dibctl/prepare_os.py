@@ -45,15 +45,20 @@ class PrepOS(object):
         self.config_drive = test_environment.get('config_drive')
 
         self.delete_instance = delete_instance
-        self.flavor_id = test_environment["flavor"]
+        self.flavor_id = test_environment['nova']['flavor']
         self.nic_list = list(self.prepare_nics(test_environment))
         self.main_nic_regexp = test_environment.get('main_nic_regexp', None)
         self.os = osclient.OSClient(
-            os_auth_url=test_environment["os_auth_url"],
-            os_tenant_name=test_environment["os_tenant_name"],
-            os_username=test_environment["os_username"],
-            os_password=test_environment["os_password"],
-            insecure=test_environment.get('insecure', False)
+            keystone_data=test_environment['keystone'],
+            nova_data=test_environment['nova'],
+            glance_data=osclient.smart_join_glance_config(
+                test_environment.get('glance', {}),
+                self.image.get('glance', {})
+            ),
+            neutron_data=test_environment.get('neutron', None),
+            overrides=os.environ,
+            ca_path=test_environment.get('ssl_ca_path', '/etc/ssl/certs'),
+            insecure=test_environment.get('ssl_insecure', False)
         )
 
     @staticmethod

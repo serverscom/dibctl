@@ -15,7 +15,7 @@ def prepare_os():
 
 @pytest.fixture
 def prep_os(prepare_os):
-    with mock.patch.object(prepare_os.PrepOS, "__init__", lambda x:None):
+    with mock.patch.object(prepare_os.PrepOS, "__init__", lambda x: None):
         prep_os = prepare_os.PrepOS()
     prep_os.os = mock.MagicMock(spec=prepare_os.osclient.OSClient)
     prep_os.delete_image = True
@@ -27,45 +27,41 @@ def prep_os(prepare_os):
     return prep_os
 
 
-def test_init_normal(prepare_os):
-    with mock.patch.object(prepare_os.osclient, "OSClient") as mock_client:
-        image = {
-            'glance':{
-                'name': 'foo'
-            }
-        }
-        env = {
+@pytest.fixture
+def mock_image_cfg():
+    image = {
+        'glance': {
+            'name': 'foo'
+        },
+        'filename': sentinel.filename
+    }
+    return image
+
+@pytest.fixture
+def mock_env_cfg():
+    env = {
+        'keystone': {
+            'auth_url': sentinel.auth,
+            'tenant_name': sentinel.tenant,
+            'password': sentinel.password,
+            'username': sentinel.user
+        },
+        'nova':{
             'flavor': 'example',
-            'os_auth_url': sentinel.auth,
-            'os_tenant_name': sentinel.tenant,
-            'os_username': sentinel.user,
-            'os_password': sentinel.password
+            'nics': [
+                {'net-id': sentinel.net_id}
+            ]
         }
-        dt = prepare_os.PrepOS(image, env)
+    }
+    return env
+
+
+def test_init_normal(prepare_os, mock_image_cfg, mock_env_cfg):
+    with mock.patch.object(prepare_os.osclient, "OSClient"):
+        dt = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg)
         assert dt.os
         assert dt.flavor_id == 'example'
         assert dt.delete_image is True
-        assert dt.delete_instance is True
-
-
-def test_init_override(prepare_os):
-    with mock.patch.object(prepare_os.osclient, "OSClient") as mock_client:
-        image = {
-            'glance':{
-                'name': 'foo'
-            }
-        }
-        env = {
-            'flavor': 'example',
-            'os_auth_url': sentinel.auth,
-            'os_tenant_name': sentinel.tenant,
-            'os_username': sentinel.user,
-            'os_password': sentinel.password
-        }
-        dt = prepare_os.PrepOS(image, env, override_image = 'image')
-        assert dt.os
-        assert dt.flavor_id == 'example'
-        assert dt.delete_image is False
         assert dt.delete_instance is True
 
 
@@ -129,7 +125,7 @@ def test_upload_image_normal(prep_os):
     assert prep_os.os.upload_image.call_args == mock.call(
         sentinel.image_name,
         sentinel.filename,
-        meta = sentinel.meta
+        meta=sentinel.meta
     )
 
 
@@ -398,53 +394,21 @@ def test_wait_for_port_eventually_fail(prepare_os, prep_os):
                 assert prep_os.wait_for_port(sentinel.port, 60) is False
 
 
-def test_grand_test_for_context_manager_normal(prepare_os, prep_os):
-    image = {
-        'glance':{
-            'name': 'imagename'
-        },
-        'filename': 'filename',
-        'tests': {
-            'wait_for_port': 22
-        }
-    }
-    env = {
-        'flavor': 'example',
-        'os_auth_url': sentinel.auth,
-        'os_tenant_name': sentinel.tenant,
-        'os_username': sentinel.user,
-        'os_password': sentinel.password
-    }
+def test_grand_test_for_context_manager_normal(prepare_os, prep_os, mock_image_cfg, mock_env_cfg):
 
     with mock.patch.object(prepare_os.osclient, "OSClient") as mockos:
         mockos.return_value.new_keypair.return_value.private_key = "key"
         mockos.return_value.boot_instance.return_value.status = "ACTIVE"
-        with prepare_os.PrepOS(image, env, delete_instance=False):
+        with prepare_os.PrepOS(mock_image_cfg, mock_env_cfg, delete_instance=False):
             pass
 
 
-def test_grand_test_for_context_manager_fail_not_delete(prepare_os, capsys):
-    image = {
-        'glance':{
-            'name': 'imagename'
-        },
-        'filename': 'filename',
-        'tests': {
-            'wait_for_port': 22
-        }
-    }
-    env = {
-        'flavor': 'example',
-        'os_auth_url': sentinel.auth,
-        'os_tenant_name': sentinel.tenant,
-        'os_username': sentinel.user,
-        'os_password': sentinel.password
-    }
+def test_grand_test_for_context_manager_fail_not_delete(prepare_os, capsys, mock_image_cfg, mock_env_cfg):
     with pytest.raises(Exception):
         with mock.patch.object(prepare_os.osclient, "OSClient") as mockos:
             mockos.return_value.new_keypair.return_value.private_key = "key"
             mockos.return_value.boot_instance.return_value.status = "ACTIVE"
-            with prepare_os.PrepOS(image, env, delete_instance=False) as prep_os:
+            with prepare_os.PrepOS(mock_image_cfg, mock_env_cfg, delete_instance=False) as prep_os:
                 prep_os.report = True
                 raise Exception
     output = capsys.readouterr()[0]

@@ -21,13 +21,22 @@ def empty_OSClient(osclient):
 
 
 @pytest.fixture
-def mock_os(osclient):
+def mock_keystone_data():
+    return {
+        'username': sentinel.username,
+        'password': sentinel.password,
+        'auth_url': sentinel.auth_url,
+        'tenant_name': sentinel.tenant_name
+    }
+
+@pytest.fixture
+def mock_os(osclient, mock_keystone_data):
     with mock.patch.object(osclient, "glanceclient"):
         with mock.patch.object(osclient, "novaclient"):
             with mock.patch.object(osclient, "session"):
                 with mock.patch.object(osclient, "identity"):
                     with mock.patch.object(osclient.OSClient, "_ask_for_version", return_value='v2'):
-                        o = osclient.OSClient(sentinel.auth, sentinel.tenant, sentinel.username, sentinel.password)
+                        o = osclient.OSClient(mock_keystone_data,{}, {}, {})
                         o.glance = mock.MagicMock()
                         o.nova = mock.MagicMock()
     return o

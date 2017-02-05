@@ -1,6 +1,6 @@
 example_env:
-  ca_cert_path: /etc/ssl/ca
-  insecure: True
+  ssl_insecure: True
+  ssl_ca_path: '/etc/ssl/certs'
   keystone:
     api_version: 2
     username: amarao

@@ -72,7 +72,22 @@ class GenericCommand(object):
                 overrides=self.env_overrides,
                 label=self.args.envlabel
             )
-            self.os = osclient.OSClient(**self.upload_env)
+            #  REFACTOR 1
+            glance_data = osclient.smart_join_glance_config(
+                {'name': 'foo'},
+                {}
+            )
+            #    self.image.get('glance', {}),
+            #    self.upload_env.get('glance', {})
+            self.os = osclient.OSClient(
+                keystone_data=self.upload_env['keystone'],
+                nova_data={},
+                glace_data=glance_data,
+                neutron_data={},
+                overrides=os.environ,
+                ca_path=self.upload_env.get('ssl_ca_path', '/etc/ssl/cacerts'),
+                insecure=self.upload_env.get('ssl_insecure', False)
+            )
         return self._command()
 
     def _command(self):
@@ -197,7 +212,7 @@ class UploadCommand(GenericCommand):
             self.public,
             meta=self.meta
         )
-        print("Image ''%s' uploaded to %s as %s" % (self.name, self.upload_env['os_auth_url'], self.uuid))
+        print("Image ''%s' uploaded with uuid %s" % (self.name, self.uuid))
 
     def obsolete_old_images(self):
         candidates = self.os.older_images(self.name, self.uuid)

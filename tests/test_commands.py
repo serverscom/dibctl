@@ -8,10 +8,12 @@ from mock import sentinel
 import argparse
 import imp
 
+
 @pytest.fixture
 def commands():
     from dibctl import commands
     return commands
+
 
 @pytest.fixture
 def cred():
@@ -21,6 +23,35 @@ def cred():
         'os_username': 'mock',
         'os_password': 'mock'
     }
+
+@pytest.fixture
+def mock_image_cfg():
+    image = {
+        'glance': {
+            'name': 'foo'
+        },
+        'filename': sentinel.filename
+    }
+    return image
+
+@pytest.fixture
+def mock_env_cfg():
+    env = {
+        'keystone': {
+            'auth_url': sentinel.auth,
+            'tenant_name': sentinel.tenant,
+            'password': sentinel.password,
+            'username': sentinel.user
+        },
+        'nova': {
+            'flavor': 'example',
+            'nics': [
+                {'net-id': sentinel.net_id}
+            ]
+        }
+    }
+    return env
+
 
 def create_subparser(ParserClass):
     parser = argparse.ArgumentParser()
@@ -291,16 +322,15 @@ def test_TestCommand_actual_proper_env_override(commands):
     args = parser.parse_args(['test', 'label', '--environment', 'foo'])
     assert args.imagelabel == 'label'
     with mock.patch.object(commands.config, "ImageConfig") as ic:
-        ic.return_value.get.return_value = {'tests': {'environment_name':'unrelated', 'tests_list': []}}
+        ic.return_value.get.return_value = {'tests': {'environment_name': 'unrelated', 'tests_list': []}}
         with mock.patch.object(commands.config, "TestEnvConfig") as tec:
             tec.return_value = {'foo': 'bar'}
-            with mock.patch.object(commands.do_tests, "DoTests") as dt:
+            with mock.patch.object(commands.do_tests, "DoTests"):
                 args.command(args)
             assert obj.test_env == 'bar'
 
 
-
-def test_UploadCommand_actual_with_obsolete(commands, cred):
+def test_UploadCommand_actual_with_obsolete(commands, cred, mock_env_cfg, mock_image_cfg):
     parser, obj = create_subparser(commands.UploadCommand)
     args = parser.parse_args(['upload', 'label', 'uploadlabel'])
     assert args.imagelabel == 'label'
@@ -309,24 +339,26 @@ def test_UploadCommand_actual_with_obsolete(commands, cred):
     assert args.input is None
 
     with mock.patch.object(commands.config, "UploadEnvConfig", autospec=True, strict=True) as uec:
-        uec.return_value.get.return_value = cred
-        with mock.patch.object(commands.osclient, "OSClient", autospec=True, strict=True) as mock_os:
+        uec.return_value.get.return_value = mock_env_cfg
+        with mock.patch.object(commands.osclient, "OSClient") as mock_os:
             mock_os.return_value.older_images.return_value = [sentinel.one, sentinel.two]
-            with mock.patch.object(commands.config, "ImageConfig", autospec=True, strict=True):
+            with mock.patch.object(commands.config, "ImageConfig", autospec=True, strict=True) as ic:
+                ic.return_value.get.return_value = mock_image_cfg
                 args.command(args)
-                assert obj.image
-                assert obj.upload_env
 
-def test_UploadCommand_no_glance_section(commands, cred):
+
+def test_UploadCommand_no_glance_section(commands, mock_env_cfg):
+    img_config = {}
     parser, obj = create_subparser(commands.UploadCommand)
     args = parser.parse_args(['upload', 'label', 'uploadlabel'])
     with mock.patch.object(commands.config, "UploadEnvConfig") as uec:
-        uec.return_value.get.return_value = cred
-        with mock.patch.object(commands.osclient, "OSClient", autospec=True, strict=True) as mock_os:
-            with mock.patch.object(commands.config, "ImageConfig") as mock_img:
-                mock_img.return_value.get.return_value = {}
+        uec.return_value.get.return_value = mock_env_cfg
+        with mock.patch.object(commands.osclient, "OSClient"):
+            with mock.patch.object(commands.config, "ImageConfig") as ic:
+                ic.return_value.get.return_value = img_config
                 with pytest.raises(commands.NotFoundInConfigError):
                     args.command(args)
+
 
 def test_UploadCommand_obsolete(commands):
     parser = create_subparser(commands.UploadCommand)[0]
@@ -334,23 +366,23 @@ def test_UploadCommand_obsolete(commands):
     assert args.no_obsolete is True
 
 
-def test_RotateCommand_actual(commands, cred):
+def test_RotateCommand_actual(commands, mock_env_cfg):
     parser, obj = create_subparser(commands.RotateCommand)
     args = parser.parse_args(['rotate', 'uploadlabel'])
     with mock.patch.object(commands.config, "UploadEnvConfig") as uec:
-        uec.return_value.get.return_value = cred
-        with mock.patch.object(commands.osclient, "OSClient", autospec=True, strict=True) as mock_os:
+        uec.return_value.get.return_value = mock_env_cfg
+        with mock.patch.object(commands.osclient, "OSClient"):
             args.command(args)
     assert obj.upload_env
 
 
-def test_ObsoleteCommand_actual(commands, cred):
+def test_ObsoleteCommand_actual(commands, mock_env_cfg):
     parser, obj = create_subparser(commands.ObsoleteCommand)
     args = parser.parse_args(['mark-obsolete', 'uploadlabel', 'myuuid'])
     assert args.uuid == 'myuuid'
     with mock.patch.object(commands.config, "UploadEnvConfig") as uec:
-        uec.return_value.get.return_value = cred
-        with mock.patch.object(commands.osclient, "OSClient", autospec=True, strict=True) as mock_os:
+        uec.return_value.get.return_value = mock_env_cfg
+        with mock.patch.object(commands.osclient, "OSClient"):
             args.command(args)
     assert obj.upload_env
 
@@ -426,12 +458,14 @@ def test_main(commands):
                 commands.main(['build', 'label'])
                 mock_exit.call_args[0][0] == 1
 
+
 def test_main_premature_exit(commands):
     with mock.patch.object(commands.GenericCommand, 'get_from_config') as m_func:
         m_func.side_effect = commands.NotFoundInConfigError
         with mock.patch.object(commands.sys,'exit') as mock_exit:
             commands.main(['build', 'label'])
             mock_exit.call_args[0][0] == -1
+
 
 def test_init(commands):
     with mock.patch.object(commands,"Main") as m:
