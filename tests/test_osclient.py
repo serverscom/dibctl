@@ -29,6 +29,7 @@ def mock_keystone_data():
         'tenant_name': sentinel.tenant_name
     }
 
+
 @pytest.fixture
 def mock_os(osclient, mock_keystone_data):
     with mock.patch.object(osclient, "glanceclient"):
@@ -36,10 +37,55 @@ def mock_os(osclient, mock_keystone_data):
             with mock.patch.object(osclient, "session"):
                 with mock.patch.object(osclient, "identity"):
                     with mock.patch.object(osclient.OSClient, "_ask_for_version", return_value='v2'):
-                        o = osclient.OSClient(mock_keystone_data,{}, {}, {})
+                        o = osclient.OSClient(mock_keystone_data, {}, {}, {})
                         o.glance = mock.MagicMock()
                         o.nova = mock.MagicMock()
     return o
+
+
+@pytest.mark.parametrize('orig1, orig2, policy, result', [
+    [{}, {'key': sentinel.result}, 'first', sentinel.result],
+    [{'key': sentinel.result}, {}, 'first', sentinel.result],
+    [{}, {'key': sentinel.result}, 'second', sentinel.result],
+    [{'key': sentinel.result}, {}, 'second', sentinel.result],
+    [{'key': sentinel.foo}, {'key': sentinel.result}, 'second', sentinel.result],
+    [{'key': sentinel.result}, {'key': sentinel.foo}, 'first', sentinel.result],
+    [{'key': []}, {}, 'mergelist', []],
+    [{}, {'key': []}, 'mergelist', []],
+    [{'key': []}, {'key': []}, 'mergelist', []],
+    [{'key': [sentinel.one]}, {'key': []}, 'mergelist', [sentinel.one]],
+    [{'key': []}, {'key': [sentinel.one]}, 'mergelist', [sentinel.one]],
+    [{'key': [sentinel.one]}, {'key': [sentinel.two]}, 'mergelist', [sentinel.one, sentinel.two]],
+    [{'key': [sentinel.one]}, {'key': [sentinel.one]}, 'mergelist', [sentinel.one, sentinel.one]],
+    [{'key': {}}, {}, 'mergedict', {}],
+    [{'key': {}}, {'key': {}}, 'mergedict', {}],
+    [{}, {'key': {}}, 'mergedict', {}],
+    [{'key': {'one': 1}}, {'key': {}}, 'mergedict', {'one': 1}],
+    [{'key': {}}, {'key': {'one': 1}}, 'mergedict', {'one': 1}],
+    [{'key': {'one': 1}}, {'key': {'two': 2}}, 'mergedict', {'one': 1, 'two': 2}],
+    [{'key': {'one': 1, 'two': 'bad'}}, {'key': {'two': 2}}, 'mergedict', {'one': 1, 'two': 2}],
+    [{'key': 0}, {'key': 2}, 'max', 2],
+    [{'key': 3}, {'key': 1}, 'max', 3],
+    [{'key': 3}, {'key': 3}, 'max', 3],
+    [{}, {'key': 4}, 'max', 4],
+    [{'key': 5}, {}, 'max', 5],
+])
+def test__smart_merge(osclient, orig1, orig2, policy, result):
+    target = {}
+    osclient._smart_merge(target, 'key', orig1, orig2, policy)
+    assert target['key'] == result
+
+
+@pytest.mark.parametrize('policy', ['first', 'second', 'mergelist', 'mergedict', 'max'])
+def test__smart_merge_empty(osclient, policy):
+    target = {}
+    osclient._smart_merge(target, 'key', {}, {}, policy)
+    assert target == {}
+
+
+def test__smart_merge_unknown_policy(osclient):
+    with pytest.raises(osclient.UnknownPolicy):
+        osclient._smart_merge({}, 'key', {'key': 'value'}, {}, 'unknown policy')
 
 
 @pytest.mark.parametrize('ver, libver, expected', [
