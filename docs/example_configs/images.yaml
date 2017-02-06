@@ -1,18 +1,18 @@
 xenial:
   filename: xenial.img.qcow2
   glance:
-    name: 'lab'
-    upload_timeout: 900
+    name: 'Example of Ubuntu Xenial'
+    upload_timeout: 1800
     properties:
-     display_priority: "4"
-     allowed_flavors: "[3,4,5,6]"
+     foo: "bar"
     public: False
   dib:
    environment_variables:
-      DIB_APT_REPO: mirror.servers.com
-      DIB_NTP: 192.168.8.8
+      DIB_RELEASE: xenial
       elements:
-        - ubuntu
+        - ubuntu-minimal
+        - vm
+        - cloud-init
   tests:
      wait_for_port: 22
      port_wait_timeout: 30

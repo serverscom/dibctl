@@ -1,17 +1,160 @@
 Dibctl
 ------
 
+Warning: *it is in the refactoring process, please come back in few days*
+
 Dibctl is an automation software indendent to help with configuring
 diskimage-builder, maintain, test and upload images in consistent way.
 
-This readme is under construction, as well, as software itself.
+It provides frameworks for integration testing of images and a way
+to keep all image configuration details in a single place (git repository).
+
+*This readme is under construction, as well, as software itself.*
+
+Element is not image
+--------------------
+
+Diskimage-builder is very nice way to build custom images from elements.
+One need to supply few pieces to diskimage-builder to get image:
+- few enviroment variables for diskimage-builder itself
+- few very inconsistent and cryptic variables for used elements
+- some command line arguments for diksimage-builder
+- list of elements used to build image
+
+Resulting command line is a 'golden artifact' - you need to keep it
+somewhere.
+
+After an image was build, you can upload it to your Glance. You need
+to provide few more pieces of information:
+- Image name
+- Credentials for Glance
+- Additional meta you need to set up on image (`hw_property`, etc)
+
+This adds few more lines to the 'golden artifact'.
+
+Normally one wants to test image before uploading. It should, at least,
+be able to boot and accept ssh key.
+
+One may create a simple script to boot and test it:
+
+This adds few more lines:
+- credential to spawn instance
+- flavor id
+- nics net-id
+- security group name
+
+If one have more than one image with more than one configuration
+for testing, this brings up complexity even higher.
+
+Dibctl was created to solve this problems. It provides consistent
+way to describe images, test and upload enviroments, relations
+between image and tests, way to ensure that images are fully functional
+(outside of usual scope of 'I can log in').
+Examples of test preshipped with dibctl:
+- Does instance resize rootfs up to flavor limits at first boot?
+- Does it recieves IP addresses on all attached interfaces?
+- Does DNS set up properly?
+- Does hostname match the name of the instance?
+- Does instance still work after reboot?
+
+Outside of main scope dibctl gives one more nice feature: image-transfer,
+which can copy image from one glance to another while preserving every propery,
+ownership and share information (tenant-name based).
+
+Key concepts
+------------
+
+Dibctl uses following conceptions:
+- label (for image and environment) - internal 'name' for a given image or environemnt to
+use in command line. Add entries in dibctl configuration have label, or 'namelabel'.
+- image: set of attirbutes to build and test image. Images are described in images.yaml file.
+- test instance: Instance used for testing image. Instance is created at test time and
+  removed afterwards. Dibctl creates custom SSH key for each test.
+- test image: image uploaded for testing. Dibctl uses separate upload stage for testing and
+  actual 'upload to procution'. Test images normally uploaded to specific project and are
+  not public. Production images are normally public (or upload to selected tenant and shared
+  with specific tenants). Test image is removed after test (succesfull or not).
+- test environemnt: set of attributes and variables describing how upload test image and
+  how to boot test instance. Every image references to test environement by it's label.
+  They are listed in tests.yaml
+- upload environemnts: Those are describes how and where upload images for production use.
+  Uploaded images are subjected to optional 'obsoletion' stage (see Obsoletion part below),
+  which happens automatically every time image is uploaded or manually.
 
 
 Image lifecycle
 ---------------
 
-BUILD -> TEST -> UPLOAD -> OBSOLETE -> ROTATE
+`BUILD -> TEST -> UPLOAD -> OBSOLETE -> ROTATE`
 
+## Build stage
+It uses information from corresponding entry in images.yaml to execute diskimage-builder.
+'filename' option specify target filename.
+dibctl translates diskimage-builder exit codes
+(it exits with same exit code as diskimage-builder).
+
+## Test stage
+At this stage image should be build. Dibctl uses information from entry in images.yaml
+to find image file for testing ('filename'), and than uses `environment_name` to
+find correspoinding test environment in tests.yaml. Then it upload image, creates new ssh key,
+spawns instance accoring to test environments settings, and executing tests
+in `tests_list` section of image configuration. Those tests recieve information about
+instance (IP addresses, network settings, hostname, flavor, etc), perform instance validation.
+If all tests passes successfully, dibctl sets exit code to 0, otherwise error returned.
+Regardless of the test results all test-time objects in Openstack are removed: test image,
+test instance, ssh key. User may use `--keep-failed-image` and `--keep-failed-instance` to
+keep them for closer investigation.
+
+*not implemented yet*
+By using --shell dibctl may be instructed to open ssh shell to test machine when tests failed.
+After that shell is closed, instance (and all other pieces of test) are removed.
+
+
+## Upload stage
+At the upload stage image is uploaded to specified installation with specific settings
+for publication. All image-specific things (properties, tags, etc) from images.yaml
+are used during this stage, as well, as settings from upload.yaml (See variable ordering
+to see override rules).
+
+After upload done, it triggers *obosoletion stage* if obsoletion is stated in 
+upload configuration.
+
+## Obsolete stage
+Obsolete image: If image is in the same tenant and have same glance name as freshly uploaded,
+it is obsolete. Obsoleted images recieve specific rename pattern (usually adds 'Obsolete ' before
+name), and specific set of properties.
+
+Obsoletion may be performed manually by using 'obsolete' command.
+
+## Rotation stage
+If obsolete image is no longer used by any instances in region it's called unused obsoleted
+image and may be removed. That is done by 'rotate' command.
+
+Please note, rotation requires administrative privilege (dibctl needs to see all instances
+in the region). Normally it's performed periodically by administrator itself, without
+delegating this job to CI/cron.
+
+Installation
+------------
+You need to have following packages installed:
+- diskimage-builder
+- novaclient
+- glanceclient
+- keystoneauth1
+
+Important notice: at this moment diskimage-builder package
+in debian & ubuntu is very, very old (1.0). You need 
+to upgrade it al least to 1.9 to have working images.
+
+Please use pip version or rebuild package
+if you have own CI/buildfarm.
+
+If you want to use python-based test you need:
+- pytest
+- pytest-timeout
+- pytest-testinfra (it's new and it may be not in your distro yet)
+
+TODO: set up ppa with dependencies
 
 Configuration
 -------------
@@ -44,6 +187,10 @@ options for one openstack installation.
 During upload image uploaded to a given upload
 environemnt with metadata, name and properties
 specified in the images.yaml.
+
+Variable ordering
+-----------------
+
 
 
 Configs
