@@ -64,7 +64,11 @@ class PrepOS(object):
     @staticmethod
     def prepare_nics(env):
         for nic in env.get('nics', []):
-            yield {'net-id': nic}
+            response = {}
+            if 'net-id' in nic:
+                response['net-id'] = nic['net-id']
+            # TODO add fixed IP/mac/etc
+            yield response
 
     @staticmethod
     def make_test_name(bare_name):

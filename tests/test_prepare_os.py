@@ -37,6 +37,7 @@ def mock_image_cfg():
     }
     return image
 
+
 @pytest.fixture
 def mock_env_cfg():
     env = {
@@ -46,10 +47,11 @@ def mock_env_cfg():
             'password': sentinel.password,
             'username': sentinel.user
         },
-        'nova':{
+        'nova': {
             'flavor': 'example',
             'nics': [
-                {'net-id': sentinel.net_id}
+                {'net-id': sentinel.uuid1},
+                {'net-id': sentinel.uuid2}
             ]
         }
     }
@@ -65,21 +67,20 @@ def test_init_normal(prepare_os, mock_image_cfg, mock_env_cfg):
         assert dt.delete_instance is True
 
 
-def test_prepare_nics(prepare_os):
-    env = {'nics': [sentinel.uuid1, sentinel.uuid2]}
-    assert list(prepare_os.PrepOS.prepare_nics(env)) == [
+def test_prepare_nics(prepare_os, mock_env_cfg):
+    assert list(prepare_os.PrepOS.prepare_nics(mock_env_cfg['nova'])) == [
         {'net-id': sentinel.uuid1},
         {'net-id': sentinel.uuid2}
     ]
 
 
-@pytest.mark.parametrize("name, output",[
-["Ubuntu 16.04 x86_64", "DIBCTL-Ubuntu 16.04 x86_64-deadbeef-dead-400-000-79880364a956"],
-["key", "DIBCTL-key-deadbeef-dead-400-000-79880364a956"],
-["test", "DIBCTL-test-deadbeef-dead-400-000-79880364a956"]
+@pytest.mark.parametrize("name, output", [
+    ["Ubuntu 16.04 x86_64", "DIBCTL-Ubuntu 16.04 x86_64-deadbeef-dead-400-000-79880364a956"],
+    ["key", "DIBCTL-key-deadbeef-dead-400-000-79880364a956"],
+    ["test", "DIBCTL-test-deadbeef-dead-400-000-79880364a956"]
 ])
 def test_make_test_name(prepare_os, name, output):
-    with mock.patch.object(prepare_os.uuid, "uuid4", return_value = 'deadbeef-dead-400-000-79880364a956'):
+    with mock.patch.object(prepare_os.uuid, "uuid4", return_value='deadbeef-dead-400-000-79880364a956'):
         assert prepare_os.PrepOS.make_test_name(name) == output
 
 
