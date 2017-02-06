@@ -98,9 +98,8 @@ class DoTests(object):
 
     def run_all_tests(self):
         was_error = False
-        print("Will run test instance with flavor %s in openstack at %s." % (
-            self.test_env["flavor"],
-            self.test_env["os_auth_url"]
+        print("Will run test instance with flavor %s." % (
+            self.test_env['nova']["flavor"]
         ))
         with prepare_os.PrepOS(
             self.image,
