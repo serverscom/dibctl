@@ -294,7 +294,7 @@ def main(line=None):
     m = Main(line)
     try:
         code = m.run()
-    except PrematureExitError as e:
+    except (PrematureExitError, osclient.CredNotFound) as e:
         print("Error: %s" % str(e))
         code = -1
     sys.exit(code)

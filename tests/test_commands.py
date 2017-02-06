@@ -6,7 +6,6 @@ import pytest
 import mock
 from mock import sentinel
 import argparse
-import imp
 
 
 @pytest.fixture
@@ -24,6 +23,7 @@ def cred():
         'os_password': 'mock'
     }
 
+
 @pytest.fixture
 def mock_image_cfg():
     image = {
@@ -33,6 +33,7 @@ def mock_image_cfg():
         'filename': sentinel.filename
     }
     return image
+
 
 @pytest.fixture
 def mock_env_cfg():
@@ -311,7 +312,7 @@ def test_TestCommand_actual_no_proper_env(commands):
     args = parser.parse_args(['test', 'label'])
     assert args.imagelabel == 'label'
     with mock.patch.object(commands.config, "ImageConfig") as ic:
-        ic.return_value.get.return_value = {'tests': {'something':'unrelated'}}
+        ic.return_value.get.return_value = {'tests': {'something': 'unrelated'}}
         with mock.patch.object(commands.config, "TestEnvConfig"):
             with pytest.raises(commands.TestEnvironmentNotFoundError):
                 args.command(args)
@@ -454,24 +455,32 @@ def test_Main_build_error(commands):
 def test_main(commands):
     with mock.patch.object(commands, 'config'):
         with mock.patch.object(commands.dib.DIB, 'run', return_value=1):
-            with mock.patch.object(commands.sys,'exit') as mock_exit:
+            with mock.patch.object(commands.sys, 'exit') as mock_exit:
                 commands.main(['build', 'label'])
-                mock_exit.call_args[0][0] == 1
+                assert mock_exit.call_args[0][0] == 1
 
 
-def test_main_premature_exit(commands):
+def test_main_premature_exit_config(commands):
     with mock.patch.object(commands.GenericCommand, 'get_from_config') as m_func:
         m_func.side_effect = commands.NotFoundInConfigError
         with mock.patch.object(commands.sys,'exit') as mock_exit:
             commands.main(['build', 'label'])
-            mock_exit.call_args[0][0] == -1
+            assert mock_exit.call_args[0][0] == -1
+
+
+def test_main_premature_exit_config(commands):
+    with mock.patch.object(commands.osclient, 'OSClient') as m_func:
+        m_func.side_effect = commands.osclient.CredNotFound
+        with mock.patch.object(commands.sys, 'exit') as mock_exit:
+            commands.main(['build', 'label'])
+            assert mock_exit.call_args[0][0] == -1
 
 
 def test_init(commands):
     with mock.patch.object(commands,"Main") as m:
         m.return_value.run.return_value = 42
-        with mock.patch.object(commands,"__name__", "__main__"):
-            with mock.patch.object(commands.sys,'exit') as mock_exit:
+        with mock.patch.object(commands, "__name__", "__main__"):
+            with mock.patch.object(commands.sys, 'exit') as mock_exit:
                 commands.init()
                 assert mock_exit.call_args[0][0] == 42
 
