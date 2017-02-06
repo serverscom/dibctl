@@ -315,59 +315,6 @@ class OSClient(object):
                   )
         raise MissmatchError(message)
 
-    def transitional_init(self, os_auth_url, os_tenant_name, os_username, os_password, insecure=False):
-        self.os_creds = {
-            "auth_url": os_auth_url,
-            "tenant_name": os_tenant_name,
-            "username": os_username,
-            "password": os_password,
-        }
-        self.insecure = insecure
-        self.new__init__(self.os_creds, {}, {}, {}, {}, insecure=insecure)
-
-    def old__init__(self, os_auth_url, os_tenant_name, os_username, os_password, insecure=False):
-        self.os_creds = {
-            "auth_url": os_auth_url,
-            "tenant_name": os_tenant_name,
-            "username": os_username,
-            "password": os_password,
-            "insecure": insecure
-        }
-        self.insecure = insecure
-        self.init_keystone(os_auth_url, os_tenant_name, os_username, os_password)
-        self.init_glance()
-        self.init_nova()
-
-    def init_keystone(self, os_auth_url, os_tenant_name, os_username, os_password):
-        self.keystone_auth = keystoneclient.v2_0.Client(
-            **self.os_creds
-        )
-        self.token = self.keystone_auth.get_token(self.keystone_auth.session)
-        self.glance_endpoint = self.keystone_auth.service_catalog.url_for(
-            service_type="image",
-            endpoint_type="publicURL"
-        )
-
-    def init_glance(self):
-        self.glance = glanceclient.Client(
-            version="1",
-            endpoint=self.glance_endpoint,
-            token=self.token,
-            cacert=self.OS_CACERT,
-            insecure=self.insecure
-        )
-
-    def init_nova(self):
-        self.nova = novaclient.client.Client(
-            version="2",
-            username=self.os_creds["username"],
-            password=self.os_creds["password"],
-            project_id=self.os_creds["tenant_name"],
-            auth_url=self.os_creds["auth_url"],
-            cacert=self.OS_CACERT,
-            insecure=self.insecure
-        )
-
     def upload_image(
         self,
         name,

@@ -254,7 +254,7 @@ def test_set_auth_version_ok_forced(empty_OSClient, osclient, version):
 
 def test_set_auth_version_bad_forced(empty_OSClient, osclient):
     with pytest.raises(osclient.DiscoveryError):
-        empty_OSClient._set_auth_version({'auth_version': '2'}, False)
+        empty_OSClient._set_auth_version({'api_version': '2'}, False)
 
 
 @pytest.mark.parametrize('lowpriority, highpriority, target', [
@@ -337,42 +337,26 @@ def test_prepare_auth_normal(empty_OSClient, version):
         assert creds
 
 
-#@pytest.mark.parametrize('version', ['v2', 'v3'])
-#@pytest.mark.parametrize('insecure', [True, False])
-#def test_create_session_v2(osclient, version, insecure):#
-    #with mock.patch.object(osclient.identity, version) as mock_identity:
-    #    mock_identity.Password.return_value = sentinel.auth
-    #    with mock.patch.object(osclient.session, 'Session') as mock_session:
-    #        osclient.OSClient.create_session(version, sentinel.auth_data, insecure)
-    #        assert mock.call(auth=sentinel.auth) in mock_session.call_args
-    #        assert (not insecure) in mock_session.call_args[0]
+@pytest.mark.parametrize('version', ['v2', 'v3'])
+@pytest.mark.parametrize('insecure', [True, False])
+def test_create_session_v2(osclient, version, insecure, mock_keystone_data):
+    with mock.patch.object(osclient.identity, version) as mock_identity:
+        mock_identity.Password.return_value = sentinel.auth
+        with mock.patch.object(osclient.session, 'Session') as mock_session:
+            osclient.OSClient.create_session(version, mock_keystone_data, insecure)
+            assert mock_identity.Password.called
+            assert mock_session.called
 
 
-# -----------------------------------------------------------------------------------------------------------
-# -----------------------------------------------------------------------------------------------------------
-# -----------------------------------------------------------------------------------------------------------
-
-def notest_osclient_init(osclient):
-    with mock.patch.object(osclient.glanceclient, "Client") as mock_gc:  # disable for test
-        with mock.patch.object(osclient.keystoneclient.v2_0, "Client"):
-            with mock.patch.object(osclient.novaclient.client, "Client"):
-                o = osclient.OSClient(sentinel.auth, sentinel.tenant, sentinel.username, sentinel.password)
-                assert o.keystone_auth
-                assert o.glance
-                assert o.nova
-                assert mock_gc.called
+def test_create_session_bad_auth_version(osclient, mock_keystone_data):
+    with pytest.raises(osclient.DiscoveryError):
+        osclient.OSClient.create_session('v4', mock_keystone_data, False)
 
 
 def test_osclient_upload_image_simple(osclient, mock_os):
     with mock.patch.object(osclient, "open", mock.mock_open()):
         mock_os.upload_image(sentinel.name, sentinel.filename)
         assert mock_os.glance.images.create.called
-
-
-# FIXME
-def notest_osclient_upload_image_meta(osclient, mock_os):
-    with mock.patch.object(osclient, "open", mock.mock_open()):
-        mock_os.upload_image(sentinel.name, sentinel.filename, meta={sentinel.key: sentinel.value})
 
 
 def test_osclient_older_images(osclient, mock_os):
