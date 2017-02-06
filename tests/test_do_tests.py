@@ -92,8 +92,9 @@ def test_run_test_matrix(do_tests, runner, continue_on_fail, result, expected):
 @pytest.mark.parametrize('port', [False, 22])
 def test_run_all_tests_minimal(do_tests, port, capsys):
     env = {
-        'flavor': 'some flavor',
-        'os_auth_url': 'http://test.example.com/auth_url'
+        'nova': {
+            'flavor': 'some flavor'
+        }
     }
     image = {
         'tests': {
@@ -109,8 +110,9 @@ def test_run_all_tests_minimal(do_tests, port, capsys):
 
 def test_run_all_tests_port_timeout(do_tests):
     env = {
-        'flavor': 'some flavor',
-        'os_auth_url': 'http://test.example.com/auth_url'
+        'nova': {
+            'flavor': 'some flavor'
+        }
     }
     image = {
         'tests': {
@@ -131,8 +133,9 @@ def test_run_all_tests_port_timeout(do_tests):
 
 def test_run_all_tests_with_tests(do_tests, capsys):
     env = {
-        'flavor': 'some flavor',
-        'os_auth_url': 'http://test.example.com/auth_url'
+        'nova': {
+            'flavor': 'some flavor'
+        }
     }
     image = {
         'tests': {
@@ -152,8 +155,9 @@ def test_run_all_tests_with_tests(do_tests, capsys):
 
 def test_run_all_tests_fail(do_tests, capsys):
     env = {
-        'flavor': 'some flavor',
-        'os_auth_url': 'http://test.example.com/auth_url'
+        'nova': {
+            'flavor': 'some flavor'
+        }
     }
     image = {
         'tests': {
