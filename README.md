@@ -158,17 +158,41 @@ TODO: set up ppa with dependencies
 
 Configuration
 -------------
-There are three important conceptions in Dibctl:
-images, test environments and upload environments.
-Each of them have separate configuration file.
 
-## Images.yaml
+Dibctl may use system-wide configuration files
+(/etc/dibctl/) or local configuration files (./dibctl).
+Local configuration files usually used within
+git repository, containing custom image and enviroment
+configs, custom diskimage-builder elements and
+custom tests.
+
+## Configuration file prioriy
+Dibctl stops searching file as soon as file is found.
+Each file is searched independently
+(f.e. /etc/dibctl/images.yaml and ./dibctl/test.yaml)
+
+Lookup order:
+
+- `./` (config file in the current directory)
+- `./dibctl` (config file in the dibctl directory in the current directory)
+- `/etc/dibctl` (system-wide configs)
+
+Configuration file names:
+- `images.yaml`
+- `test.yaml` (test environments)
+- `upload.yaml` (upload environments)
+
+If one uses pytest-based tests, than tox.ini and other
+pytest-related configuration files may influence tests
+discovery.
+
+### `images.yaml`
 This file describes how to build image, which
-name and medata it should have in glance during upload,
+name and properties it should have in Glance during upload,
 which *test_environment* to use to test this image,
 which tests should be ran during test stage.
 
-## test.yaml
+### `test.yaml`
 This file describes test environments. They may be
 referenced by images in `image.yaml`, or forced to
 be used during test from command line.
@@ -179,19 +203,38 @@ purposes:
    actual 'upload' stage)
 - Which flavor, network(s), etc to use
 
-## upload.yaml
+### `upload.yaml`
 This file contains configuration for upload.
-Each entry describes credentials and connection
-options for one openstack installation.
 
-During upload image uploaded to a given upload
-environemnt with metadata, name and properties
-specified in the images.yaml.
 
 Variable ordering
 -----------------
+When dibctl performs tests or uploads it combines
+information from `images.yaml` and correspoding
+environment config (`test.yaml` or `upload.yaml`).
 
+Each of that file may contains `glance` section.
+Normally all image-specific variables should
+be kept in the `images.yaml` config file,
+but under certain circumstances it may be desirable
+to override/change them for a given location.
+Most noticable and common are timeout settings
+(for remote/slow regions) and `glance_endpoint`
+to help deal with complicated intra-extra-net
+endpoints.
 
+Special riority rules for `glance` section:
+- `api_version` - environment have priority over image
+- `upload_timeout` - used a max of all available values
+- `properties` - merged. If there are same properties in
+   the images config and in environement config,
+   environments have priority over image.
+- `tags` - merged (this is a simple list)
+- `endpoint` - environment have priority over image
+
+For all other variables image has priority over
+environment (please see `smart_join_glance_config`
+function for up to date information).
 
 Configs
 -------
