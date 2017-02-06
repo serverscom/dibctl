@@ -83,6 +83,31 @@ def test__smart_merge_empty(osclient, policy):
     assert target == {}
 
 
+@pytest.mark.parametrize('name, value_1, value_2, result', [
+    ['api_version', 1, 1, 1],
+    ['api_version', 1, 2, 2],
+    ['api_version', 2, 1, 1],
+    ['upload_timeout', 300, 600, 600],
+    ['upload_timeout', 500, 300, 500],
+    ['properties', {'allowed_flavors': '[1,2,3]'}, {'region_specific': 'foo'}, {'allowed_flavors': '[1,2,3]', 'region_specific': 'foo'}],
+    ['tags', ['tag1'], ['tag2'], ['tag1', 'tag2']],
+    ['endpoint', 'http://general', 'http://specific', 'http://specific'],
+    ['other_value', 'in_image', 'in_env', 'in_image']
+])
+def test_smart_join_glance_config(osclient, name, value_1, value_2, result):
+    config_1 = {name: value_1}
+    config_2 = {name: value_2}
+    assert osclient.smart_join_glance_config(config_1, config_2)[name] == result
+
+
+def test_smart_join_glance_config_with_empty_1(osclient):
+    assert osclient.smart_join_glance_config({'key': 'value'}, {}) == {'key': 'value'}
+
+
+def test_smart_join_glance_config_with_empty_2(osclient):
+    assert osclient.smart_join_glance_config({}, {'key': 'value'}) == {'key': 'value'}
+
+
 def test__smart_merge_unknown_policy(osclient):
     with pytest.raises(osclient.UnknownPolicy):
         osclient._smart_merge({}, 'key', {'key': 'value'}, {}, 'unknown policy')
