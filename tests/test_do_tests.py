@@ -13,9 +13,6 @@ def do_tests():
     return do_tests
 
 
-
-
-
 def test_init_no_tests(do_tests):
     image = {}
     dt = do_tests.DoTests(image, sentinel.env)
@@ -70,7 +67,6 @@ def test_run_test_duplicate_runner(do_tests):
     dt = do_tests.DoTests({}, sentinel.env)
     with pytest.raises(do_tests.BadTestConfigError):
         dt.run_test({'pytest': 1, 'shell': 2}, sentinel.config, sentinel.env)
-
 
 
 @pytest.mark.parametrize('continue_on_fail, result, expected', [

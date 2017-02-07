@@ -1,7 +1,3 @@
-#  deliports
-import keystoneclient
-
-
 import glanceclient
 from keystoneauth1 import identity
 from keystoneauth1 import session
