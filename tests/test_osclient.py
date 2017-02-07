@@ -31,6 +31,17 @@ def mock_keystone_data():
 
 
 @pytest.fixture
+def actual_keystone_data_v2():
+    return {
+        'username': 'user',
+        'password': 'secret',
+        'auth_url': 'http://example.com:5000/v2',
+        'tenant_name': 'tenant',
+        'api_version': 'v2'
+    }
+
+
+@pytest.fixture
 def mock_os(osclient, mock_keystone_data):
     with mock.patch.object(osclient, "glanceclient"):
         with mock.patch.object(osclient, "novaclient"):
@@ -337,6 +348,23 @@ def test_prepare_auth_normal(empty_OSClient, version):
         assert creds
 
 
+def test_prepare_auth_limited_overrides(empty_OSClient):
+    data = {
+        'auth_url': sentinel.url,
+        'username': sentinel.username,
+        'tenant': sentinel.tenant,
+        'password': sentinel.password_bad
+    }
+    overrides = {
+        'OS_PASSWORD': sentinel.password_ok,
+        'USERNAME': sentinel.should_not_be_used
+    }
+    with mock.patch.object(empty_OSClient, "api_version",  "v2", create=True):
+        creds = empty_OSClient._prepare_auth(data, overrides)
+        assert creds['username'] == sentinel.username
+        assert creds['password'] == sentinel.password_ok
+
+
 @pytest.mark.parametrize('version', ['v2', 'v3'])
 @pytest.mark.parametrize('insecure', [True, False])
 def test_create_session_v2(osclient, version, insecure, mock_keystone_data):
@@ -351,6 +379,12 @@ def test_create_session_v2(osclient, version, insecure, mock_keystone_data):
 def test_create_session_bad_api_version(osclient, mock_keystone_data):
     with pytest.raises(osclient.DiscoveryError):
         osclient.OSClient.create_session('v4', mock_keystone_data, False)
+
+
+def test_init(osclient, actual_keystone_data_v2):
+    with mock.patch.object(osclient, 'novaclient'):
+        with mock.patch.object(osclient, 'glanceclient'):
+            assert osclient.OSClient(actual_keystone_data_v2, {}, {}, {}, {})
 
 
 def test_osclient_upload_image_simple(osclient, mock_os):

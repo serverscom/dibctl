@@ -178,6 +178,7 @@ class OSClient(object):
         ca_path='/etc/ssl/certs',
         insecure=False
     ):
+
         self._set_api_version(keystone_data, insecure)
         self.auth = self._prepare_auth(keystone_data, overrides)
         self.session = self.create_session(self.api_version, self.auth, insecure)
@@ -235,9 +236,10 @@ class OSClient(object):
         return new_creds
 
     def _prepare_auth(self, keystone_data, overrides):
+        filtered_overrides = {k: v for k, v in overrides.items() if k.startswith('OS_')}
         creds = {}
         for target, cfg in self.OPTION_NAMINGS.iteritems():
-            creds.update(self._get_generic_field(keystone_data, overrides, target, cfg))
+            creds.update(self._get_generic_field(keystone_data, filtered_overrides, target, cfg))
         return self.map_creds(creds, self.api_version, self.OPTIONS_MAPPING)
 
     def _set_api_version(self, keystone_data, insecure):
