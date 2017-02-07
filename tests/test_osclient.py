@@ -234,27 +234,27 @@ def test__ask_for_version_bad_verion(osclient, empty_OSClient):
             empty_OSClient._ask_for_version(keystone_data, ['v3'], False)
 
 
-def test_set_auth_version_ok_non_forced(empty_OSClient):
+def test_set_api_version_ok_non_forced(empty_OSClient):
     with mock.patch.object(empty_OSClient, '_ask_for_version', return_value='v2'):
-        empty_OSClient._set_auth_version({}, False)
-        assert empty_OSClient.auth_version == 'v2'
+        empty_OSClient._set_api_version({}, False)
+        assert empty_OSClient.api_version == 'v2'
 
 
-def test_set_auth_version_bad_non_forced(empty_OSClient, osclient):
+def test_set_api_version_bad_non_forced(empty_OSClient, osclient):
     with pytest.raises(osclient.DiscoveryError):
         with mock.patch.object(empty_OSClient, '_ask_for_version', side_effect=osclient.DiscoveryError):
-            empty_OSClient._set_auth_version({}, False)
+            empty_OSClient._set_api_version({}, False)
 
 
 @pytest.mark.parametrize('version', ['v2', 'v3'])
-def test_set_auth_version_ok_forced(empty_OSClient, osclient, version):
-    empty_OSClient._set_auth_version({'api_version': version}, False)
-    assert empty_OSClient.auth_version == version
+def test_set_api_version_ok_forced(empty_OSClient, osclient, version):
+    empty_OSClient._set_api_version({'api_version': version}, False)
+    assert empty_OSClient.api_version == version
 
 
-def test_set_auth_version_bad_forced(empty_OSClient, osclient):
+def test_set_api_version_bad_forced(empty_OSClient, osclient):
     with pytest.raises(osclient.DiscoveryError):
-        empty_OSClient._set_auth_version({'api_version': '2'}, False)
+        empty_OSClient._set_api_version({'api_version': '2'}, False)
 
 
 @pytest.mark.parametrize('lowpriority, highpriority, target', [
@@ -309,7 +309,7 @@ def test_map_creds_all_in(osclient, v):
     'OS_USERNAME',
 ])
 def test_prepare_auth_check_overrides(empty_OSClient, override, version):
-    with mock.patch.object(empty_OSClient, "auth_version", version, create=True):
+    with mock.patch.object(empty_OSClient, "api_version", version, create=True):
         data = {
             'os_username': sentinel.old,
             'os_password': sentinel.old,
@@ -332,7 +332,7 @@ def test_prepare_auth_normal(empty_OSClient, version):
     overrides = {
         'OS_PASSWORD': sentinel.password
     }
-    with mock.patch.object(empty_OSClient, "auth_version", version, create=True):
+    with mock.patch.object(empty_OSClient, "api_version", version, create=True):
         creds = empty_OSClient._prepare_auth(data, overrides)
         assert creds
 
@@ -348,7 +348,7 @@ def test_create_session_v2(osclient, version, insecure, mock_keystone_data):
             assert mock_session.called
 
 
-def test_create_session_bad_auth_version(osclient, mock_keystone_data):
+def test_create_session_bad_api_version(osclient, mock_keystone_data):
     with pytest.raises(osclient.DiscoveryError):
         osclient.OSClient.create_session('v4', mock_keystone_data, False)
 
