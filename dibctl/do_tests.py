@@ -27,7 +27,8 @@ class DoTests(object):
         upload_only=False,
         continue_on_fail=False,
         keep_failed_image=False,
-        keep_failed_instance=False
+        keep_failed_instance=False,
+        shell_on_errors=False
     ):
         '''
             - image - entry of images.yaml
@@ -35,6 +36,7 @@ class DoTests(object):
             - image_uuid - override image-related things
             - upload_only - don't run tests
         '''
+        self.shell_on_errors = shell_on_errors
         self.keep_failed_image = keep_failed_image
         self.keep_failed_instance = keep_failed_instance
         self.continue_on_fail = continue_on_fail
@@ -122,7 +124,14 @@ class DoTests(object):
                     break
             if was_error:
                 print("ERROR: Some tests failed.")
+                if self.shell_on_errors:
+                    self.open_shell()
                 return False
             else:
                 print("Done all tests successfully.")
                 return True
+
+    def open_shell(self):
+        if 'ssh' not in self.image:
+            raise TestError('Asked to open ssh after test failed, but there is no ssh section in image config')
+        raise NotImplementedError("Option is not implemented yet")

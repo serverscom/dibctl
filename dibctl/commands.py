@@ -152,6 +152,7 @@ class TestCommand(GenericCommand):
         self.parser.add_argument('--use-existing-image', help='Skip upload and use given image uuid for test (will not be removed after test)', dest='uuid')
         self.parser.add_argument('--keep-failed-image', action='store_true', help="Do not remove image if test failed")
         self.parser.add_argument('--keep-failed-instance', action='store_true', help="Do not remove instance and ssh key is test failed")
+        self.parser.add_argument('--shell', action='store_true', help="Open ssh shell to the server if some test failed and there is ssh config for image")
 
     def _prepare(self):
         tests = self.image.get('tests', None)
@@ -174,7 +175,8 @@ class TestCommand(GenericCommand):
             test_env=self.test_env,
             upload_only=self.args.upload_only,
             keep_failed_image=self.args.keep_failed_image,
-            keep_failed_instance=self.args.keep_failed_instance
+            keep_failed_instance=self.args.keep_failed_instance,
+            shell_on_errors=self.args.shell
         )
         try:
             status = dt.run_all_tests()
