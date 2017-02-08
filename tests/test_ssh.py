@@ -13,8 +13,13 @@ def ssh():
     return ssh
 
 
-def test_non():
-    pass
+@pytest.mark.parametrize('host, port, user, output', [
+    ['192.168.1.1', 22, 'user', 'user@192.168.1.1'],
+    ['192.168.1.1', 1222, 'user', 'user@192.168.1.1:1222']
+])
+def test_user_host_and_port(ssh, host, port, user, output):
+    s = ssh.SSH(host, user, None, port)
+    assert s.user_host_and_port() == output
 
 
 if __name__ == "__main__":
