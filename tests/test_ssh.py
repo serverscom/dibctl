@@ -138,6 +138,31 @@ def test_shell_simple_run(ssh, capsys):
             s.shell({}, 'test message')
 
 
+@pytest.mark.parametrize('key, value', [
+    ['ip', '192.168.0.1'],
+    ['username', 'user'],
+    ['port', 22]
+])
+def test_info(ssh, key, value):
+    s = ssh.SSH('192.168.0.1', 'user', 'secret')
+    i = s.info()
+    assert i[key] == value
+    del s
+
+
+@pytest.mark.parametrize('key', [
+    'config',
+    'private_key_file',
+    'config',
+    'command_line',
+    'connector'
+])
+def test_info_2(ssh, key):
+    s = ssh.SSH('192.168.0.1', 'user', 'secret')
+    i = s.info()
+    assert key in i
+    del s
+
 if __name__ == "__main__":
     ourfilename = os.path.abspath(inspect.getfile(inspect.currentframe()))
     currentdir = os.path.dirname(ourfilename)

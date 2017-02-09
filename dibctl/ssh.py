@@ -104,3 +104,15 @@ class SSH(object):
         print(message)
         print("Executing shell: ", " ".join(command_line))
         subprocess.call(command_line, stdin=sys.stdin, stderr=sys.stderr, stdout=sys.stdout, env=env, shell=True)
+
+    def info(self):
+        result = {
+            'ip': self.ip,
+            'private_key_file': self.key_file(),
+            'username': self.username,
+            'port': self.port,
+            'config': self.config(),
+            'command_line': self.command_line(),
+            'connector': self.connector()
+        }
+        return result

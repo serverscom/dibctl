@@ -56,7 +56,8 @@ def runner(path, ssh, tos, vars, timeout_val, continue_on_fail):
         raise BadRunnerError('Path %s is not a test file or a dir' % path)
     config = dict(os.environ)
     config.update(unwrap_config(ENV_PREFIX, tos.get_env_config()))
-    config.update(ssh.env_vars('DIBCTL_'))
+    if ssh:
+        config.update(ssh.env_vars('DIBCTL_'))
     config.update(unwrap_config(ENV_PREFIX, vars))
     for test in tests:
         test_successfull = run_shell_test(test, config)

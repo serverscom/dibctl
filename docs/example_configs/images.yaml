@@ -13,14 +13,14 @@ xenial:
         - ubuntu-minimal
         - vm
         - cloud-init
-  ssh:  #not implemented yet
+  ssh:
     username: cloud-user
   tests:
      wait_for_port: 22
      port_wait_timeout: 30
      environment_name: example_env
      environment_variables:
-      ssh_username: cloud-user
+       foo: bar
      tests_list:
       - shell: docs/tests_examples/shell_examples.d/
         timeout: 300
