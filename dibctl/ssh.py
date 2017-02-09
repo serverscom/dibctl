@@ -1,7 +1,12 @@
 import tempfile
+import subprocess
+import sys
 
 
 class SSH(object):
+
+    COMMAND_NAME = 'ssh'
+
     def __init__(self, ip, username, private_key, port=22):
         self.ip = ip
         self.username = username
@@ -37,7 +42,7 @@ class SSH(object):
 
     def command_line(self):
         command_line = [
-            "ssh",
+            self.COMMAND_NAME,
             "-o", "StrictHostKeyChecking=no",
             "-o", "UserKnownHostsFile=/dev/null",
             "-o", "UpdateHostKeys=no",
@@ -84,5 +89,11 @@ class SSH(object):
             prefix + 'SSH_PRIVATE_KEY': self.key_file(),
             prefix + 'SSH': ' '.join(self.command_line())
         }
-        print result
         return result
+
+    def shell(self, env, message):
+        '''Opens a user-accessible shell to machine'''
+        command_line = self.command_line()
+        print(message)
+        print("Executing shell: ", " ".join(command_line))
+        subprocess.call(command_line, stdin=sys.stdin, stderr=sys.stderr, stdout=sys.stdout, env=env, shell=True)

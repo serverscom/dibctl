@@ -108,6 +108,14 @@ def test_env_vars(ssh):
     assert "192.168.0.1" in env['TEST_SSH']
     del s
 
+
+def test_shell_simple_run(ssh, capsys):
+    with mock.patch.object(ssh.SSH, "COMMAND_NAME", "echo"):
+        s = ssh.SSH('192.168.0.1', 'user', 'secret')
+        with capsys.disabled():
+            s.shell({}, 'test message')
+
+
 if __name__ == "__main__":
     ourfilename = os.path.abspath(inspect.getfile(inspect.currentframe()))
     currentdir = os.path.dirname(ourfilename)
