@@ -50,6 +50,28 @@ def test_key_file_remove_afterwards(ssh):
         open(f, 'r')
 
 
+def test_verbatim_key_file_name(ssh):
+    s = ssh.SSH(sentinel.ip, sentinel.user, "secret", sentinel.port)
+    f = s.verbatim_key_file()
+    assert 'saved_dibctl_key_' in f
+    os.remove(f)
+
+
+def test_verbatim_key_file_content(ssh):
+    s = ssh.SSH(sentinel.ip, sentinel.user, "secret", sentinel.port)
+    f = s.verbatim_key_file()
+    assert 'secret' in open(f, 'r').read()
+    os.remove(f)
+
+
+def test_verbatim_key_file_kept_after_removal(ssh):
+    s = ssh.SSH(sentinel.ip, sentinel.user, "secret", sentinel.port)
+    f = s.verbatim_key_file()
+    del s
+    assert 'secret' in open(f, 'r').read()
+    os.remove(f)
+
+
 def test_command_line(ssh):
     s = ssh.SSH('192.168.0.1', 'user', 'secret')
     cmdline = " ".join(s.command_line())

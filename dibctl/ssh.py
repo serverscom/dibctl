@@ -40,6 +40,13 @@ class SSH(object):
             self.private_key_file.flush()
         return self.private_key_file.name
 
+    def verbatim_key_file(self):
+        '''saves file in persistent way'''
+        f = tempfile.NamedTemporaryFile(prefix='saved_dibctl_key_', delete=False)
+        f.write(self.private_key)
+        f.close()
+        return f.name
+
     def command_line(self):
         command_line = [
             self.COMMAND_NAME,
