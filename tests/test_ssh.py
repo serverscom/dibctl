@@ -50,6 +50,53 @@ def test_key_file_remove_afterwards(ssh):
         open(f, 'r')
 
 
+def test_command_line(ssh):
+    s = ssh.SSH('192.168.0.1', 'user', 'secret')
+    cmdline = " ".join(s.command_line())
+    assert 'user@192.168.0.1' in cmdline
+    assert "-o StrictHostKeyChecking=no" in cmdline
+    assert "-o UserKnownHostsFile=/dev/null" in cmdline
+    assert "-o UpdateHostKeys=no" in cmdline
+    assert "-o PasswordAuthentication=no" in cmdline
+    assert "-i " in cmdline
+    del s
+
+
+def test_connector(ssh):
+    s = ssh.SSH('192.168.0.1', sentinel.user, sentinel.key)
+    assert s.connector() == 'ssh://192.168.0.1'
+
+
+def test_config_name(ssh):
+    s = ssh.SSH('192.168.0.1', 'user', 'secret')
+    assert 'dibctl_config_' in s.config()
+    del s
+
+
+def test_config_content(ssh):
+    s = ssh.SSH('192.168.0.1', 'user', 'secret', port=99)
+    cfg = s.config()
+    with open(cfg, 'r') as c:
+        data = c.read()
+        assert "User user" in data
+        assert "Host 192.168.0.1" in data
+        assert "StrictHostKeyChecking no" in data
+        assert "UserKnownHostsFile /dev/null" in data
+        assert "UpdateHostKeys no" in data
+        assert "PasswordAuthentication no" in data
+        assert "Port 99" in data
+        assert "IdentityFile" in data
+    del s
+
+
+def test_config_afterwards(ssh):
+    s = ssh.SSH('192.168.0.1', 'user', 'secret')
+    cfg = s.config()
+    del s
+    with pytest.raises(IOError):
+        open(cfg, 'r')
+
+
 if __name__ == "__main__":
     ourfilename = os.path.abspath(inspect.getfile(inspect.currentframe()))
     currentdir = os.path.dirname(ourfilename)
