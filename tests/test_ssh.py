@@ -97,6 +97,17 @@ def test_config_afterwards(ssh):
         open(cfg, 'r')
 
 
+def test_env_vars(ssh):
+    s = ssh.SSH('192.168.0.1', 'user', 'secret')
+    env = s.env_vars('TEST_')
+    assert env['TEST_SSH_USERNAME'] == 'user'
+    assert env['TEST_SSH_IP'] == '192.168.0.1'
+    assert env['TEST_SSH_PORT'] == '22'
+    assert open(env['TEST_SSH_PRIVATE_KEY'], 'r').read() == 'secret'
+    assert "Host" in open(env['TEST_SSH_CONFIG'], 'r').read()
+    assert "192.168.0.1" in env['TEST_SSH']
+    del s
+
 if __name__ == "__main__":
     ourfilename = os.path.abspath(inspect.getfile(inspect.currentframe()))
     currentdir = os.path.dirname(ourfilename)
