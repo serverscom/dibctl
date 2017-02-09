@@ -8,6 +8,13 @@ from mock import sentinel
 import tempfile
 import uuid
 
+
+@pytest.fixture
+def ssh():
+    from dibctl import ssh
+    return ssh
+
+
 @pytest.fixture
 def shell_runner():
     from dibctl import shell_runner
@@ -87,65 +94,58 @@ def test_gather_tests_single_file_exec(shell_runner):
     os.rmdir(tdir)
 
 
-def test_prepare_ssh(shell_runner):
-    tos = mock.MagicMock()
-    tos.os_key_private_file = '~/.ssh/id_rsa'
-    tos.ip = '192.168.0.1'
-    vars = {'ssh_username': 'root'}
-    pair = shell_runner.prepare_ssh(tos, vars)
-    assert pair['SSH'].startswith('ssh ')
-    assert '-o StrictHostKeyChecking=no' in  pair['SSH']
-    assert '-o UserKnownHostsFile=/dev/null' in  pair['SSH']
-    assert '-o UpdateHostKeys=no' in  pair['SSH']
-    assert '-o PasswordAuthentication=no' in  pair['SSH']
-    assert '-i ~/.ssh/id_rsa' in pair['SSH']
-    assert 'root@192.168.0.1' in pair['SSH']
-
-
 def test_runner_bad_path(shell_runner):
     with pytest.raises(shell_runner.BadRunnerError):
-        shell_runner.runner('/dev/null', sentinel.config, sentinel.vars, sentinel.timeout, continue_on_fail=False)
+        shell_runner.runner('/dev/null', sentinel.ssh, sentinel.config, sentinel.vars, sentinel.timeout, continue_on_fail=False)
 
 
-def test_runner_empty_tests(shell_runner):
+def test_runner_empty_tests(shell_runner, ssh):
     tos = mock.MagicMock()
     tos.ip = '192.168.1.1'
     tos.os_key_private_file = '~/.ssh/config'
     vars = {'ssh_username': 'root'}
+    s = ssh.SSH('192.168.1.1', 'user', 'secret')
     with mock.patch.object(shell_runner, "gather_tests", return_value=[]):
-        assert shell_runner.runner(sentinel.path, tos, vars, sentinel.timeout, continue_on_fail=False) is True
+        assert shell_runner.runner(sentinel.path, s, tos, vars, sentinel.timeout, continue_on_fail=False) is True
+    del s
 
 
-def test_runner_all_ok(shell_runner):
+def test_runner_all_ok(shell_runner, ssh):
     tos = mock.MagicMock()
     tos.ip = '192.168.1.1'
     tos.os_key_private_file = '~/.ssh/config'
     vars = {'ssh_username': 'root'}
     with mock.patch.object(shell_runner, "gather_tests", return_value=["test1", "test2"]):
         with mock.patch.object(shell_runner, "run_shell_test", return_value=True):
-            assert shell_runner.runner(sentinel.path, tos, vars, sentinel.timeout, continue_on_fail=False) is True
+            s = ssh.SSH('192.168.1.1', 'user', 'secret')
+            assert shell_runner.runner(sentinel.path, s, tos, vars, sentinel.timeout, continue_on_fail=False) is True
+            del s
 
 
-def test_runner_all_no_continue(shell_runner):
+def test_runner_all_no_continue(shell_runner, ssh):
     tos = mock.MagicMock()
     tos.ip = '192.168.1.1'
     tos.os_key_private_file = '~/.ssh/config'
     vars = {'ssh_username': 'root'}
+    s = ssh.SSH('192.168.1.1', 'user', 'secret')
     with mock.patch.object(shell_runner, "gather_tests", return_value=["test1", "test2"]):
         with mock.patch.object(shell_runner, "run_shell_test", return_value=False) as mock_run:
-            assert shell_runner.runner(sentinel.path, tos, vars, sentinel.timeout, continue_on_fail=False) is False
+            assert shell_runner.runner(sentinel.path, s, tos, vars, sentinel.timeout, continue_on_fail=False) is False
             assert mock_run.call_count == 1
+    del s
 
 
-def test_runner_all_with_continue(shell_runner):
+def test_runner_all_with_continue(shell_runner, ssh):
     tos = mock.MagicMock()
     tos.ip = '192.168.1.1'
     tos.os_key_private_file = '~/.ssh/config'
     vars = {'ssh_username': 'root'}
+    s = ssh.SSH('192.168.1.1', 'user', 'secret')
     with mock.patch.object(shell_runner, "gather_tests", return_value=["test1", "test2"]):
         with mock.patch.object(shell_runner, "run_shell_test", return_value=False) as mock_run:
-            assert shell_runner.runner(sentinel.path, tos, vars, sentinel.timeout, continue_on_fail=True) is False
+            assert shell_runner.runner(sentinel.path, s, tos, vars, sentinel.timeout, continue_on_fail=True) is False
             assert mock_run.call_count == 2
+    del s
 
 
 

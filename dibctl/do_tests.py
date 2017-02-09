@@ -1,7 +1,7 @@
 import prepare_os
 import pytest_runner
 import shell_runner
-
+import ssh
 
 class TestError(EnvironmentError):
     pass
@@ -41,6 +41,7 @@ class DoTests(object):
         self.keep_failed_instance = keep_failed_instance
         self.continue_on_fail = continue_on_fail
         self.image = image
+        self.ssh = None
         self.override_image_uuid = image_uuid
         if image_uuid:
             self.delete_image = False
@@ -86,7 +87,7 @@ class DoTests(object):
         runner_name, runner, path = self.get_runner(test)
         print("Running tests %s: %s." % (runner_name, path))
         timeout_val = test.get('timeout', 300)
-        if runner(path, instance_config, vars, timeout_val=timeout_val, continue_on_fail=self.continue_on_fail):
+        if runner(path, self.ssh, instance_config, vars, timeout_val=timeout_val, continue_on_fail=self.continue_on_fail):
             print("Done running tests  %s: %s." % (runner_name, path))
             return True
         else:
@@ -109,6 +110,10 @@ class DoTests(object):
             override_image=self.override_image_uuid,
             delete_image=self.delete_image
         ) as prep_os:
+            if 'ssh' in self.image:
+                self.ssh = ssh.SSH(prep_os.ip, self.image['ssh'].get('username', 'user'), prep_os.os_key, self.image['ssh'].get('port', 22))
+            else:
+                self.ssh = None
             port = self.image['tests'].get('wait_for_port', self.DEFAULT_PORT)
             port_wait_timeout = self.image['tests'].get('port_wait_timeout', self.DEFAULT_PORT_WAIT_TIMEOUT)
             if port:

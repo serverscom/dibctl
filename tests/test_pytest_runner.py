@@ -14,19 +14,27 @@ def pytest_runner():
 
 
 @pytest.fixture
-def dcp(pytest_runner):
+def ssh():
+    from dibctl import ssh
+    return ssh
+
+
+@pytest.fixture
+def dcp(pytest_runner, ssh):
     tos = mock.MagicMock()
     tos.ip = '192.168.0.1'
     tos.os_instance.interface_list.return_value = [sentinel.iface1, sentinel.iface2]
-    tos.flavor.return_value.get_keys.return_value = {'name':'value'}
+    tos.flavor.return_value.get_keys.return_value = {'name': 'value'}
     tos.key_name = 'foo-key-name'
     tos.os_key_private_file = 'private-file'
     tos.ips.return_value = [sentinel.ip1, sentinel.ip2]
     env = {
         'ssh_username': 'root'
     }
-    dcp = pytest_runner.DibCtlPlugin(tos, env)
+    s = ssh.SSH('192.168.0.1', 'root', 'secret')
+    dcp = pytest_runner.DibCtlPlugin(s, tos, env)
     return dcp
+
 
 @pytest.mark.parametrize("code, status",[
     [0, True],
@@ -35,9 +43,10 @@ def dcp(pytest_runner):
 ])
 def test_runner_status(pytest_runner, code, status):
     with mock.patch.object(pytest_runner, "DibCtlPlugin"):
-        with mock.patch.object(pytest_runner.pytest, "main", return_value = code):
+        with mock.patch.object(pytest_runner.pytest, "main", return_value=code):
             assert pytest_runner.runner(
                 sentinel.path,
+                sentinel.ssh,
                 sentinel.tos,
                 sentinel.environment_variables,
                 sentinel.timeout_val,
@@ -47,9 +56,10 @@ def test_runner_status(pytest_runner, code, status):
 
 def test_runner_status_cont_on_fail_true(pytest_runner):
     with mock.patch.object(pytest_runner, "DibCtlPlugin"):
-        with mock.patch.object(pytest_runner.pytest, "main", return_value = -1) as mock_main:
+        with mock.patch.object(pytest_runner.pytest, "main", return_value=-1) as mock_main:
             pytest_runner.runner(
                 sentinel.path,
+                sentinel.ssh,
                 sentinel.tos,
                 sentinel.environment_variables,
                 sentinel.timeout_val,
@@ -60,9 +70,10 @@ def test_runner_status_cont_on_fail_true(pytest_runner):
 
 def test_runner_status_cont_on_fail_false(pytest_runner):
     with mock.patch.object(pytest_runner, "DibCtlPlugin"):
-        with mock.patch.object(pytest_runner.pytest, "main", return_value = -1) as mock_main:
+        with mock.patch.object(pytest_runner.pytest, "main", return_value=-1) as mock_main:
             pytest_runner.runner(
                 sentinel.path,
+                sentinel.ssh,
                 sentinel.tos,
                 sentinel.environment_variables,
                 sentinel.timeout_val,
@@ -77,12 +88,13 @@ def test_DibCtlPlugin_init_trivial(dcp):
 
 
 def test_DibCtlPlugin_init_no_testinfra(pytest_runner):
-    with mock.patch.dict(sys.modules, {'testinfra':None}):
+    with mock.patch.dict(sys.modules, {'testinfra': None}):
         dcp = pytest_runner.DibCtlPlugin(
+            sentinel.ssh,
             mock.MagicMock(),
-            {'ssh_username':'root'}
+            {'ssh_username': 'root'}
         )
-        assert dcp.testinfra == None
+        assert dcp.testinfra is None
         with pytest.raises(ImportError):
             dcp.ssh_backend(mock.MagicMock())
 

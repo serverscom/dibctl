@@ -49,28 +49,14 @@ def run_shell_test(path, env):
         return False
 
 
-def prepare_ssh(tos, vars):
-    command_line = [
-        "ssh",
-        "-o StrictHostKeyChecking=no",
-        "-o UserKnownHostsFile=/dev/null",
-        "-o UpdateHostKeys=no",
-        "-o PasswordAuthentication=no",
-        "-i",
-        tos.os_key_private_file,
-        "%s@%s" % (vars['ssh_username'], tos.ip)
-    ]
-    return {'SSH': " ".join(command_line)}
-
-
-def runner(path, tos, vars, timeout_val, continue_on_fail):
+def runner(path, ssh, tos, vars, timeout_val, continue_on_fail):
     result = True
     tests = gather_tests(path)
     if tests is None:
         raise BadRunnerError('Path %s is not a test file or a dir' % path)
     config = dict(os.environ)
     config.update(unwrap_config(ENV_PREFIX, tos.get_env_config()))
-    config.update(prepare_ssh(tos, vars))
+    config.update(ssh.env_vars('DIBCTL_'))
     config.update(unwrap_config(ENV_PREFIX, vars))
     for test in tests:
         test_successfull = run_shell_test(test, config)

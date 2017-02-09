@@ -4,7 +4,7 @@ import tempfile
 
 
 class DibCtlPlugin(object):
-    def __init__(self, tos, environment_variables):
+    def __init__(self, ssh, tos, environment_variables):
         self.cached_ssh_backend = None
         self.env_vars = environment_variables
         self.tos = tos
@@ -98,9 +98,9 @@ class DibCtlPlugin(object):
         return {'ip': 0, 'port': 0, 'timeout': 0, 'delay': 0.0}
 
 
-def runner(path, tos, environment_variables, timeout_val, continue_on_fail):
+def runner(path, ssh, tos, environment_variables, timeout_val, continue_on_fail):
     cmdline = [path, '-v', '-s']
-    dibctl_plugin = DibCtlPlugin(tos, environment_variables)
+    dibctl_plugin = DibCtlPlugin(ssh, tos, environment_variables)
     sys.stdout.flush()
     if not continue_on_fail:
         cmdline.append('-x')
