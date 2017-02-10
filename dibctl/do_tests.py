@@ -3,6 +3,7 @@ import pytest_runner
 import shell_runner
 import ssh
 
+
 class TestError(EnvironmentError):
     pass
 
@@ -87,7 +88,14 @@ class DoTests(object):
         runner_name, runner, path = self.get_runner(test)
         print("Running tests %s: %s." % (runner_name, path))
         timeout_val = test.get('timeout', 300)
-        if runner(path, self.ssh, instance_config, vars, timeout_val=timeout_val, continue_on_fail=self.continue_on_fail):
+        if runner(
+            path,
+            self.ssh,
+            instance_config,
+            vars,
+            timeout_val=timeout_val,
+            continue_on_fail=self.continue_on_fail
+        ):
             print("Done running tests  %s: %s." % (runner_name, path))
             return True
         else:
@@ -111,7 +119,12 @@ class DoTests(object):
             delete_image=self.delete_image
         ) as prep_os:
             if 'ssh' in self.image:
-                self.ssh = ssh.SSH(prep_os.ip, self.image['ssh'].get('username', 'user'), prep_os.os_key, self.image['ssh'].get('port', 22))
+                self.ssh = ssh.SSH(
+                    prep_os.ip,
+                    self.image['ssh'].get('username', 'user'),
+                    prep_os.os_key,
+                    self.image['ssh'].get('port', 22)
+                )
             else:
                 self.ssh = None
             port = self.image['tests'].get('wait_for_port', self.DEFAULT_PORT)
