@@ -6,6 +6,7 @@ import sys
 import osclient
 import do_tests
 
+
 class PrematureExitError(SystemExit):
     pass
 
@@ -71,7 +72,22 @@ class GenericCommand(object):
                 overrides=self.env_overrides,
                 label=self.args.envlabel
             )
-            self.os = osclient.OSClient(**self.upload_env)
+            #  REFACTOR 1
+            glance_data = osclient.smart_join_glance_config(
+                {'name': 'foo'},
+                {}
+            )
+            #    self.image.get('glance', {}),
+            #    self.upload_env.get('glance', {})
+            self.os = osclient.OSClient(
+                keystone_data=self.upload_env['keystone'],
+                nova_data={},
+                glace_data=glance_data,
+                neutron_data={},
+                overrides=os.environ,
+                ca_path=self.upload_env.get('ssl_ca_path', '/etc/ssl/cacerts'),
+                insecure=self.upload_env.get('ssl_insecure', False)
+            )
         return self._command()
 
     def _command(self):
@@ -113,7 +129,6 @@ class BuildCommand(GenericCommand):
 
     def _run(self):
         code = self.dib.run()
-        #import pdb; pdb.set_trace()
         if code != 0:
             print("Error: Failed to build image '%s', exit code is %s" % (self.args.imagelabel, code))
         else:
@@ -137,6 +152,7 @@ class TestCommand(GenericCommand):
         self.parser.add_argument('--use-existing-image', help='Skip upload and use given image uuid for test (will not be removed after test)', dest='uuid')
         self.parser.add_argument('--keep-failed-image', action='store_true', help="Do not remove image if test failed")
         self.parser.add_argument('--keep-failed-instance', action='store_true', help="Do not remove instance and ssh key is test failed")
+        self.parser.add_argument('--shell', action='store_true', help="Open ssh shell to the server if some test failed and there is ssh config for image")
 
     def _prepare(self):
         tests = self.image.get('tests', None)
@@ -159,12 +175,13 @@ class TestCommand(GenericCommand):
             test_env=self.test_env,
             upload_only=self.args.upload_only,
             keep_failed_image=self.args.keep_failed_image,
-            keep_failed_instance=self.args.keep_failed_instance
+            keep_failed_instance=self.args.keep_failed_instance,
+            shell_on_errors=self.args.shell
         )
         try:
             status = dt.run_all_tests()
         except do_tests.TestError as e:
-            print "Error while testing: %s" % e
+            print("Error while testing: %s" % e)
             return 1
         if status:
             return 0
@@ -197,13 +214,13 @@ class UploadCommand(GenericCommand):
             self.public,
             meta=self.meta
         )
-        print ("Image ''%s' uploaded to %s as %s" % (self.name, self.upload_env['os_auth_url'], self.uuid) )
+        print("Image ''%s' uploaded with uuid %s" % (self.name, self.uuid))
 
     def obsolete_old_images(self):
         candidates = self.os.older_images(self.name, self.uuid)
         for img in candidates:
             obsolete_image = self.os.mark_image_obsolete(self.name, img)
-            print "Obsoleting %s" % obsolete_image.id
+            print("Obsoleting %s" % obsolete_image.id)
 
     def _command(self):
         self._prepare()
@@ -232,7 +249,7 @@ class ObsoleteCommand(GenericCommand):
     def _command(self):
         img = self.os.get_image(self.args.uuid)
         self.os.mark_image_obsolete(img.name, img)
-        print "Obsoleting %s (%s)" % (img.id, img.name)
+        print("Obsoleting %s (%s)" % (img.id, img.name))
 
 
 class TransferCommand(GenericCommand):
@@ -279,13 +296,15 @@ def main(line=None):
     m = Main(line)
     try:
         code = m.run()
-    except PrematureExitError as e:
+    except (PrematureExitError, osclient.CredNotFound) as e:
         print("Error: %s" % str(e))
         code = -1
     sys.exit(code)
 
+
 def init():
     if __name__ == "__main__":
         main()
+
 
 init()

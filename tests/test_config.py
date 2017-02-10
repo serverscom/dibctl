@@ -56,13 +56,13 @@ def test_set_conf_default_name_ok_3(config, sequence, return_name):
 
 
 def test_read_and_validate_config_simple(config):
-    mock_config = mock.mock_open(read_data='[]')
+    mock_config = mock.mock_open(read_data='{"key": "value"  }')
     with mock.patch.object(config.Config, "_apply_overrides"):
         with mock.patch.object(config.Config, "DEFAULT_CONFIG_NAME", "foobar.yaml"):
             with mock.patch.object(config, "open", mock_config) as mock_open:
                 with mock.patch.object(config.os.path, "isfile", return_value=True):
                     conf = config.Config()
-                    assert conf.config == []
+                    assert conf.config == {'key': 'value'}
                     assert mock_open.call_args[0][0] == './foobar.yaml'
 
 

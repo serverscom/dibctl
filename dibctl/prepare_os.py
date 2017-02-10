@@ -7,17 +7,18 @@ import time
 import os
 import json
 import tempfile
+import ssh
+
 
 class TimeoutError(EnvironmentError):
     pass
+
 
 class InstanceError(EnvironmentError):
     pass
 
 
-
-
-class TestOS(object):
+class PrepOS(object):
 
     'Provides test-specific image/instance/keypair with timeouts and cleanup at errors'
     LONG_OS_TIMEOUT = 360
@@ -45,21 +46,30 @@ class TestOS(object):
         self.config_drive = test_environment.get('config_drive')
 
         self.delete_instance = delete_instance
-        self.flavor_id = test_environment["flavor"]
-        self.nic_list = list(self.prepare_nics(test_environment))
+        self.flavor_id = test_environment['nova']['flavor']
+        self.nic_list = list(self.prepare_nics(test_environment['nova']))
         self.main_nic_regexp = test_environment.get('main_nic_regexp', None)
         self.os = osclient.OSClient(
-            os_auth_url=test_environment["os_auth_url"],
-            os_tenant_name=test_environment["os_tenant_name"],
-            os_username=test_environment["os_username"],
-            os_password=test_environment["os_password"],
-            insecure=test_environment.get('insecure', False)
+            keystone_data=test_environment['keystone'],
+            nova_data=test_environment['nova'],
+            glance_data=osclient.smart_join_glance_config(
+                test_environment.get('glance', {}),
+                self.image.get('glance', {})
+            ),
+            neutron_data=test_environment.get('neutron', None),
+            overrides=os.environ,
+            ca_path=test_environment.get('ssl_ca_path', '/etc/ssl/certs'),
+            insecure=test_environment.get('ssl_insecure', False)
         )
 
     @staticmethod
     def prepare_nics(env):
         for nic in env.get('nics', []):
-            yield {'net-id': nic}
+            response = {}
+            if 'net-id' in nic:
+                response['net-id'] = nic['net-id']
+            # TODO add fixed IP/mac/etc
+            yield response
 
     @staticmethod
     def make_test_name(bare_name):
@@ -149,7 +159,7 @@ class TestOS(object):
                 else:
                     print("Not removing %s." % name)
         except Exception as e:
-            print("Error while clear up %s: %s" %(name, e))
+            print("Error while clear up %s: %s" % (name, e))
 
     def cleanup_instance(self):
         self._cleanup(
@@ -190,18 +200,16 @@ class TestOS(object):
     def error_handler(self, signum, frame, timeout=True):
         if timeout:
             print("Timeout!")
-        print ("Clearing up due to error")
+        print("Clearing up due to error")
         self.cleanup()
         if timeout:
             raise TimeoutError("Timeout")
-
 
     def report_if_fail(self):
         if self.report and self.os_instance and not self.delete_instance:
             print("Instance %s is not removed. Please debug and remove it manually." % self.os_instance.id)
             print("Instance ip is %s" % self.ip)
             print("Private key file is %s" % self.os_key_private_file)
-
 
     def __enter__(self):
         try:
@@ -252,7 +260,6 @@ class TestOS(object):
     def network(self):
         return self.os_instance.interface_list()
 
-
     def wait_for_port(self, port=22, timeout=60):
         '''check if we can connect to given port. Wait for port
            up to timeout and then return error
@@ -263,8 +270,8 @@ class TestOS(object):
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # add source IP
             result = sock.connect_ex((self.ip, port))
             if result == 0:
-                time.sleep(1)  # in many cases there is a race between port
-                               # become availabe and actual service been available
+                time.sleep(1)   # in many cases there is a race between port
+                # become availabe and actual service been available
                 print("Instance accepts connections on port %s" % port)
                 return True
             time.sleep(3)

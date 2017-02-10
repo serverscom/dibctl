@@ -13,9 +13,6 @@ def do_tests():
     return do_tests
 
 
-
-
-
 def test_init_no_tests(do_tests):
     image = {}
     dt = do_tests.DoTests(image, sentinel.env)
@@ -45,13 +42,13 @@ def test_init_tests(do_tests):
 
 def test_chef_if_keep_stuff_after_fail_remove_all(do_tests):
     dt = do_tests.DoTests({}, sentinel.env)
-    tos = mock.MagicMock()
+    prep_os = mock.MagicMock()
     dt.keep_failed_instance = True
     dt.keep_failed_image = True
-    dt.check_if_keep_stuff_after_fail(tos)
-    assert tos.delete_instance is False
-    assert tos.delete_keypair is False
-    assert tos.delete_image is False
+    dt.check_if_keep_stuff_after_fail(prep_os)
+    assert prep_os.delete_instance is False
+    assert prep_os.delete_keypair is False
+    assert prep_os.delete_image is False
 
 
 def test_run_test_bad_config(do_tests):
@@ -70,7 +67,6 @@ def test_run_test_duplicate_runner(do_tests):
     dt = do_tests.DoTests({}, sentinel.env)
     with pytest.raises(do_tests.BadTestConfigError):
         dt.run_test({'pytest': 1, 'shell': 2}, sentinel.config, sentinel.env)
-
 
 
 @pytest.mark.parametrize('continue_on_fail, result, expected', [
@@ -92,8 +88,9 @@ def test_run_test_matrix(do_tests, runner, continue_on_fail, result, expected):
 @pytest.mark.parametrize('port', [False, 22])
 def test_run_all_tests_minimal(do_tests, port, capsys):
     env = {
-        'flavor': 'some flavor',
-        'os_auth_url': 'http://test.example.com/auth_url'
+        'nova': {
+            'flavor': 'some flavor'
+        }
     }
     image = {
         'tests': {
@@ -102,15 +99,16 @@ def test_run_all_tests_minimal(do_tests, port, capsys):
         }
     }
     dt = do_tests.DoTests(image, env)
-    with mock.patch.object(do_tests.test_os, "TestOS"):
+    with mock.patch.object(do_tests.prepare_os, "PrepOS"):
         assert dt.run_all_tests() is True
     assert 'Done' in capsys.readouterr()[0]
 
 
 def test_run_all_tests_port_timeout(do_tests):
     env = {
-        'flavor': 'some flavor',
-        'os_auth_url': 'http://test.example.com/auth_url'
+        'nova': {
+            'flavor': 'some flavor'
+        }
     }
     image = {
         'tests': {
@@ -119,20 +117,21 @@ def test_run_all_tests_port_timeout(do_tests):
         }
     }
     dt = do_tests.DoTests(image, env)
-    with mock.patch.object(do_tests.test_os, "TestOS") as mock_tos_class:
-        mock_tos = mock.MagicMock()
-        mock_tos.wait_for_port.return_value = False
+    with mock.patch.object(do_tests.prepare_os, "PrepOS") as mock_prep_os_class:
+        mock_prep_os = mock.MagicMock()
+        mock_prep_os.wait_for_port.return_value = False
         mock_enter = mock.MagicMock()
-        mock_enter.__enter__.return_value = mock_tos
-        mock_tos_class.return_value = mock_enter
+        mock_enter.__enter__.return_value = mock_prep_os
+        mock_prep_os_class.return_value = mock_enter
         with pytest.raises(do_tests.TestError):
             dt.run_all_tests()
 
 
 def test_run_all_tests_with_tests(do_tests, capsys):
     env = {
-        'flavor': 'some flavor',
-        'os_auth_url': 'http://test.example.com/auth_url'
+        'nova': {
+            'flavor': 'some flavor'
+        }
     }
     image = {
         'tests': {
@@ -142,18 +141,19 @@ def test_run_all_tests_with_tests(do_tests, capsys):
     }
     dt = do_tests.DoTests(image, env)
     with mock.patch.multiple(do_tests, pytest_runner=mock.DEFAULT, shell_runner=mock.DEFAULT):
-        with mock.patch.object(do_tests.test_os, "TestOS") as mock_tos_class:
-            mock_tos = mock.MagicMock()
+        with mock.patch.object(do_tests.prepare_os, "PrepOS") as mock_prep_os_class:
+            mock_prep_os = mock.MagicMock()
             mock_enter = mock.MagicMock()
-            mock_enter.__enter__.return_value = mock_tos
-            mock_tos_class.return_value = mock_enter
+            mock_enter.__enter__.return_value = mock_prep_os
+            mock_prep_os_class.return_value = mock_enter
             assert dt.run_all_tests() is True
 
 
 def test_run_all_tests_fail(do_tests, capsys):
     env = {
-        'flavor': 'some flavor',
-        'os_auth_url': 'http://test.example.com/auth_url'
+        'nova': {
+            'flavor': 'some flavor'
+        }
     }
     image = {
         'tests': {
@@ -164,11 +164,11 @@ def test_run_all_tests_fail(do_tests, capsys):
     dt = do_tests.DoTests(image, env)
     with mock.patch.object(do_tests.pytest_runner, "runner") as runner:
         runner.side_effect = [False, ValueError("Shouldn't be called")]
-        with mock.patch.object(do_tests.test_os, "TestOS") as mock_tos_class:
-            mock_tos = mock.MagicMock()
+        with mock.patch.object(do_tests.prepare_os, "PrepOS") as mock_prep_os_class:
+            mock_prep_os = mock.MagicMock()
             mock_enter = mock.MagicMock()
-            mock_enter.__enter__.return_value = mock_tos
-            mock_tos_class.return_value = mock_enter
+            mock_enter.__enter__.return_value = mock_prep_os
+            mock_prep_os_class.return_value = mock_enter
             assert dt.run_all_tests() is False
             assert runner.call_count == 1
 

@@ -4,6 +4,6 @@ glanceclient
 novaclient
 keystoneauth1
 pytest
-pytest-cov
 pytest-timeout
 testinfra
+jsonschema

@@ -1,6 +1,7 @@
-import test_os
+import prepare_os
 import pytest_runner
 import shell_runner
+import ssh
 
 
 class TestError(EnvironmentError):
@@ -27,7 +28,8 @@ class DoTests(object):
         upload_only=False,
         continue_on_fail=False,
         keep_failed_image=False,
-        keep_failed_instance=False
+        keep_failed_instance=False,
+        shell_on_errors=False
     ):
         '''
             - image - entry of images.yaml
@@ -35,10 +37,12 @@ class DoTests(object):
             - image_uuid - override image-related things
             - upload_only - don't run tests
         '''
+        self.shell_on_errors = shell_on_errors
         self.keep_failed_image = keep_failed_image
         self.keep_failed_instance = keep_failed_instance
         self.continue_on_fail = continue_on_fail
         self.image = image
+        self.ssh = None
         self.override_image_uuid = image_uuid
         if image_uuid:
             self.delete_image = False
@@ -51,14 +55,14 @@ class DoTests(object):
             self.tests_list = []
         self.test_env = test_env
 
-    def check_if_keep_stuff_after_fail(self, tos):
+    def check_if_keep_stuff_after_fail(self, prep_os):
         if self.keep_failed_instance:
-            tos.delete_instance = False
-            tos.delete_keypair = False
-            tos.report = True
+            prep_os.delete_instance = False
+            prep_os.delete_keypair = False
+            prep_os.report = True
             print("Do not delete instance for failed tests")
         if self.keep_failed_image:
-            tos.delete_image = False
+            prep_os.delete_image = False
             print("Do not delete image for failed tests")
 
     @staticmethod
@@ -80,12 +84,18 @@ class DoTests(object):
             raise BadTestConfigError("No known runner names found in %s" % str(test))
         return name, runner, path
 
-
     def run_test(self, test, instance_config, vars):
         runner_name, runner, path = self.get_runner(test)
         print("Running tests %s: %s." % (runner_name, path))
         timeout_val = test.get('timeout', 300)
-        if runner(path, instance_config, vars, timeout_val=timeout_val, continue_on_fail=self.continue_on_fail):
+        if runner(
+            path,
+            self.ssh,
+            instance_config,
+            vars,
+            timeout_val=timeout_val,
+            continue_on_fail=self.continue_on_fail
+        ):
             print("Done running tests  %s: %s." % (runner_name, path))
             return True
         else:
@@ -99,32 +109,47 @@ class DoTests(object):
 
     def run_all_tests(self):
         was_error = False
-        print("Will run test instance with flavor %s in openstack at %s." % (
-            self.test_env["flavor"],
-            self.test_env["os_auth_url"]
+        print("Will run test instance with flavor %s." % (
+            self.test_env['nova']["flavor"]
         ))
-        with test_os.TestOS(
+        with prepare_os.PrepOS(
             self.image,
             self.test_env,
             override_image=self.override_image_uuid,
             delete_image=self.delete_image
-        ) as tos:
+        ) as prep_os:
+            if 'ssh' in self.image:
+                self.ssh = ssh.SSH(
+                    prep_os.ip,
+                    self.image['ssh'].get('username', 'user'),
+                    prep_os.os_key.private_key,
+                    self.image['ssh'].get('port', 22)
+                )
+            else:
+                self.ssh = None
             port = self.image['tests'].get('wait_for_port', self.DEFAULT_PORT)
             port_wait_timeout = self.image['tests'].get('port_wait_timeout', self.DEFAULT_PORT_WAIT_TIMEOUT)
             if port:
-                port_available = tos.wait_for_port(port, port_wait_timeout)
+                port_available = prep_os.wait_for_port(port, port_wait_timeout)
                 if not port_available:
-                    self.check_if_keep_stuff_after_fail(tos)
+                    self.check_if_keep_stuff_after_fail(prep_os)
                     was_error = True
                     raise TestError("Timeout while waiting instance to accept connection on port %s." % port)
             for test in self.tests_list:
-                if self.run_test(test, tos, self.environment_variables) is not True:
-                    self.check_if_keep_stuff_after_fail(tos)
+                if self.run_test(test, prep_os, self.environment_variables) is not True:
+                    self.check_if_keep_stuff_after_fail(prep_os)
                     was_error = True
                     break
             if was_error:
                 print("ERROR: Some tests failed.")
+                if self.shell_on_errors:
+                    self.open_shell()
                 return False
             else:
                 print("Done all tests successfully.")
                 return True
+
+    def open_shell(self):
+        if not self.ssh:
+            raise TestError('Asked to open ssh after test failed, but there is no ssh section in image config')
+        self.ssh.shell({}, "Opening shell due to error")

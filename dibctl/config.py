@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import os
 import yaml
+from jsonschema import validate
 
 '''Config support for dibctl'''
 
@@ -21,10 +22,14 @@ class Config (object):
 
     DEFAULT_CONFIG_NAME = None  # should be overrided in subclasses
     CONFIG_SEARCH_PATH = ["./", "./dibctl/", "/etc/dibctl/"]
+    SCHEMA = {
+        "type": "object",
+        "minItem": 1
+    }
 
     def __init__(self, config_file=None, overrides={}):
         self.config_file = self.set_conf_name(config_file)
-        print ("Using %s" % self.config_file)
+        print("Using %s" % self.config_file)
         self.config = self.read_and_validate_config(self.config_file)
         self._apply_overrides(**overrides)
 
@@ -36,10 +41,10 @@ class Config (object):
     def _apply_overrides(self):
         raise TypeError("This method should not be called")
 
-    @staticmethod
-    def read_and_validate_config(name):
-        # add validation here
-        return yaml.load(open(name, "r"))
+    def read_and_validate_config(self, name):
+        content = yaml.load(open(name, "r"))
+        validate(content, self.SCHEMA)
+        return content
 
     def set_conf_name(self, forced_name):
         if forced_name:
@@ -64,12 +69,13 @@ class Config (object):
 
 class ImageConfig(Config):
 
-    DEFAULT_CONFIG_NAME = "images.yaml"  #TODO RENAME TO iamge.yaml
+    DEFAULT_CONFIG_NAME = "images.yaml"  # TODO RENAME TO iamge.yaml
 
     def _apply_overrides(self, filename=None):
         if filename:
             for img_key in self.config:
                 self.config[img_key].update(filename=filename)
+
 
 # This class is not used by itself
 class EnvConfig(Config):
@@ -91,8 +97,10 @@ class EnvConfig(Config):
         for env_key in self.config:
             self.config[env_key].update(env_override)
 
+
 class TestEnvConfig(EnvConfig):
     DEFAULT_CONFIG_NAME = "test.yaml"
+
 
 class UploadEnvConfig(EnvConfig):
     DEFAULT_CONFIG_NAME = "upload.yaml"

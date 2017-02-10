@@ -1,7 +1,3 @@
-#  deliports
-import keystoneclient
-
-
 import glanceclient
 from keystoneauth1 import identity
 from keystoneauth1 import session
@@ -10,6 +6,11 @@ import re
 from functools import partial
 import requests
 import simplejson
+import copy
+
+
+class UnknownPolicy(ValueError):
+    pass
 
 
 class OpenStackError(EnvironmentError):
@@ -54,6 +55,52 @@ class NoIPFoundError(IPError):
 
 class MultipleIPError(IPError):
     pass
+
+
+# all those '_smart' functions should be somewhere in config part...
+def _smart_merge(target, key, orig1, orig2, policy='second'):
+    if policy == 'first':  # orig1 have priority over orig2
+        if key in orig1:
+            target[key] = orig1[key]
+        elif key in orig2:
+            target[key] = orig2[key]
+    elif policy == 'second':  # orig2 have priority over orig1
+        if key in orig2:
+            target[key] = orig2[key]
+        elif key in orig1:
+            target[key] = orig1[key]
+    elif policy == 'mergelist':  # for lists
+        if key in orig1 or key in orig2:
+            target[key] = orig1.get(key, []) + orig2.get(key, [])
+    elif policy == 'mergedict':  # for dicts
+        if key in orig1 or key in orig2:
+            target[key] = copy.deepcopy(orig1.get(key, {}))
+            target[key].update(orig2.get(key, {}))
+    elif policy == 'max':  # (num types only), use the maximum value
+        if key in orig1 or key in orig2:
+            target[key] = max(orig1.get(key, None), orig2.get(key, None))
+    else:
+        raise UnknownPolicy("Policy %s is unknown, can't merge" % policy)
+
+
+def smart_join_glance_config(img_conf, env_conf):
+    '''
+        join together two glance sections with
+        special logic for each field during merge.
+    '''
+    # default policy is 'second', so we'll join both, and than process special cases
+    common_config = copy.deepcopy(env_conf)
+    # should cover 'name' and 'public'
+    common_config.update(img_conf)
+    for key, policy in (
+        ('api_version', 'second'),  # test/upload_env has priority here
+        ('upload_timeout', 'max'),
+        ('properties', 'mergedict'),  # envs has priority on conflicting entries
+        ('tags', 'mergelist'),
+        ('endpoint', 'second'),  # envs has priority. I don't know why anyone wants to put endpoint into image config.
+    ):
+        _smart_merge(common_config, key, img_conf, env_conf, policy)
+    return common_config
 
 
 class OSClient(object):
@@ -121,7 +168,7 @@ class OSClient(object):
         }
     }
 
-    def new__init__(
+    def __init__(
         self,
         keystone_data,
         nova_data,
@@ -131,22 +178,22 @@ class OSClient(object):
         ca_path='/etc/ssl/certs',
         insecure=False
     ):
-        self._set_auth_version(keystone_data, insecure)
+
+        self._set_api_version(keystone_data, insecure)
         self.auth = self._prepare_auth(keystone_data, overrides)
-        self.session = self.create_session(self.auth_version, self.auth, insecure)
+        self.session = self.create_session(self.api_version, self.auth, insecure)
         self.nova = self.get_nova(self.session)
         self.glance = self.get_glance(self.session)
 
     @staticmethod
-    def create_session(auth_version, auth_data, insecure, timeout=30):
+    def create_session(api_version, auth_data, insecure, timeout=30):
         verify = not insecure
-        print auth_data, auth_version
-        if auth_version == 'v2':
+        if api_version == 'v2':
             auth = identity.v2.Password(**auth_data)
-        elif auth_version == 'v3':
+        elif api_version == 'v3':
             auth = identity.v3.Password(**auth_data)
         else:
-            raise DiscoveryError('Auth version %s is not supported' % auth_version)
+            raise DiscoveryError('Auth version %s is not supported' % api_version)
 
         # TODO we need to respect CACERT!
         return session.Session(
@@ -189,25 +236,26 @@ class OSClient(object):
         return new_creds
 
     def _prepare_auth(self, keystone_data, overrides):
+        filtered_overrides = {k: v for k, v in overrides.items() if k.startswith('OS_')}
         creds = {}
         for target, cfg in self.OPTION_NAMINGS.iteritems():
-            creds.update(self._get_generic_field(keystone_data, overrides, target, cfg))
-        return self.map_creds(creds, self.auth_version, self.OPTIONS_MAPPING)
+            creds.update(self._get_generic_field(keystone_data, filtered_overrides, target, cfg))
+        return self.map_creds(creds, self.api_version, self.OPTIONS_MAPPING)
 
-    def _set_auth_version(self, keystone_data, insecure):
+    def _set_api_version(self, keystone_data, insecure):
         local_versions = self._find_local_versions()
         if 'api_version' in keystone_data:
-            force_auth_version = keystone_data['api_version']
-            if self._issupported_version(force_auth_version, local_versions):
-                self.auth_version = force_auth_version
+            force_api_version = keystone_data['api_version']
+            if self._issupported_version(force_api_version, local_versions):
+                self.api_version = force_api_version
             else:
                 raise DiscoveryError(
                     'API version %s for keystone is not supported' %
-                    force_auth_version
+                    force_api_version
                 )
         else:
             try:
-                self.auth_version = self._ask_for_version(
+                self.api_version = self._ask_for_version(
                     keystone_data,
                     local_versions,
                     insecure
@@ -264,62 +312,6 @@ class OSClient(object):
                     app_versions=str(self.SUPPORTED_VERSIONS)
                   )
         raise MissmatchError(message)
-
-    def transitional_init(self, os_auth_url, os_tenant_name, os_username, os_password, insecure=False):
-        self.os_creds = {
-            "auth_url": os_auth_url,
-            "tenant_name": os_tenant_name,
-            "username": os_username,
-            "password": os_password,
-        }
-        self.insecure = insecure
-        print self.os_creds, insecure
-        self.new__init__(self.os_creds, {}, {}, {}, {}, insecure=insecure)
-
-    __init__ = transitional_init
-
-    def old__init__(self, os_auth_url, os_tenant_name, os_username, os_password, insecure=False):
-        self.os_creds = {
-            "auth_url": os_auth_url,
-            "tenant_name": os_tenant_name,
-            "username": os_username,
-            "password": os_password,
-            "insecure": insecure
-        }
-        self.insecure = insecure
-        self.init_keystone(os_auth_url, os_tenant_name, os_username, os_password)
-        self.init_glance()
-        self.init_nova()
-
-    def init_keystone(self, os_auth_url, os_tenant_name, os_username, os_password):
-        self.keystone_auth = keystoneclient.v2_0.Client(
-            **self.os_creds
-        )
-        self.token = self.keystone_auth.get_token(self.keystone_auth.session)
-        self.glance_endpoint = self.keystone_auth.service_catalog.url_for(
-            service_type="image",
-            endpoint_type="publicURL"
-        )
-
-    def init_glance(self):
-        self.glance = glanceclient.Client(
-            version="1",
-            endpoint=self.glance_endpoint,
-            token=self.token,
-            cacert=self.OS_CACERT,
-            insecure=self.insecure
-        )
-
-    def init_nova(self):
-        self.nova = novaclient.client.Client(
-            version="2",
-            username=self.os_creds["username"],
-            password=self.os_creds["password"],
-            project_id=self.os_creds["tenant_name"],
-            auth_url=self.os_creds["auth_url"],
-            cacert=self.OS_CACERT,
-            insecure=self.insecure
-        )
 
     def upload_image(
         self,
