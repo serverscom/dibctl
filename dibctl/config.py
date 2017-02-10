@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import os
 import yaml
+from jsonschema import validate
 
 '''Config support for dibctl'''
 
@@ -21,6 +22,10 @@ class Config (object):
 
     DEFAULT_CONFIG_NAME = None  # should be overrided in subclasses
     CONFIG_SEARCH_PATH = ["./", "./dibctl/", "/etc/dibctl/"]
+    SCHEMA = {
+        "type": "object",
+        "minItem": 1
+    }
 
     def __init__(self, config_file=None, overrides={}):
         self.config_file = self.set_conf_name(config_file)
@@ -36,10 +41,10 @@ class Config (object):
     def _apply_overrides(self):
         raise TypeError("This method should not be called")
 
-    @staticmethod
-    def read_and_validate_config(name):
-        # add validation here
-        return yaml.load(open(name, "r"))
+    def read_and_validate_config(self, name):
+        content = yaml.load(open(name, "r"))
+        validate(content, self.SCHEMA)
+        return content
 
     def set_conf_name(self, forced_name):
         if forced_name:

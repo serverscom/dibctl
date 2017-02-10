@@ -6,3 +6,4 @@ keystoneauth1
 pytest
 pytest-timeout
 testinfra
+jsonschema

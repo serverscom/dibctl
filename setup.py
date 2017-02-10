@@ -17,7 +17,7 @@ class PyTest(Command):
 
 setup(
     name="dibctl",
-    version="0.4.0",
+    version="0.4.1",
     description="diskimage-builder control",
     author="George Shuklin",
     author_email="george.shuklin@gmail.com",
@@ -26,10 +26,11 @@ setup(
     install_requires=[
         'PyYAML',
         'diskimage-builder',
-        'python-keystoneclient',
-        'python-glanceclient',
-        'python-novaclient',
+        'keystoneclient',
+        'glanceclient',
+        'novaclient',
         'pytest-timeout',
+        'jsonschema',
         'pytest' #not a mistake - we use pytest as part of the app
     ],
     entry_points="""
