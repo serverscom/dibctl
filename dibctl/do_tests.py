@@ -122,7 +122,7 @@ class DoTests(object):
                 self.ssh = ssh.SSH(
                     prep_os.ip,
                     self.image['ssh'].get('username', 'user'),
-                    prep_os.os_key,
+                    prep_os.os_key.private_key,
                     self.image['ssh'].get('port', 22)
                 )
             else:
@@ -150,6 +150,6 @@ class DoTests(object):
                 return True
 
     def open_shell(self):
-        if 'ssh' not in self.image:
+        if not self.ssh:
             raise TestError('Asked to open ssh after test failed, but there is no ssh section in image config')
-        raise NotImplementedError("Option is not implemented yet")
+        self.ssh.shell({}, "Opening shell due to error")
