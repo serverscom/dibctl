@@ -1,3 +1,9 @@
+dibctl (0.4.1) xenial; urgency=medium
+
+  * Version with basic config validation
+
+ -- George Shuklin <george.shuklin@gmail.com>  Sat, 11 Feb 2017 01:23:06 +0200
+
 dibctl (0.4.0) xenial; urgency=medium
 
   * Initial public release
