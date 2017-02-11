@@ -79,10 +79,40 @@ class ImageConfig(Config):
             ".+": {
                 "type": "object",
                 "properties": {
-                    "filename": {"type": "string"}
+                    "filename": {"type": "string"},
+                    "dib": {
+                        "type": "object",
+                        "properties": {
+                            "environment_variables": {
+                                "type": "object"
+                            },
+                            "elements": {
+                                "type": "array",
+                                "uniqueItems": True
+                            }
+
+                        },
+                        "required": ["elements"]
+                    },
+                    "glance": {
+                        "type": "object",
+                        "properties": {
+                            "name": {type: "string"},
+                            "upload_timeout": {"type": "number", "minimum": 1},
+                            "properties": {
+                                "type": "object"
+                            },
+                            "endpoint": {"type": "string"},
+                            "public": {"type": "bool"}
+
+                        },
+                        "required": ["name"]
+                    },
+                    "tests": {"type": "object"},
                 }
             }
-        }
+        },
+        "required": ["filename"]
     }
 
     def _apply_overrides(self, filename=None):

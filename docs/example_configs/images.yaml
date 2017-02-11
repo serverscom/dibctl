@@ -1,6 +1,7 @@
 xenial:
   filename: xenial.img.qcow2
   glance:
+    endpoint: "http://foo.example.com" #not implmented yet
     name: 'Example of Ubuntu Xenial'
     upload_timeout: 1800
     properties:
@@ -9,10 +10,9 @@ xenial:
   dib:
    environment_variables:
       DIB_RELEASE: xenial
-      elements:
-        - ubuntu-minimal
-        - vm
-        - cloud-init
+   elements:
+     - ubuntu-minimal
+     - vm
   tests:
      ssh:
        username: cloud-user
