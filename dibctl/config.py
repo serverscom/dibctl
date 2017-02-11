@@ -22,7 +22,8 @@ class Config (object):
 
     DEFAULT_CONFIG_NAME = None  # should be overrided in subclasses
     CONFIG_SEARCH_PATH = ["./", "./dibctl/", "/etc/dibctl/"]
-    SCHEMA = {
+    SCHEMA = {  # each subclass should provide own schema
+        "$schema": "http://json-schema.org/draft-04/schema#",
         "type": "object",
         "minItem": 1
     }
@@ -70,6 +71,19 @@ class Config (object):
 class ImageConfig(Config):
 
     DEFAULT_CONFIG_NAME = "images.yaml"  # TODO RENAME TO iamge.yaml
+    SCHEMA = {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "minItem": 1,
+        "patternProperties": {
+            ".+": {
+                "type": "object",
+                "properties": {
+                    "filename": {"type": "string"}
+                }
+            }
+        }
+    }
 
     def _apply_overrides(self, filename=None):
         if filename:
