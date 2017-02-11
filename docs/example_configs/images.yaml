@@ -13,9 +13,9 @@ xenial:
         - ubuntu-minimal
         - vm
         - cloud-init
-  ssh:
-    username: cloud-user
   tests:
+     ssh:
+       username: cloud-user
      wait_for_port: 22
      port_wait_timeout: 30
      environment_name: example_env

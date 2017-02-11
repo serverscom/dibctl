@@ -103,7 +103,7 @@ def test_runner_empty_tests(shell_runner, ssh):
     tos = mock.MagicMock()
     tos.ip = '192.168.1.1'
     tos.os_key_private_file = '~/.ssh/config'
-    vars = {'ssh_username': 'root'}
+    vars = {}
     s = ssh.SSH('192.168.1.1', 'user', 'secret')
     with mock.patch.object(shell_runner, "gather_tests", return_value=[]):
         assert shell_runner.runner(sentinel.path, s, tos, vars, sentinel.timeout, continue_on_fail=False) is True
@@ -114,7 +114,7 @@ def test_runner_all_ok(shell_runner, ssh):
     tos = mock.MagicMock()
     tos.ip = '192.168.1.1'
     tos.os_key_private_file = '~/.ssh/config'
-    vars = {'ssh_username': 'root'}
+    vars = {}
     with mock.patch.object(shell_runner, "gather_tests", return_value=["test1", "test2"]):
         with mock.patch.object(shell_runner, "run_shell_test", return_value=True):
             s = ssh.SSH('192.168.1.1', 'user', 'secret')
@@ -126,7 +126,7 @@ def test_runner_all_no_continue(shell_runner, ssh):
     tos = mock.MagicMock()
     tos.ip = '192.168.1.1'
     tos.os_key_private_file = '~/.ssh/config'
-    vars = {'ssh_username': 'root'}
+    vars = {}
     s = ssh.SSH('192.168.1.1', 'user', 'secret')
     with mock.patch.object(shell_runner, "gather_tests", return_value=["test1", "test2"]):
         with mock.patch.object(shell_runner, "run_shell_test", return_value=False) as mock_run:
@@ -139,7 +139,7 @@ def test_runner_all_with_continue(shell_runner, ssh):
     tos = mock.MagicMock()
     tos.ip = '192.168.1.1'
     tos.os_key_private_file = '~/.ssh/config'
-    vars = {'ssh_username': 'root'}
+    vars = {}
     s = ssh.SSH('192.168.1.1', 'user', 'secret')
     with mock.patch.object(shell_runner, "gather_tests", return_value=["test1", "test2"]):
         with mock.patch.object(shell_runner, "run_shell_test", return_value=False) as mock_run:

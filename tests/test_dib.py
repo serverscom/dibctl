@@ -28,9 +28,10 @@ def test_dib_cmdline_no_tracing(dib):
     dib = dib.DIB(sentinel.filename, [sentinel.element], tracing=False)
     assert '-x' not in dib.cmdline
 
+
 def test_dib_cmdline_tracing(dib):
     dib = dib.DIB(sentinel.filename, [sentinel.element], tracing=True)
-    assert  '-x' in dib.cmdline
+    assert '-x' in dib.cmdline
 
 
 def test_dib_cmdline_offline(dib):
