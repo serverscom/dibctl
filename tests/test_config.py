@@ -6,6 +6,10 @@ import pytest
 import mock
 from mock import sentinel
 
+ourfilename = os.path.abspath(inspect.getfile(inspect.currentframe()))
+currentdir = os.path.dirname(ourfilename)
+parentdir = os.path.dirname(currentdir)
+
 
 @pytest.fixture
 def config():
@@ -95,7 +99,7 @@ def test_empty_apply_overrides(config):
 
 
 def test_imageconfig(config):
-    mock_config = mock.mock_open(read_data='{"image1":{"filename": "ok"}}')
+    mock_config = mock.mock_open(read_data='{"image1": {"filename": "ok"}}')
     with mock.patch.object(config, "open", mock_config) as mock_open:
         with mock.patch.object(config.os.path, "isfile", return_value=True):
             config.ImageConfig()
@@ -119,12 +123,29 @@ def test_imageconfig_filename_override(config):
             assert conf.get('image2') == {'filename': 'new'}
 
 
-def test_imageconfig_filename_override_absent(config):
-    mock_config = mock.mock_open(read_data='{"image1":{"element": "ignore"}}')
+@pytest.mark.parametrize('bad_config', [
+    '{"foo": "bar"}',
+    '{"foo": {}}',
+    '{"foo": {"filename": "x", "glance": {}}}',
+    '{"foo": {"filename": "x", "dib": {}}}'
+])
+def test_imageconfig_schema_bad(config, bad_config):
+    mock_config = mock.mock_open(read_data=bad_config)
     with mock.patch.object(config, "open", mock_config):
         with mock.patch.object(config.os.path, "isfile", return_value=True):
-            conf = config.ImageConfig(overrides={'filename': 'new'})
-            assert conf.get('image1')['filename'] == 'new'
+            with pytest.raises(config.jsonschema.ValidationError):
+                config.ImageConfig("mock_config_name")
+
+
+# this is integration test
+# it uses 'docs/example_configs/images.yaml' file to
+# ensure that examples and code stay in sync
+# plus this is a good way to store huge input data sample
+# it mainly checks the schema but also all other
+# bits related to 'forced config'. No mocks involved
+def test_integration_imageconfig_schema_from_docs_example(config):
+    config.ImageConfig(os.path.join(parentdir, "docs/example_configs/images.yaml"))
+
 
 
 def test_envconfig(config):
@@ -152,14 +173,6 @@ def test_envconfig_filename_override(config):
             assert conf.get('env2')['os_password'] == 'other'
 
 
-def test_envconfig_filename_override_absent(config):
-    mock_config = mock.mock_open(read_data='{"env1":{"os_tenant_name": "something"}}')
-    with mock.patch.object(config, "open", mock_config):
-        with mock.patch.object(config.os.path, "isfile", return_value=True):
-            conf = config.EnvConfig(overrides={'os_password': 'pass'})
-            assert conf.get('env1')['os_password'] == 'pass'
-
-
 def notest_get_environment_not_ok(config):
     mock_config = mock.mock_open(read_data='{"env1":{ "os_tenant_name": "good_name"}}')
     with mock.patch.object(config, "open", mock_config):
@@ -170,9 +183,6 @@ def notest_get_environment_not_ok(config):
 
 
 if __name__ == "__main__":
-    ourfilename = os.path.abspath(inspect.getfile(inspect.currentframe()))
-    currentdir = os.path.dirname(ourfilename)
-    parentdir = os.path.dirname(currentdir)
     file_to_test = os.path.join(
         parentdir,
         os.path.basename(parentdir),

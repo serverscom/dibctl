@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import os
 import yaml
-from jsonschema import validate
+import jsonschema
 
 '''Config support for dibctl'''
 
@@ -44,7 +44,7 @@ class Config (object):
 
     def read_and_validate_config(self, name):
         content = yaml.load(open(name, "r"))
-        validate(content, self.SCHEMA)
+        jsonschema.validate(content, self.SCHEMA)
         return content
 
     def set_conf_name(self, forced_name):
@@ -74,7 +74,6 @@ class ImageConfig(Config):
     SCHEMA = {
         "$schema": "http://json-schema.org/draft-04/schema#",
         "type": "object",
-        "minItem": 1,
         "patternProperties": {
             ".+": {
                 "type": "object",
@@ -103,16 +102,36 @@ class ImageConfig(Config):
                                 "type": "object"
                             },
                             "endpoint": {"type": "string"},
-                            "public": {"type": "bool"}
+                            "public": {"type": "boolean"}
 
                         },
                         "required": ["name"]
                     },
-                    "tests": {"type": "object"},
-                }
+                    "tests": {
+                        "type": "object",
+                        "properties": {
+                            "ssh": {"type": "object"},
+                            "wait_for_port": {"type": "number"},
+                            "port_wait_timeout": {"type": "number"},
+                            "environment_name": {"type": "string"},
+                            "environment_variables": {"type": "object"},
+                            "test_list": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "shell_runner": {type: "string"},
+                                        "pytest_ruuner": {type: "string"},
+                                        "timeout": {"type": "number"}
+                                    }
+                                }
+                            }
+                        }
+                    },
+                },
+                "required": ["filename"]
             }
-        },
-        "required": ["filename"]
+        }
     }
 
     def _apply_overrides(self, filename=None):
