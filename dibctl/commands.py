@@ -148,16 +148,38 @@ class TestCommand(GenericCommand):
     def add_options(self):
         self.parser.add_argument('--test-config', help='Name of custom test.yaml', dest="env_cfg_name")
         self.parser.add_argument('--environment', help='Use given environment for tests', dest='envlabel')
-        self.parser.add_argument('--upload-only', action='store_true', help='Do not run tests, only upload image to test env')
-        self.parser.add_argument('--use-existing-image', help='Skip upload and use given image uuid for test (will not be removed after test)', dest='uuid')
-        self.parser.add_argument('--keep-failed-image', action='store_true', help="Do not remove image if test failed")
-        self.parser.add_argument('--keep-failed-instance', action='store_true', help="Do not remove instance and ssh key is test failed")
-        self.parser.add_argument('--shell', action='store_true', help="Open ssh shell to the server if some test failed and there is ssh config for image")
+        self.parser.add_argument(
+            '--upload-only',
+            action='store_true',
+            help='Do not run tests, only upload image to test env'
+        )
+        self.parser.add_argument(
+            '--use-existing-image',
+            help='Skip upload and use given image uuid for test (will not be removed after test)',
+            dest='uuid'
+        )
+        self.parser.add_argument(
+            '--keep-failed-image',
+            action='store_true',
+            help="Do not remove image if test failed"
+        )
+        self.parser.add_argument(
+            '--keep-failed-instance',
+            action='store_true',
+            help="Do not remove instance and ssh key is test failed"
+        )
+        self.parser.add_argument(
+            '--shell',
+            action='store_true',
+            help="Open ssh shell to the server if some test failed and there is ssh config for image"
+        )
 
     def _prepare(self):
         tests = self.image.get('tests', None)
         if not tests:
-            raise NoTestsError('No tests section was defined for image %s in the image config. Abort.' % self.args.imagelabel)
+            raise NoTestsError(
+                'No tests section was defined for image %s in the image config. Abort.' % self.args.imagelabel
+            )
         env_label = self.args.envlabel or tests.get('environment_name', None)
         if not env_label:
             raise TestEnvironmentNotFoundError('No environemnt name for tests were no given in config or command line')
@@ -268,10 +290,26 @@ class TransferCommand(GenericCommand):
         self.parser.add_argument('--src-password', help="OS_PASSWORD for the source openstack")
         self.parser.add_argument('--dst-password', help="OS_PASSWORD for the destination openstack")
         self.parser.add_argument('--ignore-meta', action="store_true", help="Do not copy metada")
-        self.parser.add_argument('--ignore-membership', action="store_true", help="Do not copy membership for shared images")
+        self.parser.add_argument(
+            '--ignore-membership',
+            action="store_true",
+            help="Do not copy membership for shared images"
+        )
 
     def _command(self):
         pass
+
+
+class ValidateCommand(GenericCommand):
+    name = 'validate'
+    help = 'Validate configuration files against config schema'
+    options = ['upload-config', 'img-config']
+
+    def _command(self):
+        raise NotImplementedError(
+            "1. move 'config' part apart from label, 2. made 'test-env' "
+            "generic for TestCommand and ValidateCommand"
+        )
 
 
 class Main(object):
@@ -285,6 +323,7 @@ class Main(object):
         RotateCommand(subparsers)
         ObsoleteCommand(subparsers)
         TransferCommand(subparsers)
+        ValidateCommand(subparsers)
         self.args = self.parser.parse_args(command_line)
 
     def run(self):
