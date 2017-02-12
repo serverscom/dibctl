@@ -18,10 +18,15 @@ class NotFoundInConfigError(ConfigError):
     pass
 
 
+SCHEMA_TIMEOUT = {'type': 'integer', "minimum": 0}
+SCHEMA_PORT = {'type': 'integer', 'minimum': 1, 'maximum': 65535}
+
+
 class Config (object):
 
     DEFAULT_CONFIG_NAME = None  # should be overrided in subclasses
     CONFIG_SEARCH_PATH = ["./", "./dibctl/", "/etc/dibctl/"]
+
     SCHEMA = {  # each subclass should provide own schema
         "$schema": "http://json-schema.org/draft-04/schema#",
         "type": "object",
@@ -97,7 +102,7 @@ class ImageConfig(Config):
                         "type": "object",
                         "properties": {
                             "name": {type: "string"},
-                            "upload_timeout": {"type": "number", "minimum": 1},
+                            "upload_timeout": SCHEMA_TIMEOUT,
                             "properties": {  # it's a name, 'properties'
                                 "type": "object"
                             },
@@ -114,19 +119,11 @@ class ImageConfig(Config):
                                 "type": "object",
                                 "properties": {
                                     "username": {"type": "string"},
-                                    "port": {
-                                        "type": "integer",
-                                        "minimum": 0,
-                                        "maximum": 65535
-                                    }
+                                    "port": SCHEMA_PORT
                                 },
                                 "required": ["username"]
                             },
-                            "wait_for_port": {
-                                "type": "integer",
-                                "minimum": 0,
-                                "maximum": 65535
-                            },
+                            "wait_for_port": SCHEMA_PORT,
                             "port_wait_timeout": {"type": "number"},
                             "environment_name": {"type": "string"},
                             "environment_variables": {"type": "object"},
@@ -137,7 +134,7 @@ class ImageConfig(Config):
                                     "properties": {
                                         "shell_runner": {type: "string"},
                                         "pytest_ruuner": {type: "string"},
-                                        "timeout": {"type": "number"}
+                                        "timeout": SCHEMA_TIMEOUT
                                     }
                                 }
                             }
@@ -178,6 +175,24 @@ class EnvConfig(Config):
 
 class TestEnvConfig(EnvConfig):
     DEFAULT_CONFIG_NAME = "test.yaml"
+    SCHEMA = {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "patternProperties": {
+            ".+": {
+                "type": "object",
+                "properties": {
+                    'keystone': {'type': 'object'},
+                    'nova': {'type': 'object'},
+                    'glance': {'type': 'object'},
+                    'neutron': {'type': 'object'},
+                    'ssl_insecure': {'type': 'boolean'},
+                    'ss_ca_path': {'type': 'string'}
+                },
+                "required": ['keystone', 'nova']
+            }
+        }
+    }
 
 
 class UploadEnvConfig(EnvConfig):
