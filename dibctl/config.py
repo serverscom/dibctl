@@ -98,7 +98,7 @@ class ImageConfig(Config):
                         "properties": {
                             "name": {type: "string"},
                             "upload_timeout": {"type": "number", "minimum": 1},
-                            "properties": {
+                            "properties": {  # it's a name, 'properties'
                                 "type": "object"
                             },
                             "endpoint": {"type": "string"},
@@ -110,8 +110,23 @@ class ImageConfig(Config):
                     "tests": {
                         "type": "object",
                         "properties": {
-                            "ssh": {"type": "object"},
-                            "wait_for_port": {"type": "number"},
+                            "ssh": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {"type": "string"},
+                                    "port": {
+                                        "type": "integer",
+                                        "minimum": 0,
+                                        "maximum": 65535
+                                    }
+                                },
+                                "required": ["username"]
+                            },
+                            "wait_for_port": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 65535
+                            },
                             "port_wait_timeout": {"type": "number"},
                             "environment_name": {"type": "string"},
                             "environment_variables": {"type": "object"},
