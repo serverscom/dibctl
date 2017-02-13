@@ -1,12 +1,14 @@
 non_production_environment:
- os_auth_url: https://auth.lab-2.azure.com:5000/v2.0
- os_tenant_name: tenantname
- os_username: mock_user
- os_password: mock_password
- insecure: true
+  keystone:
+    auth_url: https://auth.lab-2.azure.com:5000/v2.0
+    tenant_name: tenantname
+    username: mock_user
+    password: mock_password
+  ssl_insecure: true
 
- azure-us-1:
-  os_auth_url: https://auth.us01.azure.com:5000/v2.0
-  os_tenant_name: tenantname
-  os_username: mock_user
-  os_password: mock_password
+azure-us-1:
+  keystone:
+    auth_url: https://auth.us01.azure.com:5000/v2.0
+    tenant_name: tenantname
+    #username: may use OS_USERNAME environemnt variable
+    password: mock_password

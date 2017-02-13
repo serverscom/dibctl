@@ -20,6 +20,52 @@ class NotFoundInConfigError(ConfigError):
 
 SCHEMA_TIMEOUT = {'type': 'integer', "minimum": 0}
 SCHEMA_PORT = {'type': 'integer', 'minimum': 1, 'maximum': 65535}
+SCHEMA_PATH = {'type': 'string'}
+SCHEMA_KEYSTONE = {}
+SCHEMA_GLANCE = {
+    "type": "object",
+    "properties": {
+        "name": {"type": "string"},
+        "upload_timeout": SCHEMA_TIMEOUT,
+        "properties": {  # it's a name, 'properties'
+            "type": "object"
+        },
+        "endpoint": {"type": "string"},
+        "public": {"type": "boolean"}
+
+    }
+    # "required": ["name"]  # TODO reintroduce it back
+}
+SCHEMA_KEYSTONE = {
+    'type': 'object',
+    'properties': {
+        'api_version': {
+            'type': 'integer',
+            'minimum': 2,
+            'maximum': 3
+        },  # add oneOf
+        'username': {'type': 'string'},
+        'user': {'type': 'string'},
+        'os_username': {'type': 'string'},
+        'password': {'type': 'string'},
+        'os_password': {'type': 'string'},
+        'pass': {'type': 'string'},
+        'tenant': {'type': 'string'},
+        'tenant_name': {'type': 'string'},
+        'os_tenant_name': {'type': 'string'},
+        'project': {'type': 'string'},
+        'project_name': {'type': 'string'},
+        'os_project': {'type': 'string'},
+        'os_project_name': {'type': 'string'},
+        'url': {'type': 'string'},
+        'auth_url': {'type': 'string'},
+        'os_auth_url': {'type': 'string'},
+        'user_domain': {'type': 'string'},
+        'user_domain_id': {'type': 'string'},
+        'tenant_domain': {'type': 'string'},
+        'tenant_domain_id': {'type': 'string'}
+    }
+}
 
 
 class Config (object):
@@ -83,7 +129,7 @@ class ImageConfig(Config):
             ".+": {
                 "type": "object",
                 "properties": {
-                    "filename": {"type": "string"},
+                    "filename": SCHEMA_PATH,
                     "dib": {
                         "type": "object",
                         "properties": {
@@ -98,20 +144,7 @@ class ImageConfig(Config):
                         },
                         "required": ["elements"]
                     },
-                    "glance": {
-                        "type": "object",
-                        "properties": {
-                            "name": {type: "string"},
-                            "upload_timeout": SCHEMA_TIMEOUT,
-                            "properties": {  # it's a name, 'properties'
-                                "type": "object"
-                            },
-                            "endpoint": {"type": "string"},
-                            "public": {"type": "boolean"}
-
-                        },
-                        "required": ["name"]
-                    },
+                    "glance": SCHEMA_GLANCE,
                     "tests": {
                         "type": "object",
                         "properties": {
@@ -132,8 +165,8 @@ class ImageConfig(Config):
                                 "items": {
                                     "type": "object",
                                     "properties": {
-                                        "shell_runner": {type: "string"},
-                                        "pytest_ruuner": {type: "string"},
+                                        "shell_runner": SCHEMA_PATH,
+                                        "pytest_ruuner": SCHEMA_PATH,
                                         "timeout": SCHEMA_TIMEOUT
                                     }
                                 }
@@ -182,12 +215,30 @@ class TestEnvConfig(EnvConfig):
             ".+": {
                 "type": "object",
                 "properties": {
-                    'keystone': {'type': 'object'},
-                    'nova': {'type': 'object'},
-                    'glance': {'type': 'object'},
+                    'keystone': SCHEMA_KEYSTONE,
+                    'nova': {
+                        'type': 'object',
+                        'properties': {
+                            # 'api_version': {"type": number}
+                            'flavor': {"type": "string"},
+                            "nics": {
+                                "type": "array",
+                                'minItem': 1,
+                                'items': {
+                                    'type': 'object',
+                                    'properties': {
+                                        'net-id': {'type': 'string'},
+                                        'fixed-ip': {'type': 'string'}
+                                    },
+                                    'required': ['net-id']
+                                }
+                            },
+                            'main_nic_regexp': {'type': 'string'}
+                        }
+                    },
+                    'glance': SCHEMA_GLANCE,
                     'neutron': {'type': 'object'},
-                    'ssl_insecure': {'type': 'boolean'},
-                    'ss_ca_path': {'type': 'string'}
+
                 },
                 "required": ['keystone', 'nova']
             }
@@ -197,3 +248,19 @@ class TestEnvConfig(EnvConfig):
 
 class UploadEnvConfig(EnvConfig):
     DEFAULT_CONFIG_NAME = "upload.yaml"
+    SCHEMA = {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "patternProperties": {
+            ".+": {
+                "type": "object",
+                "properties": {
+                    'keystone': SCHEMA_KEYSTONE,
+                    'glance': SCHEMA_GLANCE,
+                    'ssl_insecure': {'type': 'boolean'},
+                    'ss_ca_path': SCHEMA_PATH
+                },
+                'required': ['keystone']
+            }
+        }
+    }

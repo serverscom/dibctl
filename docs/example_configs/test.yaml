@@ -27,14 +27,14 @@ example_env:
     #  key1: value1
     #  key2: value2
     #config-drive: true
+    main_nic_regexp: internet
   #neutron:
   #  is: not_implemented_yet
   glance:
     upload_timeout: 1666
     api_version: 1 # 2 is not yet supported
-    property:
+    properties:
       key1: value1
       key2: value2
     #tag:
     # - tag1
-  main_nic_regexp: internet
