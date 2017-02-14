@@ -145,7 +145,7 @@ def test_imageconfig_schema_bad(config, bad_config):
 # it mainly checks the schema but also all other
 # bits related to 'forced config'. No mocks involved
 def test_integration_imageconfig_schema_from_docs_example(config):
-    config.ImageConfig(os.path.join(parentdir, "docs/example_configs/images.yaml"))
+    config.ImageConfig(os.path.join(parentdir, "dibctl/docs/example_configs/images.yaml"))
 
 
 def test_envconfig(config):
@@ -189,7 +189,7 @@ def notest_get_environment_not_ok(config):
 # it mainly checks the schema but also all other
 # bits related to 'forced config'. No mocks involved
 def test_integration_testenvconfig_schema_from_docs_example(config):
-    config.TestEnvConfig(os.path.join(parentdir, "docs/example_configs/test.yaml"))
+    config.TestEnvConfig(os.path.join(parentdir, "dibctl/docs/example_configs/test.yaml"))
 
 
 @pytest.mark.parametrize('bad_config', [
@@ -215,7 +215,7 @@ def test_testenv_config_schema_bad(config, bad_config):
 # it mainly checks the schema but also all other
 # bits related to 'forced config'. No mocks involved
 def test_integration_uploadenvconfig_schema_from_docs_example(config):
-    config.UploadEnvConfig(os.path.join(parentdir, "docs/example_configs/upload.yaml"))
+    config.UploadEnvConfig(os.path.join(parentdir, "dibctl/docs/example_configs/upload.yaml"))
 
 
 @pytest.mark.parametrize('bad_config', [

@@ -33,6 +33,8 @@ setup(
         'jsonschema',
         'pytest' #not a mistake - we use pytest as part of the app
     ],
+    include_package_data=True,
+    package_data={'dibctl': ['docs/*', 'docs/example_configs/*', 'docs/tests_examples/shell_examples.d/*', 'docs/tests_examples/pytest_examples/*']},
     entry_points="""
         [console_scripts]
         dibctl=dibctl.commands:main
