@@ -43,6 +43,8 @@ class GenericCommand(object):
             self.parser.add_argument('--images-config', help='Use specific file instead of images.yaml')
         if 'upload-config' in self.options:
             self.parser.add_argument('--upload-config', help='Use specific file instead of upload.yaml')
+        if 'test-env-config' in self.options:
+            self.parser.add_argument('--test-config', help='Name of custom test.yaml', dest="env_cfg_name")
         if 'imagelabel' in self.options:
             self.parser.add_argument('imagelabel', help='Label of image in the images.yaml')
         if 'uploadlabel' in self.options:
@@ -143,10 +145,9 @@ class BuildCommand(GenericCommand):
 class TestCommand(GenericCommand):
     name = 'test'
     help = 'Test image'
-    options = ['imagelabel', 'input', 'img-config', 'env-override']
+    options = ['imagelabel', 'input', 'img-config', 'env-override', 'test-env-config']
 
     def add_options(self):
-        self.parser.add_argument('--test-config', help='Name of custom test.yaml', dest="env_cfg_name")
         self.parser.add_argument('--environment', help='Use given environment for tests', dest='envlabel')
         self.parser.add_argument(
             '--upload-only',
@@ -303,7 +304,7 @@ class TransferCommand(GenericCommand):
 class ValidateCommand(GenericCommand):
     name = 'validate'
     help = 'Validate configuration files against config schema'
-    options = ['upload-config', 'img-config']
+    options = ['upload-config', 'img-config', 'test-env-config']
 
     def _command(self):
         raise NotImplementedError(
