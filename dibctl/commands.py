@@ -68,28 +68,33 @@ class GenericCommand(object):
         if 'output' in self.options:
             self.overrides['filename'] = self.args.output
         if 'img-config' in self.options:
-            pass
+            self.image_config = config.ImageConfig(
+                config_file=self.args.images_config,
+                overrides=self.overrides
+            )
         if 'upload-config' in self.options:
-            pass
+            self.upload_config = config.UploadEnvConfig(
+                config_file=self.args.upload_config,
+                overrides=self.overrides
+            )
         if 'test-env-config' in self.options:
-            pass
+            self.test_env_config = config.TestEnvConfig(
+                config_file=self.args.env_cfg_config,
+                overrides=self.overrides
+            )
         if 'env-override' in self.options:
             self.set_overrides_from_env()
         if 'imagelabel' in self.options:
             self.image = self.get_from_config(
-                cfg_name=self.args.images_config,
-                ConfClass=config.ImageConfig,
-                overrides=self.overrides,
+                config=self.image_config,
                 label=self.args.imagelabel
             )
         if 'uploadlabel' in self.options:
             self.upload_env = self.get_from_config(
-                cfg_name=self.args.upload_config,
-                ConfClass=config.UploadEnvConfig,
-                overrides=self.env_overrides,
+                config=self.upload_config,
                 label=self.args.envlabel
             )
-            #  REFACTOR 1
+            #  REFACTOR 2
             glance_data = osclient.smart_join_glance_config(
                 {'name': 'foo'},
                 {}
@@ -118,10 +123,9 @@ class GenericCommand(object):
                 self.env_overrides[name.lower()] = value
 
     @staticmethod
-    def get_from_config(cfg_name, ConfClass, overrides, label):
+    def get_from_config(config, label):
         try:
-            cfg = ConfClass(config_file=cfg_name, overrides=overrides)
-            data = cfg.get(label)
+            data = config.get(label)
         except config.ConfigError as e:
             raise NotFoundInConfigError(e.message)
         return data
@@ -200,9 +204,7 @@ class TestCommand(GenericCommand):
         if not env_label:
             raise TestEnvironmentNotFoundError('No environemnt name for tests were no given in config or command line')
         self.test_env = self.get_from_config(
-            cfg_name=self.args.env_cfg_name,
-            ConfClass=config.TestEnvConfig,
-            overrides=self.env_overrides,
+            config=self.test_env_config,
             label=env_label
         )
 
