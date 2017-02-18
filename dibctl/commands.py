@@ -53,7 +53,7 @@ class GenericCommand(object):
         if 'upload-config' in self.options:
             self.parser.add_argument('--upload-config', help='Use specific file instead of upload.yaml')
         if 'test-env-config' in self.options:
-            self.parser.add_argument('--test-config', help='Name of custom test.yaml', dest="env_cfg_name")
+            self.parser.add_argument('--test-config', help='Name of custom test.yaml')
         if 'imagelabel' in self.options:
             self.parser.add_argument('imagelabel', help='Label of image in the images.yaml')
         if 'uploadlabel' in self.options:
@@ -79,28 +79,25 @@ class GenericCommand(object):
             )
         if 'test-env-config' in self.options:
             self.test_env_config = config.TestEnvConfig(
-                config_file=self.args.env_cfg_config,
+                config_file=self.args.test_config,
                 overrides=self.overrides
             )
         if 'env-override' in self.options:
             self.set_overrides_from_env()
         if 'imagelabel' in self.options:
             self.image = self.get_from_config(
-                config=self.image_config,
+                cfg=self.image_config,
                 label=self.args.imagelabel
             )
         if 'uploadlabel' in self.options:
             self.upload_env = self.get_from_config(
-                config=self.upload_config,
+                cfg=self.upload_config,
                 label=self.args.envlabel
             )
-            #  REFACTOR 2
             glance_data = osclient.smart_join_glance_config(
                 {'name': 'foo'},
                 {}
             )
-            #    self.image.get('glance', {}),
-            #    self.upload_env.get('glance', {})
             self.os = osclient.OSClient(
                 keystone_data=self.upload_env['keystone'],
                 nova_data={},
@@ -123,9 +120,9 @@ class GenericCommand(object):
                 self.env_overrides[name.lower()] = value
 
     @staticmethod
-    def get_from_config(config, label):
+    def get_from_config(cfg, label):
         try:
-            data = config.get(label)
+            data = cfg.get(label)
         except config.ConfigError as e:
             raise NotFoundInConfigError(e.message)
         return data
@@ -204,7 +201,7 @@ class TestCommand(GenericCommand):
         if not env_label:
             raise TestEnvironmentNotFoundError('No environemnt name for tests were no given in config or command line')
         self.test_env = self.get_from_config(
-            config=self.test_env_config,
+            cfg=self.test_env_config,
             label=env_label
         )
 
