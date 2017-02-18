@@ -26,6 +26,15 @@ class NotFoundInConfigError(PrematureExitError):
 class GenericCommand(object):
     # An abstract class, shouldn't be used directly
     options = []
+    # Possible values:
+    # 'input',
+    # 'output',
+    # 'img-config',
+    # 'upload-confg',
+    # 'test-env-config',
+    # 'imagelabel',
+    # 'uploadlabel',
+    # 'env-override'
     name = 'generic'
     help = 'replace me'
     image = None
@@ -58,6 +67,12 @@ class GenericCommand(object):
             self.overrides['filename'] = self.args.input
         if 'output' in self.options:
             self.overrides['filename'] = self.args.output
+        if 'img-config' in self.options:
+            pass
+        if 'upload-config' in self.options:
+            pass
+        if 'test-env-config' in self.options:
+            pass
         if 'env-override' in self.options:
             self.set_overrides_from_env()
         if 'imagelabel' in self.options:
