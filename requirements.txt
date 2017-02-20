@@ -1,7 +1,7 @@
 PyYAML>=3.1.0
 diskimage-builder
-glanceclient
-novaclient
+python-glanceclient
+python-novaclient
 keystoneauth1
 pytest
 pytest-timeout
