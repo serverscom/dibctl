@@ -118,12 +118,12 @@ class DoTests(object):
             override_image=self.override_image_uuid,
             delete_image=self.delete_image
         ) as prep_os:
-            if 'ssh' in self.image:
+            if 'ssh' in self.image['tests']:
                 self.ssh = ssh.SSH(
                     prep_os.ip,
-                    self.image['ssh'].get('username', 'user'),
+                    self.image['tests']['ssh'].get('username', 'user'),
                     prep_os.os_key.private_key,
-                    self.image['ssh'].get('port', 22)
+                    self.image['tests']['ssh'].get('port', 22)
                 )
             else:
                 self.ssh = None

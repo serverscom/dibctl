@@ -108,23 +108,19 @@ def test_GenericCommand_set_overrides_from_env_empty(commands, capsys):
 
 def test_GenericCommand_get_from_config_normal(commands):
     mock_Cfg = mock.MagicMock()
-    mock_Cfg.return_value.get.return_value = sentinel.value
+    mock_Cfg.get.return_value = sentinel.value
     assert commands.GenericCommand.get_from_config(
-        sentinel.cfg_name,
         mock_Cfg,
-        sentinel.overrides,
         sentinel.label
     ) == sentinel.value
 
 
 def test_GenericCommand_get_from_config_no_config(commands):
     mock_Cfg = mock.MagicMock()
-    mock_Cfg.return_value.get.side_effect = commands.config.ConfigError
+    mock_Cfg.get.side_effect = commands.config.ConfigError
     with pytest.raises(commands.NotFoundInConfigError):
-        assert commands.GenericCommand.get_from_config(
-            sentinel.cfg_name,
+        commands.GenericCommand.get_from_config(
             mock_Cfg,
-            sentinel.overrides,
             sentinel.label
         )
 
@@ -189,7 +185,7 @@ def test_BuildCommand_run_error(commands, capsys):
             assert 'Error' in s_in
 
 
-@pytest.mark.parametrize('status, exit_code',[
+@pytest.mark.parametrize('status, exit_code', [
     [True, 0],
     [False, 1]
 ])
@@ -197,13 +193,6 @@ def test_TestCommand_actual(commands, status, exit_code):
     parser, obj = create_subparser(commands.TestCommand)
     args = parser.parse_args(['test', 'label'])
     assert args.imagelabel == 'label'
-    assert args.env_cfg_name is None
-    assert args.envlabel is None
-    assert args.uuid is None
-    assert args.keep_failed_image is False
-    assert args.keep_failed_instance is False
-    assert args.images_config is None
-    assert args.input is None
     with mock.patch.object(commands.config, "ImageConfig"):
         with mock.patch.object(commands.config, "TestEnvConfig"):
             with mock.patch.object(commands.do_tests, "DoTests") as dt:
@@ -216,19 +205,11 @@ def test_TestCommand__command_exception(commands):
     parser, obj = create_subparser(commands.TestCommand)
     args = parser.parse_args(['test', 'label'])
     assert args.imagelabel == 'label'
-    assert args.env_cfg_name is None
-    assert args.envlabel is None
-    assert args.uuid is None
-    assert args.keep_failed_image is False
-    assert args.keep_failed_instance is False
-    assert args.images_config is None
-    assert args.input is None
     with mock.patch.object(commands.config, "ImageConfig"):
         with mock.patch.object(commands.config, "TestEnvConfig"):
             with mock.patch.object(commands.do_tests, "DoTests") as dt:
                 dt.return_value.run_all_tests.side_effect = commands.do_tests.TestError
                 assert args.command(args) == 1
-
 
 
 def test_TestCommand_input(commands):
@@ -237,7 +218,7 @@ def test_TestCommand_input(commands):
     assert args.input == 'file'
     with mock.patch.object(commands.config, "TestEnvConfig"):
         with mock.patch.object(commands.config, "ImageConfig"):
-            with mock.patch.object(commands.do_tests, "DoTests") as dt:
+            with mock.patch.object(commands.do_tests, "DoTests"):
                 args.command(args)
                 assert args.input == 'file'
 
@@ -245,12 +226,12 @@ def test_TestCommand_input(commands):
 def test_TestCommand_test_env(commands):
     parser = create_subparser(commands.TestCommand)[0]
     args = parser.parse_args(['test', 'label', '--test-config', 'cfg'])
-    assert args.env_cfg_name == 'cfg'
-    with mock.patch.object(commands.config, "TestEnvConfig"):
+    with mock.patch.object(commands.config, "TestEnvConfig") as mock_tec:
+        mock_tec.get.return_value = sentinel.data
         with mock.patch.object(commands.config, "ImageConfig"):
-            with mock.patch.object(commands.do_tests, "DoTests") as dt:
+            with mock.patch.object(commands.do_tests, "DoTests"):
                 args.command(args)
-                assert args.env_cfg_name == 'cfg'
+                assert args.test_config == 'cfg'
 
 
 def test_TestCommand_env_name(commands):
@@ -259,7 +240,7 @@ def test_TestCommand_env_name(commands):
     assert args.envlabel == 'env'
     with mock.patch.object(commands.config, "TestEnvConfig"):
         with mock.patch.object(commands.config, "ImageConfig"):
-            with mock.patch.object(commands.do_tests, "DoTests") as dt:
+            with mock.patch.object(commands.do_tests, "DoTests"):
                 args.command(args)
                 assert args.envlabel == 'env'
 
@@ -270,9 +251,10 @@ def test_TestCommand_existing(commands):
     assert args.uuid == 'myuuid'
     with mock.patch.object(commands.config, "TestEnvConfig"):
         with mock.patch.object(commands.config, "ImageConfig"):
-            with mock.patch.object(commands.do_tests, "DoTests") as dt:
+            with mock.patch.object(commands.do_tests, "DoTests"):
                 args.command(args)
                 assert args.uuid == 'myuuid'
+
 
 def test_TestCommand_keep_image(commands):
     parser = create_subparser(commands.TestCommand)[0]
@@ -280,9 +262,9 @@ def test_TestCommand_keep_image(commands):
     assert args.keep_failed_image is True
     with mock.patch.object(commands.config, "TestEnvConfig"):
         with mock.patch.object(commands.config, "ImageConfig"):
-            with mock.patch.object(commands.do_tests, "DoTests") as dt:
+            with mock.patch.object(commands.do_tests, "DoTests"):
                 args.command(args)
-                assert args.keep_failed_image == True
+                assert args.keep_failed_image is True
 
 
 def test_TestCommand_keep_instance(commands):
@@ -291,9 +273,9 @@ def test_TestCommand_keep_instance(commands):
     assert args.keep_failed_instance is True
     with mock.patch.object(commands.config, "TestEnvConfig"):
         with mock.patch.object(commands.config, "ImageConfig"):
-            with mock.patch.object(commands.do_tests, "DoTests") as dt:
+            with mock.patch.object(commands.do_tests, "DoTests"):
                 args.command(args)
-                assert args.keep_failed_instance == True
+                assert args.keep_failed_instance is True
 
 
 def test_TestCommand_actual_no_tests(commands):
@@ -461,23 +443,24 @@ def test_main(commands):
 
 
 def test_main_premature_exit_config(commands):
-    with mock.patch.object(commands.GenericCommand, 'get_from_config') as m_func:
-        m_func.side_effect = commands.NotFoundInConfigError
-        with mock.patch.object(commands.sys,'exit') as mock_exit:
-            commands.main(['build', 'label'])
-            assert mock_exit.call_args[0][0] == -1
-
-
-def test_main_premature_exit_config(commands):
-    with mock.patch.object(commands.osclient, 'OSClient') as m_func:
-        m_func.side_effect = commands.osclient.CredNotFound
+    with mock.patch.object(commands.config, "ImageConfig") as m:
+        m.side_effect = commands.NotFoundInConfigError
         with mock.patch.object(commands.sys, 'exit') as mock_exit:
             commands.main(['build', 'label'])
             assert mock_exit.call_args[0][0] == -1
 
 
+def test_main_premature_exit_config2(commands):
+    with mock.patch.object(commands, "config"):
+        with mock.patch.object(commands.osclient, 'OSClient') as m_func:
+            m_func.side_effect = commands.osclient.CredNotFound
+            with mock.patch.object(commands.sys, 'exit') as mock_exit:
+                commands.main(['test', 'label'])
+                assert mock_exit.call_args[0][0] == -1
+
+
 def test_init(commands):
-    with mock.patch.object(commands,"Main") as m:
+    with mock.patch.object(commands, "Main") as m:
         m.return_value.run.return_value = 42
         with mock.patch.object(commands, "__name__", "__main__"):
             with mock.patch.object(commands.sys, 'exit') as mock_exit:

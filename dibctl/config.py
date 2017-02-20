@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import os
 import yaml
-from jsonschema import validate
+import jsonschema
 
 '''Config support for dibctl'''
 
@@ -18,11 +18,63 @@ class NotFoundInConfigError(ConfigError):
     pass
 
 
+SCHEMA_TIMEOUT = {'type': 'integer', "minimum": 0}
+SCHEMA_PORT = {'type': 'integer', 'minimum': 1, 'maximum': 65535}
+SCHEMA_PATH = {'type': 'string'}
+SCHEMA_KEYSTONE = {}
+SCHEMA_GLANCE = {
+    "type": "object",
+    "properties": {
+        "name": {"type": "string"},
+        "upload_timeout": SCHEMA_TIMEOUT,
+        "properties": {  # it's a name, 'properties'
+            "type": "object"
+        },
+        "endpoint": {"type": "string"},
+        "public": {"type": "boolean"}
+
+    }
+    # "required": ["name"]  # TODO reintroduce it back
+}
+SCHEMA_KEYSTONE = {
+    'type': 'object',
+    'properties': {
+        'api_version': {
+            'type': 'integer',
+            'minimum': 2,
+            'maximum': 3
+        },  # add oneOf
+        'username': {'type': 'string'},
+        'user': {'type': 'string'},
+        'os_username': {'type': 'string'},
+        'password': {'type': 'string'},
+        'os_password': {'type': 'string'},
+        'pass': {'type': 'string'},
+        'tenant': {'type': 'string'},
+        'tenant_name': {'type': 'string'},
+        'os_tenant_name': {'type': 'string'},
+        'project': {'type': 'string'},
+        'project_name': {'type': 'string'},
+        'os_project': {'type': 'string'},
+        'os_project_name': {'type': 'string'},
+        'url': {'type': 'string'},
+        'auth_url': {'type': 'string'},
+        'os_auth_url': {'type': 'string'},
+        'user_domain': {'type': 'string'},
+        'user_domain_id': {'type': 'string'},
+        'tenant_domain': {'type': 'string'},
+        'tenant_domain_id': {'type': 'string'}
+    }
+}
+
+
 class Config (object):
 
     DEFAULT_CONFIG_NAME = None  # should be overrided in subclasses
     CONFIG_SEARCH_PATH = ["./", "./dibctl/", "/etc/dibctl/"]
-    SCHEMA = {
+
+    SCHEMA = {  # each subclass should provide own schema
+        "$schema": "http://json-schema.org/draft-04/schema#",
         "type": "object",
         "minItem": 1
     }
@@ -43,7 +95,7 @@ class Config (object):
 
     def read_and_validate_config(self, name):
         content = yaml.load(open(name, "r"))
-        validate(content, self.SCHEMA)
+        jsonschema.validate(content, self.SCHEMA)
         return content
 
     def set_conf_name(self, forced_name):
@@ -70,6 +122,62 @@ class Config (object):
 class ImageConfig(Config):
 
     DEFAULT_CONFIG_NAME = "images.yaml"  # TODO RENAME TO iamge.yaml
+    SCHEMA = {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "patternProperties": {
+            ".+": {
+                "type": "object",
+                "properties": {
+                    "filename": SCHEMA_PATH,
+                    "dib": {
+                        "type": "object",
+                        "properties": {
+                            "environment_variables": {
+                                "type": "object"
+                            },
+                            "elements": {
+                                "type": "array",
+                                "uniqueItems": True
+                            }
+
+                        },
+                        "required": ["elements"]
+                    },
+                    "glance": SCHEMA_GLANCE,
+                    "tests": {
+                        "type": "object",
+                        "properties": {
+                            "ssh": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {"type": "string"},
+                                    "port": SCHEMA_PORT
+                                },
+                                "required": ["username"]
+                            },
+                            "wait_for_port": SCHEMA_PORT,
+                            "port_wait_timeout": {"type": "number"},
+                            "environment_name": {"type": "string"},
+                            "environment_variables": {"type": "object"},
+                            "test_list": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "shell_runner": SCHEMA_PATH,
+                                        "pytest_ruuner": SCHEMA_PATH,
+                                        "timeout": SCHEMA_TIMEOUT
+                                    }
+                                }
+                            }
+                        }
+                    },
+                },
+                "required": ["filename"]
+            }
+        }
+    }
 
     def _apply_overrides(self, filename=None):
         if filename:
@@ -100,7 +208,59 @@ class EnvConfig(Config):
 
 class TestEnvConfig(EnvConfig):
     DEFAULT_CONFIG_NAME = "test.yaml"
+    SCHEMA = {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "patternProperties": {
+            ".+": {
+                "type": "object",
+                "properties": {
+                    'keystone': SCHEMA_KEYSTONE,
+                    'nova': {
+                        'type': 'object',
+                        'properties': {
+                            # 'api_version': {"type": number}
+                            'flavor': {"type": "string"},
+                            "nics": {
+                                "type": "array",
+                                'minItem': 1,
+                                'items': {
+                                    'type': 'object',
+                                    'properties': {
+                                        'net-id': {'type': 'string'},
+                                        'fixed-ip': {'type': 'string'}
+                                    },
+                                    'required': ['net-id']
+                                }
+                            },
+                            'main_nic_regexp': {'type': 'string'}
+                        }
+                    },
+                    'glance': SCHEMA_GLANCE,
+                    'neutron': {'type': 'object'},
+
+                },
+                "required": ['keystone', 'nova']
+            }
+        }
+    }
 
 
 class UploadEnvConfig(EnvConfig):
     DEFAULT_CONFIG_NAME = "upload.yaml"
+    SCHEMA = {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "patternProperties": {
+            ".+": {
+                "type": "object",
+                "properties": {
+                    'keystone': SCHEMA_KEYSTONE,
+                    'glance': SCHEMA_GLANCE,
+                    'ssl_insecure': {'type': 'boolean'},
+                    'ss_ca_path': SCHEMA_PATH
+                },
+                'required': ['keystone']
+            }
+        }
+    }

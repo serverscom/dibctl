@@ -12,12 +12,15 @@ class PyTest(Command):
 
     def run(self):
         import pytest
-        pytest.main('build/')
+        print("Running unit tests")
+        pytest.main(['build/'])
+        print("Running integration tests for docs examples")
+        pytest.main(['doctest/'])
 
 
 setup(
     name="dibctl",
-    version="0.4.1",
+    version="0.4.2",
     description="diskimage-builder control",
     author="George Shuklin",
     author_email="george.shuklin@gmail.com",
@@ -31,7 +34,7 @@ setup(
         'novaclient',
         'pytest-timeout',
         'jsonschema',
-        'pytest' #not a mistake - we use pytest as part of the app
+        'pytest' # not a mistake - we use pytest as a part of the app
     ],
     entry_points="""
         [console_scripts]

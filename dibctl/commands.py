@@ -26,6 +26,15 @@ class NotFoundInConfigError(PrematureExitError):
 class GenericCommand(object):
     # An abstract class, shouldn't be used directly
     options = []
+    # Possible values:
+    # 'input',
+    # 'output',
+    # 'img-config',
+    # 'upload-confg',
+    # 'test-env-config',
+    # 'imagelabel',
+    # 'uploadlabel',
+    # 'env-override'
     name = 'generic'
     help = 'replace me'
     image = None
@@ -43,6 +52,8 @@ class GenericCommand(object):
             self.parser.add_argument('--images-config', help='Use specific file instead of images.yaml')
         if 'upload-config' in self.options:
             self.parser.add_argument('--upload-config', help='Use specific file instead of upload.yaml')
+        if 'test-env-config' in self.options:
+            self.parser.add_argument('--test-config', help='Name of custom test.yaml')
         if 'imagelabel' in self.options:
             self.parser.add_argument('imagelabel', help='Label of image in the images.yaml')
         if 'uploadlabel' in self.options:
@@ -56,29 +67,37 @@ class GenericCommand(object):
             self.overrides['filename'] = self.args.input
         if 'output' in self.options:
             self.overrides['filename'] = self.args.output
+        if 'img-config' in self.options:
+            self.image_config = config.ImageConfig(
+                config_file=self.args.images_config,
+                overrides=self.overrides
+            )
+        if 'upload-config' in self.options:
+            self.upload_config = config.UploadEnvConfig(
+                config_file=self.args.upload_config,
+                overrides=self.overrides
+            )
+        if 'test-env-config' in self.options:
+            self.test_env_config = config.TestEnvConfig(
+                config_file=self.args.test_config,
+                overrides=self.overrides
+            )
         if 'env-override' in self.options:
             self.set_overrides_from_env()
         if 'imagelabel' in self.options:
             self.image = self.get_from_config(
-                cfg_name=self.args.images_config,
-                ConfClass=config.ImageConfig,
-                overrides=self.overrides,
+                cfg=self.image_config,
                 label=self.args.imagelabel
             )
         if 'uploadlabel' in self.options:
             self.upload_env = self.get_from_config(
-                cfg_name=self.args.upload_config,
-                ConfClass=config.UploadEnvConfig,
-                overrides=self.env_overrides,
+                cfg=self.upload_config,
                 label=self.args.envlabel
             )
-            #  REFACTOR 1
             glance_data = osclient.smart_join_glance_config(
                 {'name': 'foo'},
                 {}
             )
-            #    self.image.get('glance', {}),
-            #    self.upload_env.get('glance', {})
             self.os = osclient.OSClient(
                 keystone_data=self.upload_env['keystone'],
                 nova_data={},
@@ -101,9 +120,8 @@ class GenericCommand(object):
                 self.env_overrides[name.lower()] = value
 
     @staticmethod
-    def get_from_config(cfg_name, ConfClass, overrides, label):
+    def get_from_config(cfg, label):
         try:
-            cfg = ConfClass(config_file=cfg_name, overrides=overrides)
             data = cfg.get(label)
         except config.ConfigError as e:
             raise NotFoundInConfigError(e.message)
@@ -143,28 +161,47 @@ class BuildCommand(GenericCommand):
 class TestCommand(GenericCommand):
     name = 'test'
     help = 'Test image'
-    options = ['imagelabel', 'input', 'img-config', 'env-override']
+    options = ['imagelabel', 'input', 'img-config', 'env-override', 'test-env-config']
 
     def add_options(self):
-        self.parser.add_argument('--test-config', help='Name of custom test.yaml', dest="env_cfg_name")
         self.parser.add_argument('--environment', help='Use given environment for tests', dest='envlabel')
-        self.parser.add_argument('--upload-only', action='store_true', help='Do not run tests, only upload image to test env')
-        self.parser.add_argument('--use-existing-image', help='Skip upload and use given image uuid for test (will not be removed after test)', dest='uuid')
-        self.parser.add_argument('--keep-failed-image', action='store_true', help="Do not remove image if test failed")
-        self.parser.add_argument('--keep-failed-instance', action='store_true', help="Do not remove instance and ssh key is test failed")
-        self.parser.add_argument('--shell', action='store_true', help="Open ssh shell to the server if some test failed and there is ssh config for image")
+        self.parser.add_argument(
+            '--upload-only',
+            action='store_true',
+            help='Do not run tests, only upload image to test env'
+        )
+        self.parser.add_argument(
+            '--use-existing-image',
+            help='Skip upload and use given image uuid for test (will not be removed after test)',
+            dest='uuid'
+        )
+        self.parser.add_argument(
+            '--keep-failed-image',
+            action='store_true',
+            help="Do not remove image if test failed"
+        )
+        self.parser.add_argument(
+            '--keep-failed-instance',
+            action='store_true',
+            help="Do not remove instance and ssh key is test failed"
+        )
+        self.parser.add_argument(
+            '--shell',
+            action='store_true',
+            help="Open ssh shell to the server if some test failed and there is ssh config for image"
+        )
 
     def _prepare(self):
         tests = self.image.get('tests', None)
         if not tests:
-            raise NoTestsError('No tests section was defined for image %s in the image config. Abort.' % self.args.imagelabel)
+            raise NoTestsError(
+                'No tests section was defined for image %s in the image config. Abort.' % self.args.imagelabel
+            )
         env_label = self.args.envlabel or tests.get('environment_name', None)
         if not env_label:
             raise TestEnvironmentNotFoundError('No environemnt name for tests were no given in config or command line')
         self.test_env = self.get_from_config(
-            cfg_name=self.args.env_cfg_name,
-            ConfClass=config.TestEnvConfig,
-            overrides=self.env_overrides,
+            cfg=self.test_env_config,
             label=env_label
         )
 
@@ -268,10 +305,24 @@ class TransferCommand(GenericCommand):
         self.parser.add_argument('--src-password', help="OS_PASSWORD for the source openstack")
         self.parser.add_argument('--dst-password', help="OS_PASSWORD for the destination openstack")
         self.parser.add_argument('--ignore-meta', action="store_true", help="Do not copy metada")
-        self.parser.add_argument('--ignore-membership', action="store_true", help="Do not copy membership for shared images")
+        self.parser.add_argument(
+            '--ignore-membership',
+            action="store_true",
+            help="Do not copy membership for shared images"
+        )
 
     def _command(self):
         pass
+
+
+class ValidateCommand(GenericCommand):
+    name = 'validate'
+    help = 'Validate configuration files against config schema'
+    options = ['upload-config', 'img-config', 'test-env-config']
+
+    def _command(self):
+        print("Configs has been validated.")
+        return 0
 
 
 class Main(object):
@@ -285,6 +336,7 @@ class Main(object):
         RotateCommand(subparsers)
         ObsoleteCommand(subparsers)
         TransferCommand(subparsers)
+        ValidateCommand(subparsers)
         self.args = self.parser.parse_args(command_line)
 
     def run(self):
