@@ -80,7 +80,7 @@ class GenericCommand(object):
         if 'test-env-config' in self.options:
             self.test_env_config = config.TestEnvConfig(
                 config_file=self.args.test_config,
-                overrides=self.overrides
+                overrides={}
             )
         if 'env-override' in self.options:
             self.set_overrides_from_env()
