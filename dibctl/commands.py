@@ -348,7 +348,11 @@ def main(line=None):
     m = Main(line)
     try:
         code = m.run()
-    except (PrematureExitError, osclient.CredNotFound) as e:
+    except (
+        PrematureExitError,
+        osclient.CredNotFound,
+        config.ConfigError
+    ) as e:
         print("Error: %s" % str(e))
         code = -1
     sys.exit(code)

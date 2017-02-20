@@ -18,6 +18,10 @@ class NotFoundInConfigError(ConfigError):
     pass
 
 
+class InvaidConfigError(ConfigError):
+    pass
+
+
 SCHEMA_TIMEOUT = {'type': 'integer', "minimum": 0}
 SCHEMA_PORT = {'type': 'integer', 'minimum': 1, 'maximum': 65535}
 SCHEMA_PATH = {'type': 'string'}
@@ -95,7 +99,11 @@ class Config (object):
 
     def read_and_validate_config(self, name):
         content = yaml.load(open(name, "r"))
-        jsonschema.validate(content, self.SCHEMA)
+        try:
+            jsonschema.validate(content, self.SCHEMA)
+        except jsonschema.exceptions.ValidationError as e:
+            error_message = "There is an error in the file '%s': %s" % (name, e.message)
+            raise InvaidConfigError(error_message)
         return content
 
     def set_conf_name(self, forced_name):
