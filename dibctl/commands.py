@@ -80,7 +80,7 @@ class GenericCommand(object):
         if 'test-env-config' in self.options:
             self.test_env_config = config.TestEnvConfig(
                 config_file=self.args.test_config,
-                overrides=self.overrides
+                overrides={}
             )
         if 'env-override' in self.options:
             self.set_overrides_from_env()
@@ -348,7 +348,11 @@ def main(line=None):
     m = Main(line)
     try:
         code = m.run()
-    except (PrematureExitError, osclient.CredNotFound) as e:
+    except (
+        PrematureExitError,
+        osclient.CredNotFound,
+        config.ConfigError
+    ) as e:
         print("Error: %s" % str(e))
         code = -1
     sys.exit(code)

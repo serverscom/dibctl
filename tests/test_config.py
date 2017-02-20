@@ -134,7 +134,7 @@ def test_imageconfig_schema_bad(config, bad_config):
     mock_config = mock.mock_open(read_data=bad_config)
     with mock.patch.object(config, "open", mock_config):
         with mock.patch.object(config.os.path, "isfile", return_value=True):
-            with pytest.raises(config.jsonschema.ValidationError):
+            with pytest.raises(config.InvaidConfigError):
                 config.ImageConfig("mock_config_name")
 
 
@@ -184,7 +184,7 @@ def test_testenv_config_schema_bad(config, bad_config):
     mock_config = mock.mock_open(read_data=bad_config)
     with mock.patch.object(config, "open", mock_config):
         with mock.patch.object(config.os.path, "isfile", return_value=True):
-            with pytest.raises(config.jsonschema.ValidationError):
+            with pytest.raises(config.InvaidConfigError):
                 config.TestEnvConfig("mock_config_name")
 
 
@@ -198,7 +198,7 @@ def test_uploadenv_config_schema_bad(config, bad_config):
     mock_config = mock.mock_open(read_data=bad_config)
     with mock.patch.object(config, "open", mock_config):
         with mock.patch.object(config.os.path, "isfile", return_value=True):
-            with pytest.raises(config.jsonschema.ValidationError):
+            with pytest.raises(config.InvaidConfigError):
                 config.UploadEnvConfig("mock_config_name")
 
 
