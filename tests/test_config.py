@@ -138,16 +138,6 @@ def test_imageconfig_schema_bad(config, bad_config):
                 config.ImageConfig("mock_config_name")
 
 
-# this is integration test
-# it uses 'docs/example_configs/images.yaml' file to
-# ensure that examples and code stay in sync
-# plus this is a good way to store huge input data sample
-# it mainly checks the schema but also all other
-# bits related to 'forced config'. No mocks involved
-def test_integration_imageconfig_schema_from_docs_example(config):
-    config.ImageConfig(os.path.join(parentdir, "dibctl/docs/example_configs/images.yaml"))
-
-
 def test_envconfig(config):
     mock_config = mock.mock_open(read_data='{"env1":{"filename": "ok"}}')
     with mock.patch.object(config, "open", mock_config) as mock_open:
@@ -182,16 +172,6 @@ def notest_get_environment_not_ok(config):
                 conf.get_environment('env3')["os_tenant_name"]
 
 
-# this is integration test
-# it uses 'docs/example_configs/test.yaml' file to
-# ensure that examples and code stay in sync
-# plus this is a good way to store huge input data sample
-# it mainly checks the schema but also all other
-# bits related to 'forced config'. No mocks involved
-def test_integration_testenvconfig_schema_from_docs_example(config):
-    config.TestEnvConfig(os.path.join(parentdir, "dibctl/docs/example_configs/test.yaml"))
-
-
 @pytest.mark.parametrize('bad_config', [
     '{"foo": "bar"}',
     '{"foo": {}}',
@@ -208,16 +188,6 @@ def test_testenv_config_schema_bad(config, bad_config):
                 config.TestEnvConfig("mock_config_name")
 
 
-# this is integration test
-# it uses 'docs/example_configs/upload.yaml' file to
-# ensure that examples and code stay in sync
-# plus this is a good way to store huge input data sample
-# it mainly checks the schema but also all other
-# bits related to 'forced config'. No mocks involved
-def test_integration_uploadenvconfig_schema_from_docs_example(config):
-    config.UploadEnvConfig(os.path.join(parentdir, "dibctl/docs/example_configs/upload.yaml"))
-
-
 @pytest.mark.parametrize('bad_config', [
     '{"foo": "bar"}',
     '{"foo": {}}',
@@ -230,6 +200,7 @@ def test_uploadenv_config_schema_bad(config, bad_config):
         with mock.patch.object(config.os.path, "isfile", return_value=True):
             with pytest.raises(config.jsonschema.ValidationError):
                 config.UploadEnvConfig("mock_config_name")
+
 
 if __name__ == "__main__":
     file_to_test = os.path.join(
