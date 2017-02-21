@@ -127,8 +127,8 @@ class PrepOS(object):
             while self.os_instance.status != 'ACTIVE':
                 if self.os_instance.status in ('ERROR', 'DELETED'):
                     raise InstanceError(
-                        "Instance %s got %s state." % (
-                            self.os_instance,
+                        "Instance %s state is '%s' (expected 'ACTIVE')." % (
+                            self.os_instance.id,
                             self.os_instance.status
                         )
                     )

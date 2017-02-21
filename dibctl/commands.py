@@ -5,6 +5,7 @@ import dib
 import sys
 import osclient
 import do_tests
+import prepare_os
 
 
 class PrematureExitError(SystemExit):
@@ -351,7 +352,8 @@ def main(line=None):
     except (
         PrematureExitError,
         osclient.CredNotFound,
-        config.ConfigError
+        config.ConfigError,
+        prepare_os.InstanceError
     ) as e:
         print("Error: %s" % str(e))
         code = -1
