@@ -43,7 +43,7 @@ class PrepOS(object):
         self.os_instance = None
         self.os_key = None
         self.delete_keypair = True
-        self.config_drive = test_environment.get('config_drive')
+        self.config_drive = test_environment.get('config_drive', False)
 
         self.delete_instance = delete_instance
         self.flavor_id = test_environment['nova']['flavor']

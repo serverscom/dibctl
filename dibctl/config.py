@@ -253,7 +253,8 @@ class TestEnvConfig(EnvConfig):
                                     "additionalProperties": False
                                 }
                             },
-                            'main_nic_regexp': {'type': 'string'}
+                            'main_nic_regexp': {'type': 'string'},
+                            'config-drive': {'type': 'boolean'}
                         },
                         "additionalProperties": False,
                         "required": ['flavor']
