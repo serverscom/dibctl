@@ -131,11 +131,16 @@ def test_env_vars(ssh):
     del s
 
 
-def test_shell_simple_run(ssh, capsys):
+def test_shell_simple_run(ssh):
     with mock.patch.object(ssh.SSH, "COMMAND_NAME", "echo"):
         s = ssh.SSH('192.168.0.1', 'user', 'secret')
-        with capsys.disabled():
+        rfd, wfd = os.pipe()
+        w = os.fdopen(wfd, 'w', 0)
+        with mock.patch.multiple(ssh.sys, stdout=w, stderr=w, stdin=None):
             s.shell({}, 'test message')
+        output = os.read(rfd, 1000)
+        assert 'echo' in output  # should be ssh, but test demands
+        assert 'user@192.168.0.1' in output
 
 
 @pytest.mark.parametrize('key, value', [
@@ -162,6 +167,7 @@ def test_info_2(ssh, key):
     i = s.info()
     assert key in i
     del s
+
 
 if __name__ == "__main__":
     ourfilename = os.path.abspath(inspect.getfile(inspect.currentframe()))
