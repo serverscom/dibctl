@@ -125,7 +125,7 @@ class Config (object):
             if os.path.isfile(candidate):
                 return candidate
 
-        raise ConfigNotFound("Unable to file %s in %s" % (self.DEFAULT_CONFIG_NAME, self.CONFIG_SEARCH_PATH))
+        raise ConfigNotFound("Unable to file %s in %s" % (self.DEFAULT_CONFIG_NAME, ", ".join(self.CONFIG_SEARCH_PATH)))
 
     def get(self, label):
         try:
