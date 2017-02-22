@@ -48,7 +48,7 @@ class PrepOS(object):
         self.delete_instance = delete_instance
         self.flavor_id = test_environment['nova']['flavor']
         self.nic_list = list(self.prepare_nics(test_environment['nova']))
-        self.main_nic_regexp = test_environment.get('main_nic_regexp', None)
+        self.main_nic_regexp = test_environment['nova'].get('main_nic_regexp', None)
         self.os = osclient.OSClient(
             keystone_data=test_environment['keystone'],
             nova_data=test_environment['nova'],
