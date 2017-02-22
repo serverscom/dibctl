@@ -86,7 +86,7 @@ def test_run_test_matrix(do_tests, runner, continue_on_fail, result, expected):
 
 
 @pytest.mark.parametrize('port', [False, 22])
-def test_run_all_tests_minimal(do_tests, port, capsys):
+def test_process_minimal(do_tests, port, capsys):
     env = {
         'nova': {
             'flavor': 'some flavor'
@@ -100,11 +100,11 @@ def test_run_all_tests_minimal(do_tests, port, capsys):
     }
     dt = do_tests.DoTests(image, env)
     with mock.patch.object(do_tests.prepare_os, "PrepOS"):
-        assert dt.run_all_tests() is True
-    assert 'Done' in capsys.readouterr()[0]
+        assert dt.process(False, False) is True
+    assert 'passed' in capsys.readouterr()[0]
 
 
-def test_run_all_tests_port_timeout(do_tests):
+def test_process_port_timeout(do_tests):
     env = {
         'nova': {
             'flavor': 'some flavor'
@@ -124,10 +124,10 @@ def test_run_all_tests_port_timeout(do_tests):
         mock_enter.__enter__.return_value = mock_prep_os
         mock_prep_os_class.return_value = mock_enter
         with pytest.raises(do_tests.TestError):
-            dt.run_all_tests()
+            dt.process(False, False)
 
 
-def test_run_all_tests_with_tests(do_tests, capsys):
+def test_process_with_tests(do_tests, capsys):
     env = {
         'nova': {
             'flavor': 'some flavor'
@@ -146,10 +146,10 @@ def test_run_all_tests_with_tests(do_tests, capsys):
             mock_enter = mock.MagicMock()
             mock_enter.__enter__.return_value = mock_prep_os
             mock_prep_os_class.return_value = mock_enter
-            assert dt.run_all_tests() is True
+            assert dt.process(False, False) is True
 
 
-def test_run_all_tests_fail(do_tests, capsys):
+def test_process_all_tests_fail(do_tests, capsys):
     env = {
         'nova': {
             'flavor': 'some flavor'
@@ -169,8 +169,11 @@ def test_run_all_tests_fail(do_tests, capsys):
             mock_enter = mock.MagicMock()
             mock_enter.__enter__.return_value = mock_prep_os
             mock_prep_os_class.return_value = mock_enter
-            assert dt.run_all_tests() is False
+            assert dt.process(False, False) is False
             assert runner.call_count == 1
+
+def test_run_all_tests(do_tests):
+
 
 
 if __name__ == "__main__":

@@ -28,8 +28,7 @@ class DoTests(object):
         upload_only=False,
         continue_on_fail=False,
         keep_failed_image=False,
-        keep_failed_instance=False,
-        shell_on_errors=False
+        keep_failed_instance=False
     ):
         '''
             - image - entry of images.yaml
@@ -37,7 +36,6 @@ class DoTests(object):
             - image_uuid - override image-related things
             - upload_only - don't run tests
         '''
-        self.shell_on_errors = shell_on_errors
         self.keep_failed_image = keep_failed_image
         self.keep_failed_instance = keep_failed_instance
         self.continue_on_fail = continue_on_fail
@@ -107,11 +105,17 @@ class DoTests(object):
                 print("Stop testing due to previous error.")
                 return False
 
-    def run_all_tests(self):
-        was_error = False
-        print("Will run test instance with flavor %s." % (
-            self.test_env['nova']["flavor"]
-        ))
+    def run_all_tests(self, prep_os):
+        success = True
+
+        for test in self.tests_list:
+            if self.run_test(test, prep_os, self.environment_variables) is not True:
+                self.check_if_keep_stuff_after_fail(prep_os)
+                success = False
+                break
+        return success
+
+    def process(self, shell_only, shell_on_errors):
         with prepare_os.PrepOS(
             self.image,
             self.test_env,
@@ -133,23 +137,19 @@ class DoTests(object):
                 port_available = prep_os.wait_for_port(port, port_wait_timeout)
                 if not port_available:
                     self.check_if_keep_stuff_after_fail(prep_os)
-                    was_error = True
                     raise TestError("Timeout while waiting instance to accept connection on port %s." % port)
-            for test in self.tests_list:
-                if self.run_test(test, prep_os, self.environment_variables) is not True:
-                    self.check_if_keep_stuff_after_fail(prep_os)
-                    was_error = True
-                    break
-            if was_error:
-                print("ERROR: Some tests failed.")
-                if self.shell_on_errors:
-                    self.open_shell()
-                return False
+            if shell_only:
+                self.open_shell('Opening ssh shell to instance without running tests')
+            result = self.run_all_tests(prep_os)
+            if not result:
+                print("Some tests failed")
+                if shell_on_errors:
+                    self.open_shell('There was an test error and asked to open --shell')
             else:
-                print("Done all tests successfully.")
-                return True
+                print("All tests passed successfully.")
+            return result
 
-    def open_shell(self):
+    def open_shell(self, reason):
         if not self.ssh:
-            raise TestError('Asked to open ssh after test failed, but there is no ssh section in image config')
-        self.ssh.shell({}, "Opening shell due to error")
+            raise TestError('Asked to open ssh shell to server, but there is no ssh section in the image config')
+        self.ssh.shell({}, reason)

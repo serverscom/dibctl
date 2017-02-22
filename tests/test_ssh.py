@@ -139,7 +139,7 @@ def test_shell_simple_run(ssh):
         with mock.patch.multiple(ssh.sys, stdout=w, stderr=w, stdin=None):
             s.shell({}, 'test message')
         output = os.read(rfd, 1000)
-        assert 'echo' in output  # should be ssh, but test demands
+        assert 'echo' in output #  should be ssh, but test demands
         assert 'user@192.168.0.1' in output
 
 
