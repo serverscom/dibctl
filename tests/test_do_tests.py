@@ -172,8 +172,23 @@ def test_process_all_tests_fail(do_tests, capsys):
             assert dt.process(False, False) is False
             assert runner.call_count == 1
 
-def test_run_all_tests(do_tests):
 
+@pytest.mark.parametrize('result', [True, False])
+def test_run_all_tests(do_tests, result):
+    env = {
+        'nova': {
+            'flavor': 'some flavor'
+        }
+    }
+    image = {
+        'tests': {
+            'wait_for_port': 22,
+            'tests_list': [{'pytest': sentinel.path1}, {'pytest': sentinel.path2}]
+        }
+    }
+    with mock.patch.object(do_tests.DoTests, "run_test", return_value=result):
+        dt = do_tests.DoTests(image, env)
+        assert dt.run_all_tests(mock.MagicMock()) is result
 
 
 if __name__ == "__main__":

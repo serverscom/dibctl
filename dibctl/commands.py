@@ -225,7 +225,7 @@ class TestCommand(GenericCommand):
             keep_failed_instance=self.args.keep_failed_instance
         )
         try:
-            status = dt.run_all_tests(shell_only=self.args.shell_only, shell_on_errorss=elf.args.shell)
+            status = dt.process(shell_only=self.args.shell_only, shell_on_errors=self.args.shell)
         except do_tests.TestError as e:
             print("Error while testing: %s" % e)
             return 1
