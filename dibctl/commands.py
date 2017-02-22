@@ -352,8 +352,9 @@ def main(line=None):
     except (
         PrematureExitError,
         osclient.CredNotFound,
+        osclient.OpenStackError,
         config.ConfigError,
-        prepare_os.InstanceError
+        prepare_os.InstanceError,
     ) as e:
         print("Error: %s" % str(e))
         code = -1
