@@ -148,8 +148,9 @@ class DoTests(object):
             self.init_ssh(prep_os)
             self.wait_port(prep_os)
             if shell_only:
-                self.open_shell('Opening ssh shell to instance without running tests')
+                result = self.open_shell('Opening ssh shell to instance without running tests')
                 self.check_if_keep_stuff_after_fail(prep_os)
+                return result
             result = self.run_all_tests(prep_os)
             if not result:
                 print("Some tests failed")
@@ -167,3 +168,4 @@ class DoTests(object):
         status = self.ssh.shell({}, message)
         if status == 42:  # magical constant!
             self.keep_failed_instance = True
+        return status
