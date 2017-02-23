@@ -246,15 +246,16 @@ class TestEnvConfig(EnvConfig):
                                 'items': {
                                     'type': 'object',
                                     'properties': {
-                                        'net-id': {'type': 'string'},
-                                        'fixed-ip': {'type': 'string'}
+                                        'net_id': {'type': 'string'},
+                                        'fixed_ip': {'type': 'string'}
                                     },
-                                    'required': ['net-id'],
+                                    'required': ['net_id'],
                                     "additionalProperties": False
                                 }
                             },
                             'main_nic_regexp': {'type': 'string'},
-                            'config-drive': {'type': 'boolean'}
+                            'config_drive': {'type': 'boolean'},
+                            'availability_zone': {'type': 'string'}
                         },
                         "additionalProperties": False,
                         "required": ['flavor']

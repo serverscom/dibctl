@@ -43,6 +43,7 @@ class PrepOS(object):
         self.os_key = None
         self.delete_keypair = True
         self.config_drive = test_environment.get('config_drive', False)
+        self.availability_zone = test_environment.get('availability_zone', None)
 
         self.delete_instance = delete_instance
         self.flavor_id = test_environment['nova']['flavor']
@@ -112,7 +113,8 @@ class PrepOS(object):
                 self.flavor_id,
                 self.os_key.name,
                 self.nic_list,
-                self.config_drive
+                self.config_drive,
+                self.availability_zone
             )
             print("Instance %s created." % self.os_instance.id)
 

@@ -133,6 +133,7 @@ def test_upload_image_normal(prep_os):
 def test_spawn_instance(prep_os):
     prep_os.instance_name = sentinel.instance_name
     prep_os.os_image = sentinel.os_image
+    prep_os.availability_zone = None
     prep_os.config_drive = None
     prep_os.flavor_id = sentinel.flavor_id
     prep_os.os_key = mock.MagicMock(name=sentinel.key_name)
@@ -196,6 +197,7 @@ def test_prepare(prepare_os, prep_os):
     assert prep_os.init_keypair.called
     assert prep_os.init_keypair.called
 
+
 def test_cleanup_instance(prep_os):
     prep_os._cleanup = mock.create_autospec(prep_os._cleanup)
     prep_os.os_instance = sentinel.instance
@@ -208,7 +210,7 @@ def test_cleanup_instance(prep_os):
     assert prep_os.get_instance_main_ip.called
 
 
-def  test_cleanup(prepare_os, prep_os):
+def test_cleanup(prepare_os, prep_os):
     prep_os.wipe_private_key = mock.MagicMock()
     prep_os.delete_keypair = True
     prep_os.delete_image = True
