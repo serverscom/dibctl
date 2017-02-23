@@ -5,6 +5,7 @@ import dib
 import sys
 import osclient
 import do_tests
+import prepare_os
 
 
 class PrematureExitError(SystemExit):
@@ -164,7 +165,11 @@ class TestCommand(GenericCommand):
     options = ['imagelabel', 'input', 'img-config', 'env-override', 'test-env-config']
 
     def add_options(self):
-        self.parser.add_argument('--environment', help='Use given environment for tests', dest='envlabel')
+        self.parser.add_argument(
+            '--environment',
+            dest='envlabel',
+            help='Use given environment for tests (override label from images.yaml)'
+        )
         self.parser.add_argument(
             '--upload-only',
             action='store_true',
@@ -190,6 +195,11 @@ class TestCommand(GenericCommand):
             action='store_true',
             help="Open ssh shell to the server if some test failed and there is ssh config for image"
         )
+        self.parser.add_argument(
+            '--shell-only',
+            action='store_true',
+            help='Run ssh shell to instance directly, skipping tests'
+        )
 
     def _prepare(self):
         tests = self.image.get('tests', None)
@@ -212,11 +222,10 @@ class TestCommand(GenericCommand):
             test_env=self.test_env,
             upload_only=self.args.upload_only,
             keep_failed_image=self.args.keep_failed_image,
-            keep_failed_instance=self.args.keep_failed_instance,
-            shell_on_errors=self.args.shell
+            keep_failed_instance=self.args.keep_failed_instance
         )
         try:
-            status = dt.run_all_tests()
+            status = dt.process(shell_only=self.args.shell_only, shell_on_errors=self.args.shell)
         except do_tests.TestError as e:
             print("Error while testing: %s" % e)
             return 1
@@ -351,7 +360,9 @@ def main(line=None):
     except (
         PrematureExitError,
         osclient.CredNotFound,
-        config.ConfigError
+        osclient.OpenStackError,
+        config.ConfigError,
+        prepare_os.InstanceError,
     ) as e:
         print("Error: %s" % str(e))
         code = -1

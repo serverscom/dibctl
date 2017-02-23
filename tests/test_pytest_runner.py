@@ -100,7 +100,7 @@ def test_DibCtlPlugin_flavor_fixture(dcp):
 
 
 def test_DibCtlPlugin_flavor_meta_fixture(dcp):
-    assert dcp.flavor_meta(sentinel.request) == {'name':'value'}
+    assert dcp.flavor_meta(sentinel.request) == {'name': 'value'}
 
 
 def test_DibCtlPlugin_instance_fixture(dcp):
@@ -114,7 +114,6 @@ def test_DibCtlPlugin_network_fixture(dcp):
 def test_DibCtlPlugin_wait_for_port_fixture(dcp):
     dcp.wait_for_port(sentinel.request)()
     assert dcp.tos.wait_for_port.call_args == mock.call(22, 60)
-
 
 
 def test_DibCtlPlugin_ips_v4_fixture(dcp):

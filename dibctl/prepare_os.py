@@ -7,7 +7,6 @@ import time
 import os
 import json
 import tempfile
-import ssh
 
 
 class TimeoutError(EnvironmentError):
@@ -43,12 +42,13 @@ class PrepOS(object):
         self.os_instance = None
         self.os_key = None
         self.delete_keypair = True
-        self.config_drive = test_environment.get('config_drive')
+        self.config_drive = test_environment.get('config_drive', False)
+        self.availability_zone = test_environment.get('availability_zone', None)
 
         self.delete_instance = delete_instance
         self.flavor_id = test_environment['nova']['flavor']
         self.nic_list = list(self.prepare_nics(test_environment['nova']))
-        self.main_nic_regexp = test_environment.get('main_nic_regexp', None)
+        self.main_nic_regexp = test_environment['nova'].get('main_nic_regexp', None)
         self.os = osclient.OSClient(
             keystone_data=test_environment['keystone'],
             nova_data=test_environment['nova'],
@@ -113,7 +113,8 @@ class PrepOS(object):
                 self.flavor_id,
                 self.os_key.name,
                 self.nic_list,
-                self.config_drive
+                self.config_drive,
+                self.availability_zone
             )
             print("Instance %s created." % self.os_instance.id)
 
@@ -127,8 +128,8 @@ class PrepOS(object):
             while self.os_instance.status != 'ACTIVE':
                 if self.os_instance.status in ('ERROR', 'DELETED'):
                     raise InstanceError(
-                        "Instance %s got %s state." % (
-                            self.os_instance,
+                        "Instance %s state is '%s' (expected 'ACTIVE')." % (
+                            self.os_instance.id,
                             self.os_instance.status
                         )
                     )

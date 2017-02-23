@@ -196,7 +196,7 @@ def test_TestCommand_actual(commands, status, exit_code):
     with mock.patch.object(commands.config, "ImageConfig"):
         with mock.patch.object(commands.config, "TestEnvConfig"):
             with mock.patch.object(commands.do_tests, "DoTests") as dt:
-                dt.return_value.run_all_tests.return_value = status
+                dt.return_value.process.return_value = status
                 assert args.command(args) == exit_code
                 assert obj.image
 
@@ -208,7 +208,7 @@ def test_TestCommand__command_exception(commands):
     with mock.patch.object(commands.config, "ImageConfig"):
         with mock.patch.object(commands.config, "TestEnvConfig"):
             with mock.patch.object(commands.do_tests, "DoTests") as dt:
-                dt.return_value.run_all_tests.side_effect = commands.do_tests.TestError
+                dt.return_value.process.side_effect = commands.do_tests.TestError
                 assert args.command(args) == 1
 
 

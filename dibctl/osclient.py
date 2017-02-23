@@ -358,14 +358,15 @@ class OSClient(object):
     def new_keypair(self, name):
         return self.nova.keypairs.create(name)
 
-    def boot_instance(self, name, image_uuid, flavor, key_name, nic_list, config_drive=None):
+    def boot_instance(self, name, image_uuid, flavor, key_name, nic_list, config_drive=None, availability_zone=None):
         instance = self.nova.servers.create(
             name,
             image_uuid,
             flavor,
             key_name=key_name,
             nics=nic_list,
-            config_drive=config_drive
+            config_drive=config_drive,
+            availability_zone=availability_zone
         )
         return instance
 
@@ -393,7 +394,7 @@ class OSClient(object):
             found = instance.networks.values()
 
         if len(found) > 1:
-                raise MultipleIPError("More than one network match: %s" % str(found))
+                raise MultipleIPError("More than one network match: %s, matching regexp is '%s'" % (str(found), str(regexp)))
         elif len(found) == 1:
                 return found[0][0]
         else:

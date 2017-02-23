@@ -15,19 +15,19 @@ example_env:
     # wait_for_active_timeout: 900 #not implemented yet
     flavor: "30" # id, not name (TODO)
     nics:
-     - net-id: 'fe2acef0-4383-4432-8fca-f9e23f835dd5'
-       #fixed-ip: '192.168.0.1' # not implemented yet
+     - net_id: 'fe2acef0-4383-4432-8fca-f9e23f835dd5'
+       #fixed_ip: '192.168.0.1' # not implemented yet
     #security_group: # not implemented yet
     # - default
     # - allow_everything
-    #availability_zone: nova #not implemented yet
     #user-data: 'foo=bar'
     #user-data-file: /user/data/from/local/machine/where/dibctl/runs
     #hint:
     #  key1: value1
     #  key2: value2
-    #config-drive: true
+    config_drive: true
     main_nic_regexp: internet
+    availability_zone: az2
   #neutron:
   #  is: not_implemented_yet
   glance:

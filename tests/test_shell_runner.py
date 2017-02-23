@@ -148,7 +148,6 @@ def test_runner_all_with_continue(shell_runner, ssh):
     del s
 
 
-
 if __name__ == "__main__":
     ourfilename = os.path.abspath(inspect.getfile(inspect.currentframe()))
     currentdir = os.path.dirname(ourfilename)

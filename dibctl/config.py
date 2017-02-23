@@ -29,6 +29,11 @@ SCHEMA_KEYSTONE = {}
 SCHEMA_GLANCE = {
     "type": "object",
     "properties": {
+        'api_version': {
+            'type': 'integer',
+            'minimum': 1,
+            'maximum': 1
+        },
         "name": {"type": "string"},
         "upload_timeout": SCHEMA_TIMEOUT,
         "properties": {  # it's a name, 'properties'
@@ -36,8 +41,8 @@ SCHEMA_GLANCE = {
         },
         "endpoint": {"type": "string"},
         "public": {"type": "boolean"}
-
-    }
+    },
+    "additionalProperties": False
     # "required": ["name"]  # TODO reintroduce it back
 }
 SCHEMA_KEYSTONE = {
@@ -47,7 +52,7 @@ SCHEMA_KEYSTONE = {
             'type': 'integer',
             'minimum': 2,
             'maximum': 3
-        },  # add oneOf
+        },
         'username': {'type': 'string'},
         'user': {'type': 'string'},
         'os_username': {'type': 'string'},
@@ -67,8 +72,11 @@ SCHEMA_KEYSTONE = {
         'user_domain': {'type': 'string'},
         'user_domain_id': {'type': 'string'},
         'tenant_domain': {'type': 'string'},
-        'tenant_domain_id': {'type': 'string'}
-    }
+        'tenant_domain_id': {'type': 'string'},
+        'project_domain_id': {'type': 'string'},
+        'project_domain': {'type': 'string'}
+    },
+    "additionalProperties": False
 }
 
 
@@ -117,7 +125,7 @@ class Config (object):
             if os.path.isfile(candidate):
                 return candidate
 
-        raise ConfigNotFound("Unable to file %s in %s" % (self.DEFAULT_CONFIG_NAME, self.CONFIG_SEARCH_PATH))
+        raise ConfigNotFound("Unable to file %s in %s" % (self.DEFAULT_CONFIG_NAME, ", ".join(self.CONFIG_SEARCH_PATH)))
 
     def get(self, label):
         try:
@@ -150,7 +158,8 @@ class ImageConfig(Config):
                             }
 
                         },
-                        "required": ["elements"]
+                        "required": ["elements"],
+                        "additionalProperties": False
                     },
                     "glance": SCHEMA_GLANCE,
                     "tests": {
@@ -162,6 +171,7 @@ class ImageConfig(Config):
                                     "username": {"type": "string"},
                                     "port": SCHEMA_PORT
                                 },
+                                "additionalProperties": False,
                                 "required": ["username"]
                             },
                             "wait_for_port": SCHEMA_PORT,
@@ -176,7 +186,8 @@ class ImageConfig(Config):
                                         "shell_runner": SCHEMA_PATH,
                                         "pytest_ruuner": SCHEMA_PATH,
                                         "timeout": SCHEMA_TIMEOUT
-                                    }
+                                    },
+                                    "additionalProperties": False
                                 }
                             }
                         }
@@ -235,20 +246,27 @@ class TestEnvConfig(EnvConfig):
                                 'items': {
                                     'type': 'object',
                                     'properties': {
-                                        'net-id': {'type': 'string'},
-                                        'fixed-ip': {'type': 'string'}
+                                        'net_id': {'type': 'string'},
+                                        'fixed_ip': {'type': 'string'}
                                     },
-                                    'required': ['net-id']
+                                    'required': ['net_id'],
+                                    "additionalProperties": False
                                 }
                             },
-                            'main_nic_regexp': {'type': 'string'}
-                        }
+                            'main_nic_regexp': {'type': 'string'},
+                            'config_drive': {'type': 'boolean'},
+                            'availability_zone': {'type': 'string'}
+                        },
+                        "additionalProperties": False,
+                        "required": ['flavor']
                     },
                     'glance': SCHEMA_GLANCE,
                     'neutron': {'type': 'object'},
-
+                    'ssl_insecure': {'type': 'boolean'},
+                    'ssl_ca_path': SCHEMA_PATH
                 },
-                "required": ['keystone', 'nova']
+                "required": ['keystone', 'nova'],
+                "additionalProperties": False
             }
         }
     }
@@ -266,9 +284,10 @@ class UploadEnvConfig(EnvConfig):
                     'keystone': SCHEMA_KEYSTONE,
                     'glance': SCHEMA_GLANCE,
                     'ssl_insecure': {'type': 'boolean'},
-                    'ss_ca_path': SCHEMA_PATH
+                    'ssl_ca_path': SCHEMA_PATH
                 },
-                'required': ['keystone']
+                'required': ['keystone'],
+                "additionalProperties": False
             }
         }
     }
