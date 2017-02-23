@@ -198,18 +198,6 @@ def test_prepare(prepare_os, prep_os):
     assert prep_os.init_keypair.called
 
 
-def test_cleanup_instance(prep_os):
-    prep_os._cleanup = mock.create_autospec(prep_os._cleanup)
-    prep_os.os_instance = sentinel.instance
-    prep_os.cleanup_image()
-    assert prep_os._cleanup.called
-    assert prep_os.save_private_key.called
-    assert prep_os.upload_image.called
-    assert prep_os.spawn_instance.called
-    assert prep_os.wait_for_instance.called
-    assert prep_os.get_instance_main_ip.called
-
-
 def test_cleanup(prepare_os, prep_os):
     prep_os.wipe_private_key = mock.MagicMock()
     prep_os.delete_keypair = True
