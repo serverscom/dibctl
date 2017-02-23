@@ -1,3 +1,13 @@
+dibctl (0.4.5) UNRELEASED; urgency=medium
+
+	* Switch config to underlines
+        * Add support for availability zone in test.yaml
+        * --shell-only switch for test mode
+        * Exit code 42 will keep instances in --shell* modes
+        * More strict config checks
+
+ -- George Shuklin <george.shuklin@gmail.com>  Thu, 23 Feb 2017 17:53:08 +0200
+
 dibctl (0.4.4) xenial; urgency=medium
 
   * Fix bug with overrides
