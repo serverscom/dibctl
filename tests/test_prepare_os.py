@@ -69,8 +69,8 @@ def test_init_normal(prepare_os, mock_image_cfg, mock_env_cfg):
 
 def test_prepare_nics(prepare_os, mock_env_cfg):
     assert list(prepare_os.PrepOS.prepare_nics(mock_env_cfg['nova'])) == [
-        {'net_id': sentinel.uuid1},
-        {'net_id': sentinel.uuid2}
+        {'net-id': sentinel.uuid1},
+        {'net-id': sentinel.uuid2}
     ]
 
 

@@ -43,7 +43,7 @@ class PrepOS(object):
         self.os_key = None
         self.delete_keypair = True
         self.config_drive = test_environment.get('config_drive', False)
-        self.availability_zone = test_environment.get('availability_zone', None)
+        self.availability_zone = test_environment['nova'].get('availability_zone', None)
 
         self.delete_instance = delete_instance
         self.flavor_id = test_environment['nova']['flavor']
@@ -67,7 +67,7 @@ class PrepOS(object):
         for nic in env.get('nics', []):
             response = {}
             if 'net_id' in nic:
-                response['net_id'] = nic['net_id']
+                response['net-id'] = nic['net_id']
             # TODO add fixed IP/mac/etc
             yield response
 
