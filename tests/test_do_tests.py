@@ -238,6 +238,24 @@ def test_process_with_tests(do_tests, capsys):
             assert dt.process(False, False) is True
 
 
+def test_process_shell_only(do_tests, capsys):
+    env = {
+        'nova': {
+            'flavor': 'some flavor'
+        }
+    }
+    image = {
+        'tests': {
+            'wait_for_port': 22,
+            'tests_list': [{'pytest': sentinel.path1}, {'shell': sentinel.path2}]
+        }
+    }
+    with mock.patch.object(do_tests.prepare_os, "PrepOS"):
+        with mock.patch.object(do_tests.DoTests, "open_shell", return_value=sentinel.result):
+            dt = do_tests.DoTests(image, env)
+            assert dt.process(shell_only=True, shell_on_errors=False) == sentinel.result
+
+
 def test_process_all_tests_fail(do_tests, capsys):
     env = {
         'nova': {
