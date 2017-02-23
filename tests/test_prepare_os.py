@@ -236,16 +236,10 @@ def test_inner__cleanup_no_flag(prepare_os):
 
 def test_inner__cleanup_exception(prepare_os, capsys):
     random_uuid = 'fbfc9dbc-bc6c-11e6-843b-ef48d80469ef'
-    mock_delete = mock.MagicMock(side_effect = ValueError("mock error " + random_uuid))
+    mock_delete = mock.MagicMock(side_effect=ValueError("mock error " + random_uuid))
     prepare_os.PrepOS._cleanup("name", sentinel.object, True, mock_delete)
     assert mock_delete.called
     assert random_uuid in capsys.readouterr()[0]
-
-
-def test_cleanup_instance(prep_os):
-    prep_os._cleanup = mock.create_autospec(prep_os._cleanup)
-    prep_os.cleanup_instance()
-    assert prep_os._cleanup.called
 
 
 def test_cleanup_image(prep_os):
@@ -297,7 +291,7 @@ def test_is_port_available_instant(prepare_os, prep_os):
     with mock.patch.object(prepare_os.time, "time", mock.MagicMock(return_value=0)):
         mock_sock = mock.MagicMock()
         mock_sock.connect_ex.return_value = 0
-        with mock.patch.object(prepare_os.socket, "socket", mock.MagicMock(return_value = mock_sock)):
+        with mock.patch.object(prepare_os.socket, "socket", mock.MagicMock(return_value=mock_sock)):
             prep_os.ip = sentinel.ip
             assert prep_os.wait_for_port(sentinel.port, 60) is True
 
@@ -364,7 +358,6 @@ def test_get_env_config(prepare_os, prep_os):
     assert env['iface_2_info'] == '{}'
     assert env['flavor_meta_sentinel.name1'] == 'sentinel.value1'
     assert env['flavor_meta_sentinel.name2'] == 'sentinel.value2'
-
 
 
 def test_wait_for_port_never(prepare_os, prep_os):
