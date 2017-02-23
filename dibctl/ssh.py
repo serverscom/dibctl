@@ -103,7 +103,7 @@ class SSH(object):
         command_line = self.command_line()
         print(message)
         print("Executing shell: ", " ".join(command_line))
-        subprocess.call(command_line, stdin=sys.stdin, stderr=sys.stderr, stdout=sys.stdout, env=env)
+        return subprocess.call(command_line, stdin=sys.stdin, stderr=sys.stderr, stdout=sys.stdout, env=env)
 
     def info(self):
         result = {

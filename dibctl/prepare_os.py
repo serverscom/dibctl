@@ -7,7 +7,6 @@ import time
 import os
 import json
 import tempfile
-import ssh
 
 
 class TimeoutError(EnvironmentError):

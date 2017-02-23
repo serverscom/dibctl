@@ -85,6 +85,95 @@ def test_run_test_matrix(do_tests, runner, continue_on_fail, result, expected):
         assert mock_r.runner.called
 
 
+def test_init_ssh_with_data(do_tests):
+    env = {
+        'nova': {
+            'flavor': 'some flavor'
+        }
+    }
+    image = {
+        'tests': {
+            'tests_list': [],
+            'ssh': {
+                'username': 'user'
+            }
+        }
+    }
+    dt = do_tests.DoTests(image, env)
+    dt.init_ssh(mock.MagicMock())
+    assert dt.ssh is not None
+
+
+def test_init_ssh_no_ssh(do_tests):
+    env = {
+        'nova': {
+            'flavor': 'some flavor'
+        }
+    }
+    image = {
+        'tests': {
+            'tests_list': []
+        }
+    }
+    dt = do_tests.DoTests(image, env)
+    dt.init_ssh(mock.MagicMock())
+    assert dt.ssh is None
+
+
+def test_wait_port_good(do_tests):
+    env = {
+        'nova': {
+            'flavor': 'some flavor'
+        }
+    }
+    image = {
+        'tests': {
+            'tests_list': [],
+            'wait_for_port': 42,
+            'port_wait_timeout': 99
+        }
+    }
+    dt = do_tests.DoTests(image, env)
+    mock_prep_os = mock.MagicMock()
+    dt.wait_port(mock_prep_os) is True
+    assert mock_prep_os.wait_for_port.call_args == mock.call(42, 99)
+
+
+def test_wait_port_no_port(do_tests):
+    env = {
+        'nova': {
+            'flavor': 'some flavor'
+        }
+    }
+    image = {
+        'tests': {
+            'tests_list': [],
+        }
+    }
+    dt = do_tests.DoTests(image, env)
+    mock_prep_os = mock.MagicMock()
+    assert dt.wait_port(mock_prep_os) is False
+
+
+def test_wait_port_timeout(do_tests):
+    env = {
+        'nova': {
+            'flavor': 'some flavor'
+        }
+    }
+    image = {
+        'tests': {
+            'tests_list': [],
+            'wait_for_port': 42
+        }
+    }
+    dt = do_tests.DoTests(image, env)
+    mock_prep_os = mock.MagicMock()
+    mock_prep_os.wait_for_port.return_value = False
+    with pytest.raises(do_tests.TestError):
+        dt.wait_port(mock_prep_os)
+
+
 @pytest.mark.parametrize('port', [False, 22])
 def test_process_minimal(do_tests, port, capsys):
     env = {
@@ -189,6 +278,32 @@ def test_run_all_tests(do_tests, result):
     with mock.patch.object(do_tests.DoTests, "run_test", return_value=result):
         dt = do_tests.DoTests(image, env)
         assert dt.run_all_tests(mock.MagicMock()) is result
+
+
+@pytest.mark.parametrize('retval, keep', [
+    [0, False],
+    [1, False],
+    [42, True]
+])
+def test_open_shell(do_tests, retval, keep):
+    env = {
+        'nova': {
+            'flavor': 'some flavor'
+        }
+    }
+    image = {
+        'tests': {
+            'wait_for_port': 22,
+            'tests_list': [{'pytest': sentinel.path1}, {'pytest': sentinel.path2}]
+        }
+    }
+    dt = do_tests.DoTests(image, env)
+    with mock.patch.object(dt, 'ssh') as mock_ssh:
+        mock_ssh.shell.return_value = retval
+        dt.open_shell('reason')
+        assert dt.keep_failed_instance == keep
+        assert 'exit 42' in mock_ssh.shell.call_args[0][1]
+        assert 'reason' in mock_ssh.shell.call_args[0][1]
 
 
 if __name__ == "__main__":
