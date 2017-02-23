@@ -47,7 +47,7 @@ def mock_env_cfg():
         'nova': {
             'flavor': 'example',
             'nics': [
-                {'net-id': sentinel.net_id}
+                {'net_id': sentinel.net_id}
             ]
         }
     }

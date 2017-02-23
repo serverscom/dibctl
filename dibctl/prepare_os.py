@@ -66,8 +66,8 @@ class PrepOS(object):
     def prepare_nics(env):
         for nic in env.get('nics', []):
             response = {}
-            if 'net-id' in nic:
-                response['net-id'] = nic['net-id']
+            if 'net_id' in nic:
+                response['net_id'] = nic['net_id']
             # TODO add fixed IP/mac/etc
             yield response
 
