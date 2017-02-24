@@ -157,6 +157,7 @@ class DoTests(object):
                 if shell_on_errors:
                     self.open_shell('There was an test error and asked to open --shell')
                     self.check_if_keep_stuff_after_fail(prep_os)
+                    return result
             else:
                 print("All tests passed successfully.")
             return result
