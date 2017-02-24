@@ -142,6 +142,68 @@ def test_spawn_instance(prep_os):
     assert prep_os.os.boot_instance.called
 
 
+def test_spawn_instance_no_config_drive(prepare_os):
+    img = {
+        'glance': {
+            'name': 'name'
+        }
+    }
+    env = {
+        'keystone': {
+        },
+        'nova': {
+            'flavor': 'mock_flavor'
+        }
+    }
+    with mock.patch.object(prepare_os.osclient, "OSClient") as mock_os:
+        p = prepare_os.PrepOS(img, env)
+        p.os_key = mock.MagicMock()
+        p.spawn_instance(1)
+        assert mock_os.return_value.boot_instance.call_args[1]['config_drive'] is False
+
+
+def test_spawn_instance_no_config_drive2(prepare_os):
+    img = {
+        'glance': {
+            'name': 'name'
+        }
+    }
+    env = {
+        'keystone': {
+        },
+        'nova': {
+            'flavor': 'mock_flavor',
+            'config_drive': False
+        }
+    }
+    with mock.patch.object(prepare_os.osclient, "OSClient") as mock_os:
+        p = prepare_os.PrepOS(img, env)
+        p.os_key = mock.MagicMock()
+        p.spawn_instance(1)
+        assert mock_os.return_value.boot_instance.call_args[1]['config_drive'] is False
+
+
+def test_spawn_instance_with_drive(prepare_os):
+    img = {
+        'glance': {
+            'name': 'name'
+        }
+    }
+    env = {
+        'keystone': {
+        },
+        'nova': {
+            'flavor': 'mock_flavor',
+            'config_drive': True
+        }
+    }
+    with mock.patch.object(prepare_os.osclient, "OSClient") as mock_os:
+        p = prepare_os.PrepOS(img, env)
+        p.os_key = mock.MagicMock()
+        p.spawn_instance(1)
+        assert mock_os.return_value.boot_instance.call_args[1]['config_drive'] is True
+
+
 def test_get_instance_main_ip(prep_os):
     prep_os.os.get_instance_ip.return_value = sentinel.ip
     prep_os.os_instance = sentinel.instance

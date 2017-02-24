@@ -42,9 +42,8 @@ class PrepOS(object):
         self.os_instance = None
         self.os_key = None
         self.delete_keypair = True
-        self.config_drive = test_environment.get('config_drive', False)
+        self.config_drive = test_environment['nova'].get('config_drive', False)
         self.availability_zone = test_environment['nova'].get('availability_zone', None)
-
         self.delete_instance = delete_instance
         self.flavor_id = test_environment['nova']['flavor']
         self.nic_list = list(self.prepare_nics(test_environment['nova']))
@@ -108,13 +107,13 @@ class PrepOS(object):
         print("Creating test instance (time limit is %s s)" % timeout_s)
         with timeout.timeout(timeout_s, self.error_handler):
             self.os_instance = self.os.boot_instance(
-                self.instance_name,
-                self.os_image,
-                self.flavor_id,
-                self.os_key.name,
-                self.nic_list,
-                self.config_drive,
-                self.availability_zone
+                name=self.instance_name,
+                image_uuid=self.os_image,
+                flavor=self.flavor_id,
+                key_name=self.os_key.name,
+                nic_list=self.nic_list,
+                config_drive=self.config_drive,
+                availability_zone=self.availability_zone
             )
             print("Instance %s created." % self.os_instance.id)
 
@@ -265,7 +264,7 @@ class PrepOS(object):
         '''check if we can connect to given port. Wait for port
            up to timeout and then return error
         '''
-        print("Waiting for instance to accept connections on %s:%s" % (self.ip, port))
+        print("Waiting for instance to accept connections on %s:%s (time limit is %s s)" % (self.ip, port, timeout))
         start = time.time()
         while (start + timeout > time.time()):
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # add source IP
