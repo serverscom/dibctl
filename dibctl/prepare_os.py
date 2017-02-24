@@ -210,6 +210,8 @@ class PrepOS(object):
             print("Instance %s is not removed. Please debug and remove it manually." % self.os_instance.id)
             print("Instance ip is %s" % self.ip)
             print("Private key file is %s" % self.os_key_private_file)
+        if self.report and self.os_image and not self.delete_image:
+            print("Image %s is not removed. Please debug and remove it manually." % self.os_image)
 
     def __enter__(self):
         try:
