@@ -1,13 +1,24 @@
 Dibctl
 ------
 
-Warning: *it is in the refactoring process, please come back in few days*
+Dibctl is a software for image build, testing and  uploading.
+It uses diskimage-builder to build images, pytest and testinfra
+to test them and provide a consistent way to upload tested images
+to multiple Openstack installations.
 
-Dibctl is an automation software indendent to help with configuring
-diskimage-builder, maintain, test and upload images in consistent way.
+Dibctl uses configuration files to how to build image, which name
+it should have after upload, what properties (if any) should be
+set for a given image. Image configuration file also provide list
+of tests for each image, plus name of environment where tests should
+happen.
 
-It provides frameworks for integration testing of images and a way
-to keep all image configuration details in a single place (git repository).
+Other configuration file, test.yaml contains information how to
+run test instance: region authorization url, credentials, flavor,
+network list, availability zone, security groups and other nova
+parameters.
+
+Third configuration file provides upload configuration for
+arbitrary amount of openstack regions.
 
 *This readme is under construction, as well, as software itself.*
 
@@ -116,7 +127,7 @@ for publication. All image-specific things (properties, tags, etc) from images.y
 are used during this stage, as well, as settings from upload.yaml (See variable ordering
 to see override rules).
 
-After upload done, it triggers *obosoletion stage* if obsoletion is stated in 
+After upload done, it triggers *obosoletion stage* if obsoletion is stated in
 upload configuration.
 
 ## Obsolete stage
@@ -143,7 +154,7 @@ You need to have following packages installed:
 - keystoneauth1
 
 Important notice: at this moment diskimage-builder package
-in debian & ubuntu is very, very old (1.0). You need 
+in debian & ubuntu is very, very old (1.0). You need
 to upgrade it al least to 1.9 to have working images.
 
 Please use pip version or rebuild package
