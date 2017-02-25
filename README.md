@@ -13,14 +13,31 @@ of tests for each image, plus name of environment where tests should
 happen.
 
 Other configuration file, test.yaml contains information how to
-run test instance: region authorization url, credentials, flavor,
+run test instance: region authorization URL, credentials, flavor,
 network list, availability zone, security groups and other nova
 parameters.
 
 Third configuration file provides upload configuration for
-arbitrary amount of openstack regions.
+arbitrary amount of Openstack regions.
 
 *This readme is under construction, as well, as software itself.*
+
+Testing frameworks
+------------------
+Dibctl provides few testing frameworks. Each of the frameworks
+provided with full information about image, it properties, created
+instance (it flavor, network settings, credentials to access instance
+SSH, etc).
+Test frameworks:
+- 'shell': each test is a simple shell script, which is executed
+outside test VM
+- 'shell_in_ssh':each test is a simple shell script, which is executed
+inside guest machine (not yet implemented)
+- 'pytest' - tests are implemented by means of py.test, with optional
+support for testinfra. Dibctl provides wast set of fixtures with all
+available information about image and instance, plus few handy operations
+(wait_for_port), and direct access to nova object for testing instance
+reactions on nova operations (hard reboot, rebuild, etc).
 
 Element is not image
 --------------------
