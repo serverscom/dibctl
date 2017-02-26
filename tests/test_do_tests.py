@@ -305,7 +305,6 @@ def test_process_all_tests_fail_open_shell(do_tests):
                 assert mock_open_shell.called
 
 
-
 @pytest.mark.parametrize('result', [True, False])
 def test_run_all_tests(do_tests, result):
     env = {
@@ -348,6 +347,19 @@ def test_open_shell(do_tests, retval, keep):
         assert dt.keep_failed_instance == keep
         assert 'exit 42' in mock_ssh.shell.call_args[0][1]
         assert 'reason' in mock_ssh.shell.call_args[0][1]
+
+
+def test_open_shell_no_ssh_config(do_tests):
+    env = {
+        'nova': {
+            'flavor': 'some flavor'
+        }
+    }
+    image = {
+    }
+    dt = do_tests.DoTests(image, env)
+    with pytest.raises(do_tests.TestError):
+        dt.open_shell('reason')
 
 
 if __name__ == "__main__":
