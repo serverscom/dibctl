@@ -129,14 +129,41 @@ def test_wait_port_good(do_tests):
     image = {
         'tests': {
             'tests_list': [],
-            'wait_for_port': 42,
-            'port_wait_timeout': 99
+            'wait_for_port': 22,
+            'port_wait_timeout': 180
         }
     }
     dt = do_tests.DoTests(image, env)
     mock_prep_os = mock.MagicMock()
-    dt.wait_port(mock_prep_os) is True
-    assert mock_prep_os.wait_for_port.call_args == mock.call(42, 99)
+    assert dt.wait_port(mock_prep_os) is True
+    assert mock_prep_os.wait_for_port.call_args == mock.call(22, 180)
+
+
+@pytest.mark.parametrize('env_timeout, image_timeout, result', [
+    [1, 2, 2],
+    [2, 1, 2],
+    [0, 0, 61]  # questionable
+])
+def test_get_port_timeout_uses_max(do_tests, env_timeout, image_timeout, result):
+    env = {
+        'nova': {
+            'flavor': 'some flavor'
+        },
+        'tests': {
+            'port_wait_timeout': env_timeout
+        }
+    }
+    image = {
+        'tests': {
+            'tests_list': [],
+            'wait_for_port': 22,
+            'port_wait_timeout': image_timeout
+        }
+    }
+    dt = do_tests.DoTests(image, env)
+    mock_prep_os = mock.MagicMock()
+    dt.wait_port(mock_prep_os)
+    assert mock_prep_os.wait_for_port.call_args == mock.call(22, result)
 
 
 def test_wait_port_no_port(do_tests):
@@ -280,6 +307,31 @@ def test_process_all_tests_fail(do_tests, capsys):
             assert runner.call_count == 1
 
 
+def test_process_all_tests_fail_open_shell(do_tests):
+    env = {
+        'nova': {
+            'flavor': 'some flavor'
+        }
+    }
+    image = {
+        'tests': {
+            'wait_for_port': 22,
+            'tests_list': [{'pytest': sentinel.path1}, {'pytest': sentinel.path2}]
+        }
+    }
+    dt = do_tests.DoTests(image, env)
+    with mock.patch.object(do_tests.pytest_runner, "runner") as runner:
+        runner.side_effect = [False, ValueError("Shouldn't be called")]
+        with mock.patch.object(do_tests.prepare_os, "PrepOS") as mock_prep_os_class:
+            mock_prep_os = mock.MagicMock()
+            mock_enter = mock.MagicMock()
+            mock_enter.__enter__.return_value = mock_prep_os
+            mock_prep_os_class.return_value = mock_enter
+            with mock.patch.object(dt, 'open_shell') as mock_open_shell:
+                assert dt.process(False, shell_on_errors=True) is False
+                assert mock_open_shell.called
+
+
 @pytest.mark.parametrize('result', [True, False])
 def test_run_all_tests(do_tests, result):
     env = {
@@ -322,6 +374,19 @@ def test_open_shell(do_tests, retval, keep):
         assert dt.keep_failed_instance == keep
         assert 'exit 42' in mock_ssh.shell.call_args[0][1]
         assert 'reason' in mock_ssh.shell.call_args[0][1]
+
+
+def test_open_shell_no_ssh_config(do_tests):
+    env = {
+        'nova': {
+            'flavor': 'some flavor'
+        }
+    }
+    image = {
+    }
+    dt = do_tests.DoTests(image, env)
+    with pytest.raises(do_tests.TestError):
+        dt.open_shell('reason')
 
 
 if __name__ == "__main__":

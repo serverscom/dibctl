@@ -102,7 +102,7 @@ class SSH(object):
         '''Opens a user-accessible shell to machine'''
         command_line = self.command_line()
         print(message)
-        print("Executing shell: ", " ".join(command_line))
+        print("Executing shell: %s" % " ".join(command_line))
         return subprocess.call(command_line, stdin=sys.stdin, stderr=sys.stderr, stdout=sys.stdout, env=env)
 
     def info(self):

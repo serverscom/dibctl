@@ -263,7 +263,15 @@ class TestEnvConfig(EnvConfig):
                     'glance': SCHEMA_GLANCE,
                     'neutron': {'type': 'object'},
                     'ssl_insecure': {'type': 'boolean'},
-                    'ssl_ca_path': SCHEMA_PATH
+                    'ssl_ca_path': SCHEMA_PATH,
+                    'tests': {
+                        'type': 'object',
+                        'properties': {
+                            'port_wait_timeout': SCHEMA_TIMEOUT
+                        },
+                        'required': ['port_wait_timeout'],
+                        'additionalProperties': False
+                    }
                 },
                 "required": ['keystone', 'nova'],
                 "additionalProperties": False

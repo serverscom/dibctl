@@ -50,8 +50,8 @@ def mock_env_cfg():
         'nova': {
             'flavor': 'example',
             'nics': [
-                {'net-id': sentinel.uuid1},
-                {'net-id': sentinel.uuid2}
+                {'net_id': sentinel.uuid1},
+                {'net_id': sentinel.uuid2}
             ]
         }
     }
@@ -142,6 +142,68 @@ def test_spawn_instance(prep_os):
     assert prep_os.os.boot_instance.called
 
 
+def test_spawn_instance_no_config_drive(prepare_os):
+    img = {
+        'glance': {
+            'name': 'name'
+        }
+    }
+    env = {
+        'keystone': {
+        },
+        'nova': {
+            'flavor': 'mock_flavor'
+        }
+    }
+    with mock.patch.object(prepare_os.osclient, "OSClient") as mock_os:
+        p = prepare_os.PrepOS(img, env)
+        p.os_key = mock.MagicMock()
+        p.spawn_instance(1)
+        assert mock_os.return_value.boot_instance.call_args[1]['config_drive'] is False
+
+
+def test_spawn_instance_no_config_drive2(prepare_os):
+    img = {
+        'glance': {
+            'name': 'name'
+        }
+    }
+    env = {
+        'keystone': {
+        },
+        'nova': {
+            'flavor': 'mock_flavor',
+            'config_drive': False
+        }
+    }
+    with mock.patch.object(prepare_os.osclient, "OSClient") as mock_os:
+        p = prepare_os.PrepOS(img, env)
+        p.os_key = mock.MagicMock()
+        p.spawn_instance(1)
+        assert mock_os.return_value.boot_instance.call_args[1]['config_drive'] is False
+
+
+def test_spawn_instance_with_drive(prepare_os):
+    img = {
+        'glance': {
+            'name': 'name'
+        }
+    }
+    env = {
+        'keystone': {
+        },
+        'nova': {
+            'flavor': 'mock_flavor',
+            'config_drive': True
+        }
+    }
+    with mock.patch.object(prepare_os.osclient, "OSClient") as mock_os:
+        p = prepare_os.PrepOS(img, env)
+        p.os_key = mock.MagicMock()
+        p.spawn_instance(1)
+        assert mock_os.return_value.boot_instance.call_args[1]['config_drive'] is True
+
+
 def test_get_instance_main_ip(prep_os):
     prep_os.os.get_instance_ip.return_value = sentinel.ip
     prep_os.os_instance = sentinel.instance
@@ -198,18 +260,6 @@ def test_prepare(prepare_os, prep_os):
     assert prep_os.init_keypair.called
 
 
-def test_cleanup_instance(prep_os):
-    prep_os._cleanup = mock.create_autospec(prep_os._cleanup)
-    prep_os.os_instance = sentinel.instance
-    prep_os.cleanup_image()
-    assert prep_os._cleanup.called
-    assert prep_os.save_private_key.called
-    assert prep_os.upload_image.called
-    assert prep_os.spawn_instance.called
-    assert prep_os.wait_for_instance.called
-    assert prep_os.get_instance_main_ip.called
-
-
 def test_cleanup(prepare_os, prep_os):
     prep_os.wipe_private_key = mock.MagicMock()
     prep_os.delete_keypair = True
@@ -236,16 +286,10 @@ def test_inner__cleanup_no_flag(prepare_os):
 
 def test_inner__cleanup_exception(prepare_os, capsys):
     random_uuid = 'fbfc9dbc-bc6c-11e6-843b-ef48d80469ef'
-    mock_delete = mock.MagicMock(side_effect = ValueError("mock error " + random_uuid))
+    mock_delete = mock.MagicMock(side_effect=ValueError("mock error " + random_uuid))
     prepare_os.PrepOS._cleanup("name", sentinel.object, True, mock_delete)
     assert mock_delete.called
     assert random_uuid in capsys.readouterr()[0]
-
-
-def test_cleanup_instance(prep_os):
-    prep_os._cleanup = mock.create_autospec(prep_os._cleanup)
-    prep_os.cleanup_instance()
-    assert prep_os._cleanup.called
 
 
 def test_cleanup_image(prep_os):
@@ -297,7 +341,7 @@ def test_is_port_available_instant(prepare_os, prep_os):
     with mock.patch.object(prepare_os.time, "time", mock.MagicMock(return_value=0)):
         mock_sock = mock.MagicMock()
         mock_sock.connect_ex.return_value = 0
-        with mock.patch.object(prepare_os.socket, "socket", mock.MagicMock(return_value = mock_sock)):
+        with mock.patch.object(prepare_os.socket, "socket", mock.MagicMock(return_value=mock_sock)):
             prep_os.ip = sentinel.ip
             assert prep_os.wait_for_port(sentinel.port, 60) is True
 
@@ -364,7 +408,6 @@ def test_get_env_config(prepare_os, prep_os):
     assert env['iface_2_info'] == '{}'
     assert env['flavor_meta_sentinel.name1'] == 'sentinel.value1'
     assert env['flavor_meta_sentinel.name2'] == 'sentinel.value2'
-
 
 
 def test_wait_for_port_never(prepare_os, prep_os):

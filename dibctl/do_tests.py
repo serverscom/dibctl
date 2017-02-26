@@ -126,10 +126,19 @@ class DoTests(object):
         else:
             self.ssh = None
 
+    def get_port_timeout(self):
+        port_wait_timeout = max(
+            self.image.get('tests', {}).get('port_wait_timeout', 0),
+            self.test_env.get('tests', {}).get('port_wait_timeout', 0)
+        )
+        if port_wait_timeout == 0:
+            port_wait_timeout = self.DEFAULT_PORT_WAIT_TIMEOUT
+        return port_wait_timeout
+
     def wait_port(self, prep_os):
         if 'wait_for_port' in self.image['tests']:
             port = self.image['tests']['wait_for_port']
-            port_wait_timeout = self.image['tests'].get('port_wait_timeout', self.DEFAULT_PORT_WAIT_TIMEOUT)
+            port_wait_timeout = self.get_port_timeout()
             port_available = prep_os.wait_for_port(port, port_wait_timeout)
             if not port_available:
                 self.check_if_keep_stuff_after_fail(prep_os)
@@ -157,6 +166,7 @@ class DoTests(object):
                 if shell_on_errors:
                     self.open_shell('There was an test error and asked to open --shell')
                     self.check_if_keep_stuff_after_fail(prep_os)
+                    return result
             else:
                 print("All tests passed successfully.")
             return result

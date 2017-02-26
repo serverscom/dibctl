@@ -1,63 +1,130 @@
 Dibctl
 ------
 
-Warning: *it is in the refactoring process, please come back in few days*
+Dibctl is a software for image build, testing and  uploading.
+It uses diskimage-builder to build images, pytest and testinfra
+to test them and provide a consistent way to upload tested images
+to multiple Openstack installations.
 
-Dibctl is an automation software indendent to help with configuring
-diskimage-builder, maintain, test and upload images in consistent way.
+Dibctl uses configuration files to how to build image, which name
+it should have after upload, what properties (if any) should be
+set for a given image. Image configuration file also provide list
+of tests for each image, plus name of environment where tests should
+happen.
 
-It provides frameworks for integration testing of images and a way
-to keep all image configuration details in a single place (git repository).
+Other configuration file, test.yaml contains information how to
+run test instance: region authorization URL, credentials, flavor,
+network list, availability zone, security groups and other nova
+parameters.
+
+Third configuration file provides upload configuration for
+arbitrary amount of Openstack regions.
 
 *This readme is under construction, as well, as software itself.*
 
-Element is not image
---------------------
+Testing frameworks
+------------------
+Dibctl provides few testing frameworks. Each of the frameworks
+provided with full information about image, it properties, created
+instance (it flavor, network settings, credentials to access instance
+SSH, etc).
+Test frameworks:
+- 'shell': each test is a simple shell script, which is executed
+outside test VM
+- 'shell_in_ssh':each test is a simple shell script, which is executed
+inside guest machine (not yet implemented)
+- 'pytest' - tests are implemented by means of py.test, with optional
+support for testinfra. Dibctl provides wast set of fixtures with all
+available information about image and instance, plus few handy operations
+(wait_for_port), and direct access to nova object for testing instance
+reactions on nova operations (hard reboot, rebuild, etc).
 
-Diskimage-builder is very nice way to build custom images from elements.
-One need to supply few pieces to diskimage-builder to get image:
-- few enviroment variables for diskimage-builder itself
+Dibctl comes with some generic (applicable to any image of any provider).
+
+Examples of test coming with dibctl:
+- Does instance resize rootfs up to a flavor size at a first boot?
+- Does it receives IP addresses on all attached interfaces?
+- Does DNS set up properly?
+- Does hostname match the name of the instance?
+- Does instance still work after reboot?
+
+Workflow
+--------
+Dibctl was created to operates on following workflow:
+Configurations are described by operators, than dibctl performs:
+- build
+- test: new instance is spawned from tested image, and corresponding
+  test scripts are called. If they all report success, images passes
+  the test.
+- if test was successful, it uploaded to one or more regions of Openstack.
+- Older copies of images marked as obsolete and removed (after they become
+  unsed - see description below).
+
+That process is repeated on regular basis via cron or CI server (Jenkins?).
+Comprehensive testing assures that image that passed the test may be
+uploaded safely in automated manner.
+
+Motivational introduction
+-------------------------
+
+Diskimage-builder solved most of the issues around process of building images.
+It reduces all complexity of images to set of elements and well-defined rules
+of the build process.
+Nevertheless, there are many problems outside of the diskimage-builder scope:
+
+- Integration testing
+- Linking together diskimage-builder-related information (environment variables,
+  command line options) and glance-related information (image name, properties
+  credentials for upload, etc)
+- Unified upload to one or more regions
+- Recycling of older image copies
+
+Let's look to all those sages. Firstly, one need to set up:
+
+- environment variables for diskimage-builder
 - few very inconsistent and cryptic variables for used elements
 - some command line arguments for diksimage-builder
-- list of elements used to build image
+- list of elements used to build an image
 
 Resulting command line is a 'golden artifact' - you need to keep it
 somewhere.
 
-After an image was build, you can upload it to your Glance. You need
+After the image was build, one can upload it to Glance. One need
 to provide few more pieces of information:
 - Image name
 - Credentials for Glance
-- Additional meta you need to set up on image (`hw_property`, etc)
+- Additional meta needed to set up on image (`hw_property`, etc)
 
 This adds few more lines to the 'golden artifact'.
 
-Normally one wants to test image before uploading. It should, at least,
+Normally one wants to test images before uploading. Each image should, at least,
 be able to boot and accept ssh key.
 
 One may create a simple script to boot and test it:
 
-This adds few more lines:
+This adds few more lines to 'golden artifact':
 - credential to spawn instance
 - flavor id
 - nics net-id
 - security group name
 
 If one have more than one image with more than one configuration
-for testing, this brings up complexity even higher.
+for testing, this brings up complexity even higher, as many of those
+values become variables for reusable part of the script.
+If tests failed one should not leave broken and forgotten instances,
+ssh keypairs and test images. So there should be garbage collection
+code or some kind of 'finally' clause in the script.
 
-Dibctl was created to solve this problems. It provides consistent
-way to describe images, test and upload enviroments, relations
-between image and tests, way to ensure that images are fully functional
-(outside of usual scope of 'I can log in').
-Examples of test preshipped with dibctl:
-- Does instance resize rootfs up to flavor limits at first boot?
-- Does it recieves IP addresses on all attached interfaces?
-- Does DNS set up properly?
-- Does hostname match the name of the instance?
-- Does instance still work after reboot?
+After upload one want to remove older copies of the same image.
+That adds even more lines to the script, bringing it to the scale of
+a normal application.
 
-Outside of main scope dibctl gives one more nice feature: image-transfer,
+Dibctl was created as evolution of such script, which at certain
+point become unmanageable. Newer version was written with better understanding
+of the process, without cutting corners.
+
+
+Outside of its main goal, dibctl gives one more nice feature: image-transfer,
 which can copy image from one glance to another while preserving every propery,
 ownership and share information (tenant-name based).
 
@@ -116,7 +183,7 @@ for publication. All image-specific things (properties, tags, etc) from images.y
 are used during this stage, as well, as settings from upload.yaml (See variable ordering
 to see override rules).
 
-After upload done, it triggers *obosoletion stage* if obsoletion is stated in 
+After upload done, it triggers *obosoletion stage* if obsoletion is stated in
 upload configuration.
 
 ## Obsolete stage
@@ -143,7 +210,7 @@ You need to have following packages installed:
 - keystoneauth1
 
 Important notice: at this moment diskimage-builder package
-in debian & ubuntu is very, very old (1.0). You need 
+in debian & ubuntu is very, very old (1.0). You need
 to upgrade it al least to 1.9 to have working images.
 
 Please use pip version or rebuild package
