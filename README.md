@@ -39,6 +39,23 @@ available information about image and instance, plus few handy operations
 (wait_for_port), and direct access to nova object for testing instance
 reactions on nova operations (hard reboot, rebuild, etc).
 
+Workflow
+--------
+Dibctl was created to operates on following workflow:
+Configurations are described by operators, than dibctl performs:
+- build
+- test: new instance is spawned from tested image, and corresponding
+  test scripts are called. If they all report success, images passes
+  the test.
+- if test was successful, it uploaded to one or more regions of Openstack.
+- Older copies of images marked as obsolete and removed (after they become
+  unsed - see description below).
+
+That process is repeated on regular basis via cron or CI server (Jenkins?).
+Comprehensive testing assures that image that passed the test may be
+uploaded safely in automated manner.
+
+
 Element is not image
 --------------------
 
