@@ -22,6 +22,10 @@ class InvaidConfigError(ConfigError):
     pass
 
 
+SCHEMA_UUID = {
+    "type": "string",
+    "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+}
 SCHEMA_TIMEOUT = {'type': 'integer', "minimum": 0}
 SCHEMA_PORT = {'type': 'integer', 'minimum': 1, 'maximum': 65535}
 SCHEMA_PATH = {'type': 'string'}
@@ -242,11 +246,11 @@ class TestEnvConfig(EnvConfig):
                             'flavor': {"type": "string"},
                             "nics": {
                                 "type": "array",
-                                'minItem': 1,
+                                'minItems': 1,
                                 'items': {
                                     'type': 'object',
                                     'properties': {
-                                        'net_id': {'type': 'string'},
+                                        'net_id': SCHEMA_UUID,
                                         'fixed_ip': {'type': 'string'}
                                     },
                                     'required': ['net_id'],

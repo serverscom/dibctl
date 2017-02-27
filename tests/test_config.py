@@ -175,10 +175,11 @@ def notest_get_environment_not_ok(config):
 @pytest.mark.parametrize('bad_config', [
     '{"foo": "bar"}',
     '{"foo": {}}',
-    '{"foo": {"keystone": {}}}',
-    '{"foo": {"keystone": {"api_version": 4}}}',
-    '{"foo": {"nova": {}}}',
-    '{"foo": {"nova": {"nics":[]}}}'
+    '{"foo": {keystone: {}}}',
+    '{"foo": {keystone: {api_version: 4}}}',
+    '{"foo": {keystone: {}, nova: {}}}',
+    '{"foo": {keystone: {}, nova: {nics: [], flavor: foo}}}',
+    '{"foo": {keystone: {}, nova: {flavor: foo, nics: [{net_id: 27c642c-invalid-uuid}]}}}'
 ])
 def test_testenv_config_schema_bad(config, bad_config):
     mock_config = mock.mock_open(read_data=bad_config)

@@ -42,7 +42,5 @@ if __name__ == "__main__":
         os.path.basename(ourfilename).replace("test_", '')
     )
     pytest.main([
-     "-vv",
-     "--cov", file_to_test,
-     "--cov-report", "term-missing"
+     "-vv"
      ] + sys.argv)
