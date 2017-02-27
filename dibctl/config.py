@@ -99,6 +99,9 @@ class Config (object):
         self.config_file = self.set_conf_name(config_file)
         print("Using %s" % self.config_file)
         self.config = self.read_and_validate_config(self.config_file)
+        self.subinit(overrides)
+
+    def subinit(self, overrides):
         self._apply_overrides(**overrides)
 
     @staticmethod
@@ -141,7 +144,7 @@ class Config (object):
 
 class ImageConfig(Config):
 
-    DEFAULT_CONFIG_NAME = "images.yaml"  # TODO RENAME TO iamge.yaml
+    DEFAULT_CONFIG_NAME = "images.yaml"
     SCHEMA = {
         "$schema": "http://json-schema.org/draft-04/schema#",
         "type": "object",
