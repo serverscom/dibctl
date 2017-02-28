@@ -1,4 +1,11 @@
-dibctl (1.4.6) xenial; urgency=medium
+dibctl (0.4.7) xenial; urgency=medium
+
+  * Internal refactoring for Config parsing
+  * More strict config validation: uuids & minItems
+
+ -- George Shuklin <george.shuklin@gmail.com>  Tue, 28 Feb 2017 15:49:14 +0200
+
+dibctl (0.4.6) xenial; urgency=medium
 
   * Port_wait_timeout in tests.yaml
   * Fixes for --shell command
