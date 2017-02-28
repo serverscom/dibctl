@@ -79,33 +79,6 @@ def test_GenericCommand_no_command(commands):
         args.command(sentinel.args)
 
 
-@pytest.mark.parametrize('name, dname', [
-    ('OS_AUTH_URL', 'os_auth_url'),
-    ('OS_TENANT_NAME', 'os_tenant_name'),
-    ('OS_USERNAME', 'os_username'),
-    ('OS_PASSWORD', 'os_password')
-])
-def test_GenericCommand_set_overrides_from_env(commands, capsys, name, dname):
-    parser, gen_comm = create_subparser(commands.GenericCommand)
-    mock_env = {name: 'test_value'}
-    with mock.patch.object(commands.os, "environ", mock_env):
-        gen_comm.set_overrides_from_env()
-        assert gen_comm.env_overrides[dname] == 'test_value'
-        s_in = capsys.readouterr()[0]
-        assert name in s_in
-        assert dname in s_in
-
-
-def test_GenericCommand_set_overrides_from_env_empty(commands, capsys):
-    parser, gen_comm = create_subparser(commands.GenericCommand)
-    mock_env = {}
-    with mock.patch.object(commands.os, "environ", mock_env):
-        gen_comm.set_overrides_from_env()
-        s_in = capsys.readouterr()[0]
-        assert len(s_in) == 0
-        assert gen_comm.overrides == {}
-
-
 def test_GenericCommand_get_from_config_normal(commands):
     mock_Cfg = mock.MagicMock()
     mock_Cfg.get.return_value = sentinel.value

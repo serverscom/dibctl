@@ -42,7 +42,6 @@ class GenericCommand(object):
 
     def __init__(self, subparser):
         self.overrides = {}
-        self.env_overrides = {}
         self.parser = subparser.add_parser(self.name, help=self.help)
         self.parser.add_argument('--debug', help='Print junk', action='store_true', default=False)
         if 'input' in self.options:
@@ -75,16 +74,14 @@ class GenericCommand(object):
             )
         if 'upload-config' in self.options:
             self.upload_config = config.UploadEnvConfig(
-                config_file=self.args.upload_config,
-                overrides=self.overrides
+                config_file=self.args.upload_config
             )
         if 'test-env-config' in self.options:
             self.test_env_config = config.TestEnvConfig(
-                config_file=self.args.test_config,
-                overrides={}
+                config_file=self.args.test_config
             )
         if 'env-override' in self.options:
-            self.set_overrides_from_env()
+            pass # TODO remove this!
         if 'imagelabel' in self.options:
             self.image = self.get_from_config(
                 cfg=self.image_config,
@@ -112,13 +109,6 @@ class GenericCommand(object):
 
     def _command(self):
         raise NotImplementedError("Should be redefined")
-
-    def set_overrides_from_env(self):
-        for name in ['OS_AUTH_URL', 'OS_TENANT_NAME', 'OS_USERNAME', 'OS_PASSWORD']:
-            value = os.environ.get(name, None)
-            if value:
-                print("Using environment variable %s instead of value %s from the config" % (name, name.lower()))
-                self.env_overrides[name.lower()] = value
 
     @staticmethod
     def get_from_config(cfg, label):

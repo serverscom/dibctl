@@ -228,7 +228,7 @@ class EnvConfig(Config):
     def subinit(self, overrides):
         pass
 
-    def __init__(self, config_file=None, overrides={}):
+    def __init__(self, config_file=None):
         self.common_init(config_file, {})
 
 
