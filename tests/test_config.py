@@ -57,20 +57,12 @@ def test_imageconfig_schema_bad(config, bad_config):
                 config.ImageConfig("mock_config_name")
 
 
-def test_envconfig(config):
-    mock_config = mock.mock_open(read_data='{"env1":{"filename": "ok"}}')
+def test_testenvconfig(config):
+    mock_config = mock.mock_open(read_data='{}')
     with mock.patch.object(config, "open", mock_config) as mock_open:
         with mock.patch.object(config.os.path, "isfile", return_value=True):
-            config.EnvConfig()
-        assert mock_open.call_args[0][0] == './test-environments.yaml'
-
-
-def test_envconfig_no_override(config):
-    mock_config = mock.mock_open(read_data='{"env1":{"os_tenant_name": "somename"}}')
-    with mock.patch.object(config, "open", mock_config):
-        with mock.patch.object(config.os.path, "isfile", return_value=True):
-            conf = config.EnvConfig()
-            assert conf.get('env1')['os_tenant_name'] == 'somename'
+            config.TestEnvConfig()
+        assert mock_open.call_args[0][0] == './test.yaml'
 
 
 def notest_get_environment_not_ok(config):

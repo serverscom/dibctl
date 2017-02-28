@@ -95,25 +95,15 @@ class Config (object):
         "minItem": 1
     }
 
-    def __init__(self, config_file, overrides):
-        self.common_init(config_file, overrides)
-
-    def common_init(self, config_file=None, overrides={}):
+    def common_init(self, config_file=None):
         self.config_file = self.set_conf_name(config_file)
         print("Using %s" % self.config_file)
         self.config = self.read_and_validate_config(self.config_file)
-        self.subinit(overrides)
 
     @staticmethod
     def append(d, key, value):
         if value:
             d[key] = value
-
-    def _apply_overrides(self):
-        pass
-
-    def subinit(self, overrides):
-        pass
 
     def read_and_validate_config(self, name):
         content = yaml.load(open(name, "r"))
@@ -208,32 +198,16 @@ class ImageConfig(Config):
         }
     }
 
-    def _apply_overrides(self, filename=None):
+    def __init__(self, config_file=None, filename=None):
+        self.common_init(config_file)
         if filename:
             for img_key in self.config:
                 self.config[img_key].update(filename=filename)
 
-    def subinit(self, overrides):
-        self._apply_overrides(**overrides)
 
-    def __init__(self, config_file=None, filename=None):
-        if filename:
-            overrides = {'filename': filename}
-        else:
-            overrides = {}
-        self.common_init(config_file, overrides)
-
-
-# This class is not used by itself
 class EnvConfig(Config):
-
-    DEFAULT_CONFIG_NAME = "test-environments.yaml"
-
-    def subinit(self, overrides):
-        pass
-
     def __init__(self, config_file=None):
-        self.common_init(config_file, {})
+        self.common_init(config_file)
 
 
 class TestEnvConfig(EnvConfig):

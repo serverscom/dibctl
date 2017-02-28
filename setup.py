@@ -28,7 +28,7 @@ class PyTest(Command):
 
 setup(
     name="dibctl",
-    version="0.4.6",
+    version="0.4.7",
     description="diskimage-builder control",
     author="George Shuklin",
     author_email="george.shuklin@gmail.com",
