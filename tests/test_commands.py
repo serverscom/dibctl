@@ -102,7 +102,7 @@ def test_BuildCommand_actual(commands):
     parser, obj = create_subparser(commands.BuildCommand)
     args = parser.parse_args(['build', 'label'])
     assert args.imagelabel == 'label'
-    assert args.output is None
+    assert args.filename is None
     assert args.images_config is None
     with mock.patch.object(obj, "_command"):
         with mock.patch.object(commands.config, "ImageConfig"):
@@ -113,7 +113,7 @@ def test_BuildCommand_actual(commands):
 def test_BuildCommand_output(commands):
     parser = create_subparser(commands.BuildCommand)[0]
     args = parser.parse_args(['build', 'label', '--output', 'foo'])
-    assert args.output is 'foo'
+    assert args.filename is 'foo'
 
 
 def test_BuildCommand_img_config(commands):
@@ -188,12 +188,11 @@ def test_TestCommand__command_exception(commands):
 def test_TestCommand_input(commands):
     parser = create_subparser(commands.TestCommand)[0]
     args = parser.parse_args(['test', 'label', '--input', 'file'])
-    assert args.input == 'file'
     with mock.patch.object(commands.config, "TestEnvConfig"):
         with mock.patch.object(commands.config, "ImageConfig"):
             with mock.patch.object(commands.do_tests, "DoTests"):
                 args.command(args)
-                assert args.input == 'file'
+                assert args.filename == 'file'
 
 
 def test_TestCommand_test_env(commands):
@@ -292,7 +291,7 @@ def test_UploadCommand_actual_with_obsolete(commands, cred, mock_env_cfg, mock_i
     assert args.imagelabel == 'label'
     assert args.no_obsolete is False
     assert args.images_config is None
-    assert args.input is None
+    assert args.filename is None
 
     with mock.patch.object(commands.config, "UploadEnvConfig", autospec=True, strict=True) as uec:
         uec.return_value.get.return_value = mock_env_cfg

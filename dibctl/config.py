@@ -95,7 +95,7 @@ class Config (object):
         "minItem": 1
     }
 
-    def __init__(self, config_file=None, overrides={}):
+    def __init__(self, config_file, overrides):
         self.common_init(config_file, overrides)
 
     def common_init(self, config_file=None, overrides={}):
@@ -216,7 +216,11 @@ class ImageConfig(Config):
     def subinit(self, overrides):
         self._apply_overrides(**overrides)
 
-    def __init__(self, config_file=None, overrides={}):
+    def __init__(self, config_file=None, filename=None):
+        if filename:
+            overrides = {'filename': filename}
+        else:
+            overrides = {}
         self.common_init(config_file, overrides)
 
 
