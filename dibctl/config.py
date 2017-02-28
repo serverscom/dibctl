@@ -96,13 +96,13 @@ class Config (object):
     }
 
     def __init__(self, config_file=None, overrides={}):
+        self.common_init(config_file, overrides)
+
+    def common_init(self, config_file=None, overrides={}):
         self.config_file = self.set_conf_name(config_file)
         print("Using %s" % self.config_file)
         self.config = self.read_and_validate_config(self.config_file)
         self.subinit(overrides)
-
-    def subinit(self, overrides):
-        self._apply_overrides(**overrides)
 
     @staticmethod
     def append(d, key, value):
@@ -110,7 +110,10 @@ class Config (object):
             d[key] = value
 
     def _apply_overrides(self):
-        raise TypeError("This method should not be called")
+        pass
+
+    def subinit(self, overrides):
+        pass
 
     def read_and_validate_config(self, name):
         content = yaml.load(open(name, "r"))
@@ -210,26 +213,23 @@ class ImageConfig(Config):
             for img_key in self.config:
                 self.config[img_key].update(filename=filename)
 
+    def subinit(self, overrides):
+        self._apply_overrides(**overrides)
+
+    def __init__(self, config_file=None, overrides={}):
+        self.common_init(config_file, overrides)
+
 
 # This class is not used by itself
 class EnvConfig(Config):
 
     DEFAULT_CONFIG_NAME = "test-environments.yaml"
 
-    def _apply_overrides(
-        self,
-        os_auth_url=None,
-        os_tenant_name=None,
-        os_username=None,
-        os_password=None
-    ):
-        env_override = {}
-        self.append(env_override, "os_password", os_password)
-        self.append(env_override, "os_tenant_name", os_tenant_name)
-        self.append(env_override, "os_username", os_username)
-        self.append(env_override, "os_auth_url", os_auth_url)
-        for env_key in self.config:
-            self.config[env_key].update(env_override)
+    def subinit(self, overrides):
+        pass
+
+    def __init__(self, config_file=None, overrides={}):
+        self.common_init(config_file, {})
 
 
 class TestEnvConfig(EnvConfig):

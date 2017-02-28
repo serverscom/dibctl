@@ -91,13 +91,6 @@ def test_get_notok(config):
                         assert conf.get('image2')
 
 
-def test_empty_apply_overrides(config):
-    with mock.patch.object(config.Config, "read_and_validate_config"):
-        with mock.patch.object(config.os.path, "isfile", return_value=True):
-            with pytest.raises(TypeError):
-                config.Config(sentinel.fake_file_name)
-
-
 def test_imageconfig(config):
     mock_config = mock.mock_open(read_data='{"image1": {"filename": "ok"}}')
     with mock.patch.object(config, "open", mock_config) as mock_open:
@@ -152,15 +145,6 @@ def test_envconfig_no_override(config):
         with mock.patch.object(config.os.path, "isfile", return_value=True):
             conf = config.EnvConfig()
             assert conf.get('env1')['os_tenant_name'] == 'somename'
-
-
-def test_envconfig_filename_override(config):
-    mock_config = mock.mock_open(read_data='{"env1":{"os_tenant_name": "bad"}, "env2":{"os_password":"bad"}}')
-    with mock.patch.object(config, "open", mock_config):
-        with mock.patch.object(config.os.path, "isfile", return_value=True):
-            conf = config.EnvConfig(overrides={'os_tenant_name': 'new', 'os_password': 'other'})
-            assert conf.get('env1')['os_tenant_name'] == 'new'
-            assert conf.get('env2')['os_password'] == 'other'
 
 
 def notest_get_environment_not_ok(config):
