@@ -35,7 +35,6 @@ class GenericCommand(object):
     # 'test-env-config',
     # 'imagelabel',
     # 'uploadlabel',
-    # 'env-override'
     name = 'generic'
     help = 'replace me'
     image = None
@@ -75,8 +74,6 @@ class GenericCommand(object):
             self.test_env_config = config.TestEnvConfig(
                 config_file=self.args.test_config
             )
-        if 'env-override' in self.options:
-            pass #  TODO remove this!
         if 'imagelabel' in self.options:
             self.image = self.get_from_config(
                 cfg=self.image_config,
@@ -147,7 +144,7 @@ class BuildCommand(GenericCommand):
 class TestCommand(GenericCommand):
     name = 'test'
     help = 'Test image'
-    options = ['imagelabel', 'input', 'img-config', 'env-override', 'test-env-config']
+    options = ['imagelabel', 'input', 'img-config', 'test-env-config']
 
     def add_options(self):
         self.parser.add_argument(
@@ -223,7 +220,7 @@ class TestCommand(GenericCommand):
 class UploadCommand(GenericCommand):
     name = 'upload'
     help = 'Upload image'
-    options = ['imagelabel', 'input', 'img-config', 'env-override', 'upload-config', 'uploadlabel']
+    options = ['imagelabel', 'input', 'img-config', 'upload-config', 'uploadlabel']
 
     def add_options(self):
         self.parser.add_argument('--no-obsolete', action='store_true', help='Do not obsolete images with same name')
@@ -263,7 +260,7 @@ class UploadCommand(GenericCommand):
 class RotateCommand(GenericCommand):
     name = 'rotate'
     help = 'Remove unused obsolete images'
-    options = ['env-override', 'upload-config', 'uploadlabel']
+    options = ['upload-config', 'uploadlabel']
 
     def _command(self):
         pass
@@ -272,7 +269,7 @@ class RotateCommand(GenericCommand):
 class ObsoleteCommand(GenericCommand):
     name = 'mark-obsolete'
     help = 'Obsolete image'
-    options = ['env-override', 'upload-config', 'uploadlabel']
+    options = ['upload-config', 'uploadlabel']
 
     def add_options(self):
         self.parser.add_argument('uuid', help="image UUID to mark as obsolete")
