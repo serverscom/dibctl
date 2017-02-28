@@ -22,6 +22,10 @@ class InvaidConfigError(ConfigError):
     pass
 
 
+SCHEMA_UUID = {
+    "type": "string",
+    "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+}
 SCHEMA_TIMEOUT = {'type': 'integer', "minimum": 0}
 SCHEMA_PORT = {'type': 'integer', 'minimum': 1, 'maximum': 65535}
 SCHEMA_PATH = {'type': 'string'}
@@ -91,19 +95,15 @@ class Config (object):
         "minItem": 1
     }
 
-    def __init__(self, config_file=None, overrides={}):
+    def common_init(self, config_file=None):
         self.config_file = self.set_conf_name(config_file)
         print("Using %s" % self.config_file)
         self.config = self.read_and_validate_config(self.config_file)
-        self._apply_overrides(**overrides)
 
     @staticmethod
     def append(d, key, value):
         if value:
             d[key] = value
-
-    def _apply_overrides(self):
-        raise TypeError("This method should not be called")
 
     def read_and_validate_config(self, name):
         content = yaml.load(open(name, "r"))
@@ -137,7 +137,7 @@ class Config (object):
 
 class ImageConfig(Config):
 
-    DEFAULT_CONFIG_NAME = "images.yaml"  # TODO RENAME TO iamge.yaml
+    DEFAULT_CONFIG_NAME = "images.yaml"
     SCHEMA = {
         "$schema": "http://json-schema.org/draft-04/schema#",
         "type": "object",
@@ -198,31 +198,16 @@ class ImageConfig(Config):
         }
     }
 
-    def _apply_overrides(self, filename=None):
+    def __init__(self, config_file=None, filename=None):
+        self.common_init(config_file)
         if filename:
             for img_key in self.config:
                 self.config[img_key].update(filename=filename)
 
 
-# This class is not used by itself
 class EnvConfig(Config):
-
-    DEFAULT_CONFIG_NAME = "test-environments.yaml"
-
-    def _apply_overrides(
-        self,
-        os_auth_url=None,
-        os_tenant_name=None,
-        os_username=None,
-        os_password=None
-    ):
-        env_override = {}
-        self.append(env_override, "os_password", os_password)
-        self.append(env_override, "os_tenant_name", os_tenant_name)
-        self.append(env_override, "os_username", os_username)
-        self.append(env_override, "os_auth_url", os_auth_url)
-        for env_key in self.config:
-            self.config[env_key].update(env_override)
+    def __init__(self, config_file=None):
+        self.common_init(config_file)
 
 
 class TestEnvConfig(EnvConfig):
@@ -242,11 +227,11 @@ class TestEnvConfig(EnvConfig):
                             'flavor': {"type": "string"},
                             "nics": {
                                 "type": "array",
-                                'minItem': 1,
+                                'minItems': 1,
                                 'items': {
                                     'type': 'object',
                                     'properties': {
-                                        'net_id': {'type': 'string'},
+                                        'net_id': SCHEMA_UUID,
                                         'fixed_ip': {'type': 'string'}
                                     },
                                     'required': ['net_id'],

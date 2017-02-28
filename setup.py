@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from setuptools import setup, find_packages, Command
+import sys
 
 class PyTest(Command):
     user_options = [('pytest-args=', 'a', "Arguments to pass to py.test")]
@@ -13,14 +14,21 @@ class PyTest(Command):
     def run(self):
         import pytest
         print("Running unit tests")
-        pytest.main(['build/'])
+        error_code = pytest.main(['build', '--ignore', 'build/doctest'])
+        if error_code:
+            sys.exit(error_code)
         print("Running integration tests for docs examples")
-        pytest.main(['doctest/'])
+        # doctests should be run against current dir, not 'build'
+        # because config examples are not copied to build
+        # (they are installed as config files)
+        error_code = pytest.main(['doctest/'])
+        if error_code:
+            sys.exit(error_code)
 
 
 setup(
     name="dibctl",
-    version="0.4.6",
+    version="0.4.7",
     description="diskimage-builder control",
     author="George Shuklin",
     author_email="george.shuklin@gmail.com",

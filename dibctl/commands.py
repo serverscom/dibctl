@@ -41,14 +41,12 @@ class GenericCommand(object):
     image = None
 
     def __init__(self, subparser):
-        self.overrides = {}
-        self.env_overrides = {}
         self.parser = subparser.add_parser(self.name, help=self.help)
         self.parser.add_argument('--debug', help='Print junk', action='store_true', default=False)
         if 'input' in self.options:
-            self.parser.add_argument('--input', '-i', help='Input filename for image (overrides default)')
+            self.parser.add_argument('--input', '-i', help='Input filename for image (overrides default)', dest='filename')
         if 'output' in self.options:
-            self.parser.add_argument('--output', '-o', help='Outut filename for image (overrides default)')
+            self.parser.add_argument('--output', '-o', help='Outut filename for image (overrides default)', dest='filename')
         if 'img-config' in self.options:
             self.parser.add_argument('--images-config', help='Use specific file instead of images.yaml')
         if 'upload-config' in self.options:
@@ -64,27 +62,21 @@ class GenericCommand(object):
 
     def command(self, args):
         self.args = args
-        if 'input' in self.options:
-            self.overrides['filename'] = self.args.input
-        if 'output' in self.options:
-            self.overrides['filename'] = self.args.output
         if 'img-config' in self.options:
             self.image_config = config.ImageConfig(
                 config_file=self.args.images_config,
-                overrides=self.overrides
+                filename=self.args.filename
             )
         if 'upload-config' in self.options:
             self.upload_config = config.UploadEnvConfig(
-                config_file=self.args.upload_config,
-                overrides=self.overrides
+                config_file=self.args.upload_config
             )
         if 'test-env-config' in self.options:
             self.test_env_config = config.TestEnvConfig(
-                config_file=self.args.test_config,
-                overrides={}
+                config_file=self.args.test_config
             )
         if 'env-override' in self.options:
-            self.set_overrides_from_env()
+            pass #  TODO remove this!
         if 'imagelabel' in self.options:
             self.image = self.get_from_config(
                 cfg=self.image_config,
@@ -112,13 +104,6 @@ class GenericCommand(object):
 
     def _command(self):
         raise NotImplementedError("Should be redefined")
-
-    def set_overrides_from_env(self):
-        for name in ['OS_AUTH_URL', 'OS_TENANT_NAME', 'OS_USERNAME', 'OS_PASSWORD']:
-            value = os.environ.get(name, None)
-            if value:
-                print("Using environment variable %s instead of value %s from the config" % (name, name.lower()))
-                self.env_overrides[name.lower()] = value
 
     @staticmethod
     def get_from_config(cfg, label):
@@ -327,7 +312,7 @@ class TransferCommand(GenericCommand):
 class ValidateCommand(GenericCommand):
     name = 'validate'
     help = 'Validate configuration files against config schema'
-    options = ['upload-config', 'img-config', 'test-env-config']
+    options = ['upload-config', 'img-config', 'test-env-config', 'input']
 
     def _command(self):
         print("Configs has been validated.")

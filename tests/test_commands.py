@@ -79,33 +79,6 @@ def test_GenericCommand_no_command(commands):
         args.command(sentinel.args)
 
 
-@pytest.mark.parametrize('name, dname', [
-    ('OS_AUTH_URL', 'os_auth_url'),
-    ('OS_TENANT_NAME', 'os_tenant_name'),
-    ('OS_USERNAME', 'os_username'),
-    ('OS_PASSWORD', 'os_password')
-])
-def test_GenericCommand_set_overrides_from_env(commands, capsys, name, dname):
-    parser, gen_comm = create_subparser(commands.GenericCommand)
-    mock_env = {name: 'test_value'}
-    with mock.patch.object(commands.os, "environ", mock_env):
-        gen_comm.set_overrides_from_env()
-        assert gen_comm.env_overrides[dname] == 'test_value'
-        s_in = capsys.readouterr()[0]
-        assert name in s_in
-        assert dname in s_in
-
-
-def test_GenericCommand_set_overrides_from_env_empty(commands, capsys):
-    parser, gen_comm = create_subparser(commands.GenericCommand)
-    mock_env = {}
-    with mock.patch.object(commands.os, "environ", mock_env):
-        gen_comm.set_overrides_from_env()
-        s_in = capsys.readouterr()[0]
-        assert len(s_in) == 0
-        assert gen_comm.overrides == {}
-
-
 def test_GenericCommand_get_from_config_normal(commands):
     mock_Cfg = mock.MagicMock()
     mock_Cfg.get.return_value = sentinel.value
@@ -129,7 +102,7 @@ def test_BuildCommand_actual(commands):
     parser, obj = create_subparser(commands.BuildCommand)
     args = parser.parse_args(['build', 'label'])
     assert args.imagelabel == 'label'
-    assert args.output is None
+    assert args.filename is None
     assert args.images_config is None
     with mock.patch.object(obj, "_command"):
         with mock.patch.object(commands.config, "ImageConfig"):
@@ -140,7 +113,7 @@ def test_BuildCommand_actual(commands):
 def test_BuildCommand_output(commands):
     parser = create_subparser(commands.BuildCommand)[0]
     args = parser.parse_args(['build', 'label', '--output', 'foo'])
-    assert args.output is 'foo'
+    assert args.filename is 'foo'
 
 
 def test_BuildCommand_img_config(commands):
@@ -215,12 +188,11 @@ def test_TestCommand__command_exception(commands):
 def test_TestCommand_input(commands):
     parser = create_subparser(commands.TestCommand)[0]
     args = parser.parse_args(['test', 'label', '--input', 'file'])
-    assert args.input == 'file'
     with mock.patch.object(commands.config, "TestEnvConfig"):
         with mock.patch.object(commands.config, "ImageConfig"):
             with mock.patch.object(commands.do_tests, "DoTests"):
                 args.command(args)
-                assert args.input == 'file'
+                assert args.filename == 'file'
 
 
 def test_TestCommand_test_env(commands):
@@ -319,7 +291,7 @@ def test_UploadCommand_actual_with_obsolete(commands, cred, mock_env_cfg, mock_i
     assert args.imagelabel == 'label'
     assert args.no_obsolete is False
     assert args.images_config is None
-    assert args.input is None
+    assert args.filename is None
 
     with mock.patch.object(commands.config, "UploadEnvConfig", autospec=True, strict=True) as uec:
         uec.return_value.get.return_value = mock_env_cfg
