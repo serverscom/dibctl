@@ -21,6 +21,11 @@ def prep_os(prepare_os):
     prep_os.delete_image = True
     prep_os.delete_instance = True
     prep_os.delete_keypair = True
+    prep_os.upload_timeout = 1
+    prep_os.active_timeout = 1
+    prep_os.cleanup_timeout = 1
+    prep_os.keypair_timeout = 1
+    prep_os.create_timeout = 1
     prep_os.os_image = sentinel.image
     prep_os.os_instance = sentinel.instance
     prep_os.os_key = sentinel.key

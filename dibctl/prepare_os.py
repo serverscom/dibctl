@@ -7,6 +7,7 @@ import time
 import os
 import json
 import tempfile
+import config
 
 
 class TimeoutError(EnvironmentError):
@@ -30,12 +31,45 @@ class PrepOS(object):
         if override_image:
             self.image_name = ""
             self.delete_image = False
-            self.upload_timeout = self.LONG_OS_TIMEOUT
         else:
             self.image_name = self.make_test_name(image['glance']['name'])
             self.image = image
             self.delete_image = delete_image
-            self.upload_timeout = self.image['glance'].get('upload_timeout', self.LONG_OS_TIMEOUT)
+        self.upload_timeout = config.get_max(
+            image,
+            test_environment,
+            'glance',
+            'upload_timeout',
+            self.LONG_OS_TIMEOUT
+        )
+        self.keypair_timeout = config.get_max(
+            image,
+            test_environment,
+            'nova',
+            'keypair_timeout',
+            self.SHORT_OS_TIMEOUT
+        )
+        self.cleanup_timeout = config.get_max(
+            image,
+            test_environment,
+            'nova',
+            'cleanup_timeout',
+            self.SHORT_OS_TIMEOUT
+        )
+        self.active_timeout = config.get_max(
+            image,
+            test_environment,
+            'nova',
+            'active_timeout',
+            self.LONG_OS_TIMEOUT
+        )
+        self.create_timeout = config.get_max(
+            image,
+            test_environment,
+            'nova',
+            'create_timeout',
+            self.LONG_OS_TIMEOUT
+        )
         self.key_name = self.make_test_name('key')
         self.instance_name = self.make_test_name('test')
         self.os_image = None
@@ -75,7 +109,7 @@ class PrepOS(object):
         return 'DIBCTL-%s-%s' % (bare_name, str(uuid.uuid4()))
 
     def init_keypair(self):
-        with timeout.timeout(self.SHORT_OS_TIMEOUT, self.error_handler):
+        with timeout.timeout(self.keypair_timeout, self.error_handler):
             self.os_key = self.os.new_keypair(self.key_name)
 
     def save_private_key(self):
@@ -142,9 +176,9 @@ class PrepOS(object):
         sys.stdout.flush()
         self.upload_image(self.upload_timeout)
         sys.stdout.flush()
-        self.spawn_instance(self.SHORT_OS_TIMEOUT)
+        self.spawn_instance(self.create_timeout)
         sys.stdout.flush()
-        self.wait_for_instance(self.LONG_OS_TIMEOUT)
+        self.wait_for_instance(self.active_timeout)
         sys.stdout.flush()
         self.get_instance_main_ip()
         sys.stdout.flush()

@@ -312,7 +312,7 @@ class ValidateCommand(GenericCommand):
     options = ['upload-config', 'img-config', 'test-env-config', 'input']
 
     def _command(self):
-        print("Configs has been validated.")
+        print("Configs have been validated.")
         return 0
 
 

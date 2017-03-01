@@ -422,15 +422,6 @@ def test_main_premature_exit_config(commands):
             assert mock_exit.call_args[0][0] == -1
 
 
-def test_main_premature_exit_config2(commands):
-    with mock.patch.object(commands, "config"):
-        with mock.patch.object(commands.osclient, 'OSClient') as m_func:
-            m_func.side_effect = commands.osclient.CredNotFound
-            with mock.patch.object(commands.sys, 'exit') as mock_exit:
-                commands.main(['test', 'label'])
-                assert mock_exit.call_args[0][0] == -1
-
-
 def test_init(commands):
     with mock.patch.object(commands, "Main") as m:
         m.return_value.run.return_value = 42

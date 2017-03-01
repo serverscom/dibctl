@@ -565,3 +565,111 @@ OS_TENANT_NAME=public_images \
  dibctl mark-obsolete "Ubuntu Karmic x86_64"
 
 ```
+
+Timeouts
+--------
+
+Most of operations Dibctl does have a time limit. They have reasonable
+default values, but it's possible to override them. When there are conflicting
+values in different configuration files, dibctl uses maximal value.
+For example, if image config  in glance section has `upload_timeout: 300`, and
+environment has `upload_timeout: 3600`, dibctl will wait up to 3600 seconds.
+
+All time-related settings for Dibctl are measured in seconds.
+
+List of timeout settings (default value is provided in braces):
+- `glance.upload_timeout` (360 seconds). Limit how long image may be uploaded.
+  Applied to test, upload and transfer commands.
+  All operations stops if this timeout was triggered. Glance image would
+  be left half-uploaded, and, hopefully, would be cleaned by glance.
+  May be specified in images.yaml, test.yaml and upload.yaml configs.
+- `tests.wait_for_port` (61 seconds). Limit how long to wait instance between
+  become ACTIVE and answering on a `wait_for_port` port. Applied to test
+  command only.
+  May be specified in images.yaml and test.yaml configs.
+- `nova.create_timeout` (10 seconds): Limit how long nova may answer to
+  instance creation request.  It does not include time for transfer from
+   'created' to 'BUILD' and 'ACTIVE' states, only the actual 'create' command.
+  Applied only to test command.
+  May be specified in images.yaml and test.yaml configs.
+  If this timeout was triggered, uploaded image would be removed, keypair
+  will be removed and instance would be left 'as is'.
+  All further operations would be stopped.
+- `nova.active_timeout` (360 seconds). Limit how long dibctl will wait
+   for instance after it was created before it become 'ACTIVE' (or fall
+   into 'ERROR' state).
+  May be specified in images.yaml, test.yaml and upload.yaml configs
+  Applied to test command only.
+  If this timeout was triggered tests would not be called.
+  Further operations are dependent on command line options:
+  image will be removed unless there are --keep-failed-image option.
+  instance will be removed unless there are --keep-failed-instance option.
+  keypair will be removed anyway, but private key in filesystem would be
+  kept in instance was kept.
+- `nova.keypair_timeout` (10 seconds). Timeout for keypair operations.
+   Normally you wouldn't need to change this.
+   May be specified in images.yaml, test.yaml
+   Applicable to test command only.
+   If this timeout was trigged, image would be removed, keypair left
+   as is, all further operations would be stopped.
+- `cleanup_timeout` - not yet implemented.
+  Applied to test command only
+  May be specified in images.yaml, test.yaml
+- Each element in tests.tests_list has own `timeout` value, which
+  is limiting time for all tests gathered under given path combined.
+  For example, if you have test like this:
+  ```
+  tests:
+    tests_list:
+      - pytest: /foobar.py
+        timeout: 300
+ ```
+ Than if foobar.py contains 3 tests each finishing in 120 seconds,
+ than timeout would be triggered at the third test, at 300th second.
+ May be specified only images.yaml
+ Applied only to test command.
+ If this timeout was triggered, behavior is dependent on
+ --keep-failed-image, --keep-failed-instance
+ and --continue-on-fail option. Regardless of those options,
+ rest of tests under given line (which triggered timeout)
+ would be skipped (This is due to the test process terminated abruptly).
+ After failure or successful operation there is a cleanup stage.
+ Each operation in this stage uses same `cleanup_timeout` value.
+ If one operation is triggered timeout, dibctl will continue to perform
+ next operation in cleanup cycle.
+
+ If by any reason you want to stop dibctl to perform cleanup cycle
+ after you ran it, you may at your choice:
+ - use kill -9 to it
+ - press Ctrl-Z and than `kill -9 %1` (everywhere except for opened shell)
+ - use `exit 42` in the opened shell to disable cleanup sequence (works
+   only inside shell due to obvious reasons).
+
+Pressing Ctrl-C during all operations will threated as failure and would
+cause clean sequence accordingly to the command line settings.
+
+Timeout sequence:
+
+- upload_image: wait up to `glance.upload_timeout`
+- create test keypair: wait up to `nova.keypair_timeout`
+- spawn test instance: wait up to `nova.create_timeout`
+- wait for instance to become ACTIVE: wait up to `nova.active_timeout`
+- wait for instance to answer port: wait up to `tests.wait_for_ports`
+- each entry from tests_lists will be capped at it own timeout value.
+
+After tests (or after failure, or after user exited a shell from instance
+and that instance should be cleaned up due to command line settings)
+Eeach clean operation will be capped up to cleanup_timeout value.
+If timeout happens
+
+Individual tests may apply own time limits. For shell tests
+it's normally done with 'timeout' command, for pytest-based
+tests it is done with `pytest.mark.timeout` decorator.
+
+Example for the test below has timeout value 15:
+
+```
+@pytest.mark.timeout(timeout=15)
+def test_hostname(ssh_backend, instance):
+    assert ssh_backend.SystemInfo.hostname == instance.name.lower()
+```

@@ -162,6 +162,13 @@ class ImageConfig(Config):
                         "additionalProperties": False
                     },
                     "glance": SCHEMA_GLANCE,
+                    "nova": {
+                        "type": "object",
+                        "create_timeout": SCHEMA_TIMEOUT,
+                        "active_timeout": SCHEMA_TIMEOUT,
+                        "keypair_timeout": SCHEMA_TIMEOUT,
+                        "cleanup_timeout": SCHEMA_TIMEOUT
+                    },
                     "tests": {
                         "type": "object",
                         "properties": {
@@ -178,13 +185,13 @@ class ImageConfig(Config):
                             "port_wait_timeout": {"type": "number"},
                             "environment_name": {"type": "string"},
                             "environment_variables": {"type": "object"},
-                            "test_list": {
+                            "tests_list": {
                                 "type": "array",
                                 "items": {
                                     "type": "object",
                                     "properties": {
-                                        "shell_runner": SCHEMA_PATH,
-                                        "pytest_ruuner": SCHEMA_PATH,
+                                        "shell": SCHEMA_PATH,
+                                        "pytest": SCHEMA_PATH,
                                         "timeout": SCHEMA_TIMEOUT
                                     },
                                     "additionalProperties": False
@@ -240,7 +247,11 @@ class TestEnvConfig(EnvConfig):
                             },
                             'main_nic_regexp': {'type': 'string'},
                             'config_drive': {'type': 'boolean'},
-                            'availability_zone': {'type': 'string'}
+                            'availability_zone': {'type': 'string'},
+                            "create_timeout": SCHEMA_TIMEOUT,
+                            "active_timeout": SCHEMA_TIMEOUT,
+                            "keypair_timeout": SCHEMA_TIMEOUT,
+                            "cleanup_timeout": SCHEMA_TIMEOUT
                         },
                         "additionalProperties": False,
                         "required": ['flavor']
@@ -284,3 +295,29 @@ class UploadEnvConfig(EnvConfig):
             }
         }
     }
+
+
+def get_max(config1, config2, section_name, option_name, default_value):
+    section1 = {}
+    section2 = {}
+    try:
+        if config1:
+            section1 = config1.get(section_name)
+    except NotFoundInConfigError:
+        pass
+    try:
+        if config2:
+            section2 = config2.get(section_name)
+    except NotFoundInConfigError:
+        pass
+    if not section1:
+        section1 = {}
+    if not section2:
+        section2 = {}
+    value1 = section1.get(option_name, None)
+    value2 = section2.get(option_name, None)
+    guess = max(value1, value2)
+    if guess is None:
+        return default_value
+    else:
+        return guess

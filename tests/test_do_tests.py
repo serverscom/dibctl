@@ -142,7 +142,6 @@ def test_wait_port_good(do_tests):
 @pytest.mark.parametrize('env_timeout, image_timeout, result', [
     [1, 2, 2],
     [2, 1, 2],
-    [0, 0, 61]  # questionable
 ])
 def test_get_port_timeout_uses_max(do_tests, env_timeout, image_timeout, result):
     env = {
@@ -164,6 +163,64 @@ def test_get_port_timeout_uses_max(do_tests, env_timeout, image_timeout, result)
     mock_prep_os = mock.MagicMock()
     dt.wait_port(mock_prep_os)
     assert mock_prep_os.wait_for_port.call_args == mock.call(22, result)
+
+
+def test_get_port_timeout_uses_env(do_tests):
+    env = {
+        'nova': {
+            'flavor': 'some flavor'
+        },
+        'tests': {
+            'port_wait_timeout': 42
+        }
+    }
+    image = {
+        'tests': {
+            'tests_list': [],
+            'wait_for_port': 22
+        }
+    }
+    dt = do_tests.DoTests(image, env)
+    mock_prep_os = mock.MagicMock()
+    dt.wait_port(mock_prep_os)
+    assert mock_prep_os.wait_for_port.call_args == mock.call(22, 42)
+
+
+def test_get_port_timeout_uses_img(do_tests):
+    env = {
+        'nova': {
+            'flavor': 'some flavor'
+        },
+    }
+    image = {
+        'tests': {
+            'tests_list': [],
+            'wait_for_port': 22,
+            'port_wait_timeout': 42
+        }
+    }
+    dt = do_tests.DoTests(image, env)
+    mock_prep_os = mock.MagicMock()
+    dt.wait_port(mock_prep_os)
+    assert mock_prep_os.wait_for_port.call_args == mock.call(22, 42)
+
+
+def test_get_port_timeout_uses_default(do_tests):
+    env = {
+        'nova': {
+            'flavor': 'some flavor'
+        },
+    }
+    image = {
+        'tests': {
+            'tests_list': [],
+            'wait_for_port': 22
+        }
+    }
+    dt = do_tests.DoTests(image, env)
+    mock_prep_os = mock.MagicMock()
+    dt.wait_port(mock_prep_os)
+    assert mock_prep_os.wait_for_port.call_args == mock.call(22, 61)  # magical constant!
 
 
 def test_wait_port_no_port(do_tests):
