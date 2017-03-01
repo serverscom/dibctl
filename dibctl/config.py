@@ -28,7 +28,7 @@ SCHEMA_UUID = {
 }
 SCHEMA_TIMEOUT = {'type': 'integer', "minimum": 0}
 SCHEMA_PORT = {'type': 'integer', 'minimum': 1, 'maximum': 65535}
-SCHEMA_PATH = {'type': 'string'}
+SCHEMA_PATH = {'type': 'string', 'pattern': '^(/)?([^/\0]+(/)?)+$'}
 SCHEMA_KEYSTONE = {}
 SCHEMA_GLANCE = {
     "type": "object",
@@ -154,7 +154,11 @@ class ImageConfig(Config):
                             },
                             "elements": {
                                 "type": "array",
-                                "uniqueItems": True
+                                "uniqueItems": True,
+                                "items": {
+                                    "type": "string",
+                                },
+                                "minItems": 1
                             }
 
                         },
@@ -164,10 +168,13 @@ class ImageConfig(Config):
                     "glance": SCHEMA_GLANCE,
                     "nova": {
                         "type": "object",
-                        "create_timeout": SCHEMA_TIMEOUT,
-                        "active_timeout": SCHEMA_TIMEOUT,
-                        "keypair_timeout": SCHEMA_TIMEOUT,
-                        "cleanup_timeout": SCHEMA_TIMEOUT
+                        "properties": {
+                            "create_timeout": SCHEMA_TIMEOUT,
+                            "active_timeout": SCHEMA_TIMEOUT,
+                            "keypair_timeout": SCHEMA_TIMEOUT,
+                            "cleanup_timeout": SCHEMA_TIMEOUT
+                        },
+                        "additionalProperties": False
                     },
                     "tests": {
                         "type": "object",

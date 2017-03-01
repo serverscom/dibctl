@@ -43,11 +43,19 @@ def test_imageconfig_filename_override(config):
 
 
 @pytest.mark.parametrize('bad_config', [
-    '{"foo": "bar"}',
-    '{"foo": {}}',
-    '{"foo": {"filename": "x", "glance": {"upload_timeout": "3"}}}',
-    '{"foo": {"filename": "x", "glance": {"name": 1}}}',
-    '{"foo": {"filename": "x", "dib": {}}}'
+    '{"foo": "bar"}',  # must be object
+    '{"foo": {}}',  # no filename
+    '{"foo": {random: junk}}',  # no unknown things should be here
+    '{"foo": {"filename": "x", "glance": {"upload_timeout": "3"}}}',  # timeout should be int
+    '{"foo": {"filename": "x", "glance": {"name": 1}}}',  # name should be string
+    '{"foo": {"filename": "x", "dib": {}}}',  # no elements
+    '{"foo": {"filename": "//"}}',  # bad path
+    '{foo: {filename: x, dib: {elements: []}}}',  # elements shoudn't be empty
+    '{foo: {filename: x, dib: {elements: [1]}}}',  # elements should be strings
+    '{foo: {filename: x, nova: {flavor: 3}}}',  # flavors are not allowed in images
+    '{foo: {filename: x, glance: {api_version: 2}}}',  # version 2 is not supported yet
+    '{foo: {filename: x, glance: {name: 1}}}',  # name should be string
+    '{foo: {filename: x, glance: {properties:[foo, bar]}}}',  # properties should be an object
 ])
 def test_imageconfig_schema_bad(config, bad_config):
     mock_config = mock.mock_open(read_data=bad_config)
@@ -55,6 +63,24 @@ def test_imageconfig_schema_bad(config, bad_config):
         with mock.patch.object(config.os.path, "isfile", return_value=True):
             with pytest.raises(config.InvaidConfigError):
                 config.ImageConfig("mock_config_name")
+
+
+@pytest.mark.parametrize('good_config', [
+    '{foo: {filename: x}}',
+    '{foo: {filename: x}, bar: {filename: y}}',
+    '{foo: {filename: x, dib: {elements: [el1, el2]}}}',
+    '{foo: {filename: x, nova: {}}}',
+    '{foo: {filename: x, nova: {active_timeout: 10}}}',
+    '{foo: {filename: x, glance: {}}}',
+    '{foo: {filename: x, glance: {api_version: 1}}}',
+    '{foo: {filename: x, glance: {name: foo}}}',
+    '{foo: {filename: x, glance: {properties:{foo: bar}}}}',
+])
+def test_imageconfig_schema_good(config, good_config):
+    mock_config = mock.mock_open(read_data=good_config)
+    with mock.patch.object(config, "open", mock_config):
+        with mock.patch.object(config.os.path, "isfile", return_value=True):
+            config.ImageConfig("mock_config_name")
 
 
 def test_testenvconfig(config):
