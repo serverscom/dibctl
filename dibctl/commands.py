@@ -6,6 +6,7 @@ import sys
 import osclient
 import do_tests
 import prepare_os
+import version
 
 
 class PrematureExitError(SystemExit):
@@ -41,7 +42,8 @@ class GenericCommand(object):
 
     def __init__(self, subparser):
         self.parser = subparser.add_parser(self.name, help=self.help)
-        self.parser.add_argument('--debug', help='Print junk', action='store_true', default=False)
+        self.parser.add_argument('--debug', help='Display this message', action='store_true', default=False)
+        self.parser.add_argument('--version', help='Display version', action='version', version=version.VERSION_STRING)
         if 'input' in self.options:
             self.parser.add_argument('--input', '-i', help='Input filename for image (overrides default)', dest='filename')
         if 'output' in self.options:
@@ -319,7 +321,8 @@ class ValidateCommand(GenericCommand):
 class Main(object):
     def __init__(self, command_line=None):
         self.parser = argparse.ArgumentParser()
-        self.parser.add_argument('--debug', help='Print junk', action='store_true', default=False)
+        self.parser.add_argument('--debug', help='Display this message', action='store_true', default=False)
+        self.parser.add_argument('--version', help='Display version', action='version', version=version.VERSION_STRING)
         subparsers = self.parser.add_subparsers(title='commands')
         BuildCommand(subparsers)
         TestCommand(subparsers)
