@@ -177,3 +177,6 @@ class DoTests(object):
         if status == 42:  # magical constant!
             self.keep_failed_instance = True
         return status
+
+    def reconfigure_for_existing_instance(self, instance, private_key_file=None):
+        raise NotImplementedError

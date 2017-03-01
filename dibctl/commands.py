@@ -165,6 +165,16 @@ class TestCommand(GenericCommand):
             dest='uuid'
         )
         self.parser.add_argument(
+            '--use-existing-instance',
+            help='Skip upload/boot and use given instance for test (will not be removed after test)',
+            dest='instance'
+        )
+        self.parser.add_argument(
+            '--private-key-file',
+            help='Use private key file for tests (existing instance only)',
+            dest='private_key_file'
+        )
+        self.parser.add_argument(
             '--keep-failed-image',
             action='store_true',
             help="Do not remove image if test failed"
@@ -208,6 +218,8 @@ class TestCommand(GenericCommand):
             keep_failed_image=self.args.keep_failed_image,
             keep_failed_instance=self.args.keep_failed_instance
         )
+        if self.args.instance:
+            dt.reconfigure_for_existing_instance(self.args.instance, self.args.private_key_file)
         try:
             status = dt.process(shell_only=self.args.shell_only, shell_on_errors=self.args.shell)
         except do_tests.TestError as e:
