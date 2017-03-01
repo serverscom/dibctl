@@ -569,11 +569,12 @@ OS_TENANT_NAME=public_images \
 Timeouts
 --------
 
-Most of operations Dibctl does have a time limit. They have reasonable
-default values, but it's possible to override them. When there are conflicting
-values in different configuration files, dibctl uses maximal value.
+For most of operations Dibctl have a time limit. Those timeoutes have reasonable
+default values, but it's possible to override them. When the same timeout is
+specified in two configuration files, dibctl uses maximal value.
 For example, if image config  in glance section has `upload_timeout: 300`, and
-environment has `upload_timeout: 3600`, dibctl will wait up to 3600 seconds.
+environment has `upload_timeout: 3600`, Dibctl will wait up to 3600 seconds during
+image upload.
 
 All time-related settings for Dibctl are measured in seconds.
 
