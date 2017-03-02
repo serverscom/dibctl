@@ -18,6 +18,55 @@ class InstanceError(EnvironmentError):
     pass
 
 
+class Image(object):
+    pass
+
+
+class Instance(object):
+    pass
+
+
+class Facility(object):
+    '''
+        This class stores all runtime information about what to
+        execute, what was executed, cleaned, etc.
+    '''
+
+    def __init__(self):
+        self.image = Image()
+        self.instance = Instance()
+        self.image.need_cleanup = True
+        self.instance.need_cleanup = True
+
+    def add_image_configuration(self, image_configuration):
+        self.image.mode = 'upload'
+        self.image.name = self.make_test_name
+
+    def add_test_environment_configuration(self, test_environment_configuration):
+        pass
+
+    def override_image(self, existing_image_uuid):
+        self.image.mode = 'reuse'
+
+    def override_instance(self, existing_instance_uuid):
+        pass
+
+    def override_ssh_key(self, path_to_private_key):
+        pass
+
+    def set_image_cleanup_status(self, clean=True):
+        pass
+
+    def set_instance_cleanup_status(self, clean=True):
+        pass
+
+    def is_image_need_cleanup(self):
+        pass
+
+    def is_instance_need_cleanup(self):
+        pass
+
+
 class PrepOS(object):
 
     'Provides test-specific image/instance/keypair with timeouts and cleanup at errors'
@@ -38,36 +87,31 @@ class PrepOS(object):
         self.upload_timeout = config.get_max(
             image,
             test_environment,
-            'glance',
-            'upload_timeout',
+            'glance.upload_timeout',
             self.LONG_OS_TIMEOUT
         )
         self.keypair_timeout = config.get_max(
             image,
             test_environment,
-            'nova',
-            'keypair_timeout',
+            'nova.keypair_timeout',
             self.SHORT_OS_TIMEOUT
         )
         self.cleanup_timeout = config.get_max(
             image,
             test_environment,
-            'nova',
-            'cleanup_timeout',
+            'nova.cleanup_timeout',
             self.SHORT_OS_TIMEOUT
         )
         self.active_timeout = config.get_max(
             image,
             test_environment,
-            'nova',
-            'active_timeout',
+            'nova.active_timeout',
             self.LONG_OS_TIMEOUT
         )
         self.create_timeout = config.get_max(
             image,
             test_environment,
-            'nova',
-            'create_timeout',
+            'nova.create_timeout',
             self.LONG_OS_TIMEOUT
         )
         self.key_name = self.make_test_name('key')
