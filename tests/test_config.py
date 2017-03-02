@@ -17,6 +17,13 @@ def config():
     return config
 
 
+def test_set_conf_name_not_found(config):
+    c = config.Config({})
+    with mock.patch.object(config.os.path, "isfile", return_value=False):
+        with pytest.raises(config.ConfigNotFound):
+            c.set_conf_name('foo')
+
+
 def test_imageconfig(config):
     mock_config = mock.mock_open(read_data='{"image1": {"filename": "ok"}}')
     with mock.patch.object(config, "open", mock_config) as mock_open:
