@@ -17,11 +17,17 @@ def config():
     return config
 
 
-def test_set_conf_name_not_found(config):
+def test_set_conf_name_not_found_forced(config):
     c = config.Config({})
     with mock.patch.object(config.os.path, "isfile", return_value=False):
         with pytest.raises(config.ConfigNotFound):
             c.set_conf_name('foo')
+
+
+def test_set_conf_name_not_found_natural(config):
+    with mock.patch.object(config.os.path, "isfile", return_value=False):
+        with pytest.raises(config.ConfigNotFound):
+            config.ImageConfig()
 
 
 def test_imageconfig(config):
