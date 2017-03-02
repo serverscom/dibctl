@@ -14,11 +14,11 @@ class ConfigNotFound(ConfigError):
     pass
 
 
-class NotFoundInConfigError(ConfigError):
+class InvaidConfigError(ConfigError):
     pass
 
 
-class InvaidConfigError(ConfigError):
+class NotFoundInConfigError(KeyError):
     pass
 
 
@@ -100,10 +100,6 @@ class Config (object):
         print("Using %s" % self.config_file)
         self.config = self.read_and_validate_config(self.config_file)
 
-    @staticmethod
-    def append(d, key, value):
-        if value:
-            d[key] = value
 
     def read_and_validate_config(self, name):
         content = yaml.load(open(name, "r"))
@@ -127,12 +123,22 @@ class Config (object):
 
         raise ConfigNotFound("Unable to file %s in %s" % (self.DEFAULT_CONFIG_NAME, ", ".join(self.CONFIG_SEARCH_PATH)))
 
-    def get(self, label):
+    def get(self, label, default_value=None):
+        path = label.split('.')
+        position = self.config
+        for element in path[:-1]:
+            position = position.get(element, {})
+        return position.get(path[-1], default_value)
+
+    def __getitem__(self, label):
         try:
-            obj = self.config[label]
+            path = label.split('.')
+            position = self.config
+            for element in path[:-1]:
+                position = position[element]
+            return position[path[-1]]
         except KeyError:
             raise NotFoundInConfigError("Unable to find '%s' in %s" % (label, self.config_file))
-        return obj
 
 
 class ImageConfig(Config):
