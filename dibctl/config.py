@@ -147,8 +147,12 @@ class Config (object):
         except KeyError:
             raise NotFoundInConfigError("Unable to find '%s' in %s" % (label, self.config_file))
 
-    def __in__(self, key):
-        return key in self.config
+    def __contains__(self, key):
+        try:
+            self.__getitem__(key)
+            return True
+        except NotFoundInConfigError:
+            return False
 
 
 class ImageConfig(Config):

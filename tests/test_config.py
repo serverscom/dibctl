@@ -203,6 +203,17 @@ def test_testenv_config_schema_bad(config, bad_config):
                 config.TestEnvConfig("mock_config_name")
 
 
+@pytest.mark.parametrize("input, query, result", [
+    [{}, 'foo', False],
+    [{'a': 1}, 'a', True],
+    [{'a': {'b': 2}}, "a.b", True]
+])
+def test_config_in(config, input, query, result):
+    c = config.Config(input)
+    c.config_file = 'foo'
+    assert (query in c) is result
+
+
 @pytest.mark.parametrize('bad_config', [
     '{"foo": "bar"}',
     '{"foo": {}}',
