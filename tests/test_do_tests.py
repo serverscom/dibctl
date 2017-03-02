@@ -8,6 +8,12 @@ from mock import sentinel
 
 
 @pytest.fixture
+def Config():
+    from dibctl import config
+    return config.Config
+
+
+@pytest.fixture
 def do_tests():
     from dibctl import do_tests
     return do_tests
@@ -29,15 +35,15 @@ def test_init_no_override(do_tests):
     assert dt.override_image_uuid == sentinel.uuid
 
 
-def test_init_tests(do_tests):
-    image = {
+def test_init_tests(do_tests, Config):
+    image = Config({
         'tests': {
-            'tests_list': [sentinel.test]
+            'tests_list': ['test']
         }
-    }
-    dt = do_tests.DoTests(image, sentinel.env)
-    assert dt.tests_list == [sentinel.test]
-    assert dt.test_env == sentinel.env
+    })
+    env = Config({})
+    dt = do_tests.DoTests(image, env)
+    assert dt.tests_list == ['test']
 
 
 def test_chef_if_keep_stuff_after_fail_remove_all(do_tests):
@@ -120,7 +126,7 @@ def test_init_ssh_no_ssh(do_tests):
     assert dt.ssh is None
 
 
-def test_wait_port_good(do_tests):
+def test_wait_port_good(do_tests, Config):
     env = {
         'nova': {
             'flavor': 'some flavor'
@@ -133,7 +139,7 @@ def test_wait_port_good(do_tests):
             'port_wait_timeout': 180
         }
     }
-    dt = do_tests.DoTests(image, env)
+    dt = do_tests.DoTests(Config(image), Config(env))
     mock_prep_os = mock.MagicMock()
     assert dt.wait_port(mock_prep_os) is True
     assert mock_prep_os.wait_for_port.call_args == mock.call(22, 180)
@@ -143,7 +149,7 @@ def test_wait_port_good(do_tests):
     [1, 2, 2],
     [2, 1, 2],
 ])
-def test_get_port_timeout_uses_max(do_tests, env_timeout, image_timeout, result):
+def test_get_port_timeout_uses_max(do_tests, Config, env_timeout, image_timeout, result):
     env = {
         'nova': {
             'flavor': 'some flavor'
@@ -159,13 +165,13 @@ def test_get_port_timeout_uses_max(do_tests, env_timeout, image_timeout, result)
             'port_wait_timeout': image_timeout
         }
     }
-    dt = do_tests.DoTests(image, env)
+    dt = do_tests.DoTests(Config(image), Config(env))
     mock_prep_os = mock.MagicMock()
     dt.wait_port(mock_prep_os)
     assert mock_prep_os.wait_for_port.call_args == mock.call(22, result)
 
 
-def test_get_port_timeout_uses_env(do_tests):
+def test_get_port_timeout_uses_env(do_tests, Config):
     env = {
         'nova': {
             'flavor': 'some flavor'
@@ -180,13 +186,13 @@ def test_get_port_timeout_uses_env(do_tests):
             'wait_for_port': 22
         }
     }
-    dt = do_tests.DoTests(image, env)
+    dt = do_tests.DoTests(Config(image), Config(env))
     mock_prep_os = mock.MagicMock()
     dt.wait_port(mock_prep_os)
     assert mock_prep_os.wait_for_port.call_args == mock.call(22, 42)
 
 
-def test_get_port_timeout_uses_img(do_tests):
+def test_get_port_timeout_uses_img(do_tests, Config):
     env = {
         'nova': {
             'flavor': 'some flavor'
@@ -199,7 +205,7 @@ def test_get_port_timeout_uses_img(do_tests):
             'port_wait_timeout': 42
         }
     }
-    dt = do_tests.DoTests(image, env)
+    dt = do_tests.DoTests(Config(image), Config(env))
     mock_prep_os = mock.MagicMock()
     dt.wait_port(mock_prep_os)
     assert mock_prep_os.wait_for_port.call_args == mock.call(22, 42)
@@ -340,7 +346,7 @@ def test_process_shell_only(do_tests, capsys):
             assert dt.process(shell_only=True, shell_on_errors=False) == sentinel.result
 
 
-def test_process_all_tests_fail(do_tests, capsys):
+def test_process_all_tests_fail(do_tests, capsys, Config):
     env = {
         'nova': {
             'flavor': 'some flavor'
@@ -352,7 +358,7 @@ def test_process_all_tests_fail(do_tests, capsys):
             'tests_list': [{'pytest': sentinel.path1}, {'pytest': sentinel.path2}]
         }
     }
-    dt = do_tests.DoTests(image, env)
+    dt = do_tests.DoTests(Config(image), Config(env))
     with mock.patch.object(do_tests.pytest_runner, "runner") as runner:
         runner.side_effect = [False, ValueError("Shouldn't be called")]
         with mock.patch.object(do_tests.prepare_os, "PrepOS") as mock_prep_os_class:
@@ -364,7 +370,7 @@ def test_process_all_tests_fail(do_tests, capsys):
             assert runner.call_count == 1
 
 
-def test_process_all_tests_fail_open_shell(do_tests):
+def test_process_all_tests_fail_open_shell(do_tests, Config):
     env = {
         'nova': {
             'flavor': 'some flavor'
@@ -376,7 +382,7 @@ def test_process_all_tests_fail_open_shell(do_tests):
             'tests_list': [{'pytest': sentinel.path1}, {'pytest': sentinel.path2}]
         }
     }
-    dt = do_tests.DoTests(image, env)
+    dt = do_tests.DoTests(Config(image), Config(env))
     with mock.patch.object(do_tests.pytest_runner, "runner") as runner:
         runner.side_effect = [False, ValueError("Shouldn't be called")]
         with mock.patch.object(do_tests.prepare_os, "PrepOS") as mock_prep_os_class:
@@ -390,7 +396,7 @@ def test_process_all_tests_fail_open_shell(do_tests):
 
 
 @pytest.mark.parametrize('result', [True, False])
-def test_run_all_tests(do_tests, result):
+def test_run_all_tests(do_tests, result, Config):
     env = {
         'nova': {
             'flavor': 'some flavor'
@@ -403,7 +409,7 @@ def test_run_all_tests(do_tests, result):
         }
     }
     with mock.patch.object(do_tests.DoTests, "run_test", return_value=result):
-        dt = do_tests.DoTests(image, env)
+        dt = do_tests.DoTests(Config(image), Config(env))
         assert dt.run_all_tests(mock.MagicMock()) is result
 
 

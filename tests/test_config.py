@@ -204,6 +204,20 @@ def test_uploadenv_config_schema_bad(config, bad_config):
                 config.UploadEnvConfig("mock_config_name")
 
 
+@pytest.mark.parametrize('conf1, conf2, path, result', [
+    [{'a': 1}, {'a': 2}, 'a', 2],
+    [{'a': 2}, {'a': 1}, 'a', 2],
+    [{'a': 2}, {}, 'a', 2],
+    [{}, {'a': 100}, 'a', 100],
+    [{}, {}, 'a', 99],
+    [{'a': {'b': 2}}, {}, 'a.b', 2],
+])
+def test_get_max(config, conf1, conf2, path, result):
+    c1 = config.Config(conf1)
+    c2 = config.Config(conf2)
+    assert config.get_max(c1, c2, path, 99) == result
+
+
 if __name__ == "__main__":
     file_to_test = os.path.join(
         parentdir,

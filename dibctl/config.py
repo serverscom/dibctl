@@ -95,11 +95,18 @@ class Config (object):
         "minItem": 1
     }
 
+    def __init__(self, mock_config):
+        '''
+            This class shound't be called directly
+            in actual code, but may be used as
+            mock for configs without need to 'read' files
+        '''
+        self.config = mock_config
+
     def common_init(self, config_file=None):
         self.config_file = self.set_conf_name(config_file)
         print("Using %s" % self.config_file)
         self.config = self.read_and_validate_config(self.config_file)
-
 
     def read_and_validate_config(self, name):
         content = yaml.load(open(name, "r"))
@@ -139,6 +146,9 @@ class Config (object):
             return position[path[-1]]
         except KeyError:
             raise NotFoundInConfigError("Unable to find '%s' in %s" % (label, self.config_file))
+
+    def __in__(self, key):
+        return key in self.config
 
 
 class ImageConfig(Config):
@@ -310,25 +320,9 @@ class UploadEnvConfig(EnvConfig):
     }
 
 
-def get_max(config1, config2, section_name, option_name, default_value):
-    section1 = {}
-    section2 = {}
-    try:
-        if config1:
-            section1 = config1.get(section_name)
-    except NotFoundInConfigError:
-        pass
-    try:
-        if config2:
-            section2 = config2.get(section_name)
-    except NotFoundInConfigError:
-        pass
-    if not section1:
-        section1 = {}
-    if not section2:
-        section2 = {}
-    value1 = section1.get(option_name, None)
-    value2 = section2.get(option_name, None)
+def get_max(config1, config2, path, default_value):
+    value1 = config1.get(path, None)
+    value2 = config2.get(path, None)
     guess = max(value1, value2)
     if guess is None:
         return default_value

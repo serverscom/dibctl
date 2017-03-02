@@ -47,11 +47,8 @@ class DoTests(object):
             self.delete_image = False
         else:
             self.delete_image = True
-        if 'tests' in image:
-            self.tests_list = image['tests']['tests_list']
-            self.environment_variables = image['tests'].get('environment_variables', None)
-        else:
-            self.tests_list = []
+        self.tests_list = image.get('tests.tests_list', [])
+        self.environment_variables = image.get('tests.environment_variables', None)
         self.test_env = test_env
 
     def check_if_keep_stuff_after_fail(self, prep_os):
@@ -133,8 +130,7 @@ class DoTests(object):
             port_wait_timeout = config.get_max(
                         self.image,
                         self.test_env,
-                        'tests',
-                        'port_wait_timeout',
+                        'tests.port_wait_timeout',
                         self.DEFAULT_PORT_WAIT_TIMEOUT
                     )
             port_available = prep_os.wait_for_port(port, port_wait_timeout)
