@@ -93,7 +93,7 @@ class GenericCommand(object):
             self.os = osclient.OSClient(
                 keystone_data=self.upload_env['keystone'],
                 nova_data={},
-                glace_data=glance_data,
+                glance_data=glance_data,
                 neutron_data={},
                 overrides=os.environ,
                 ca_path=self.upload_env.get('ssl_ca_path', '/etc/ssl/cacerts'),
