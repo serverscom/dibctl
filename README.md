@@ -1,26 +1,24 @@
 Dibctl
 ------
 
-Dibctl is a software for image build, testing and  uploading.
+Dibctl is a software for image building, testing and  uploading.
 It uses diskimage-builder to build images, pytest and testinfra
-to test them and provide a consistent way to upload tested images
-to multiple Openstack installations.
+to test them and it provide a consistent way to upload tested
+images to multiple Openstack installations.
 
-Dibctl uses configuration files to how to build image, which name
-it should have after upload, what properties (if any) should be
-set for a given image. Image configuration file also provide list
-of tests for each image, plus name of environment where tests should
-happen.
+Dibctl uses configuration files to describe how to build image,
+which name it should have after upload, what properties (if any)
+should be set for a given image. Image configuration file also
+provide list of tests for each image, plus name of environment
+where tests should happen.
 
-Other configuration file, test.yaml contains information how to
-run test instance: region authorization URL, credentials, flavor,
-network list, availability zone, security groups and other nova
-parameters.
+Testing happens under directives from test.yaml. It contains
+information how to run test instance: region authorization URL,
+credentials, flavor, network list, availability zone, security
+groups and other nova parameters.
 
-Third configuration file provides upload configuration for
-arbitrary amount of Openstack regions.
-
-*This readme is under construction, as well, as software itself.*
+Third configuration file provides information for uploading into
+any number of Openstack installations.
 
 Testing frameworks
 ------------------
@@ -31,36 +29,38 @@ SSH, etc).
 Test frameworks:
 - 'shell': each test is a simple shell script, which is executed
 outside test VM
-- 'shell_in_ssh':each test is a simple shell script, which is executed
+- 'ssh':each test is a simple shell script, which is executed
 inside guest machine (not yet implemented)
 - 'pytest' - tests are implemented by means of py.test, with optional
-support for testinfra. Dibctl provides wast set of fixtures with all
-available information about image and instance, plus few handy operations
-(wait_for_port), and direct access to nova object for testing instance
+support for testinfra (python library for server verification, similar to
+ServerSpec). Dibctl provides wast set of fixtures with all available
+information about image and instance, plus few handy operations
+(wait\_for\_port), and direct access to nova object for testing instance
 reactions on nova operations (hard reboot, rebuild, etc).
 
 Dibctl comes with some generic (applicable to any image of any provider).
 
-Examples of test coming with dibctl:
+Examples of test shpped with dibctl:
 - Does instance resize rootfs up to a flavor size at a first boot?
 - Does it receives IP addresses on all attached interfaces?
 - Does DNS set up properly?
 - Does hostname match the name of the instance?
 - Does instance still work after reboot?
+- Can user install nginx (apache) and get access to http port 80?
 
 Workflow
 --------
 Dibctl was created to operates on following workflow:
-Configurations are described by operators, than dibctl performs:
+Beforhand operators describes configurations. After that, each image is:
 - build
 - test: new instance is spawned from tested image, and corresponding
   test scripts are called. If they all report success, images passes
   the test.
-- if test was successful, it uploaded to one or more regions of Openstack.
+- if test was successful, uploaded too one or more installations of Openstack.
 - Older copies of images marked as obsolete and removed (after they become
   unsed - see description below).
 
-That process is repeated on regular basis via cron or CI server (Jenkins?).
+That process may be repeated on regular basis via cron or CI server (Jenkins?).
 Comprehensive testing assures that image that passed the test may be
 uploaded safely in automated manner.
 
