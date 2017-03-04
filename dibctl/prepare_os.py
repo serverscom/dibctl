@@ -18,11 +18,19 @@ class InstanceError(EnvironmentError):
     pass
 
 
-class Image(object):
+class NewImage(object):
     pass
 
 
-class Instance(object):
+class ExistingImage(object):
+    pass
+
+
+class NewInstance(object):
+    pass
+
+
+class ExistingInstance(object):
     pass
 
 
@@ -33,38 +41,32 @@ class Facility(object):
     '''
 
     def __init__(self):
-        self.image = Image()
-        self.instance = Instance()
+        self.image = None
+        self.instance = None
         self.image.need_cleanup = True
         self.instance.need_cleanup = True
 
     def add_image_configuration(self, image_configuration):
-        self.image.mode = 'upload'
+        self.image = NewImage(image_configuration)
         self.image.name = self.make_test_name
 
     def add_test_environment_configuration(self, test_environment_configuration):
-        pass
+        self.test_env_cfg = test_environment_configuration
 
     def override_image(self, existing_image_uuid):
-        self.image.mode = 'reuse'
+        self.image = ExistingImage(existing_image_uuid)
 
     def override_instance(self, existing_instance_uuid):
-        pass
+        self.instance = ExistingInstance(existing_instance_uuid)
 
     def override_ssh_key(self, path_to_private_key):
         pass
 
     def set_image_cleanup_status(self, clean=True):
-        pass
+        self.image.cleanup_status(clean)
 
     def set_instance_cleanup_status(self, clean=True):
-        pass
-
-    def is_image_need_cleanup(self):
-        pass
-
-    def is_instance_need_cleanup(self):
-        pass
+        self.instance.cleanup_status(clean)
 
 
 class PrepOS(object):
