@@ -66,7 +66,6 @@ def mock_env_cfg():
 def test_init_normal(prepare_os, mock_image_cfg, mock_env_cfg):
     with mock.patch.object(prepare_os.osclient, "OSClient"):
         dt = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg)
-        assert dt.os
         assert dt.flavor_id == 'example'
         assert dt.delete_image is True
         assert dt.delete_instance is True
@@ -162,6 +161,7 @@ def test_spawn_instance_no_config_drive(prepare_os):
     }
     with mock.patch.object(prepare_os.osclient, "OSClient") as mock_os:
         p = prepare_os.PrepOS(img, env)
+        p.connect()
         p.os_key = mock.MagicMock()
         p.spawn_instance(1)
         assert mock_os.return_value.boot_instance.call_args[1]['config_drive'] is False
@@ -183,6 +183,7 @@ def test_spawn_instance_no_config_drive2(prepare_os):
     }
     with mock.patch.object(prepare_os.osclient, "OSClient") as mock_os:
         p = prepare_os.PrepOS(img, env)
+        p.connect()
         p.os_key = mock.MagicMock()
         p.spawn_instance(1)
         assert mock_os.return_value.boot_instance.call_args[1]['config_drive'] is False
@@ -204,6 +205,7 @@ def test_spawn_instance_with_drive(prepare_os):
     }
     with mock.patch.object(prepare_os.osclient, "OSClient") as mock_os:
         p = prepare_os.PrepOS(img, env)
+        p.connect()
         p.os_key = mock.MagicMock()
         p.spawn_instance(1)
         assert mock_os.return_value.boot_instance.call_args[1]['config_drive'] is True
@@ -450,7 +452,9 @@ def test_grand_test_for_context_manager_normal(prepare_os, prep_os, mock_image_c
     with mock.patch.object(prepare_os.osclient, "OSClient") as mockos:
         mockos.return_value.new_keypair.return_value.private_key = "key"
         mockos.return_value.boot_instance.return_value.status = "ACTIVE"
-        with prepare_os.PrepOS(mock_image_cfg, mock_env_cfg, delete_instance=False):
+        p = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg, delete_instance=False)
+        p.connect()
+        with p:
             pass
 
 
@@ -459,8 +463,10 @@ def test_grand_test_for_context_manager_fail_not_delete(prepare_os, capsys, mock
         with mock.patch.object(prepare_os.osclient, "OSClient") as mockos:
             mockos.return_value.new_keypair.return_value.private_key = "key"
             mockos.return_value.boot_instance.return_value.status = "ACTIVE"
-            with prepare_os.PrepOS(mock_image_cfg, mock_env_cfg, delete_instance=False) as prep_os:
-                prep_os.report = True
+            p = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg, delete_instance=False)
+            p.connect()
+            with p:
+                p.report = True
                 raise Exception
     output = capsys.readouterr()[0]
     assert "Instance ip is" in output

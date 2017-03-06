@@ -142,12 +142,14 @@ class DoTests(object):
             return False
 
     def process(self, shell_only, shell_on_errors):
-        with prepare_os.PrepOS(
+        conn = prepare_os.PrepOS(
             self.image,
             self.test_env,
             override_image=self.override_image_uuid,
             delete_image=self.delete_image
-        ) as prep_os:
+        )
+        conn.connect()
+        with conn as prep_os:
             self.init_ssh(prep_os)
             self.wait_port(prep_os)
             if shell_only:

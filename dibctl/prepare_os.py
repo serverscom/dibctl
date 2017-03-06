@@ -128,17 +128,20 @@ class PrepOS(object):
         self.flavor_id = test_environment['nova']['flavor']
         self.nic_list = list(self.prepare_nics(test_environment['nova']))
         self.main_nic_regexp = test_environment['nova'].get('main_nic_regexp', None)
+        self.test_environment = test_environment
+
+    def connect(self):
         self.os = osclient.OSClient(
-            keystone_data=test_environment['keystone'],
-            nova_data=test_environment['nova'],
+            keystone_data=self.test_environment['keystone'],
+            nova_data=self.test_environment['nova'],
             glance_data=osclient.smart_join_glance_config(
-                test_environment.get('glance', {}),
+                self.test_environment.get('glance', {}),
                 self.image.get('glance', {})
             ),
-            neutron_data=test_environment.get('neutron', None),
+            neutron_data=self.test_environment.get('neutron'),
             overrides=os.environ,
-            ca_path=test_environment.get('ssl_ca_path', '/etc/ssl/certs'),
-            insecure=test_environment.get('ssl_insecure', False)
+            ca_path=self.test_environment.get('ssl_ca_path', '/etc/ssl/certs'),
+            insecure=self.test_environment.get('ssl_insecure', False)
         )
 
     @staticmethod
