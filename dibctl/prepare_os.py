@@ -76,60 +76,77 @@ class PrepOS(object):
     SHORT_OS_TIMEOUT = 10
     SLEEP_DELAY = 3
 
-    def __init__(self, image, test_environment, override_image=None, delete_image=True, delete_instance=True):
-        self.report = True
-        self.override_image = override_image
-        if override_image:
-            self.image_name = ""
-            self.delete_image = False
-        else:
-            self.image_name = self.make_test_name(image['glance']['name'])
-            self.image = image
-            self.delete_image = delete_image
+    def set_timeouts(self, image_item, tenv_item):
         self.upload_timeout = config.get_max(
-            image,
-            test_environment,
+            image_item,
+            tenv_item,
             'glance.upload_timeout',
             self.LONG_OS_TIMEOUT
         )
         self.keypair_timeout = config.get_max(
-            image,
-            test_environment,
+            image_item,
+            tenv_item,
             'nova.keypair_timeout',
             self.SHORT_OS_TIMEOUT
         )
         self.cleanup_timeout = config.get_max(
-            image,
-            test_environment,
+            image_item,
+            tenv_item,
             'nova.cleanup_timeout',
             self.SHORT_OS_TIMEOUT
         )
         self.active_timeout = config.get_max(
-            image,
-            test_environment,
+            image_item,
+            tenv_item,
             'nova.active_timeout',
             self.LONG_OS_TIMEOUT
         )
         self.create_timeout = config.get_max(
-            image,
-            test_environment,
+            image_item,
+            tenv_item,
             'nova.create_timeout',
             self.LONG_OS_TIMEOUT
         )
-        self.key_name = self.make_test_name('key')
-        self.instance_name = self.make_test_name('test')
+
+    def prepare_normal_image(self, image_item, delete_image_flag):
+        self.image_name = self.make_test_name(image_item['glance']['name'])
+        self.image = image_item
+        self.delete_image = delete_image_flag
         self.os_image = None
+        self.override_image = False
+
+    def prepare_override_image(self, image_item, override_image_uuid):
+        self.image = image_item
+        self.image_name = ""
+        self.delete_image = False
+        self.os_image = None
+        self.override_image = True  # refactor me
+
+    def prepare_instance(self, tenv_item, delete_instance_flag):
+        self.instance_name = self.make_test_name('test')
+        self.key_name = self.make_test_name('key')
         self.os_instance = None
         self.os_key = None
         self.delete_keypair = True
-        self.config_drive = test_environment['nova'].get('config_drive', False)
-        self.availability_zone = test_environment['nova'].get('availability_zone', None)
-        self.delete_instance = delete_instance
-        self.flavor_id = test_environment['nova']['flavor']
-        self.nic_list = list(self.prepare_nics(test_environment['nova']))
-        self.main_nic_regexp = test_environment['nova'].get('main_nic_regexp', None)
-        self.test_environment = test_environment
+        self.config_drive = tenv_item['nova'].get('config_drive', False)
+        self.availability_zone = tenv_item['nova'].get('availability_zone', None)
+        self.delete_instance = delete_instance_flag
+        self.flavor_id = tenv_item['nova']['flavor']
+        self.nic_list = list(self.prepare_nics(tenv_item['nova']))
+        self.main_nic_regexp = tenv_item['nova'].get('main_nic_regexp', None)
+
+    def __init__(self, image, test_environment, override_image=None, delete_image=True, delete_instance=True):
         self.os = None
+        self.set_timeouts(image, test_environment)
+        self.test_environment = test_environment
+        self.report = True  # refactor me!
+
+        if override_image:
+            self.prepare_override_image(override_image)
+        else:
+            self.prepare_normal_image(image, delete_image)
+
+        self.prepare_instance(test_environment, delete_instance)
 
     def connect(self):
         if not self.os:
