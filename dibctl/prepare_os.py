@@ -129,20 +129,22 @@ class PrepOS(object):
         self.nic_list = list(self.prepare_nics(test_environment['nova']))
         self.main_nic_regexp = test_environment['nova'].get('main_nic_regexp', None)
         self.test_environment = test_environment
+        self.os = None
 
     def connect(self):
-        self.os = osclient.OSClient(
-            keystone_data=self.test_environment['keystone'],
-            nova_data=self.test_environment['nova'],
-            glance_data=osclient.smart_join_glance_config(
-                self.test_environment.get('glance', {}),
-                self.image.get('glance', {})
-            ),
-            neutron_data=self.test_environment.get('neutron'),
-            overrides=os.environ,
-            ca_path=self.test_environment.get('ssl_ca_path', '/etc/ssl/certs'),
-            insecure=self.test_environment.get('ssl_insecure', False)
-        )
+        if not self.os:
+            self.os = osclient.OSClient(
+                keystone_data=self.test_environment['keystone'],
+                nova_data=self.test_environment['nova'],
+                glance_data=osclient.smart_join_glance_config(
+                    self.test_environment.get('glance', {}),
+                    self.image.get('glance', {})
+                ),
+                neutron_data=self.test_environment.get('neutron'),
+                overrides=os.environ,
+                ca_path=self.test_environment.get('ssl_ca_path', '/etc/ssl/certs'),
+                insecure=self.test_environment.get('ssl_insecure', False)
+            )
 
     @staticmethod
     def prepare_nics(env):
@@ -297,6 +299,7 @@ class PrepOS(object):
             print("Image %s is not removed. Please debug and remove it manually." % self.os_image)
 
     def __enter__(self):
+        self.connect()
         try:
             self.prepare()
             return self

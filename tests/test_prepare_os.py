@@ -161,8 +161,8 @@ def test_spawn_instance_no_config_drive(prepare_os):
     }
     with mock.patch.object(prepare_os.osclient, "OSClient") as mock_os:
         p = prepare_os.PrepOS(img, env)
-        p.connect()
         p.os_key = mock.MagicMock()
+        p.connect()
         p.spawn_instance(1)
         assert mock_os.return_value.boot_instance.call_args[1]['config_drive'] is False
 
@@ -183,8 +183,8 @@ def test_spawn_instance_no_config_drive2(prepare_os):
     }
     with mock.patch.object(prepare_os.osclient, "OSClient") as mock_os:
         p = prepare_os.PrepOS(img, env)
-        p.connect()
         p.os_key = mock.MagicMock()
+        p.connect()
         p.spawn_instance(1)
         assert mock_os.return_value.boot_instance.call_args[1]['config_drive'] is False
 
@@ -205,8 +205,8 @@ def test_spawn_instance_with_drive(prepare_os):
     }
     with mock.patch.object(prepare_os.osclient, "OSClient") as mock_os:
         p = prepare_os.PrepOS(img, env)
-        p.connect()
         p.os_key = mock.MagicMock()
+        p.connect()
         p.spawn_instance(1)
         assert mock_os.return_value.boot_instance.call_args[1]['config_drive'] is True
 
@@ -453,7 +453,6 @@ def test_grand_test_for_context_manager_normal(prepare_os, prep_os, mock_image_c
         mockos.return_value.new_keypair.return_value.private_key = "key"
         mockos.return_value.boot_instance.return_value.status = "ACTIVE"
         p = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg, delete_instance=False)
-        p.connect()
         with p:
             pass
 
@@ -464,7 +463,6 @@ def test_grand_test_for_context_manager_fail_not_delete(prepare_os, capsys, mock
             mockos.return_value.new_keypair.return_value.private_key = "key"
             mockos.return_value.boot_instance.return_value.status = "ACTIVE"
             p = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg, delete_instance=False)
-            p.connect()
             with p:
                 p.report = True
                 raise Exception
