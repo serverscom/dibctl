@@ -34,47 +34,26 @@ class ExistingInstance(object):
     pass
 
 
-class Facility(object):
-    '''
-        This class stores all runtime information about what to
-        execute, what was executed, cleaned, etc.
-    '''
-
-    def __init__(self):
-        self.image = None
-        self.instance = None
-        self.image.need_cleanup = True
-        self.instance.need_cleanup = True
-
-    def add_image_configuration(self, image_configuration):
-        self.image = NewImage(image_configuration)
-        self.image.name = self.make_test_name
-
-    def add_test_environment_configuration(self, test_environment_configuration):
-        self.test_env_cfg = test_environment_configuration
-
-    def override_image(self, existing_image_uuid):
-        self.image = ExistingImage(existing_image_uuid)
-
-    def override_instance(self, existing_instance_uuid):
-        self.instance = ExistingInstance(existing_instance_uuid)
-
-    def override_ssh_key(self, path_to_private_key):
-        pass
-
-    def set_image_cleanup_status(self, clean=True):
-        self.image.cleanup_status(clean)
-
-    def set_instance_cleanup_status(self, clean=True):
-        self.instance.cleanup_status(clean)
-
-
 class PrepOS(object):
 
     'Provides test-specific image/instance/keypair with timeouts and cleanup at errors'
     LONG_OS_TIMEOUT = 360
     SHORT_OS_TIMEOUT = 10
     SLEEP_DELAY = 3
+
+    def __init__(self, image, test_environment, override_image=None, delete_image=True, delete_instance=True):
+        self.os = None
+        self.set_timeouts(image, test_environment)
+        self.test_environment = test_environment
+        self.report = True  # refactor me!
+
+        if override_image:
+            self.prepare_override_image(override_image)
+        else:
+            self.prepare_normal_image(image, delete_image)
+
+        self.prepare_key()
+        self.prepare_instance(test_environment, delete_instance)
 
     def set_timeouts(self, image_item, tenv_item):
         self.upload_timeout = config.get_max(
@@ -122,31 +101,20 @@ class PrepOS(object):
         self.os_image = None
         self.override_image = True  # refactor me
 
-    def prepare_instance(self, tenv_item, delete_instance_flag):
-        self.instance_name = self.make_test_name('test')
+    def prepare_key(self):
         self.key_name = self.make_test_name('key')
-        self.os_instance = None
         self.os_key = None
         self.delete_keypair = True
+
+    def prepare_instance(self, tenv_item, delete_instance_flag):
+        self.instance_name = self.make_test_name('test')
+        self.os_instance = None
         self.config_drive = tenv_item['nova'].get('config_drive', False)
         self.availability_zone = tenv_item['nova'].get('availability_zone', None)
         self.delete_instance = delete_instance_flag
         self.flavor_id = tenv_item['nova']['flavor']
         self.nic_list = list(self.prepare_nics(tenv_item['nova']))
         self.main_nic_regexp = tenv_item['nova'].get('main_nic_regexp', None)
-
-    def __init__(self, image, test_environment, override_image=None, delete_image=True, delete_instance=True):
-        self.os = None
-        self.set_timeouts(image, test_environment)
-        self.test_environment = test_environment
-        self.report = True  # refactor me!
-
-        if override_image:
-            self.prepare_override_image(override_image)
-        else:
-            self.prepare_normal_image(image, delete_image)
-
-        self.prepare_instance(test_environment, delete_instance)
 
     def connect(self):
         if not self.os:
