@@ -95,13 +95,14 @@ class Config (object):
         "minItem": 1
     }
 
-    def __init__(self, mock_config):
+    def __init__(self, mock_config, filename=None):
         '''
             This class shound't be called directly
             in actual code, but may be used as
             mock for configs without need to 'read' files
         '''
         self.config = mock_config
+        self.config_file = filename
 
     def common_init(self, config_file=None):
         self.config_file = self.set_conf_name(config_file)
@@ -135,7 +136,11 @@ class Config (object):
         position = self.config
         for element in path[:-1]:
             position = position.get(element, {})
-        return position.get(path[-1], default_value)
+        retval = position.get(path[-1], default_value)
+        if type(retval) == dict:
+            return Config(retval, self.config_file)
+        else:
+            return retval
 
     def __getitem__(self, label):
         try:
@@ -143,7 +148,11 @@ class Config (object):
             position = self.config
             for element in path[:-1]:
                 position = position[element]
-            return position[path[-1]]
+            retval = position[path[-1]]
+            if type(retval) is dict:
+                return Config(retval, self.config_file)
+            else:
+                return retval
         except KeyError:
             raise NotFoundInConfigError("Unable to find '%s' in %s" % (label, self.config_file))
 
@@ -153,6 +162,9 @@ class Config (object):
             return True
         except NotFoundInConfigError:
             return False
+
+    def __eq__(self, item):
+        return self.config == item
 
 
 class ImageConfig(Config):

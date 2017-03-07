@@ -46,9 +46,8 @@ class PrepOS(object):
         self.set_timeouts(image, test_environment)
         self.test_environment = test_environment
         self.report = True  # refactor me!
-
         if override_image:
-            self.prepare_override_image(override_image)
+            self.prepare_override_image(image, override_image)
         else:
             self.prepare_normal_image(image, delete_image)
 
@@ -88,18 +87,23 @@ class PrepOS(object):
         )
 
     def prepare_normal_image(self, image_item, delete_image_flag):
-        self.image_name = self.make_test_name(image_item['glance']['name'])
         self.image = image_item
+        self.image_name = self.make_test_name(image_item['glance']['name'])
         self.delete_image = delete_image_flag
         self.os_image = None
         self.override_image = False
 
     def prepare_override_image(self, image_item, override_image_uuid):
         self.image = image_item
-        self.image_name = ""
+        self.os_image = self.get_image(override_image_uuid)
+        self.image_name = self.os_image.name
+        print("Found image %s (%s)" % (self.os_image.id, self.os_image.name))
         self.delete_image = False
-        self.os_image = None
         self.override_image = True  # refactor me
+
+    def get_image(self, image):
+        self.connect()
+        return self.os.get_image(image)
 
     def prepare_key(self):
         self.key_name = self.make_test_name('key')
@@ -118,13 +122,11 @@ class PrepOS(object):
 
     def connect(self):
         if not self.os:
+            print("Connecting to Openstack")
             self.os = osclient.OSClient(
                 keystone_data=self.test_environment['keystone'],
                 nova_data=self.test_environment['nova'],
-                glance_data=osclient.smart_join_glance_config(
-                    self.test_environment.get('glance', {}),
-                    self.image.get('glance', {})
-                ),
+                glance_data=self.image.get('glance'),
                 neutron_data=self.test_environment.get('neutron'),
                 overrides=os.environ,
                 ca_path=self.test_environment.get('ssl_ca_path', '/etc/ssl/certs'),
@@ -170,8 +172,6 @@ class PrepOS(object):
                     meta=self.image['glance'].get('properties', {})
                 )
                 print("Image %s uploaded." % self.os_image)
-            else:
-                self.os_image = self.os.get_image(self.override_image)
 
     def spawn_instance(self, timeout_s):
         print("Creating test instance (time limit is %s s)" % timeout_s)
@@ -281,8 +281,8 @@ class PrepOS(object):
             print("Instance %s is not removed. Please debug and remove it manually." % self.os_instance.id)
             print("Instance ip is %s" % self.ip)
             # print("Private key file is %s" % self.os_key_private_file)   ## A problem. Should fix this
-        if self.report and self.os_image and not self.delete_image:
-            print("Image %s is not removed. Please debug and remove it manually." % self.os_image)
+        if self.report and self.os_image and not self.delete_image and not self.override_image:
+            print("Image %s is not removed. Please debug and remove it manually." % self.os_image.id)
 
     def __enter__(self):
         self.connect()

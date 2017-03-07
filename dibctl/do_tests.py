@@ -48,6 +48,7 @@ class DoTests(object):
         else:
             self.delete_image = True
         self.tests_list = image.get('tests.tests_list', [])
+        print("DEBUG: %s, %s"%(self.tests_list, image))
         self.environment_variables = image.get('tests.environment_variables', None)
         self.test_env = test_env
 

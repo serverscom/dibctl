@@ -222,6 +222,7 @@ class TestCommand(GenericCommand):
         dt = do_tests.DoTests(
             self.image,
             test_env=self.test_env,
+            image_uuid=self.args.uuid,
             upload_only=self.args.upload_only,
             keep_failed_image=self.args.keep_failed_image,
             keep_failed_instance=self.args.keep_failed_instance

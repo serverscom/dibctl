@@ -94,13 +94,6 @@ def test_init_keypair(prep_os):
     assert prep_os.os.new_keypair.call_args[0][0] == sentinel.key_name
 
 
-def test_upload_image_with_override(prepare_os, prep_os):
-    prep_os.override_image = sentinel.override_image
-    prep_os.upload_image(1)
-    assert prep_os.os_image
-    assert prep_os.os.get_image.call_args[0][0] == sentinel.override_image
-
-
 def test_upload_image_normal(prep_os):
     prep_os.override_image = None
     prep_os.image_name = sentinel.image_name

@@ -18,7 +18,7 @@ def config():
 
 
 def test_set_conf_name_not_found_forced(config):
-    c = config.Config({})
+    c = config.Config({}, sentinel.name)
     with mock.patch.object(config.os.path, "isfile", return_value=False):
         with pytest.raises(config.ConfigNotFound):
             c.set_conf_name('foo')
@@ -209,7 +209,7 @@ def test_testenv_config_schema_bad(config, bad_config):
     [{'a': {'b': 2}}, "a.b", True]
 ])
 def test_config_in(config, input, query, result):
-    c = config.Config(input)
+    c = config.Config(input, sentinel.name)
     c.config_file = 'foo'
     assert (query in c) is result
 
@@ -237,8 +237,8 @@ def test_uploadenv_config_schema_bad(config, bad_config):
     [{'a': {'b': 2}}, {}, 'a.b', 2],
 ])
 def test_get_max(config, conf1, conf2, path, result):
-    c1 = config.Config(conf1)
-    c2 = config.Config(conf2)
+    c1 = config.Config(conf1, sentinel.name)
+    c2 = config.Config(conf2, sentinel.name)
     assert config.get_max(c1, c2, path, 99) == result
 
 
