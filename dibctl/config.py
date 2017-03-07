@@ -172,7 +172,7 @@ class Config (object):
     def __eq__(self, item):
         return self.config == item
 
-    def str(self):
+    def __str__(self):
         return str(self.config)
 
     def __repr__(self):

@@ -186,11 +186,28 @@ def notest_get_environment_not_ok(config):
                 conf.get_environment('env3')["os_tenant_name"]
 
 
-def test_dict_conversion(config):
+def test_config_dict_conversion(config):
     d = {"a": 1, "b": "c"}
     x = config.Config(d)
     y = dict(x)
     assert y == d
+
+
+def test_config_iteritems(config):
+    d = {"a": 1}
+    l = list(config.Config(d).iteritems())
+    assert l == [('a', 1)]
+
+
+def test_config_str(config):
+    d = {"a": 1}
+    assert str(config.Config(d)) == str(d)
+
+
+def test_config_repr(config):
+    d = {"a": 1}
+    r = repr(config.Config(d))
+    assert r == "Config({'a': 1})"
 
 
 @pytest.mark.parametrize('bad_config', [
