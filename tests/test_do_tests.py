@@ -46,17 +46,6 @@ def test_init_tests(do_tests, Config):
     assert dt.tests_list == ['test']
 
 
-def test_chef_if_keep_stuff_after_fail_remove_all(do_tests):
-    dt = do_tests.DoTests({}, sentinel.env)
-    prep_os = mock.MagicMock()
-    dt.keep_failed_instance = True
-    dt.keep_failed_image = True
-    dt.check_if_keep_stuff_after_fail(prep_os)
-    assert prep_os.delete_instance is False
-    assert prep_os.delete_keypair is False
-    assert prep_os.delete_image is False
-
-
 def test_run_test_bad_config(do_tests):
     dt = do_tests.DoTests({}, sentinel.env)
     with pytest.raises(do_tests.BadTestConfigError):

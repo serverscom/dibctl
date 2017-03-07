@@ -234,7 +234,6 @@ def test_wait_for_instance_timeout(prepare_os, prep_os):
 
 def test_prepare(prepare_os, prep_os):
     prep_os.init_keypair = mock.create_autospec(prep_os.init_keypair)
-    prep_os.save_private_key = mock.create_autospec(prep_os.save_private_key)
     prep_os.upload_image = mock.create_autospec(prep_os.upload_image)
     prep_os.upload_timeout = sentinel.timeout
     prep_os.spawn_instance = mock.create_autospec(prep_os.spawn_instance)
@@ -283,18 +282,8 @@ def test_cleanup_image(prep_os):
 
 def test_cleanup_ssh_key_delete(prep_os):
     prep_os._cleanup = mock.create_autospec(prep_os._cleanup)
-    prep_os.wipe_private_key = mock.create_autospec(prep_os.wipe_private_key)
     prep_os.cleanup_image()
     assert prep_os._cleanup.called
-
-
-def test_cleanup_ssh_key_not_delete(prep_os):
-    prep_os._cleanup = mock.create_autospec(prep_os._cleanup)
-    prep_os.delete_keypair = False
-    prep_os.wipe_private_key = mock.create_autospec(prep_os.wipe_private_key)
-    prep_os.cleanup_image()
-    assert prep_os._cleanup.called
-    assert prep_os.wipe_private_key.called is False
 
 
 def test_error_handler_no_timeout(prep_os):
@@ -371,7 +360,7 @@ def test_get_env_config(prepare_os, prep_os):
     assert env['instance_name'] == 'name'
     assert env['flavor_id'] == 'sentinel.flavor_id'
     assert env['main_ip'] == 'sentinel.ip'
-    assert env['ssh_private_key'] == 'sentinel.private_file'
+    # assert env['ssh_private_key'] == 'sentinel.private_file'
     assert env['flavor_ram'] == 'sentinel.ram'
     assert env['flavor_name'] == 'sentinel.name'
     assert env['flavor_disk'] == 'sentinel.disk'

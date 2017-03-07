@@ -6,7 +6,6 @@ import socket
 import time
 import os
 import json
-import tempfile
 import config
 
 
@@ -109,6 +108,7 @@ class PrepOS(object):
         self.key_name = self.make_test_name('key')
         self.os_key = None
         self.delete_keypair = True
+        self.override_keypair = None
 
     def prepare_instance(self, tenv_item, delete_instance_flag):
         self.instance_name = self.make_test_name('test')
@@ -119,6 +119,7 @@ class PrepOS(object):
         self.flavor_id = tenv_item['nova']['flavor']
         self.nic_list = list(self.prepare_nics(tenv_item['nova']))
         self.main_nic_regexp = tenv_item['nova'].get('main_nic_regexp', None)
+        self.override_instance = None
 
     def connect(self):
         if not self.os:
@@ -149,17 +150,6 @@ class PrepOS(object):
     def init_keypair(self):
         with timeout.timeout(self.keypair_timeout, self.error_handler):
             self.os_key = self.os.new_keypair(self.key_name)
-
-    def save_private_key(self):
-        f = tempfile.NamedTemporaryFile(prefix='DIBCTL_ssh_key', suffix='private', delete=False)
-        f.write(self.os_key.private_key)
-        f.close()
-        self.os_key_private_file = f.name
-
-    def wipe_private_key(self):
-        with open(self.os_key_private_file, 'w') as f:
-            f.write(' ' * 4096)
-        os.remove(self.os_key_private_file)
 
     def upload_image(self, timeout_s):
         with timeout.timeout(timeout_s, self.error_handler):
@@ -208,7 +198,6 @@ class PrepOS(object):
 
     def prepare(self):
         self.init_keypair()
-        #  self.save_private_key()  #  remove, refactoring
         sys.stdout.flush()
         self.upload_image(self.upload_timeout)
         sys.stdout.flush()
@@ -254,12 +243,6 @@ class PrepOS(object):
             self.delete_keypair,
             self.os.delete_keypair
         )
-        try:
-            if self.delete_keypair and self.delete_instance:
-                # self.wipe_private_key()
-                pass
-        except Exception as e:
-            print("Error while clear up ssh key file: %s" % e)
 
     def cleanup(self):
         print("\nClearing up...")
@@ -308,7 +291,7 @@ class PrepOS(object):
             'instance_name': str(self.instance_name).lower(),
             'flavor_id': str(self.flavor_id),
             'main_ip': str(self.ip),
-            'ssh_private_key': str(self.os_key_private_file),
+            # 'ssh_private_key': str(self.os_key_private_file),  REFACTOR!
             'flavor_ram': str(flavor.ram),
             'flavor_name': str(flavor.name),
             'flavor_vcpus': str(flavor.vcpus),
@@ -351,3 +334,30 @@ class PrepOS(object):
             time.sleep(3)
         print("Instance is not accepting connection on ip %s port %s." % (self.ip, port))
         return False
+
+    def update_image_delete_status(self, delete=True):
+        if delete:
+            if self.override_image:
+                self.delete_image = True
+            else:
+                print("Will not delete image as it was not uploaded by us")
+        if not delete:
+            self.delete_image = False
+
+    def update_instance_delete_status(self, delete=True):
+        if delete:
+            if self.override_instance:
+                self.delete_instance = True
+            else:
+                print("Will not delete instance as it was not created by us")
+        if not delete:
+            self.delete_instance = False
+
+    def update_keypair_delete_status(self, delete=True):
+        if delete:
+            if self.override_keypair:
+                self.delete_keypair = True
+            else:
+                print("Will not delete keypair as it was not created by us")
+        if not delete:
+            self.delete_keypair = False

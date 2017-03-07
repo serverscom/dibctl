@@ -53,12 +53,12 @@ class DoTests(object):
 
     def check_if_keep_stuff_after_fail(self, prep_os):
         if self.keep_failed_instance:
-            prep_os.delete_instance = False
-            prep_os.delete_keypair = False
+            prep_os.update_instance_delete_status(delete=False)
+            prep_os.update_keypair_delete_status(delete=False)
             prep_os.report = True
             print("Do not delete instance for failed tests")
         if self.keep_failed_image:
-            prep_os.delete_image = False
+            prep_os.update_image_delete_status(delete=False)
             print("Do not delete image for failed tests")
 
     @staticmethod
