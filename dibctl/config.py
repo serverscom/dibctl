@@ -159,6 +159,9 @@ class Config (object):
     def __iter__(self):
         return self.config.iteritems()
 
+    def iteritems(self):
+        return self.config.iteritems()
+
     def __contains__(self, key):
         try:
             self.__getitem__(key)
