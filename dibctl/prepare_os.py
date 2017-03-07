@@ -208,7 +208,7 @@ class PrepOS(object):
 
     def prepare(self):
         self.init_keypair()
-        self.save_private_key()
+        #  self.save_private_key()  #  remove, refactoring
         sys.stdout.flush()
         self.upload_image(self.upload_timeout)
         sys.stdout.flush()
@@ -256,7 +256,8 @@ class PrepOS(object):
         )
         try:
             if self.delete_keypair and self.delete_instance:
-                self.wipe_private_key()
+                # self.wipe_private_key()
+                pass
         except Exception as e:
             print("Error while clear up ssh key file: %s" % e)
 
@@ -279,7 +280,7 @@ class PrepOS(object):
         if self.report and self.os_instance and not self.delete_instance:
             print("Instance %s is not removed. Please debug and remove it manually." % self.os_instance.id)
             print("Instance ip is %s" % self.ip)
-            print("Private key file is %s" % self.os_key_private_file)
+            # print("Private key file is %s" % self.os_key_private_file)   ## A problem. Should fix this
         if self.report and self.os_image and not self.delete_image:
             print("Image %s is not removed. Please debug and remove it manually." % self.os_image)
 

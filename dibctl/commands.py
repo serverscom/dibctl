@@ -45,9 +45,17 @@ class GenericCommand(object):
         self.parser.add_argument('--debug', help='Display this message', action='store_true', default=False)
         self.parser.add_argument('--version', help='Display version', action='version', version=version.VERSION_STRING)
         if 'input' in self.options:
-            self.parser.add_argument('--input', '-i', help='Input filename for image (overrides default)', dest='filename')
+            self.parser.add_argument(
+                '--input', '-i',
+                help='Input filename for image (overrides default)',
+                dest='filename'
+            )
         if 'output' in self.options:
-            self.parser.add_argument('--output', '-o', help='Outut filename for image (overrides default)', dest='filename')
+            self.parser.add_argument(
+                '--output', '-o',
+                help='Outut filename for image (overrides default)',
+                dest='filename'
+            )
         if 'img-config' in self.options:
             self.parser.add_argument('--images-config', help='Use specific file instead of images.yaml')
         if 'upload-config' in self.options:

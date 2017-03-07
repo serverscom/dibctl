@@ -394,7 +394,10 @@ class OSClient(object):
             found = instance.networks.values()
 
         if len(found) > 1:
-                raise MultipleIPError("More than one network match: %s, matching regexp is '%s'" % (str(found), str(regexp)))
+                raise MultipleIPError("More than one network match: %s, matching regexp is '%s'" % (
+                    str(found),
+                    str(regexp)
+                ))
         elif len(found) == 1:
                 return found[0][0]
         else:

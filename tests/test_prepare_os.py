@@ -94,21 +94,6 @@ def test_init_keypair(prep_os):
     assert prep_os.os.new_keypair.call_args[0][0] == sentinel.key_name
 
 
-def test_save_private_key(prepare_os, prep_os):
-    with mock.patch.object(prepare_os, "tempfile"):
-        prep_os.os_key = mock.MagicMock()
-        prep_os.save_private_key()
-
-
-def test_wipe_private_key(prepare_os, prep_os):
-    with mock.patch.object(prepare_os, "open", mock.mock_open(), create=True) as mock_open:
-        with mock.patch.object(prepare_os.os, "remove") as mock_remove:
-            prep_os.os_key_private_file = sentinel.private_key
-            prep_os.wipe_private_key()
-            assert mock_open().write.call_args[0][0] == " " * 4096
-            assert mock_remove.call_args[0][0] == sentinel.private_key
-
-
 def test_upload_image_with_override(prepare_os, prep_os):
     prep_os.override_image = sentinel.override_image
     prep_os.upload_image(1)
@@ -268,7 +253,6 @@ def test_prepare(prepare_os, prep_os):
 
 
 def test_cleanup(prepare_os, prep_os):
-    prep_os.wipe_private_key = mock.MagicMock()
     prep_os.delete_keypair = True
     prep_os.delete_image = True
     prep_os.delete_instance = True
@@ -276,7 +260,6 @@ def test_cleanup(prepare_os, prep_os):
     assert prep_os.os.delete_image.called
     assert prep_os.os.delete_instance.called
     assert prep_os.os.delete_keypair.called
-    assert prep_os.wipe_private_key.called
 
 
 def test_inner__cleanup_normal(prepare_os):
@@ -319,16 +302,6 @@ def test_cleanup_ssh_key_not_delete(prep_os):
     prep_os.cleanup_image()
     assert prep_os._cleanup.called
     assert prep_os.wipe_private_key.called is False
-
-
-def test_cleanup_ssh_key_exception(prep_os, capsys):
-    random_uuid = '03259c52-bc80-11e6-b6cf-6754ef2724b6'
-    prep_os._cleanup = mock.create_autospec(prep_os._cleanup)
-    prep_os.wipe_private_key = mock.MagicMock(side_effect=ValueError(random_uuid))
-    prep_os.cleanup_ssh_key()
-    assert prep_os._cleanup.called
-    assert prep_os.wipe_private_key.called is True
-    assert random_uuid in capsys.readouterr()[0]
 
 
 def test_error_handler_no_timeout(prep_os):
@@ -468,7 +441,6 @@ def test_grand_test_for_context_manager_fail_not_delete(prepare_os, capsys, mock
                 raise Exception
     output = capsys.readouterr()[0]
     assert "Instance ip is" in output
-    assert "Private key file" in output
 
 
 if __name__ == "__main__":
