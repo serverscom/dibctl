@@ -156,6 +156,9 @@ class Config (object):
         except KeyError:
             raise NotFoundInConfigError("Unable to find '%s' in %s" % (label, self.config_file))
 
+    def __iter__(self):
+        return self.config.iteritems()
+
     def __contains__(self, key):
         try:
             self.__getitem__(key)
@@ -165,6 +168,12 @@ class Config (object):
 
     def __eq__(self, item):
         return self.config == item
+
+    def str(self):
+        return str(self.config)
+
+    def __repr__(self):
+        return "Config(" + repr(self.config) + ")"
 
 
 class ImageConfig(Config):

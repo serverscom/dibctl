@@ -179,8 +179,8 @@ class OSClient(object):
         insecure=False
     ):
 
-        self._set_api_version(keystone_data, insecure)
-        self.auth = self._prepare_auth(keystone_data, overrides)
+        self._set_api_version(dict(keystone_data), insecure)
+        self.auth = self._prepare_auth(dict(keystone_data), overrides)
         self.session = self.create_session(self.api_version, self.auth, insecure)
         self.nova = self.get_nova(self.session)
         self.glance = self.get_glance(self.session)
