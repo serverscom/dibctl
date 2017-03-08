@@ -259,16 +259,16 @@ class UploadCommand(GenericCommand):
         self.public = self.glance_info.get('public', False)
 
     def upload_to_glance(self):
-        self.uuid = self.os.upload_image(
+        self.image = self.os.upload_image(
             self.name,
             self.filename,
             self.public,
             meta=self.meta
         )
-        print("Image ''%s' uploaded with uuid %s" % (self.name, self.uuid))
+        print("Image ''%s' uploaded with uuid %s" % (self.image.name, self.image.id))
 
     def obsolete_old_images(self):
-        candidates = self.os.older_images(self.name, self.uuid)
+        candidates = self.os.older_images(self.name, self.image.id)
         for img in candidates:
             obsolete_image = self.os.mark_image_obsolete(self.name, img)
             print("Obsoleting %s" % obsolete_image.id)

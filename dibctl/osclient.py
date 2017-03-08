@@ -335,7 +335,7 @@ class OSClient(object):
         if share_with_tenants:
             self.share_image(img, share_with_tenants)
 
-        return img.id
+        return img
 
     def share_image(self, img, tenant_name_list):
         raise NotImplementedError("Image sharing not implemented!")

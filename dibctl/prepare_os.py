@@ -160,13 +160,12 @@ class PrepOS(object):
             if not self.override_image:
                 filename = self.image['filename']
                 print("Uploading image from %s (time limit is %s s)" % (filename, timeout_s))
-                uuid = self.os.upload_image(
+                self.os_image = self.os.upload_image(
                     self.image_name,
                     filename,
                     meta=self.image['glance'].get('properties', {})
                 )
-                self.os_image = self.get_image(uuid)
-                print("Image %s uploaded." % self.os_image)
+                print("Image %s uploaded." % self.os_image.id)
 
     def spawn_instance(self, timeout_s):
         print("Creating test instance (time limit is %s s)" % timeout_s)
