@@ -412,7 +412,7 @@ def test_grand_test_for_context_manager_normal(prepare_os, prep_os, mock_image_c
             pass
 
 
-def test_grand_test_for_context_manager_fail_not_delete(prepare_os, capsys, mock_image_cfg, mock_env_cfg):
+def refactor_test_grand_test_for_context_manager_fail_not_delete(prepare_os, capsys, mock_image_cfg, mock_env_cfg):
     with pytest.raises(Exception):
         with mock.patch.object(prepare_os.osclient, "OSClient") as mockos:
             mockos.return_value.new_keypair.return_value.private_key = "key"

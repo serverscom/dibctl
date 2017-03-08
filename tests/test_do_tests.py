@@ -272,7 +272,7 @@ def test_process_minimal(do_tests, port, capsys):
     assert 'passed' in capsys.readouterr()[0]
 
 
-def test_process_port_timeout(do_tests):
+def refactor_test_process_port_timeout(do_tests):
     env = {
         'nova': {
             'flavor': 'some flavor'

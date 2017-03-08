@@ -91,6 +91,7 @@ class PrepOS(object):
         self.delete_image = delete_image_flag
         self.os_image = None
         self.override_image = False
+        self.image_was_removed = False
 
     def prepare_override_image(self, image_item, override_image_uuid):
         self.image = image_item
@@ -99,6 +100,7 @@ class PrepOS(object):
         print("Found image %s (%s)" % (self.os_image.id, self.os_image.name))
         self.delete_image = False
         self.override_image = True  # refactor me
+        self.image_was_removed = False
 
     def get_image(self, image):
         self.connect()
@@ -109,6 +111,7 @@ class PrepOS(object):
         self.os_key = None
         self.delete_keypair = True
         self.override_keypair = None
+        self.keypair_was_removed = False
 
     def prepare_instance(self, tenv_item, delete_instance_flag):
         self.instance_name = self.make_test_name('test')
@@ -120,6 +123,7 @@ class PrepOS(object):
         self.nic_list = list(self.prepare_nics(tenv_item['nova']))
         self.main_nic_regexp = tenv_item['nova'].get('main_nic_regexp', None)
         self.override_instance = None
+        self.instance_was_removed = False
 
     def connect(self):
         if not self.os:
@@ -282,7 +286,7 @@ class PrepOS(object):
     def __exit__(self, e_type, e_val, e_tb):
         "Cleaning up on exit"
         self.cleanup()
-        self.report_if_fail()
+        # self.report_if_fail()
 
     def get_env_config(self):
         flavor = self.flavor()
@@ -361,3 +365,31 @@ class PrepOS(object):
                 print("Will not delete keypair as it was not created by us")
         if not delete:
             self.delete_keypair = False
+
+    def instance_status(self):
+        return {
+            "preexisted": bool(self.override_instance),
+            "was_removed": bool(self.instance_was_removed),
+            "deletable": bool(self.delete_instance),
+            "id": self.os_instance.id,
+            "name": self.instance_name
+        }
+
+    def image_status(self):
+        return {
+            "preexisted": bool(self.override_image),
+            "was_removed": bool(self.image_was_removed),
+            "deletable": bool(self.delete_image),
+            "id": self.os_image.id,
+            "name": self.image_name
+        }
+
+    def keypair_status(self):
+        ''' return value (is_created_by_us, was_removed, will_be_removed)'''
+        return {
+            "preexisted": bool(self.override_keypair),
+            "was_removed": self.keypair_was_removed,
+            "deletable": self.delete_keypair,
+            "id": self.os_key.id,
+            "name": self.os_key.name  # doubious
+        }

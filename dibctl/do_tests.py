@@ -55,11 +55,9 @@ class DoTests(object):
         if self.keep_failed_instance:
             prep_os.update_instance_delete_status(delete=False)
             prep_os.update_keypair_delete_status(delete=False)
-            prep_os.report = True
-            print("Do not delete instance for failed tests")
         if self.keep_failed_image:
             prep_os.update_image_delete_status(delete=False)
-            print("Do not delete image for failed tests")
+        self.report(prep_os)
 
     @staticmethod
     def get_runner(test):
@@ -142,14 +140,13 @@ class DoTests(object):
             return False
 
     def process(self, shell_only, shell_on_errors):
-        conn = prepare_os.PrepOS(
+        prep_os = prepare_os.PrepOS(
             self.image,
             self.test_env,
             override_image=self.override_image_uuid,
             delete_image=self.delete_image
         )
-        conn.connect()
-        with conn as prep_os:
+        with prep_os:
             self.init_ssh(prep_os)
             self.wait_port(prep_os)
             if shell_only:
@@ -175,6 +172,27 @@ class DoTests(object):
         if status == 42:  # magical constant!
             self.keep_failed_instance = True
         return status
+
+    @staticmethod
+    def report_item(onthologic_name, item):
+        if item["preexisted"]:
+            print("%s %s wasn't created not us, will not be removed" % (onthologic_name, item["id"]))
+        else:
+            if item["was_removed"]:
+                print("%s %s (%s) was removed" % (onthologic_name, item['id'], item['name']))
+            else:
+                if item["deletable"]:
+                    print("%s %s (%s) will be removed" % (onthologic_name, item['id'], item['name']))
+                else:
+                    print("%s %s (%s) will not be removed" % (onthologic_name, item['id'], item['name']))
+
+    def report(self, prep_os):
+        image_status = prep_os.image_status()
+        instance_status = prep_os.instance_status()
+        keypair_status = prep_os.keypair_status()
+        self.report_item("Keypair", keypair_status)
+        self.report_item("Image", image_status)
+        self.report_item("Instance", instance_status)
 
     def reconfigure_for_existing_instance(self, instance, private_key_file=None):
         raise NotImplementedError
