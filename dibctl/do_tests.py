@@ -175,16 +175,8 @@ class DoTests(object):
 
     @staticmethod
     def report_item(onthologic_name, item):
-        if item["preexisted"]:
-            print("%s %s wasn't created not us, will not be removed" % (onthologic_name, item["id"]))
-        else:
-            if item["was_removed"]:
-                print("%s %s (%s) was removed" % (onthologic_name, item['id'], item['name']))
-            else:
-                if item["deletable"]:
-                    print("%s %s (%s) will be removed" % (onthologic_name, item['id'], item['name']))
-                else:
-                    print("%s %s (%s) will not be removed" % (onthologic_name, item['id'], item['name']))
+        if not item["was_removed"] and not item['preexisted'] and not item['deletable']:
+            print("%s %s (%s) will not be removed" % (onthologic_name, item['id'], item['name']))
 
     def report(self, prep_os):
         image_status = prep_os.image_status()
