@@ -113,14 +113,7 @@ class DoTests(object):
 
     def init_ssh(self, prep_os):
         if 'ssh' in self.image['tests']:
-            self.ssh = ssh.SSH(
-                prep_os.ip,
-                self.image['tests']['ssh'].get('username', 'user'),
-                prep_os.os_key.private_key,
-                self.image['tests']['ssh'].get('port', 22)
-            )
-        else:
-            self.ssh = None
+            self.ssh = prep_os.ssh  # continue refactoring this!
 
     def wait_port(self, prep_os):
         if 'wait_for_port' in self.image['tests']:

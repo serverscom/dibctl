@@ -85,15 +85,9 @@ class GenericCommand(object):
                 config_file=self.args.test_config
             )
         if 'imagelabel' in self.options:
-            self.image = self.get_from_config(
-                cfg=self.image_config,
-                label=self.args.imagelabel
-            )
+            self.image = self.image_config[self.args.imagelabel]
         if 'uploadlabel' in self.options:
-            self.upload_env = self.get_from_config(
-                cfg=self.upload_config,
-                label=self.args.envlabel
-            )
+            self.upload_env = self.upload_config[self.args.envlabel]
             glance_data = osclient.smart_join_glance_config(
                 {'name': 'foo'},
                 {}
@@ -111,14 +105,6 @@ class GenericCommand(object):
 
     def _command(self):
         raise NotImplementedError("Should be redefined")
-
-    @staticmethod
-    def get_from_config(cfg, label):
-        try:
-            data = cfg[label]
-        except config.ConfigError as e:
-            raise NotFoundInConfigError(e.message)
-        return data
 
     def add_options(self):
         pass  # not implemented in the abstract class
@@ -212,10 +198,7 @@ class TestCommand(GenericCommand):
         env_label = self.args.envlabel or tests.get('environment_name', None)
         if not env_label:
             raise TestEnvironmentNotFoundError('No environemnt name for tests were no given in config or command line')
-        self.test_env = self.get_from_config(
-            cfg=self.test_env_config,
-            label=env_label
-        )
+        self.test_env = self.test_env_config[env_label]
 
     def _command(self):
         self._prepare()

@@ -239,6 +239,8 @@ def test_prepare(prepare_os, prep_os):
     prep_os.spawn_instance = mock.create_autospec(prep_os.spawn_instance)
     prep_os.wait_for_instance = mock.create_autospec(prep_os.wait_for_instance)
     prep_os.get_instance_main_ip = mock.create_autospec(prep_os.get_instance_main_ip)
+    prep_os.image = mock.MagicMock()
+    prep_os.prepare_ssh = mock.create_autospec(prep_os.prepare_ssh)
     prep_os.prepare()
     assert prep_os.init_keypair.called
     assert prep_os.init_keypair.called

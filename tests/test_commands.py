@@ -79,25 +79,6 @@ def test_GenericCommand_no_command(commands):
         args.command(sentinel.args)
 
 
-def test_GenericCommand_get_from_config_normal(commands):
-    mock_Cfg = mock.MagicMock()
-    mock_Cfg.get.return_value = sentinel.value
-    assert commands.GenericCommand.get_from_config(
-        mock_Cfg,
-        sentinel.label
-    ) == sentinel.value
-
-
-def test_GenericCommand_get_from_config_no_config(commands):
-    mock_Cfg = mock.MagicMock()
-    mock_Cfg.get.side_effect = commands.config.ConfigError
-    with pytest.raises(commands.NotFoundInConfigError):
-        commands.GenericCommand.get_from_config(
-            mock_Cfg,
-            sentinel.label
-        )
-
-
 def test_BuildCommand_actual(commands):
     parser, obj = create_subparser(commands.BuildCommand)
     args = parser.parse_args(['build', 'label'])
@@ -255,7 +236,7 @@ def test_TestCommand_actual_no_tests(commands):
     args = parser.parse_args(['test', 'label'])
     assert args.imagelabel == 'label'
     with mock.patch.object(commands.config, "ImageConfig") as ic:
-        ic.return_value.get.return_value = {}
+        ic.return_value.__getitem__.return_value = {}
         with mock.patch.object(commands.config, "TestEnvConfig"):
             with pytest.raises(commands.NoTestsError):
                 args.command(args)
@@ -266,7 +247,7 @@ def test_TestCommand_actual_no_proper_env(commands):
     args = parser.parse_args(['test', 'label'])
     assert args.imagelabel == 'label'
     with mock.patch.object(commands.config, "ImageConfig") as ic:
-        ic.return_value.get.return_value = {'tests': {'something': 'unrelated'}}
+        ic.return_value.__getitem__.return_value = {'tests': {'something': 'unrelated'}}
         with mock.patch.object(commands.config, "TestEnvConfig"):
             with pytest.raises(commands.TestEnvironmentNotFoundError):
                 args.command(args)
@@ -310,7 +291,7 @@ def test_UploadCommand_no_glance_section(commands, mock_env_cfg):
         uec.return_value.get.return_value = mock_env_cfg
         with mock.patch.object(commands.osclient, "OSClient"):
             with mock.patch.object(commands.config, "ImageConfig") as ic:
-                ic.return_value.get.return_value = img_config
+                ic.return_value.__getitem__.return_value = img_config
                 with pytest.raises(commands.NotFoundInConfigError):
                     args.command(args)
 

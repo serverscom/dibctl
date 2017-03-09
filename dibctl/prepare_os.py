@@ -7,6 +7,7 @@ import time
 import os
 import json
 import config
+import ssh
 
 
 class TimeoutError(EnvironmentError):
@@ -17,19 +18,7 @@ class InstanceError(EnvironmentError):
     pass
 
 
-class NewImage(object):
-    pass
-
-
-class ExistingImage(object):
-    pass
-
-
-class NewInstance(object):
-    pass
-
-
-class ExistingInstance(object):
+class PreparationError(EnvironmentError):
     pass
 
 
@@ -52,6 +41,7 @@ class PrepOS(object):
 
         self.prepare_key()
         self.prepare_instance(test_environment, delete_instance)
+        self.ssh = None
 
     def set_timeouts(self, image_item, tenv_item):
         self.upload_timeout = config.get_max(
@@ -200,6 +190,16 @@ class PrepOS(object):
                 self.os_instance = self.os.get_instance(self.os_instance.id)
         print("Instance become active.")
 
+    def prepare_ssh(self):
+        ssh_item = self.image.get('tests.ssh')
+        if ssh_item and self.ip:
+            self.ssh = ssh.SSH(
+                ip=self.ip,
+                username=ssh_item['username'],
+                private_key=self.os_key.private_key,
+                port=ssh_item.get('port', 22)
+            )
+
     def prepare(self):
         self.init_keypair()
         sys.stdout.flush()
@@ -210,6 +210,8 @@ class PrepOS(object):
         self.wait_for_instance(self.active_timeout)
         sys.stdout.flush()
         self.get_instance_main_ip()
+        sys.stdout.flush()
+        self.prepare_ssh()
         sys.stdout.flush()
 
     @staticmethod
