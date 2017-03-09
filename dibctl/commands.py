@@ -115,7 +115,7 @@ class GenericCommand(object):
     @staticmethod
     def get_from_config(cfg, label):
         try:
-            data = cfg.get(label)
+            data = cfg[label]
         except config.ConfigError as e:
             raise NotFoundInConfigError(e.message)
         return data
