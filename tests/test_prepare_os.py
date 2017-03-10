@@ -29,6 +29,7 @@ def prep_os(prepare_os):
     prep_os.os_image = sentinel.image
     prep_os.os_instance = sentinel.instance
     prep_os.os_key = sentinel.key
+    prep_os.ssh = None
     return prep_os
 
 

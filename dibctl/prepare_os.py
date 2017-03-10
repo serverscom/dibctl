@@ -249,6 +249,13 @@ class PrepOS(object):
             self.delete_keypair,
             self.os.delete_keypair
         )
+        if self.ssh:
+            if self.delete_keypair:
+                del self.ssh
+                self.ssh = None
+            else:
+                name = self.ssh.keep_key_file()
+                print("SSH private key is in %s" % name)
 
     def cleanup(self):
         print("\nClearing up...")

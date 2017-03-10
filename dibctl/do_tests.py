@@ -173,6 +173,12 @@ class DoTests(object):
         if not item["was_removed"] and not item['preexisted'] and not item['deletable']:
             print("%s %s (%s) will not be removed" % (onthologic_name, item['id'], item['name']))
 
+    @staticmethod
+    def report_ssh(ssh):
+        if ssh:
+            print("You may use following line to access server")
+            print(" ".join(ssh.command_line()))
+
     def report(self, prep_os):
         image_status = prep_os.image_status()
         instance_status = prep_os.instance_status()
@@ -180,6 +186,7 @@ class DoTests(object):
         self.report_item("Keypair", keypair_status)
         self.report_item("Image", image_status)
         self.report_item("Instance", instance_status)
+        self.report_ssh(prep_os.ssh)
 
     def reconfigure_for_existing_instance(self, instance, private_key_file=None):
         raise NotImplementedError
