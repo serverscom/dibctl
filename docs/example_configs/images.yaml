@@ -8,6 +8,8 @@ xenial:
      foo: "bar"
     public: False
   dib:
+   min_version: '2.0.0'
+   max_version: '9.0.2'
    environment_variables:
       DIB_RELEASE: xenial
    elements:

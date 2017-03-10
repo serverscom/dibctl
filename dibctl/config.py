@@ -82,6 +82,10 @@ SCHEMA_KEYSTONE = {
     },
     "additionalProperties": False
 }
+SCHEMA_VERSION = {
+    'type': 'string',
+    'pattern': '\d+\.\d+\.\d+'
+}
 
 
 class Config (object):
@@ -193,6 +197,8 @@ class ImageConfig(Config):
                     "dib": {
                         "type": "object",
                         "properties": {
+                            "min_version": SCHEMA_VERSION,
+                            "max_version": SCHEMA_VERSION,
                             "environment_variables": {
                                 "type": "object"
                             },
