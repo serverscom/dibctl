@@ -49,19 +49,19 @@ def test_init_tests(do_tests, Config):
 def test_run_test_bad_config(do_tests):
     dt = do_tests.DoTests({}, sentinel.env)
     with pytest.raises(do_tests.BadTestConfigError):
-        dt.run_test({'one': 1, 'two': 2}, sentinel.config, sentinel.env)
+        dt.run_test(sentinel.ssh, {'one': 1, 'two': 2}, sentinel.config, sentinel.env)
 
 
 def test_run_test_bad_runner(do_tests):
     dt = do_tests.DoTests({}, sentinel.env)
     with pytest.raises(do_tests.BadTestConfigError):
-        dt.run_test({'badrunner': 1}, sentinel.config, sentinel.env)
+        dt.run_test(sentinel.ssh, {'badrunner': 1}, sentinel.config, sentinel.env)
 
 
 def test_run_test_duplicate_runner(do_tests):
     dt = do_tests.DoTests({}, sentinel.env)
     with pytest.raises(do_tests.BadTestConfigError):
-        dt.run_test({'pytest': 1, 'shell': 2}, sentinel.config, sentinel.env)
+        dt.run_test(sentinel.ssh, {'pytest': 1, 'shell': 2}, sentinel.config, sentinel.env)
 
 
 @pytest.mark.parametrize('continue_on_fail, result, expected', [
@@ -76,7 +76,7 @@ def test_run_test_matrix(do_tests, runner, continue_on_fail, result, expected):
     with mock.patch.multiple(do_tests, pytest_runner=mock.DEFAULT, shell_runner=mock.DEFAULT) as mock_rs:
         mock_r = mock_rs[runner + '_runner']
         mock_r.runner.return_value = result
-        assert dt.run_test({runner: sentinel.path}, sentinel.config, sentinel.var) is expected
+        assert dt.run_test(sentinel.ssh, {runner: sentinel.path}, sentinel.config, sentinel.var) is expected
         assert mock_r.runner.called
 
 
@@ -97,22 +97,6 @@ def test_init_ssh_with_data(do_tests):
     dt = do_tests.DoTests(image, env)
     dt.init_ssh(mock.MagicMock())
     assert dt.ssh is not None
-
-
-def test_init_ssh_no_ssh(do_tests):
-    env = {
-        'nova': {
-            'flavor': 'some flavor'
-        }
-    }
-    image = {
-        'tests': {
-            'tests_list': []
-        }
-    }
-    dt = do_tests.DoTests(image, env)
-    dt.init_ssh(mock.MagicMock())
-    assert dt.ssh is None
 
 
 def test_wait_port_good(do_tests, Config):
@@ -415,17 +399,17 @@ def test_open_shell(do_tests, retval, keep):
     }
     image = {
         'tests': {
+            'ssh': {'username': 'user'},
             'wait_for_port': 22,
             'tests_list': [{'pytest': sentinel.path1}, {'pytest': sentinel.path2}]
         }
     }
     dt = do_tests.DoTests(image, env)
-    with mock.patch.object(dt, 'ssh') as mock_ssh:
-        mock_ssh.shell.return_value = retval
-        dt.open_shell('reason')
-        assert dt.keep_failed_instance == keep
-        assert 'exit 42' in mock_ssh.shell.call_args[0][1]
-        assert 'reason' in mock_ssh.shell.call_args[0][1]
+    mock_ssh = mock.MagicMock()
+    mock_ssh.shell.return_value = retval
+    dt.open_shell(mock_ssh, 'reason')
+    assert dt.keep_failed_instance == keep
+    assert 'exit 42' in mock_ssh.shell.call_args[0][1]
 
 
 def test_open_shell_no_ssh_config(do_tests):
@@ -438,7 +422,7 @@ def test_open_shell_no_ssh_config(do_tests):
     }
     dt = do_tests.DoTests(image, env)
     with pytest.raises(do_tests.TestError):
-        dt.open_shell('reason')
+        dt.open_shell(None, 'reason')
 
 
 if __name__ == "__main__":

@@ -41,7 +41,6 @@ class DoTests(object):
         self.keep_failed_instance = keep_failed_instance
         self.continue_on_fail = continue_on_fail
         self.image = image
-        self.ssh = None
         self.override_image_uuid = image_uuid
         if image_uuid:
             self.delete_image = False
@@ -78,13 +77,13 @@ class DoTests(object):
             raise BadTestConfigError("No known runner names found in %s" % str(test))
         return name, runner, path
 
-    def run_test(self, test, instance_config, vars):
+    def run_test(self, ssh, test, instance_config, vars):
         runner_name, runner, path = self.get_runner(test)
         print("Running tests %s: %s." % (runner_name, path))
         timeout_val = test.get('timeout', 300)
         if runner(
             path,
-            self.ssh,
+            ssh,
             instance_config,
             vars,
             timeout_val=timeout_val,
@@ -105,7 +104,7 @@ class DoTests(object):
         success = True
 
         for test in self.tests_list:
-            if self.run_test(test, prep_os, self.environment_variables) is not True:
+            if self.run_test(ssh, test, prep_os, self.environment_variables) is not True:
                 self.check_if_keep_stuff_after_fail(prep_os)
                 success = False
                 break
@@ -143,25 +142,28 @@ class DoTests(object):
             self.init_ssh(prep_os)
             self.wait_port(prep_os)
             if shell_only:
-                result = self.open_shell('Opening ssh shell to instance without running tests')
+                result = self.open_shell(
+                    prep_os.ssh,
+                    'Opening ssh shell to instance without running tests'
+                )
                 self.check_if_keep_stuff_after_fail(prep_os)
                 return result
             result = self.run_all_tests(prep_os)
             if not result:
                 print("Some tests failed")
                 if shell_on_errors:
-                    self.open_shell('There was an test error and asked to open --shell')
+                    self.open_shell(prep_os.ssh, 'There was an test error and asked to open --shell')
                     self.check_if_keep_stuff_after_fail(prep_os)
                     return result
             else:
                 print("All tests passed successfully.")
             return result
 
-    def open_shell(self, reason):
-        if not self.ssh:
+    def open_shell(self, ssh, reason):
+        if not ssh:
             raise TestError('Asked to open ssh shell to server, but there is no ssh section in the image config')
         message = reason + '\nUse "exit 42" to keep instance\n'
-        status = self.ssh.shell({}, message)
+        status = ssh.shell({}, message)
         if status == 42:  # magical constant!
             self.keep_failed_instance = True
         return status
