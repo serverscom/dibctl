@@ -200,9 +200,17 @@ class ImageConfig(Config):
                                 "type": "array",
                                 "uniqueItems": True,
                                 "items": {
-                                    "type": "string",
+                                    "type": "string"
                                 },
                                 "minItems": 1
+                            },
+                            'cli_options': {
+                              'type': 'array',
+                              'uniqueItems': True,
+                              "items": {
+                                  "type": "string"
+                              },
+                              "minItems": 1
                             }
 
                         },

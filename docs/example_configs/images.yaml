@@ -13,6 +13,8 @@ xenial:
    elements:
      - ubuntu-minimal
      - vm
+   cli_options:
+      - '-x'
   nova:
     create_timeout: 5
     active_timeout: 14
