@@ -14,11 +14,11 @@ class ConfigNotFound(ConfigError):
     pass
 
 
-class NotFoundInConfigError(ConfigError):
+class InvaidConfigError(ConfigError):
     pass
 
 
-class InvaidConfigError(ConfigError):
+class NotFoundInConfigError(KeyError):
     pass
 
 
@@ -28,7 +28,7 @@ SCHEMA_UUID = {
 }
 SCHEMA_TIMEOUT = {'type': 'integer', "minimum": 0}
 SCHEMA_PORT = {'type': 'integer', 'minimum': 1, 'maximum': 65535}
-SCHEMA_PATH = {'type': 'string'}
+SCHEMA_PATH = {'type': 'string', 'pattern': '^(/)?([^/\0]+(/)?)+$'}
 SCHEMA_KEYSTONE = {}
 SCHEMA_GLANCE = {
     "type": "object",
@@ -95,15 +95,19 @@ class Config (object):
         "minItem": 1
     }
 
+    def __init__(self, mock_config, filename=None):
+        '''
+            This class shound't be called directly
+            in actual code, but may be used as
+            mock for configs without need to 'read' files
+        '''
+        self.config = mock_config
+        self.config_file = filename
+
     def common_init(self, config_file=None):
         self.config_file = self.set_conf_name(config_file)
         print("Using %s" % self.config_file)
         self.config = self.read_and_validate_config(self.config_file)
-
-    @staticmethod
-    def append(d, key, value):
-        if value:
-            d[key] = value
 
     def read_and_validate_config(self, name):
         content = yaml.load(open(name, "r"))
@@ -127,12 +131,52 @@ class Config (object):
 
         raise ConfigNotFound("Unable to file %s in %s" % (self.DEFAULT_CONFIG_NAME, ", ".join(self.CONFIG_SEARCH_PATH)))
 
-    def get(self, label):
+    def get(self, label, default_value=None):
+        path = label.split('.')
+        position = self.config
+        for element in path[:-1]:
+            position = position.get(element, {})
+        retval = position.get(path[-1], default_value)
+        if type(retval) == dict:
+            return Config(retval, self.config_file)
+        else:
+            return retval
+
+    def __getitem__(self, label):
         try:
-            obj = self.config[label]
+            path = label.split('.')
+            position = self.config
+            for element in path[:-1]:
+                position = position[element]
+            retval = position[path[-1]]
+            if type(retval) is dict:
+                return Config(retval, self.config_file)
+            else:
+                return retval
         except KeyError:
             raise NotFoundInConfigError("Unable to find '%s' in %s" % (label, self.config_file))
-        return obj
+
+    def __iter__(self):
+        return self.config.iteritems()
+
+    def iteritems(self):
+        return self.config.iteritems()
+
+    def __contains__(self, key):
+        try:
+            self.__getitem__(key)
+            return True
+        except NotFoundInConfigError:
+            return False
+
+    def __eq__(self, item):
+        return self.config == item
+
+    def __str__(self):
+        return str(self.config)
+
+    def __repr__(self):
+        return "Config(" + repr(self.config) + ")"
 
 
 class ImageConfig(Config):
@@ -154,7 +198,11 @@ class ImageConfig(Config):
                             },
                             "elements": {
                                 "type": "array",
-                                "uniqueItems": True
+                                "uniqueItems": True,
+                                "items": {
+                                    "type": "string",
+                                },
+                                "minItems": 1
                             }
 
                         },
@@ -162,6 +210,16 @@ class ImageConfig(Config):
                         "additionalProperties": False
                     },
                     "glance": SCHEMA_GLANCE,
+                    "nova": {
+                        "type": "object",
+                        "properties": {
+                            "create_timeout": SCHEMA_TIMEOUT,
+                            "active_timeout": SCHEMA_TIMEOUT,
+                            "keypair_timeout": SCHEMA_TIMEOUT,
+                            "cleanup_timeout": SCHEMA_TIMEOUT
+                        },
+                        "additionalProperties": False
+                    },
                     "tests": {
                         "type": "object",
                         "properties": {
@@ -178,13 +236,13 @@ class ImageConfig(Config):
                             "port_wait_timeout": {"type": "number"},
                             "environment_name": {"type": "string"},
                             "environment_variables": {"type": "object"},
-                            "test_list": {
+                            "tests_list": {
                                 "type": "array",
                                 "items": {
                                     "type": "object",
                                     "properties": {
-                                        "shell_runner": SCHEMA_PATH,
-                                        "pytest_ruuner": SCHEMA_PATH,
+                                        "shell": SCHEMA_PATH,
+                                        "pytest": SCHEMA_PATH,
                                         "timeout": SCHEMA_TIMEOUT
                                     },
                                     "additionalProperties": False
@@ -240,7 +298,11 @@ class TestEnvConfig(EnvConfig):
                             },
                             'main_nic_regexp': {'type': 'string'},
                             'config_drive': {'type': 'boolean'},
-                            'availability_zone': {'type': 'string'}
+                            'availability_zone': {'type': 'string'},
+                            "create_timeout": SCHEMA_TIMEOUT,
+                            "active_timeout": SCHEMA_TIMEOUT,
+                            "keypair_timeout": SCHEMA_TIMEOUT,
+                            "cleanup_timeout": SCHEMA_TIMEOUT
                         },
                         "additionalProperties": False,
                         "required": ['flavor']
@@ -284,3 +346,13 @@ class UploadEnvConfig(EnvConfig):
             }
         }
     }
+
+
+def get_max(config1, config2, path, default_value):
+    value1 = config1.get(path, None)
+    value2 = config2.get(path, None)
+    guess = max(value1, value2)
+    if guess is None:
+        return default_value
+    else:
+        return guess

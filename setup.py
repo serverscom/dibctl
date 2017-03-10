@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from setuptools import setup, find_packages, Command
 import sys
+from dibctl import version
 
 class PyTest(Command):
     user_options = [('pytest-args=', 'a', "Arguments to pass to py.test")]
@@ -28,7 +29,7 @@ class PyTest(Command):
 
 setup(
     name="dibctl",
-    version="0.4.7",
+    version=version.VERSION,
     description="diskimage-builder control",
     author="George Shuklin",
     author_email="george.shuklin@gmail.com",

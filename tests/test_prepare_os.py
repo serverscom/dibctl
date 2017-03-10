@@ -21,9 +21,15 @@ def prep_os(prepare_os):
     prep_os.delete_image = True
     prep_os.delete_instance = True
     prep_os.delete_keypair = True
+    prep_os.upload_timeout = 1
+    prep_os.active_timeout = 1
+    prep_os.cleanup_timeout = 1
+    prep_os.keypair_timeout = 1
+    prep_os.create_timeout = 1
     prep_os.os_image = sentinel.image
     prep_os.os_instance = sentinel.instance
     prep_os.os_key = sentinel.key
+    prep_os.ssh = None
     return prep_os
 
 
@@ -61,7 +67,6 @@ def mock_env_cfg():
 def test_init_normal(prepare_os, mock_image_cfg, mock_env_cfg):
     with mock.patch.object(prepare_os.osclient, "OSClient"):
         dt = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg)
-        assert dt.os
         assert dt.flavor_id == 'example'
         assert dt.delete_image is True
         assert dt.delete_instance is True
@@ -88,28 +93,6 @@ def test_init_keypair(prep_os):
     prep_os.key_name = sentinel.key_name
     prep_os.init_keypair()
     assert prep_os.os.new_keypair.call_args[0][0] == sentinel.key_name
-
-
-def test_save_private_key(prepare_os, prep_os):
-    with mock.patch.object(prepare_os, "tempfile"):
-        prep_os.os_key = mock.MagicMock()
-        prep_os.save_private_key()
-
-
-def test_wipe_private_key(prepare_os, prep_os):
-    with mock.patch.object(prepare_os, "open", mock.mock_open(), create=True) as mock_open:
-        with mock.patch.object(prepare_os.os, "remove") as mock_remove:
-            prep_os.os_key_private_file = sentinel.private_key
-            prep_os.wipe_private_key()
-            assert mock_open().write.call_args[0][0] == " " * 4096
-            assert mock_remove.call_args[0][0] == sentinel.private_key
-
-
-def test_upload_image_with_override(prepare_os, prep_os):
-    prep_os.override_image = sentinel.override_image
-    prep_os.upload_image(1)
-    assert prep_os.os_image
-    assert prep_os.os.get_image.call_args[0][0] == sentinel.override_image
 
 
 def test_upload_image_normal(prep_os):
@@ -158,6 +141,7 @@ def test_spawn_instance_no_config_drive(prepare_os):
     with mock.patch.object(prepare_os.osclient, "OSClient") as mock_os:
         p = prepare_os.PrepOS(img, env)
         p.os_key = mock.MagicMock()
+        p.connect()
         p.spawn_instance(1)
         assert mock_os.return_value.boot_instance.call_args[1]['config_drive'] is False
 
@@ -179,6 +163,7 @@ def test_spawn_instance_no_config_drive2(prepare_os):
     with mock.patch.object(prepare_os.osclient, "OSClient") as mock_os:
         p = prepare_os.PrepOS(img, env)
         p.os_key = mock.MagicMock()
+        p.connect()
         p.spawn_instance(1)
         assert mock_os.return_value.boot_instance.call_args[1]['config_drive'] is False
 
@@ -200,6 +185,7 @@ def test_spawn_instance_with_drive(prepare_os):
     with mock.patch.object(prepare_os.osclient, "OSClient") as mock_os:
         p = prepare_os.PrepOS(img, env)
         p.os_key = mock.MagicMock()
+        p.connect()
         p.spawn_instance(1)
         assert mock_os.return_value.boot_instance.call_args[1]['config_drive'] is True
 
@@ -249,19 +235,19 @@ def test_wait_for_instance_timeout(prepare_os, prep_os):
 
 def test_prepare(prepare_os, prep_os):
     prep_os.init_keypair = mock.create_autospec(prep_os.init_keypair)
-    prep_os.save_private_key = mock.create_autospec(prep_os.save_private_key)
     prep_os.upload_image = mock.create_autospec(prep_os.upload_image)
     prep_os.upload_timeout = sentinel.timeout
     prep_os.spawn_instance = mock.create_autospec(prep_os.spawn_instance)
     prep_os.wait_for_instance = mock.create_autospec(prep_os.wait_for_instance)
     prep_os.get_instance_main_ip = mock.create_autospec(prep_os.get_instance_main_ip)
+    prep_os.image = mock.MagicMock()
+    prep_os.prepare_ssh = mock.create_autospec(prep_os.prepare_ssh)
     prep_os.prepare()
     assert prep_os.init_keypair.called
     assert prep_os.init_keypair.called
 
 
 def test_cleanup(prepare_os, prep_os):
-    prep_os.wipe_private_key = mock.MagicMock()
     prep_os.delete_keypair = True
     prep_os.delete_image = True
     prep_os.delete_instance = True
@@ -269,7 +255,6 @@ def test_cleanup(prepare_os, prep_os):
     assert prep_os.os.delete_image.called
     assert prep_os.os.delete_instance.called
     assert prep_os.os.delete_keypair.called
-    assert prep_os.wipe_private_key.called
 
 
 def test_inner__cleanup_normal(prepare_os):
@@ -300,28 +285,8 @@ def test_cleanup_image(prep_os):
 
 def test_cleanup_ssh_key_delete(prep_os):
     prep_os._cleanup = mock.create_autospec(prep_os._cleanup)
-    prep_os.wipe_private_key = mock.create_autospec(prep_os.wipe_private_key)
     prep_os.cleanup_image()
     assert prep_os._cleanup.called
-
-
-def test_cleanup_ssh_key_not_delete(prep_os):
-    prep_os._cleanup = mock.create_autospec(prep_os._cleanup)
-    prep_os.delete_keypair = False
-    prep_os.wipe_private_key = mock.create_autospec(prep_os.wipe_private_key)
-    prep_os.cleanup_image()
-    assert prep_os._cleanup.called
-    assert prep_os.wipe_private_key.called is False
-
-
-def test_cleanup_ssh_key_exception(prep_os, capsys):
-    random_uuid = '03259c52-bc80-11e6-b6cf-6754ef2724b6'
-    prep_os._cleanup = mock.create_autospec(prep_os._cleanup)
-    prep_os.wipe_private_key = mock.MagicMock(side_effect=ValueError(random_uuid))
-    prep_os.cleanup_ssh_key()
-    assert prep_os._cleanup.called
-    assert prep_os.wipe_private_key.called is True
-    assert random_uuid in capsys.readouterr()[0]
 
 
 def test_error_handler_no_timeout(prep_os):
@@ -398,7 +363,7 @@ def test_get_env_config(prepare_os, prep_os):
     assert env['instance_name'] == 'name'
     assert env['flavor_id'] == 'sentinel.flavor_id'
     assert env['main_ip'] == 'sentinel.ip'
-    assert env['ssh_private_key'] == 'sentinel.private_file'
+    # assert env['ssh_private_key'] == 'sentinel.private_file'
     assert env['flavor_ram'] == 'sentinel.ram'
     assert env['flavor_name'] == 'sentinel.name'
     assert env['flavor_disk'] == 'sentinel.disk'
@@ -445,21 +410,22 @@ def test_grand_test_for_context_manager_normal(prepare_os, prep_os, mock_image_c
     with mock.patch.object(prepare_os.osclient, "OSClient") as mockos:
         mockos.return_value.new_keypair.return_value.private_key = "key"
         mockos.return_value.boot_instance.return_value.status = "ACTIVE"
-        with prepare_os.PrepOS(mock_image_cfg, mock_env_cfg, delete_instance=False):
+        p = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg, delete_instance=False)
+        with p:
             pass
 
 
-def test_grand_test_for_context_manager_fail_not_delete(prepare_os, capsys, mock_image_cfg, mock_env_cfg):
+def refactor_test_grand_test_for_context_manager_fail_not_delete(prepare_os, capsys, mock_image_cfg, mock_env_cfg):
     with pytest.raises(Exception):
         with mock.patch.object(prepare_os.osclient, "OSClient") as mockos:
             mockos.return_value.new_keypair.return_value.private_key = "key"
             mockos.return_value.boot_instance.return_value.status = "ACTIVE"
-            with prepare_os.PrepOS(mock_image_cfg, mock_env_cfg, delete_instance=False) as prep_os:
-                prep_os.report = True
+            p = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg, delete_instance=False)
+            with p:
+                p.report = True
                 raise Exception
     output = capsys.readouterr()[0]
     assert "Instance ip is" in output
-    assert "Private key file" in output
 
 
 if __name__ == "__main__":

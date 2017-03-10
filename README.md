@@ -1,26 +1,24 @@
 Dibctl
 ------
 
-Dibctl is a software for image build, testing and  uploading.
+Dibctl is a software for image building, testing and  uploading.
 It uses diskimage-builder to build images, pytest and testinfra
-to test them and provide a consistent way to upload tested images
-to multiple Openstack installations.
+to test them and it provide a consistent way to upload tested
+images to multiple Openstack installations.
 
-Dibctl uses configuration files to how to build image, which name
-it should have after upload, what properties (if any) should be
-set for a given image. Image configuration file also provide list
-of tests for each image, plus name of environment where tests should
-happen.
+Dibctl uses configuration files to describe how to build image,
+which name it should have after upload, what properties (if any)
+should be set for a given image. Image configuration file also
+provide list of tests for each image, plus name of environment
+where tests should happen.
 
-Other configuration file, test.yaml contains information how to
-run test instance: region authorization URL, credentials, flavor,
-network list, availability zone, security groups and other nova
-parameters.
+Testing happens under directives from test.yaml. It contains
+information how to run test instance: region authorization URL,
+credentials, flavor, network list, availability zone, security
+groups and other nova parameters.
 
-Third configuration file provides upload configuration for
-arbitrary amount of Openstack regions.
-
-*This readme is under construction, as well, as software itself.*
+Third configuration file provides information for uploading into
+any number of Openstack installations.
 
 Testing frameworks
 ------------------
@@ -31,36 +29,38 @@ SSH, etc).
 Test frameworks:
 - 'shell': each test is a simple shell script, which is executed
 outside test VM
-- 'shell_in_ssh':each test is a simple shell script, which is executed
+- 'ssh':each test is a simple shell script, which is executed
 inside guest machine (not yet implemented)
 - 'pytest' - tests are implemented by means of py.test, with optional
-support for testinfra. Dibctl provides wast set of fixtures with all
-available information about image and instance, plus few handy operations
-(wait_for_port), and direct access to nova object for testing instance
+support for testinfra (python library for server verification, similar to
+ServerSpec). Dibctl provides wast set of fixtures with all available
+information about image and instance, plus few handy operations
+(wait\_for\_port), and direct access to nova object for testing instance
 reactions on nova operations (hard reboot, rebuild, etc).
 
 Dibctl comes with some generic (applicable to any image of any provider).
 
-Examples of test coming with dibctl:
+Examples of test shpped with dibctl:
 - Does instance resize rootfs up to a flavor size at a first boot?
 - Does it receives IP addresses on all attached interfaces?
 - Does DNS set up properly?
 - Does hostname match the name of the instance?
 - Does instance still work after reboot?
+- Can user install nginx (apache) and get access to http port 80?
 
 Workflow
 --------
 Dibctl was created to operates on following workflow:
-Configurations are described by operators, than dibctl performs:
+Beforhand operators describes configurations. After that, each image is:
 - build
 - test: new instance is spawned from tested image, and corresponding
   test scripts are called. If they all report success, images passes
   the test.
-- if test was successful, it uploaded to one or more regions of Openstack.
+- if test was successful, uploaded too one or more installations of Openstack.
 - Older copies of images marked as obsolete and removed (after they become
   unsed - see description below).
 
-That process is repeated on regular basis via cron or CI server (Jenkins?).
+That process may be repeated on regular basis via cron or CI server (Jenkins?).
 Comprehensive testing assures that image that passed the test may be
 uploaded safely in automated manner.
 
@@ -131,20 +131,22 @@ ownership and share information (tenant-name based).
 Key concepts
 ------------
 
-Dibctl uses following conceptions:
-- label (for image and environment) - internal 'name' for a given image or environemnt to
-use in command line. Add entries in dibctl configuration have label, or 'namelabel'.
-- image: set of attirbutes to build and test image. Images are described in images.yaml file.
-- test instance: Instance used for testing image. Instance is created at test time and
-  removed afterwards. Dibctl creates custom SSH key for each test.
-- test image: image uploaded for testing. Dibctl uses separate upload stage for testing and
-  actual 'upload to procution'. Test images normally uploaded to specific project and are
-  not public. Production images are normally public (or upload to selected tenant and shared
-  with specific tenants). Test image is removed after test (succesfull or not).
-- test environemnt: set of attributes and variables describing how upload test image and
+Dibctl uses following concepts:
+- *label* (for image and environment) - internal 'name' for a given image or environment to
+  use in command line and in cross-reference fields. 
+  All entries in dibctl configuration have label, or 'namelabel'.
+- *image*: set of attirbutes to build and test actual image.
+- *test instance*: Instance which is used for image testing. Test instance is created 
+  at test time and   removed afterwards. Dibctl creates custom SSH key for each test.
+- test image: image which is uploaded for testing. Dibctl uses separate upload stage 
+  for testing and actual 'upload to procution'. Test images normally uploaded to specific
+  project and are not public. Production images are normally public (or upload to
+  selected tenant and shared  with specific tenants). Test image is removed after test
+  (succesfull or not). This can be changed by --keep-failed-image option.
+- test environment: set of attributes and variables describing how upload test image and
   how to boot test instance. Every image references to test environement by it's label.
   They are listed in tests.yaml
-- upload environemnts: Those are describes how and where upload images for production use.
+- upload environments: Those describe how and where upload images for production use.
   Uploaded images are subjected to optional 'obsoletion' stage (see Obsoletion part below),
   which happens automatically every time image is uploaded or manually.
 
@@ -172,9 +174,10 @@ Regardless of the test results all test-time objects in Openstack are removed: t
 test instance, ssh key. User may use `--keep-failed-image` and `--keep-failed-instance` to
 keep them for closer investigation.
 
-*not implemented yet*
 By using --shell dibctl may be instructed to open ssh shell to test machine when tests failed.
 After that shell is closed, instance (and all other pieces of test) are removed.
+If operator wants to keep instance from been removed after shell is closed, he (she) may
+use 'exit 42' command. Dibctl will honor exit code 42 by not removing instance.
 
 
 ## Upload stage
@@ -209,29 +212,26 @@ You need to have following packages installed:
 - glanceclient
 - keystoneauth1
 
-Important notice: at this moment diskimage-builder package
-in debian & ubuntu is very, very old (1.0). You need
-to upgrade it al least to 1.9 to have working images.
+Important notice: at this moment diskimage-builder package in Debian & Ubuntu is very,
+very old (1.0). You need to upgrade it al least to 1.9 to have working images.
 
-Please use pip version or rebuild package
-if you have own CI/buildfarm.
+Please use pip version or rebuild package if you have own CI/buildfarm.
 
-If you want to use python-based test you need:
+If you want to use python-based test you will also need:
 - pytest
 - pytest-timeout
-- pytest-testinfra (it's new and it may be not in your distro yet)
+- pytest-testinfra (it's new library and it may not be in your distro yet, use pip
+or build your onw package).
 
 TODO: set up ppa with dependencies
 
 Configuration
 -------------
 
-Dibctl may use system-wide configuration files
-(/etc/dibctl/) or local configuration files (./dibctl).
-Local configuration files usually used within
-git repository, containing custom image and enviroment
-configs, custom diskimage-builder elements and
-custom tests.
+Dibctl may use system-wide configuration files (/etc/dibctl/)
+or local configuration files (./dibctl). Local configuration files usually
+used within git repository, containing custom image and enviroment
+configs, custom diskimage-builder elements and custom tests.
 
 ## Configuration file prioriy
 Dibctl stops searching file as soon as file is found.
@@ -249,20 +249,18 @@ Configuration file names:
 - `test.yaml` (test environments)
 - `upload.yaml` (upload environments)
 
-If one uses pytest-based tests, than tox.ini and other
-pytest-related configuration files may influence tests
-discovery.
+If pytest-based tests are in use, than tox.ini and other pytest-related
+configuration files may influence tests discovery.
 
 ### `images.yaml`
-This file describes how to build image, which
-name and properties it should have in Glance during upload,
-which *test_environment* to use to test this image,
-which tests should be ran during test stage.
+This file describes how to build image, which name and properties it
+should have in Glance during upload, which *test_environment* to use
+to test this image, which tests should be ran during test stage.
 
 ### `test.yaml`
-This file describes test environments. They may be
-referenced by images in `image.yaml`, or forced to
-be used during test from command line.
+This file describes test environments. They may be referenced by
+images in `image.yaml`, or forced to be used during test from
+command line.
 It contains all openstack information for test
 purposes:
 - Where to upload image for test (OS credentials)
@@ -290,7 +288,7 @@ Most noticable and common are timeout settings
 to help deal with complicated intra-extra-net
 endpoints.
 
-Special riority rules for `glance` section:
+Special priority rules for `glance` section:
 - `api_version` - environment have priority over image
 - `upload_timeout` - used a max of all available values
 - `properties` - merged. If there are same properties in
@@ -299,87 +297,14 @@ Special riority rules for `glance` section:
 - `tags` - merged (this is a simple list)
 - `endpoint` - environment have priority over image
 
-For all other variables image has priority over
-environment (please see `smart_join_glance_config`
-function for up to date information).
+Special priority rules for all timeout values.
+For all timeout values maximum value is use.
 
-Configs
--------
+For all other variables image has priority over environment.
 
-Images config (yaml):
-```
-imagelabel:
-  filename: name of the image
-  glance:
-    name: 'Image Name x86_64'
-    properties:
-      - key: value
-      - key: value
-    public: true/false  # default true
-    share_with_tenants:
-     - tenant_name1 # some_private_tenant may be omitted, tenant from command line will be used, tenant_name
-     - tenant_name2
-  dib:
-    environment_variables:
-      key: value
-      key2: value2
-    cli_options:
-     - option1
-     - option2
-    elements:
-     - element1
-     - element2
-     environment_variables:
-       name1: value1
-       name2: value2
-  tests:
-    environment_name: name_of_environment
-    wait_for_port: 22  # default (if not specified), 22
-    port_wait_timeout: 61  #default (if not specified), 61
-    config:
-      key1: value1
-      key2: value2  # goes to environment variables for tests
-    tests_list:
-     - dir1
-     - dir2
-     - dir3/test3.py
-```
+There are examples of configuration files in
+`docs/example_configs/` folder of this repository.
 
-test environments config:
-```
-environmentname:
-  os_auth_url:
-  os_tenant_name:
-  os_username:
-  os_password:
-  flavor: name
-  main_nic_regexp: regexp1
-  nics:
-   - net-id1
-   - net-id2
-   - net-id3
-```
-
-Image lifecycle
----------------
-
-BUILD -> TEST -> UPLOAD -> OBSOLETE -> ROTATE
-
-BUILD: produce image file
-TEST: upload file to the test (private) account, start instance in test environment, run tests against image, report status
-UPLOAD: upload to given installation and obsolete images of the same name with prefix
-ROTATE: delete unused obsolete images from given installation
-
-Command line
-------------
-
-By default dibctl will search config in:
-
-- current directory: (images.yaml, test\_environments.yaml)
-- current directory: dibctl/images.yaml, dibctl/test\_evnironments.yaml
-- /etc/dibctl/images.yaml dibctl/test\_environments.yaml
-
-Alternative name may be passed via command line (--images-config, --test-environments-config)
 
 * `dibctl build imagelabel [-o filename] [--images-config images.yaml]`
   Build given image
@@ -417,151 +342,112 @@ OS_AUTH_URL
 For test command dibctl prioritize environment configuration with exception of OS_PASSWORD,
 which have higher priority over configuration file.
 
-Examples
+
+Timeouts
 --------
 
+For most of operations Dibctl have a time limit. Those timeouts have reasonable
+default values, but it's possible to override them. When the same timeout is
+specified in two configuration files, dibctl uses maximal value.
+For example, if image config  in glance section has `upload_timeout: 300`, and
+environment has `upload_timeout: 3600`, Dibctl will wait up to 3600 seconds during
+image upload.
 
-images.yaml for normal Ubuntu:
-```
-xenial-servers.com:
-  filename: xenial-servers.com.img.qcow2
-  glance:
-    name: 'Ubuntu 16.04 Xenial (x86_64)'
-    properties:
-     - display_priority: 4
-     - allowed_flavors: "[3,4,5,6]"
-    public: True
- dib:
-   environment_variables:
-      DIB_APT_REPO: mirror.servers.com
-      DIB_NTP: 192.168.8.8
-   elements:
-    - ubuntu
-    - deb-servers.com
- tests:
-     environment_variables:
-      key1: value1
-     environment_name: normal-servers.com
-     tests_list:
-      - type: tests/servers.com.d/
-      - type: tests/debian-based/
-```
+All time-related settings for Dibctl are measured in seconds.
 
-images.yaml for Centos7 with GPU for private tenant
-```
-centos7-nvidia-servers.com:
- filename: centos7-nvidia-servers.com.img.qcow2
- glance:
-   name: 'Customized Centos 7 (x86_64) with NVIDIA driver'
-   properties:
-     - display_priority: 9
-     - allowed_flavors: "[333, 666]"
-     - display_type: gpu
-   public: False
-   share_with_tenant:
-     - 3344
-     - demotenant
-  dib:
-    environment_variables:
-      DIB_APT_REPO: vip-tenant.own.repo.com
-      DIB_NTP: 192.168.8.8
-    elements:
-     - ubuntu
-     - deb-servers.com
-     - nvidia
-     - tenant_3344_tweaks
+List of timeout settings (default value is provided in braces):
+- `glance.upload_timeout` (360 seconds). Limit how long image may be uploaded.
+  Applied to test, upload and transfer commands.
+  All operations stops if this timeout was triggered. Glance image would
+  be left half-uploaded, and, hopefully, would be cleaned by glance.
+  May be specified in images.yaml, test.yaml and upload.yaml configs.
+- `tests.wait_for_port` (61 seconds). Limit how long to wait instance between
+  become ACTIVE and answering on a `wait_for_port` port. Applied to test
+  command only.
+  May be specified in images.yaml and test.yaml configs.
+- `nova.create_timeout` (10 seconds): Limit how long nova may answer to
+  instance creation request.  It does not include time for transfer from
+   'created' to 'BUILD' and 'ACTIVE' states, only the actual 'create' command.
+  Applied only to test command.
+  May be specified in images.yaml and test.yaml configs.
+  If this timeout was triggered, uploaded image would be removed, keypair
+  will be removed and instance would be left 'as is'.
+  All further operations would be stopped.
+- `nova.active_timeout` (360 seconds). Limit how long dibctl will wait
+   for instance after it was created before it become 'ACTIVE' (or fall
+   into 'ERROR' state).
+  May be specified in images.yaml, test.yaml and upload.yaml configs
+  Applied to test command only.
+  If this timeout was triggered tests would not be called.
+  Further operations are dependent on command line options:
+  image will be removed unless there are --keep-failed-image option.
+  instance will be removed unless there are --keep-failed-instance option.
+  keypair will be removed anyway, but private key in filesystem would be
+  kept in instance was kept.
+- `nova.keypair_timeout` (10 seconds). Timeout for keypair operations.
+   Normally you wouldn't need to change this.
+   May be specified in images.yaml, test.yaml
+   Applicable to test command only.
+   If this timeout was trigged, image would be removed, keypair left
+   as is, all further operations would be stopped.
+- `cleanup_timeout` - not yet implemented.
+  Applied to test command only
+  May be specified in images.yaml, test.yaml
+- Each element in tests.tests\_list has own `timeout` value, which
+  is limiting time for all tests gathered under given path combined.
+  For example, if you have test like this:
+  ```
   tests:
-    environment_name: gpu-servers.com
-    environment_variables:
-      ssh_username: cloud-user
     tests_list:
-     - pytest: tests/servers.com.d/
-     - pytest: tests/debian-based/
-     - shell: tests/deb-nvidia/
-     - pytest: tests/tenant_3344_tweaks.sh
+      - pytest: /foobar.py
+        timeout: 300
+ ```
+ Than if foobar.py contains 3 tests each finishing in 120 seconds,
+ than timeout would be triggered at the third test, at 300th second.
+ May be specified only images.yaml
+ Applied only to test command.
+ If this timeout was triggered, behavior is dependent on
+ --keep-failed-image, --keep-failed-instance
+ and --continue-on-fail option. Regardless of those options,
+ rest of tests under given line (which triggered timeout)
+ would be skipped (This is due to the test process terminated abruptly).
+ After failure or successful operation there is a cleanup stage.
+ Each operation in this stage uses same `cleanup_timeout` value.
+ If one operation is triggered timeout, dibctl will continue to perform
+ next operation in cleanup cycle.
+
+ If by any reason you want to stop dibctl to perform cleanup cycle
+ after you ran it, you may at your choice:
+ - use kill -9 to it
+ - press Ctrl-Z and than `kill -9 %1` (everywhere except for opened shell)
+ - use `exit 42` in the opened shell to disable cleanup sequence (works
+   only inside shell due to obvious reasons).
+
+Pressing Ctrl-C during all operations will threated as failure and would
+cause clean sequence accordingly to the command line settings.
+
+Timeout sequence:
+
+- upload\_image: wait up to `glance.upload_timeout`
+- create test keypair: wait up to `nova.keypair_timeout`
+- spawn test instance: wait up to `nova.create_timeout`
+- wait for instance to become ACTIVE: wait up to `nova.active_timeout`
+- wait for instance to answer port: wait up to `tests.wait_for_ports`
+- each entry from tests\_lists will be capped at it own timeout value.
+
+After tests (or after failure, or after user exited a shell from instance
+and that instance should be cleaned up due to command line settings)
+Eeach clean operation will be capped up to cleanup\_timeout value.
+If timeout happens
+
+Individual tests may apply own time limits. For shell tests
+it's normally done with 'timeout' command, for pytest-based
+tests it is done with `pytest.mark.timeout` decorator.
+
+Example for the test below has timeout value 15:
+
 ```
-
-Windows image (without dib elements, can not be build, may be tested and uploaded)
-```
-windows-servers.com:
-  filename: windows-magic-artifact.img.qcow2
-  glance:
-    name: 'Windows 2016 Server'
-    properties:
-     - display_priority: 1
-     - allowed_flavors: "[5,6,7]"
-     - isolate_os: windows
-     - requires_ssh_key: true
-     - windows12: true
-    public: True
- dib:
-   tests:
-     environment_name: windows-servers.com
-     tests_list:
-      - tests/windows-tests/
-```
-test-environments.yaml
-```
-normal-servers.com:
- os_auth_url: http://keystone.p:35357/v2.0
- os_tenant_name: for-image-tests
- os_username: image-rotate
- os_password: Kid5ilagfees
- flavor: c281fb70-a751-11e6-a10e-17fb4e159f14
- main_nic_regexp: /internet/
- nics:
-  - 1c4ac9c0-a751-11e6-a31d-fbc010cadaa1
-  - d38091ca-a751-11e6-acb0-935b96e35464
-  - 271550fa-a751-11e6-ac66-db994dd5c8b2
-gpu-servers.com:
- os_auth_url: http://keystone.p:35357/v2.0
- os_tenant_name: for-image-tests
- os_username: image-rotate
- # no os_password here
- flavor: dd533d60-1335-4257-b07a-5d018b1e06bd
- main_nic_regexp: internet
- nics:
-  - 1c4ac9c0-a751-11e6-a31d-fbc010cadaa1
-  - 271550fa-a751-11e6-ac66-db994dd5c8b2
-windows-servers.com:
- os_auth_url: http://keystone.p:35357/v2.0
- os_tenant_name: for-image-tests
- os_username: image-rotate
- # no os_password here
- flavor: 01660ce6-a752-11e6-8165-db95f7e4f53f
- nics:
-  - 1c4ac9c0-a751-11e6-a31d-fbc010cadaa1
-```
-
-Command line
-------------
-```
-dibctl build centos7-nvidia-servers.com
-dibctl test centos7-nvidia-servers.com
-OS_TENANT_NAME=public_images \
- OS_USERNAME=image-rotate \
- OS_PASSWORD="yu9Grag" \
- OS_AUTH_URL=http://keystone.p:35357/v2.0 \
- dibctl upload centos7-nvidia-servers.com
-
-OS_TENANT_NAME=demotenant \
- OS_USERNAME=superadmin \
- OS_PASSWORD="qwerty" \
- OS_AUTH_URL=http://keystone.p:35357/v2.0 \
- dibctl rotate
-
-OS_PASSWORD=4WredOlOced dibctl test windows-servers.com -i mywindows.img.qcow2
-
-OS_TENANT_NAME=public_images \
- OS_USERNAME=image-rotate \
- OS_PASSWORD="yu9Grag" \
- OS_AUTH_URL=http://keystone.p:35357/v2.0 \
- dibctl upload windows-servers.com -i mywindows.img.qcow2
-
-OS_TENANT_NAME=public_images \
- OS_USERNAME=image-rotate \
- OS_PASSWORD="yu9Grag" \
- OS_AUTH_URL=http://keystone.p:35357/v2.0 \
- dibctl mark-obsolete "Ubuntu Karmic x86_64"
-
+@pytest.mark.timeout(timeout=15)
+def test_hostname(ssh_backend, instance):
+    assert ssh_backend.SystemInfo.hostname == instance.name.lower()
 ```

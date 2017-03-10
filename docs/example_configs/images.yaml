@@ -13,6 +13,11 @@ xenial:
    elements:
      - ubuntu-minimal
      - vm
+  nova:
+    create_timeout: 5
+    active_timeout: 14
+    keypair_timeout: 5
+    cleanup_timeout: 30
   tests:
      ssh:
        username: cloud-user

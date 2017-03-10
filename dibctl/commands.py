@@ -6,6 +6,7 @@ import sys
 import osclient
 import do_tests
 import prepare_os
+import version
 
 
 class PrematureExitError(SystemExit):
@@ -35,18 +36,26 @@ class GenericCommand(object):
     # 'test-env-config',
     # 'imagelabel',
     # 'uploadlabel',
-    # 'env-override'
     name = 'generic'
     help = 'replace me'
     image = None
 
     def __init__(self, subparser):
         self.parser = subparser.add_parser(self.name, help=self.help)
-        self.parser.add_argument('--debug', help='Print junk', action='store_true', default=False)
+        self.parser.add_argument('--debug', help='Display this message', action='store_true', default=False)
+        self.parser.add_argument('--version', help='Display version', action='version', version=version.VERSION_STRING)
         if 'input' in self.options:
-            self.parser.add_argument('--input', '-i', help='Input filename for image (overrides default)', dest='filename')
+            self.parser.add_argument(
+                '--input', '-i',
+                help='Input filename for image (overrides default)',
+                dest='filename'
+            )
         if 'output' in self.options:
-            self.parser.add_argument('--output', '-o', help='Outut filename for image (overrides default)', dest='filename')
+            self.parser.add_argument(
+                '--output', '-o',
+                help='Outut filename for image (overrides default)',
+                dest='filename'
+            )
         if 'img-config' in self.options:
             self.parser.add_argument('--images-config', help='Use specific file instead of images.yaml')
         if 'upload-config' in self.options:
@@ -75,18 +84,10 @@ class GenericCommand(object):
             self.test_env_config = config.TestEnvConfig(
                 config_file=self.args.test_config
             )
-        if 'env-override' in self.options:
-            pass #  TODO remove this!
         if 'imagelabel' in self.options:
-            self.image = self.get_from_config(
-                cfg=self.image_config,
-                label=self.args.imagelabel
-            )
+            self.image = self.image_config[self.args.imagelabel]
         if 'uploadlabel' in self.options:
-            self.upload_env = self.get_from_config(
-                cfg=self.upload_config,
-                label=self.args.envlabel
-            )
+            self.upload_env = self.upload_config[self.args.envlabel]
             glance_data = osclient.smart_join_glance_config(
                 {'name': 'foo'},
                 {}
@@ -94,7 +95,7 @@ class GenericCommand(object):
             self.os = osclient.OSClient(
                 keystone_data=self.upload_env['keystone'],
                 nova_data={},
-                glace_data=glance_data,
+                glance_data=glance_data,
                 neutron_data={},
                 overrides=os.environ,
                 ca_path=self.upload_env.get('ssl_ca_path', '/etc/ssl/cacerts'),
@@ -104,14 +105,6 @@ class GenericCommand(object):
 
     def _command(self):
         raise NotImplementedError("Should be redefined")
-
-    @staticmethod
-    def get_from_config(cfg, label):
-        try:
-            data = cfg.get(label)
-        except config.ConfigError as e:
-            raise NotFoundInConfigError(e.message)
-        return data
 
     def add_options(self):
         pass  # not implemented in the abstract class
@@ -147,7 +140,7 @@ class BuildCommand(GenericCommand):
 class TestCommand(GenericCommand):
     name = 'test'
     help = 'Test image'
-    options = ['imagelabel', 'input', 'img-config', 'env-override', 'test-env-config']
+    options = ['imagelabel', 'input', 'img-config', 'test-env-config']
 
     def add_options(self):
         self.parser.add_argument(
@@ -164,6 +157,16 @@ class TestCommand(GenericCommand):
             '--use-existing-image',
             help='Skip upload and use given image uuid for test (will not be removed after test)',
             dest='uuid'
+        )
+        self.parser.add_argument(
+            '--use-existing-instance',
+            help='Skip upload/boot and use given instance for test (will not be removed after test)',
+            dest='instance'
+        )
+        self.parser.add_argument(
+            '--private-key-file',
+            help='Use private key file for tests (existing instance only)',
+            dest='private_key_file'
         )
         self.parser.add_argument(
             '--keep-failed-image',
@@ -195,20 +198,20 @@ class TestCommand(GenericCommand):
         env_label = self.args.envlabel or tests.get('environment_name', None)
         if not env_label:
             raise TestEnvironmentNotFoundError('No environemnt name for tests were no given in config or command line')
-        self.test_env = self.get_from_config(
-            cfg=self.test_env_config,
-            label=env_label
-        )
+        self.test_env = self.test_env_config[env_label]
 
     def _command(self):
         self._prepare()
         dt = do_tests.DoTests(
             self.image,
             test_env=self.test_env,
+            image_uuid=self.args.uuid,
             upload_only=self.args.upload_only,
             keep_failed_image=self.args.keep_failed_image,
             keep_failed_instance=self.args.keep_failed_instance
         )
+        if self.args.instance:
+            dt.reconfigure_for_existing_instance(self.args.instance, self.args.private_key_file)
         try:
             status = dt.process(shell_only=self.args.shell_only, shell_on_errors=self.args.shell)
         except do_tests.TestError as e:
@@ -223,7 +226,7 @@ class TestCommand(GenericCommand):
 class UploadCommand(GenericCommand):
     name = 'upload'
     help = 'Upload image'
-    options = ['imagelabel', 'input', 'img-config', 'env-override', 'upload-config', 'uploadlabel']
+    options = ['imagelabel', 'input', 'img-config', 'upload-config', 'uploadlabel']
 
     def add_options(self):
         self.parser.add_argument('--no-obsolete', action='store_true', help='Do not obsolete images with same name')
@@ -239,16 +242,16 @@ class UploadCommand(GenericCommand):
         self.public = self.glance_info.get('public', False)
 
     def upload_to_glance(self):
-        self.uuid = self.os.upload_image(
+        self.image = self.os.upload_image(
             self.name,
             self.filename,
             self.public,
             meta=self.meta
         )
-        print("Image ''%s' uploaded with uuid %s" % (self.name, self.uuid))
+        print("Image ''%s' uploaded with uuid %s" % (self.image.name, self.image.id))
 
     def obsolete_old_images(self):
-        candidates = self.os.older_images(self.name, self.uuid)
+        candidates = self.os.older_images(self.name, self.image.id)
         for img in candidates:
             obsolete_image = self.os.mark_image_obsolete(self.name, img)
             print("Obsoleting %s" % obsolete_image.id)
@@ -263,7 +266,7 @@ class UploadCommand(GenericCommand):
 class RotateCommand(GenericCommand):
     name = 'rotate'
     help = 'Remove unused obsolete images'
-    options = ['env-override', 'upload-config', 'uploadlabel']
+    options = ['upload-config', 'uploadlabel']
 
     def _command(self):
         pass
@@ -272,7 +275,7 @@ class RotateCommand(GenericCommand):
 class ObsoleteCommand(GenericCommand):
     name = 'mark-obsolete'
     help = 'Obsolete image'
-    options = ['env-override', 'upload-config', 'uploadlabel']
+    options = ['upload-config', 'uploadlabel']
 
     def add_options(self):
         self.parser.add_argument('uuid', help="image UUID to mark as obsolete")
@@ -315,14 +318,15 @@ class ValidateCommand(GenericCommand):
     options = ['upload-config', 'img-config', 'test-env-config', 'input']
 
     def _command(self):
-        print("Configs has been validated.")
+        print("Configs have been validated.")
         return 0
 
 
 class Main(object):
     def __init__(self, command_line=None):
         self.parser = argparse.ArgumentParser()
-        self.parser.add_argument('--debug', help='Print junk', action='store_true', default=False)
+        self.parser.add_argument('--debug', help='Display this message', action='store_true', default=False)
+        self.parser.add_argument('--version', help='Display version', action='version', version=version.VERSION_STRING)
         subparsers = self.parser.add_subparsers(title='commands')
         BuildCommand(subparsers)
         TestCommand(subparsers)

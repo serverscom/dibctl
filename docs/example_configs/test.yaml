@@ -28,6 +28,10 @@ example_env:
     config_drive: true
     main_nic_regexp: internet
     availability_zone: az2
+    create_timeout: 10
+    active_timeout: 999
+    keypair_timeout: 5
+    cleanup_timeout: 120
   tests:
     port_wait_timeout: 3000
   #neutron:

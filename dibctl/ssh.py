@@ -7,13 +7,14 @@ class SSH(object):
 
     COMMAND_NAME = 'ssh'
 
-    def __init__(self, ip, username, private_key, port=22):
+    def __init__(self, ip, username, private_key, port=22, override_ssh_key_filename=None):
         self.ip = ip
         self.username = username
         self.private_key = private_key
         self.port = port
         self.private_key_file = None
         self.config_file = None
+        self.override_ssh_key_filename = override_ssh_key_filename
 
     def user_host_and_port(self):
         if self.port == 22:
@@ -32,20 +33,27 @@ class SSH(object):
             is removed.
             Returns filename of that file
         '''
+        if self.override_ssh_key_filename:
+            return self.override_ssh_key_filename
         if not self.private_key_file:
             self.private_key_file = tempfile.NamedTemporaryFile(
                 prefix='dibctl_key_',
+                delete=True
             )
             self.private_key_file.write(self.private_key)
             self.private_key_file.flush()
         return self.private_key_file.name
 
-    def verbatim_key_file(self):
+    def keep_key_file(self):
         '''saves file in persistent way'''
-        f = tempfile.NamedTemporaryFile(prefix='saved_dibctl_key_', delete=False)
-        f.write(self.private_key)
-        f.close()
-        return f.name
+        if self.override_ssh_key_filename:
+            return self.override_ssh_key_filename
+        if self.private_key_file:
+            del self.private_key_file
+        self.private_key_file = tempfile.NamedTemporaryFile(prefix='saved_dibctl_key_', delete=False)
+        self.private_key_file.write(self.private_key)
+        self.private_key_file.close()
+        return self.private_key_file.name
 
     def command_line(self):
         command_line = [

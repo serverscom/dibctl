@@ -2,6 +2,7 @@ import prepare_os
 import pytest_runner
 import shell_runner
 import ssh
+import config
 
 
 class TestError(EnvironmentError):
@@ -40,28 +41,22 @@ class DoTests(object):
         self.keep_failed_instance = keep_failed_instance
         self.continue_on_fail = continue_on_fail
         self.image = image
-        self.ssh = None
         self.override_image_uuid = image_uuid
         if image_uuid:
             self.delete_image = False
         else:
             self.delete_image = True
-        if 'tests' in image:
-            self.tests_list = image['tests']['tests_list']
-            self.environment_variables = image['tests'].get('environment_variables', None)
-        else:
-            self.tests_list = []
+        self.tests_list = image.get('tests.tests_list', [])
+        self.environment_variables = image.get('tests.environment_variables', None)
         self.test_env = test_env
 
     def check_if_keep_stuff_after_fail(self, prep_os):
         if self.keep_failed_instance:
-            prep_os.delete_instance = False
-            prep_os.delete_keypair = False
-            prep_os.report = True
-            print("Do not delete instance for failed tests")
+            prep_os.update_instance_delete_status(delete=False)
+            prep_os.update_keypair_delete_status(delete=False)
         if self.keep_failed_image:
-            prep_os.delete_image = False
-            print("Do not delete image for failed tests")
+            prep_os.update_image_delete_status(delete=False)
+        self.report(prep_os)
 
     @staticmethod
     def get_runner(test):
@@ -82,13 +77,13 @@ class DoTests(object):
             raise BadTestConfigError("No known runner names found in %s" % str(test))
         return name, runner, path
 
-    def run_test(self, test, instance_config, vars):
+    def run_test(self, ssh, test, instance_config, vars):
         runner_name, runner, path = self.get_runner(test)
         print("Running tests %s: %s." % (runner_name, path))
         timeout_val = test.get('timeout', 300)
         if runner(
             path,
-            self.ssh,
+            ssh,
             instance_config,
             vars,
             timeout_val=timeout_val,
@@ -109,7 +104,7 @@ class DoTests(object):
         success = True
 
         for test in self.tests_list:
-            if self.run_test(test, prep_os, self.environment_variables) is not True:
+            if self.run_test(ssh, test, prep_os, self.environment_variables) is not True:
                 self.check_if_keep_stuff_after_fail(prep_os)
                 success = False
                 break
@@ -117,28 +112,17 @@ class DoTests(object):
 
     def init_ssh(self, prep_os):
         if 'ssh' in self.image['tests']:
-            self.ssh = ssh.SSH(
-                prep_os.ip,
-                self.image['tests']['ssh'].get('username', 'user'),
-                prep_os.os_key.private_key,
-                self.image['tests']['ssh'].get('port', 22)
-            )
-        else:
-            self.ssh = None
-
-    def get_port_timeout(self):
-        port_wait_timeout = max(
-            self.image.get('tests', {}).get('port_wait_timeout', 0),
-            self.test_env.get('tests', {}).get('port_wait_timeout', 0)
-        )
-        if port_wait_timeout == 0:
-            port_wait_timeout = self.DEFAULT_PORT_WAIT_TIMEOUT
-        return port_wait_timeout
+            self.ssh = prep_os.ssh  # continue refactoring this!
 
     def wait_port(self, prep_os):
         if 'wait_for_port' in self.image['tests']:
             port = self.image['tests']['wait_for_port']
-            port_wait_timeout = self.get_port_timeout()
+            port_wait_timeout = config.get_max(
+                        self.image,
+                        self.test_env,
+                        'tests.port_wait_timeout',
+                        self.DEFAULT_PORT_WAIT_TIMEOUT
+                    )
             port_available = prep_os.wait_for_port(port, port_wait_timeout)
             if not port_available:
                 self.check_if_keep_stuff_after_fail(prep_os)
@@ -148,34 +132,61 @@ class DoTests(object):
             return False
 
     def process(self, shell_only, shell_on_errors):
-        with prepare_os.PrepOS(
+        prep_os = prepare_os.PrepOS(
             self.image,
             self.test_env,
             override_image=self.override_image_uuid,
             delete_image=self.delete_image
-        ) as prep_os:
+        )
+        with prep_os:
             self.init_ssh(prep_os)
             self.wait_port(prep_os)
             if shell_only:
-                result = self.open_shell('Opening ssh shell to instance without running tests')
+                result = self.open_shell(
+                    prep_os.ssh,
+                    'Opening ssh shell to instance without running tests'
+                )
                 self.check_if_keep_stuff_after_fail(prep_os)
                 return result
             result = self.run_all_tests(prep_os)
             if not result:
                 print("Some tests failed")
                 if shell_on_errors:
-                    self.open_shell('There was an test error and asked to open --shell')
+                    self.open_shell(prep_os.ssh, 'There was an test error and asked to open --shell')
                     self.check_if_keep_stuff_after_fail(prep_os)
                     return result
             else:
                 print("All tests passed successfully.")
             return result
 
-    def open_shell(self, reason):
-        if not self.ssh:
+    def open_shell(self, ssh, reason):
+        if not ssh:
             raise TestError('Asked to open ssh shell to server, but there is no ssh section in the image config')
         message = reason + '\nUse "exit 42" to keep instance\n'
-        status = self.ssh.shell({}, message)
+        status = ssh.shell({}, message)
         if status == 42:  # magical constant!
             self.keep_failed_instance = True
         return status
+
+    @staticmethod
+    def report_item(onthologic_name, item):
+        if not item["was_removed"] and not item['preexisted'] and not item['deletable']:
+            print("%s %s (%s) will not be removed" % (onthologic_name, item['id'], item['name']))
+
+    @staticmethod
+    def report_ssh(ssh):
+        if ssh:
+            print("You may use following line to access server")
+            print(" ".join(ssh.command_line()))
+
+    def report(self, prep_os):
+        image_status = prep_os.image_status()
+        instance_status = prep_os.instance_status()
+        keypair_status = prep_os.keypair_status()
+        self.report_item("Keypair", keypair_status)
+        self.report_item("Image", image_status)
+        self.report_item("Instance", instance_status)
+        self.report_ssh(prep_os.ssh)
+
+    def reconfigure_for_existing_instance(self, instance, private_key_file=None):
+        raise NotImplementedError

@@ -6,7 +6,8 @@ import socket
 import time
 import os
 import json
-import tempfile
+import config
+import ssh
 
 
 class TimeoutError(EnvironmentError):
@@ -14,6 +15,10 @@ class TimeoutError(EnvironmentError):
 
 
 class InstanceError(EnvironmentError):
+    pass
+
+
+class PreparationError(EnvironmentError):
     pass
 
 
@@ -25,41 +30,103 @@ class PrepOS(object):
     SLEEP_DELAY = 3
 
     def __init__(self, image, test_environment, override_image=None, delete_image=True, delete_instance=True):
-        self.report = True
-        self.override_image = override_image
+        self.os = None
+        self.set_timeouts(image, test_environment)
+        self.test_environment = test_environment
+        self.report = True  # refactor me!
         if override_image:
-            self.image_name = ""
-            self.delete_image = False
-            self.upload_timeout = self.LONG_OS_TIMEOUT
+            self.prepare_override_image(image, override_image)
         else:
-            self.image_name = self.make_test_name(image['glance']['name'])
-            self.image = image
-            self.delete_image = delete_image
-            self.upload_timeout = self.image['glance'].get('upload_timeout', self.LONG_OS_TIMEOUT)
-        self.key_name = self.make_test_name('key')
-        self.instance_name = self.make_test_name('test')
+            self.prepare_normal_image(image, delete_image)
+
+        self.prepare_key()
+        self.prepare_instance(test_environment, delete_instance)
+        self.ssh = None
+
+    def set_timeouts(self, image_item, tenv_item):
+        self.upload_timeout = config.get_max(
+            image_item,
+            tenv_item,
+            'glance.upload_timeout',
+            self.LONG_OS_TIMEOUT
+        )
+        self.keypair_timeout = config.get_max(
+            image_item,
+            tenv_item,
+            'nova.keypair_timeout',
+            self.SHORT_OS_TIMEOUT
+        )
+        self.cleanup_timeout = config.get_max(
+            image_item,
+            tenv_item,
+            'nova.cleanup_timeout',
+            self.SHORT_OS_TIMEOUT
+        )
+        self.active_timeout = config.get_max(
+            image_item,
+            tenv_item,
+            'nova.active_timeout',
+            self.LONG_OS_TIMEOUT
+        )
+        self.create_timeout = config.get_max(
+            image_item,
+            tenv_item,
+            'nova.create_timeout',
+            self.LONG_OS_TIMEOUT
+        )
+
+    def prepare_normal_image(self, image_item, delete_image_flag):
+        self.image = image_item
+        self.image_name = self.make_test_name(image_item['glance']['name'])
+        self.delete_image = delete_image_flag
         self.os_image = None
-        self.os_instance = None
+        self.override_image = False
+        self.image_was_removed = False
+
+    def prepare_override_image(self, image_item, override_image_uuid):
+        self.image = image_item
+        self.os_image = self.get_image(override_image_uuid)
+        self.image_name = self.os_image.name
+        print("Found image %s (%s)" % (self.os_image.id, self.os_image.name))
+        self.delete_image = False
+        self.override_image = True  # refactor me
+        self.image_was_removed = False
+
+    def get_image(self, image):
+        self.connect()
+        return self.os.get_image(image)
+
+    def prepare_key(self):
+        self.key_name = self.make_test_name('key')
         self.os_key = None
         self.delete_keypair = True
-        self.config_drive = test_environment['nova'].get('config_drive', False)
-        self.availability_zone = test_environment['nova'].get('availability_zone', None)
-        self.delete_instance = delete_instance
-        self.flavor_id = test_environment['nova']['flavor']
-        self.nic_list = list(self.prepare_nics(test_environment['nova']))
-        self.main_nic_regexp = test_environment['nova'].get('main_nic_regexp', None)
-        self.os = osclient.OSClient(
-            keystone_data=test_environment['keystone'],
-            nova_data=test_environment['nova'],
-            glance_data=osclient.smart_join_glance_config(
-                test_environment.get('glance', {}),
-                self.image.get('glance', {})
-            ),
-            neutron_data=test_environment.get('neutron', None),
-            overrides=os.environ,
-            ca_path=test_environment.get('ssl_ca_path', '/etc/ssl/certs'),
-            insecure=test_environment.get('ssl_insecure', False)
-        )
+        self.override_keypair = None
+        self.keypair_was_removed = False
+
+    def prepare_instance(self, tenv_item, delete_instance_flag):
+        self.instance_name = self.make_test_name('test')
+        self.os_instance = None
+        self.config_drive = tenv_item['nova'].get('config_drive', False)
+        self.availability_zone = tenv_item['nova'].get('availability_zone', None)
+        self.delete_instance = delete_instance_flag
+        self.flavor_id = tenv_item['nova']['flavor']
+        self.nic_list = list(self.prepare_nics(tenv_item['nova']))
+        self.main_nic_regexp = tenv_item['nova'].get('main_nic_regexp', None)
+        self.override_instance = None
+        self.instance_was_removed = False
+
+    def connect(self):
+        if not self.os:
+            print("Connecting to Openstack")
+            self.os = osclient.OSClient(
+                keystone_data=self.test_environment['keystone'],
+                nova_data=self.test_environment['nova'],
+                glance_data=self.image.get('glance'),
+                neutron_data=self.test_environment.get('neutron'),
+                overrides=os.environ,
+                ca_path=self.test_environment.get('ssl_ca_path', '/etc/ssl/certs'),
+                insecure=self.test_environment.get('ssl_insecure', False)
+            )
 
     @staticmethod
     def prepare_nics(env):
@@ -75,19 +142,8 @@ class PrepOS(object):
         return 'DIBCTL-%s-%s' % (bare_name, str(uuid.uuid4()))
 
     def init_keypair(self):
-        with timeout.timeout(self.SHORT_OS_TIMEOUT, self.error_handler):
+        with timeout.timeout(self.keypair_timeout, self.error_handler):
             self.os_key = self.os.new_keypair(self.key_name)
-
-    def save_private_key(self):
-        f = tempfile.NamedTemporaryFile(prefix='DIBCTL_ssh_key', suffix='private', delete=False)
-        f.write(self.os_key.private_key)
-        f.close()
-        self.os_key_private_file = f.name
-
-    def wipe_private_key(self):
-        with open(self.os_key_private_file, 'w') as f:
-            f.write(' ' * 4096)
-        os.remove(self.os_key_private_file)
 
     def upload_image(self, timeout_s):
         with timeout.timeout(timeout_s, self.error_handler):
@@ -99,9 +155,7 @@ class PrepOS(object):
                     filename,
                     meta=self.image['glance'].get('properties', {})
                 )
-                print("Image %s uploaded." % self.os_image)
-            else:
-                self.os_image = self.os.get_image(self.override_image)
+                print("Image %s uploaded." % self.os_image.id)
 
     def spawn_instance(self, timeout_s):
         print("Creating test instance (time limit is %s s)" % timeout_s)
@@ -136,17 +190,28 @@ class PrepOS(object):
                 self.os_instance = self.os.get_instance(self.os_instance.id)
         print("Instance become active.")
 
+    def prepare_ssh(self):
+        ssh_item = self.image.get('tests.ssh')
+        if ssh_item and self.ip:
+            self.ssh = ssh.SSH(
+                ip=self.ip,
+                username=ssh_item['username'],
+                private_key=self.os_key.private_key,
+                port=ssh_item.get('port', 22)
+            )
+
     def prepare(self):
         self.init_keypair()
-        self.save_private_key()
         sys.stdout.flush()
         self.upload_image(self.upload_timeout)
         sys.stdout.flush()
-        self.spawn_instance(self.SHORT_OS_TIMEOUT)
+        self.spawn_instance(self.create_timeout)
         sys.stdout.flush()
-        self.wait_for_instance(self.LONG_OS_TIMEOUT)
+        self.wait_for_instance(self.active_timeout)
         sys.stdout.flush()
         self.get_instance_main_ip()
+        sys.stdout.flush()
+        self.prepare_ssh()
         sys.stdout.flush()
 
     @staticmethod
@@ -184,11 +249,13 @@ class PrepOS(object):
             self.delete_keypair,
             self.os.delete_keypair
         )
-        try:
-            if self.delete_keypair and self.delete_instance:
-                self.wipe_private_key()
-        except Exception as e:
-            print("Error while clear up ssh key file: %s" % e)
+        if self.ssh:
+            if self.delete_keypair:
+                del self.ssh
+                self.ssh = None
+            else:
+                name = self.ssh.keep_key_file()
+                print("SSH private key is in %s" % name)
 
     def cleanup(self):
         print("\nClearing up...")
@@ -209,11 +276,12 @@ class PrepOS(object):
         if self.report and self.os_instance and not self.delete_instance:
             print("Instance %s is not removed. Please debug and remove it manually." % self.os_instance.id)
             print("Instance ip is %s" % self.ip)
-            print("Private key file is %s" % self.os_key_private_file)
-        if self.report and self.os_image and not self.delete_image:
-            print("Image %s is not removed. Please debug and remove it manually." % self.os_image)
+            # print("Private key file is %s" % self.os_key_private_file)   ## A problem. Should fix this
+        if self.report and self.os_image and not self.delete_image and not self.override_image:
+            print("Image %s is not removed. Please debug and remove it manually." % self.os_image.id)
 
     def __enter__(self):
+        self.connect()
         try:
             self.prepare()
             return self
@@ -227,7 +295,7 @@ class PrepOS(object):
     def __exit__(self, e_type, e_val, e_tb):
         "Cleaning up on exit"
         self.cleanup()
-        self.report_if_fail()
+        # self.report_if_fail()
 
     def get_env_config(self):
         flavor = self.flavor()
@@ -236,7 +304,7 @@ class PrepOS(object):
             'instance_name': str(self.instance_name).lower(),
             'flavor_id': str(self.flavor_id),
             'main_ip': str(self.ip),
-            'ssh_private_key': str(self.os_key_private_file),
+            # 'ssh_private_key': str(self.os_key_private_file),  REFACTOR!
             'flavor_ram': str(flavor.ram),
             'flavor_name': str(flavor.name),
             'flavor_vcpus': str(flavor.vcpus),
@@ -279,3 +347,58 @@ class PrepOS(object):
             time.sleep(3)
         print("Instance is not accepting connection on ip %s port %s." % (self.ip, port))
         return False
+
+    def update_image_delete_status(self, delete=True):
+        if delete:
+            if self.override_image:
+                self.delete_image = True
+            else:
+                print("Will not delete image as it was not uploaded by us")
+        if not delete:
+            self.delete_image = False
+
+    def update_instance_delete_status(self, delete=True):
+        if delete:
+            if self.override_instance:
+                self.delete_instance = True
+            else:
+                print("Will not delete instance as it was not created by us")
+        if not delete:
+            self.delete_instance = False
+
+    def update_keypair_delete_status(self, delete=True):
+        if delete:
+            if self.override_keypair:
+                self.delete_keypair = True
+            else:
+                print("Will not delete keypair as it was not created by us")
+        if not delete:
+            self.delete_keypair = False
+
+    def instance_status(self):
+        return {
+            "preexisted": bool(self.override_instance),
+            "was_removed": bool(self.instance_was_removed),
+            "deletable": bool(self.delete_instance),
+            "id": self.os_instance.id,
+            "name": self.instance_name
+        }
+
+    def image_status(self):
+        return {
+            "preexisted": bool(self.override_image),
+            "was_removed": bool(self.image_was_removed),
+            "deletable": bool(self.delete_image),
+            "id": self.os_image.id,
+            "name": self.image_name
+        }
+
+    def keypair_status(self):
+        ''' return value (is_created_by_us, was_removed, will_be_removed)'''
+        return {
+            "preexisted": bool(self.override_keypair),
+            "was_removed": self.keypair_was_removed,
+            "deletable": self.delete_keypair,
+            "id": self.os_key.id,
+            "name": self.os_key.name  # doubious
+        }

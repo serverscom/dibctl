@@ -179,8 +179,8 @@ class OSClient(object):
         insecure=False
     ):
 
-        self._set_api_version(keystone_data, insecure)
-        self.auth = self._prepare_auth(keystone_data, overrides)
+        self._set_api_version(dict(keystone_data), insecure)
+        self.auth = self._prepare_auth(dict(keystone_data), overrides)
         self.session = self.create_session(self.api_version, self.auth, insecure)
         self.nova = self.get_nova(self.session)
         self.glance = self.get_glance(self.session)
@@ -335,7 +335,7 @@ class OSClient(object):
         if share_with_tenants:
             self.share_image(img, share_with_tenants)
 
-        return img.id
+        return img
 
     def share_image(self, img, tenant_name_list):
         raise NotImplementedError("Image sharing not implemented!")
@@ -394,7 +394,10 @@ class OSClient(object):
             found = instance.networks.values()
 
         if len(found) > 1:
-                raise MultipleIPError("More than one network match: %s, matching regexp is '%s'" % (str(found), str(regexp)))
+                raise MultipleIPError("More than one network match: %s, matching regexp is '%s'" % (
+                    str(found),
+                    str(regexp)
+                ))
         elif len(found) == 1:
                 return found[0][0]
         else:
