@@ -72,6 +72,15 @@ def test_keep_key_file_kept_after_removal(ssh):
     os.remove(f)
 
 
+def test_key_file_keep_key_file(ssh):
+    s = ssh.SSH(sentinel.ip, sentinel.user, "secret", sentinel.port)
+    f1 = s.key_file()
+    f2 = s.keep_key_file()
+    with pytest.raises(IOError):
+        open(f1, 'r')
+    assert 'secret' == open(f2, 'r').read()
+
+
 def test_command_line(ssh):
     s = ssh.SSH('192.168.0.1', 'user', 'secret')
     cmdline = " ".join(s.command_line())
@@ -139,7 +148,7 @@ def test_shell_simple_run(ssh):
         with mock.patch.multiple(ssh.sys, stdout=w, stderr=w, stdin=None):
             s.shell({}, 'test message')
         output = os.read(rfd, 1000)
-        assert 'echo' in output #  should be ssh, but test demands
+        assert 'echo' in output  # should be ssh, but test demands
         assert 'user@192.168.0.1' in output
 
 
