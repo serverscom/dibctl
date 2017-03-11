@@ -5,6 +5,7 @@ import sys
 import pytest
 import mock
 from mock import sentinel
+import tempfile
 
 
 @pytest.fixture
@@ -20,6 +21,15 @@ def ssh():
 def test_user_host_and_port(ssh, ip, port, user, output):
     s = ssh.SSH(ip, user, None, port)
     assert s.user_host_and_port() == output
+
+
+def test_key_file_with_override(ssh):
+    t = tempfile.NamedTemporaryFile()
+    t.write('secret')
+    t.flush()
+    s = ssh.SSH(sentinel.ip, sentinel.user, None, sentinel.port, override_ssh_key_filename=t.name)
+    assert s.key_file() == t.name
+    del t
 
 
 def test_key_file(ssh):
@@ -48,6 +58,15 @@ def test_key_file_remove_afterwards(ssh):
     del s
     with pytest.raises(IOError):
         open(f, 'r')
+
+
+def test_keep_key_file_with_override(ssh):
+    t = tempfile.NamedTemporaryFile()
+    t.write('secret')
+    t.flush()
+    s = ssh.SSH(sentinel.ip, sentinel.user, None, sentinel.port, override_ssh_key_filename=t.name)
+    assert s.keep_key_file() == t.name
+    del t
 
 
 def test_keep_key_file_name(ssh):
