@@ -171,7 +171,7 @@ class DoTests(object):
     @staticmethod
     def report_item(onthologic_name, item):
         if not item["was_removed"] and not item['preexisted'] and not item['deletable']:
-            print("%s %s (%s) will not be removed" % (onthologic_name, item['id'], item['name']))
+            print("%s: %s (%s), will not be removed" % (onthologic_name, item['id'], item['name']))
 
     @staticmethod
     def report_ssh(ssh):
