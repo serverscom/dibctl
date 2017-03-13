@@ -12,6 +12,11 @@ def prepare_os():
     from dibctl import prepare_os
     return prepare_os
 
+@pytest.fixture
+def config():
+    from dibctl import config
+    return config
+
 
 @pytest.fixture
 def prep_os(prepare_os):
@@ -34,19 +39,24 @@ def prep_os(prepare_os):
 
 
 @pytest.fixture
-def mock_image_cfg():
-    image = {
+def mock_image_cfg(config):
+    image = config.Config({
         'glance': {
             'name': 'foo'
         },
-        'filename': sentinel.filename
-    }
+        'filename': sentinel.filename,
+        'tests': {
+            'ssh': {
+                'username': 'user'
+            }
+        }
+    })
     return image
 
 
 @pytest.fixture
-def mock_env_cfg():
-    env = {
+def mock_env_cfg(config):
+    env = config.Config({
         'keystone': {
             'auth_url': sentinel.auth,
             'tenant_name': sentinel.tenant,
@@ -60,7 +70,7 @@ def mock_env_cfg():
                 {'net_id': sentinel.uuid2}
             ]
         }
-    }
+    })
     return env
 
 
@@ -77,6 +87,21 @@ def test_prepare_nics(prepare_os, mock_env_cfg):
         {'net-id': sentinel.uuid1},
         {'net-id': sentinel.uuid2}
     ]
+
+
+def test_prepare_ssh_empty(prepare_os, config, mock_env_cfg):
+    p = prepare_os.PrepOS(config.Config({'glance': {'name': 'foo'}}), mock_env_cfg)
+    p.ip = sentinel.ip
+    p.prepare_ssh()
+    assert p.ssh is None
+
+
+def test_prepare_ssh_normal(prepare_os, config, mock_image_cfg, mock_env_cfg):
+    p = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg)
+    p.ip = sentinel.ip
+    p.os_key = mock.MagicMock()
+    p.prepare_ssh()
+    assert p.ssh is not None
 
 
 @pytest.mark.parametrize("name, output", [
