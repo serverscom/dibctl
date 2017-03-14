@@ -3,10 +3,31 @@ import subprocess
 import os
 import sys
 import pprint
+import pkg_resources
 
 
 class NoElementsError(IndexError):
     pass
+
+
+class BadDibVersion(EnvironmentError):
+    pass
+
+
+class NoDibError(BadDibVersion):
+    pass
+
+
+def validate_version(version):
+    raise NotImplementedError
+
+
+def get_installed_version():
+    try:
+        version = pkg_resources.get_distribution('diskimage_builder').version
+    except pkg_resources.DistributionNotFound:
+        raise NoDibError("diskimage-builder is not available (as python package)")
+    return version
 
 
 class DIB():

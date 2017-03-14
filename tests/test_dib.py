@@ -80,6 +80,19 @@ def test_run_echoed(dib, DIB):
     assert dib.run() == 0
 
 
+def test_get_installed_version_normal(dib):
+    with mock.patch.object(dib.pkg_resources, 'get_distribution') as mock_gd:
+        mock_gd.return_value.version = sentinel.version
+        assert dib.get_installed_version() == sentinel.version
+
+
+def test_get_installed_version_no(dib):
+    with mock.patch.object(dib.pkg_resources, 'get_distribution') as mock_gd:
+        mock_gd.side_effect = dib.pkg_resources.DistributionNotFound
+        with pytest.raises(dib.NoDibError):
+            dib.get_installed_version()
+
+
 if __name__ == "__main__":
     ourfilename = os.path.abspath(inspect.getfile(inspect.currentframe()))
     currentdir = os.path.dirname(ourfilename)
