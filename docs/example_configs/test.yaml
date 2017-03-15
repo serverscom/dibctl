@@ -1,7 +1,7 @@
 example_env:
   ssl_insecure: True
   ssl_ca_path: /etc/ssl/certs
-  disable_warinings: False
+  disable_warnings: False
   keystone:
     api_version: 2
     #username: 'will be taken from OS_USERNAME enviroment variable'
