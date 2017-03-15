@@ -5,6 +5,7 @@ import sys
 import pytest
 import mock
 from mock import sentinel
+import tempfile
 
 
 @pytest.fixture
@@ -20,6 +21,15 @@ def ssh():
 def test_user_host_and_port(ssh, ip, port, user, output):
     s = ssh.SSH(ip, user, None, port)
     assert s.user_host_and_port() == output
+
+
+def test_key_file_with_override(ssh):
+    t = tempfile.NamedTemporaryFile()
+    t.write('secret')
+    t.flush()
+    s = ssh.SSH(sentinel.ip, sentinel.user, None, sentinel.port, override_ssh_key_filename=t.name)
+    assert s.key_file() == t.name
+    del t
 
 
 def test_key_file(ssh):
@@ -50,6 +60,15 @@ def test_key_file_remove_afterwards(ssh):
         open(f, 'r')
 
 
+def test_keep_key_file_with_override(ssh):
+    t = tempfile.NamedTemporaryFile()
+    t.write('secret')
+    t.flush()
+    s = ssh.SSH(sentinel.ip, sentinel.user, None, sentinel.port, override_ssh_key_filename=t.name)
+    assert s.keep_key_file() == t.name
+    del t
+
+
 def test_keep_key_file_name(ssh):
     s = ssh.SSH(sentinel.ip, sentinel.user, "secret", sentinel.port)
     f = s.keep_key_file()
@@ -70,6 +89,15 @@ def test_keep_key_file_kept_after_removal(ssh):
     del s
     assert 'secret' in open(f, 'r').read()
     os.remove(f)
+
+
+def test_key_file_keep_key_file(ssh):
+    s = ssh.SSH(sentinel.ip, sentinel.user, "secret", sentinel.port)
+    f1 = s.key_file()
+    f2 = s.keep_key_file()
+    with pytest.raises(IOError):
+        open(f1, 'r')
+    assert 'secret' == open(f2, 'r').read()
 
 
 def test_command_line(ssh):
@@ -139,7 +167,7 @@ def test_shell_simple_run(ssh):
         with mock.patch.multiple(ssh.sys, stdout=w, stderr=w, stdin=None):
             s.shell({}, 'test message')
         output = os.read(rfd, 1000)
-        assert 'echo' in output #  should be ssh, but test demands
+        assert 'echo' in output  # should be ssh, but test demands
         assert 'user@192.168.0.1' in output
 
 

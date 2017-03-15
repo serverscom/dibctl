@@ -7,6 +7,7 @@ import osclient
 import do_tests
 import prepare_os
 import version
+from keystoneauth1 import exceptions as keystone_exceptions
 
 
 class PrematureExitError(SystemExit):
@@ -117,6 +118,7 @@ class BuildCommand(GenericCommand):
 
     def _prepare(self):
         dib_section = self.image['dib']
+        dib.validate_version(self.image.get('dib.min_version'), self.image.get('dib.max_version'))
         self.dib = dib.DIB(
             self.image['filename'],
             dib_section['elements'],
@@ -352,6 +354,8 @@ def main(line=None):
         osclient.OpenStackError,
         config.ConfigError,
         prepare_os.InstanceError,
+        keystone_exceptions.ConnectTimeout,
+        IOError
     ) as e:
         print("Error: %s" % str(e))
         code = -1

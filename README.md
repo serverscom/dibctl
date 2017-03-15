@@ -342,6 +342,13 @@ OS_AUTH_URL
 For test command dibctl prioritize environment configuration with exception of OS_PASSWORD,
 which have higher priority over configuration file.
 
+Exit codes
+----------
+When everything went well, exit code is 0.
+If there is an error with configuration file, or connection error, exit code is -1
+If diskimage-builder failed, exit code is the same as disk-image-create's exit code
+If there were test or upload error, exit code is positive (not implemented yet)
+
 
 Timeouts
 --------
