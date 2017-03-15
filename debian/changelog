@@ -1,3 +1,13 @@
+dibctl (0.4.9) UNRELEASED; urgency=medium
+
+  * Now reports for ssh are printed if instance is not removed
+  * Better handling of connection timeouts
+  * Better handling for IOErrors
+  * Add support for dib.min_version/dib.max_version for image config
+  * Fix dib.cli_options (wasn't allowed in config Schema)
+
+ -- George Shuklin <george.shuklin@gmail.com>  Wed, 15 Mar 2017 13:23:12 +0200
+
 dibctl (0.4.8) xenial; urgency=medium
 
   * Fix bug with non-removed temp key files
