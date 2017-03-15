@@ -43,7 +43,7 @@ setup(
         'python-novaclient',
         'pytest-timeout',
         'jsonschema',
-        'pytest' # not a mistake - we use pytest as a part of the app
+        'pytest', # not a mistake - we use pytest as a part of the app
         'semantic_version'
     ],
     entry_points="""
