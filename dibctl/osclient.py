@@ -178,10 +178,10 @@ class OSClient(object):
         overrides={},
         ca_path='/etc/ssl/certs',
         insecure=False,
-        disable_warinings=False
+        disable_warnings=False
     ):
 
-        if disable_warinings:
+        if disable_warnings:
             requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
         self._set_api_version(dict(keystone_data), insecure)
         self.auth = self._prepare_auth(dict(keystone_data), overrides)
