@@ -186,7 +186,8 @@ class DoTests(object):
         self.report_item("Keypair", keypair_status)
         self.report_item("Image", image_status)
         self.report_item("Instance", instance_status)
-        self.report_ssh(prep_os.ssh)
+        if not instance_status['was_removed'] and not instance_status['deletable']:
+            self.report_ssh(prep_os.ssh)
 
     def reconfigure_for_existing_instance(self, instance, private_key_file=None):
         raise NotImplementedError
