@@ -353,6 +353,7 @@ def main(line=None):
         osclient.OpenStackError,
         config.ConfigError,
         prepare_os.InstanceError,
+        IOError
     ) as e:
         print("Error: %s" % str(e))
         code = -1

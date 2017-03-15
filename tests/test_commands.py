@@ -33,7 +33,10 @@ def mock_image_cfg():
         'dib': {
             'elements': ['foo']
         },
-        'filename': sentinel.filename
+        'filename': sentinel.filename,
+        'tests': {
+            'environment_name': 'env'
+        }
     }
     return image
 
@@ -404,6 +407,18 @@ def test_main_premature_exit_config(commands):
         with mock.patch.object(commands.sys, 'exit') as mock_exit:
             commands.main(['build', 'label'])
             assert mock_exit.call_args[0][0] == -1
+
+
+@pytest.mark.parametrize('exc', [
+    IOError
+])
+def test_main_test_command_with_exceptions(commands, mock_image_cfg, mock_env_cfg, exc):
+    with mock.patch.object(commands.config, "ImageConfig", return_value={'label': mock_image_cfg}):
+        with mock.patch.object(commands.config, "TestEnvConfig", return_value={'env': mock_env_cfg}):
+            with mock.patch.object(commands.do_tests.DoTests, 'process', side_effect=exc):
+                with mock.patch.object(commands.sys, 'exit') as mock_exit:
+                    commands.main(['test', 'label'])
+                    assert mock_exit.call_args[0][0] == -1
 
 
 def test_init(commands):
