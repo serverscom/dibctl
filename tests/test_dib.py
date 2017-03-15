@@ -82,8 +82,14 @@ def test_run_echoed(dib, DIB):
 
 def test_get_installed_version_normal(dib):
     with mock.patch.object(dib.pkg_resources, 'get_distribution') as mock_gd:
-        mock_gd.return_value.version = sentinel.version
-        assert dib.get_installed_version() == sentinel.version
+        mock_gd.return_value.version = '0.1.1'
+        assert dib.get_installed_version() == dib.semantic_version.Version('0.1.1')
+
+
+def test_get_installed_version_normal_with_rc(dib):
+    with mock.patch.object(dib.pkg_resources, 'get_distribution') as mock_gd:
+        mock_gd.return_value.version = '2.0.0rc2'
+        assert dib.get_installed_version() == dib.semantic_version.Version('2.0.0-rc2')
 
 
 def test_get_installed_version_no(dib):
@@ -91,6 +97,45 @@ def test_get_installed_version_no(dib):
         mock_gd.side_effect = dib.pkg_resources.DistributionNotFound
         with pytest.raises(dib.NoDibError):
             dib.get_installed_version()
+
+
+def test_get_installed_version_actual(dib):
+    assert dib.get_installed_version() is not None
+
+
+def test_version_good(dib):
+    assert dib._version('1.0.0') == dib.semantic_version.Version('1.0.0')
+
+
+def test_version_not_bad(dib):
+    assert dib._version('1.0.0rc1') == dib.semantic_version.Version('1.0.0-rc1')
+
+
+def test_version_bad(dib):
+    with pytest.raises(dib.BadVersion):
+        dib._version('not-a-version')
+
+
+@pytest.mark.parametrize('min_version, max_version', [
+    [None, None],
+    ['0.0.1', None],
+    [None, '999.999.999'],
+    ['0.0.1', '999.99.999']
+])
+def test_validate_version_pass(dib, min_version, max_version):
+    assert dib.validate_version(min_version, max_version) is True
+
+
+@pytest.mark.parametrize('min_version, max_version', [
+    [None, '0.0.1'],
+    ['999.999.999', '0.0.1'],
+    ['999.999.999', None],
+    ['0.0.1', '0.0.1'],
+    ['999.999.999', '999.99.999']
+])
+def test_validate_version_not_pass(dib, min_version, max_version):
+    with pytest.raises(dib.BadDibVersion):
+        dib.validate_version(min_version, max_version)
 
 
 if __name__ == "__main__":

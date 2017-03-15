@@ -30,6 +30,9 @@ def mock_image_cfg():
         'glance': {
             'name': 'foo'
         },
+        'dib': {
+            'elements': ['foo']
+        },
         'filename': sentinel.filename
     }
     return image
@@ -103,36 +106,36 @@ def test_BuildCommand_img_config(commands):
     assert args.images_config is 'bar'
 
 
-def test_BuildCommand_prepare(commands):
+def test_BuildCommand_prepare(commands, mock_image_cfg):
     parser, obj = create_subparser(commands.BuildCommand)
     args = parser.parse_args(['build', 'label'])
     assert args.imagelabel == 'label'
     with mock.patch.object(obj, "_run"):
-        with mock.patch.object(commands.config, "ImageConfig"):
+        with mock.patch.object(commands.config, "ImageConfig", return_value={'label': mock_image_cfg}):
             args.command(args)
             assert obj.dib
 
 
-def test_BuildCommand_run_success(commands, capsys):
+def test_BuildCommand_run_success(commands, mock_image_cfg, capsys):
     parser, obj = create_subparser(commands.BuildCommand)
     args = parser.parse_args(['build', 'label'])
     assert args.imagelabel == 'label'
     with mock.patch.object(commands.dib.DIB, "run") as mock_run:
         mock_run.return_value = 0
-        with mock.patch.object(commands.config, "ImageConfig"):
+        with mock.patch.object(commands.config, "ImageConfig", return_value={'label': mock_image_cfg}):
             assert args.command(args) == 0
             assert mock_run.called
             s_in = capsys.readouterr()[0]
             assert 'successfully' in s_in
 
 
-def test_BuildCommand_run_error(commands, capsys):
+def test_BuildCommand_run_error(commands, mock_image_cfg, capsys):
     parser, obj = create_subparser(commands.BuildCommand)
     args = parser.parse_args(['build', 'label'])
     assert args.imagelabel == 'label'
     with mock.patch.object(commands.dib.DIB, "run") as mock_run:
         mock_run.return_value = 1
-        with mock.patch.object(commands.config, "ImageConfig"):
+        with mock.patch.object(commands.config, "ImageConfig", return_value={'label': mock_image_cfg}):
             assert args.command(args) == 1
             assert mock_run.called
             s_in = capsys.readouterr()[0]
@@ -373,22 +376,22 @@ def test_Main_empty_cmdline(commands):
         commands.Main([])
 
 
-def test_Main_build_success(commands):
-    with mock.patch.object(commands, 'config'):
+def test_Main_build_success(commands, mock_image_cfg):
+    with mock.patch.object(commands.config, "ImageConfig", return_value={'label': mock_image_cfg}):
         with mock.patch.object(commands.dib.DIB, 'run', return_value=0):
             m = commands.Main(['build', 'label'])
             assert m.run() == 0
 
 
-def test_Main_build_error(commands):
-    with mock.patch.object(commands, 'config'):
+def test_Main_build_error(commands, mock_image_cfg):
+    with mock.patch.object(commands.config, "ImageConfig", return_value={'label': mock_image_cfg}):
         with mock.patch.object(commands.dib.DIB, 'run', return_value=1):
             m = commands.Main(['build', 'label'])
             assert m.run() == 1
 
 
-def test_main(commands):
-    with mock.patch.object(commands, 'config'):
+def test_main_build(commands, mock_image_cfg):
+    with mock.patch.object(commands.config, "ImageConfig", return_value={'label': mock_image_cfg}):
         with mock.patch.object(commands.dib.DIB, 'run', return_value=1):
             with mock.patch.object(commands.sys, 'exit') as mock_exit:
                 commands.main(['build', 'label'])

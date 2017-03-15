@@ -44,6 +44,7 @@ setup(
         'pytest-timeout',
         'jsonschema',
         'pytest' # not a mistake - we use pytest as a part of the app
+        'semantic_version'
     ],
     entry_points="""
         [console_scripts]

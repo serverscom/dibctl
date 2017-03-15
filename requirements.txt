@@ -7,3 +7,4 @@ pytest
 pytest-timeout
 testinfra
 jsonschema
+semantic_version

@@ -117,6 +117,7 @@ class BuildCommand(GenericCommand):
 
     def _prepare(self):
         dib_section = self.image['dib']
+        dib.validate_version(self.image.get('dib.min_version'), self.image.get('dib.max_version'))
         self.dib = dib.DIB(
             self.image['filename'],
             dib_section['elements'],
