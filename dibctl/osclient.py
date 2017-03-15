@@ -5,6 +5,7 @@ import novaclient.client
 import re
 from functools import partial
 import requests
+import urllib3
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import simplejson
 import copy
@@ -183,6 +184,7 @@ class OSClient(object):
 
         if disable_warnings:
             requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+            urllib3.disable_warnings()
         self._set_api_version(dict(keystone_data), insecure)
         self.auth = self._prepare_auth(dict(keystone_data), overrides)
         self.session = self.create_session(self.api_version, self.auth, insecure)

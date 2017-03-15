@@ -7,4 +7,5 @@ pytest
 pytest-timeout
 testinfra
 jsonschema
+urllib3
 semantic_version
