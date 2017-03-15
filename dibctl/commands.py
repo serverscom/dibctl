@@ -7,6 +7,7 @@ import osclient
 import do_tests
 import prepare_os
 import version
+from keystoneauth1 import exceptions as keystone_exceptions
 
 
 class PrematureExitError(SystemExit):
@@ -353,6 +354,7 @@ def main(line=None):
         osclient.OpenStackError,
         config.ConfigError,
         prepare_os.InstanceError,
+        keystone_exceptions.ConnectTimeout,
         IOError
     ) as e:
         print("Error: %s" % str(e))
