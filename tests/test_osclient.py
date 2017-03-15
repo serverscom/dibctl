@@ -387,6 +387,12 @@ def test_init(osclient, actual_keystone_data_v2):
             assert osclient.OSClient(actual_keystone_data_v2, {}, {}, {}, {})
 
 
+def test_init_disable_warnings(osclient, actual_keystone_data_v2):
+    with mock.patch.object(osclient, 'novaclient'):
+        with mock.patch.object(osclient, 'glanceclient'):
+            assert osclient.OSClient(actual_keystone_data_v2, {}, {}, {}, {}, disable_warinings=True)
+
+
 def test_osclient_upload_image_simple(osclient, mock_os):
     with mock.patch.object(osclient, "open", mock.mock_open()):
         mock_os.upload_image(sentinel.name, sentinel.filename)

@@ -100,7 +100,8 @@ class GenericCommand(object):
                 neutron_data={},
                 overrides=os.environ,
                 ca_path=self.upload_env.get('ssl_ca_path', '/etc/ssl/cacerts'),
-                insecure=self.upload_env.get('ssl_insecure', False)
+                insecure=self.upload_env.get('ssl_insecure', False),
+                disable_warnings=self.upload_env.get('disable_warnings', False)
             )
         return self._command()
 

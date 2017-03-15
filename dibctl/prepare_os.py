@@ -125,7 +125,8 @@ class PrepOS(object):
                 neutron_data=self.test_environment.get('neutron'),
                 overrides=os.environ,
                 ca_path=self.test_environment.get('ssl_ca_path', '/etc/ssl/certs'),
-                insecure=self.test_environment.get('ssl_insecure', False)
+                insecure=self.test_environment.get('ssl_insecure', False),
+                disable_warnings=self.test_environment.get('disable_warnings')
             )
 
     @staticmethod

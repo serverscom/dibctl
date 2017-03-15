@@ -325,6 +325,7 @@ class TestEnvConfig(EnvConfig):
                     'neutron': {'type': 'object'},
                     'ssl_insecure': {'type': 'boolean'},
                     'ssl_ca_path': SCHEMA_PATH,
+                    'disable_warinings': {'type': 'boolean'},
                     'tests': {
                         'type': 'object',
                         'properties': {
@@ -353,7 +354,8 @@ class UploadEnvConfig(EnvConfig):
                     'keystone': SCHEMA_KEYSTONE,
                     'glance': SCHEMA_GLANCE,
                     'ssl_insecure': {'type': 'boolean'},
-                    'ssl_ca_path': SCHEMA_PATH
+                    'ssl_ca_path': SCHEMA_PATH,
+                    'disable_warinings': {'type': 'boolean'}
                 },
                 'required': ['keystone'],
                 "additionalProperties": False
