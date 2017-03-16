@@ -458,6 +458,17 @@ def test_osclient_get_flavor(mock_os):
     assert mock_os.nova.flavors.find.called
 
 
+def test_osclient_fuzzy_find_flavor_ok_flavor_id(mock_os):
+    assert mock_os.fuzzy_find_flavor('flavor')
+    assert mock_os.nova.flavors.find.call_args == mock.call(id='flavor')
+
+
+def test_osclient_fuzzy_find_flavor_ok_flavor_id(mock_os):
+    mock_os.nova.flavors.find.side_effect=[IOError, 'value']
+    assert mock_os.fuzzy_find_flavor('flavor')
+    assert mock_os.nova.flavors.find.call_args == mock.call(name='flavor')
+    assert mock_os.nova.flavors.find.call_count == 2
+
 @pytest.mark.parametrize("networks, regexp, output", [
     [{"internet_8.8.0.0/16": ["8.8.8.8"]}, "internet", "8.8.8.8"],
     [{"internet_8.8.0.0/16": ["8.8.8.8"], "local": ["192.168.1.1"]}, "internet", "8.8.8.8"],

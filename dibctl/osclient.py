@@ -385,6 +385,13 @@ class OSClient(object):
     def delete_keypair(self, key):
         self.nova.keypairs.delete(key)
 
+    def fuzzy_find_flavor(self, flavor):
+        try:
+            flavor = self.nova.flavors.find(id=flavor)
+        except:  # BAD! FIXME
+            flavor = self.nova.flavors.find(name=flavor)
+        return flavor
+
     def get_flavor(self, flavor):
         return self.nova.flavors.find(id=flavor)
 

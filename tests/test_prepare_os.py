@@ -12,6 +12,7 @@ def prepare_os():
     from dibctl import prepare_os
     return prepare_os
 
+
 @pytest.fixture
 def config():
     from dibctl import config
@@ -77,7 +78,6 @@ def mock_env_cfg(config):
 def test_init_normal(prepare_os, mock_image_cfg, mock_env_cfg):
     with mock.patch.object(prepare_os.osclient, "OSClient"):
         dt = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg)
-        assert dt.flavor_id == 'example'
         assert dt.delete_image is True
         assert dt.delete_instance is True
 
@@ -138,24 +138,15 @@ def test_upload_image_normal(prep_os):
     )
 
 
-def test_spawn_instance(prep_os):
-    prep_os.instance_name = sentinel.instance_name
-    prep_os.os_image = sentinel.os_image
-    prep_os.availability_zone = None
-    prep_os.config_drive = None
-    prep_os.flavor_id = sentinel.flavor_id
-    prep_os.os_key = mock.MagicMock(name=sentinel.key_name)
-    prep_os.nic_list = sentinel.nic_list
-    prep_os.spawn_instance(1)
-    assert prep_os.os.boot_instance.called
+def test_spawn_instance(prepare_os, mock_image_cfg, mock_env_cfg):
+    prep_os = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg)
+    with mock.patch.object(prepare_os.osclient, 'OSClient'):
+        prep_os.os_key = mock.MagicMock()
+        prep_os.spawn_instance(1)
+        assert prep_os.os.boot_instance.called
 
 
-def test_spawn_instance_no_config_drive(prepare_os):
-    img = {
-        'glance': {
-            'name': 'name'
-        }
-    }
+def test_spawn_instance_no_config_drive(prepare_os, mock_image_cfg, config):
     env = {
         'keystone': {
         },
@@ -163,20 +154,15 @@ def test_spawn_instance_no_config_drive(prepare_os):
             'flavor': 'mock_flavor'
         }
     }
+    prep_os = prepare_os.PrepOS(mock_image_cfg, config.Config(env))
     with mock.patch.object(prepare_os.osclient, "OSClient") as mock_os:
-        p = prepare_os.PrepOS(img, env)
-        p.os_key = mock.MagicMock()
-        p.connect()
-        p.spawn_instance(1)
+        prep_os.os_key = mock.MagicMock()
+        prep_os.connect()
+        prep_os.spawn_instance(1)
         assert mock_os.return_value.boot_instance.call_args[1]['config_drive'] is False
 
 
-def test_spawn_instance_no_config_drive2(prepare_os):
-    img = {
-        'glance': {
-            'name': 'name'
-        }
-    }
+def test_spawn_instance_no_config_drive2(prepare_os, mock_image_cfg, config):
     env = {
         'keystone': {
         },
@@ -185,20 +171,15 @@ def test_spawn_instance_no_config_drive2(prepare_os):
             'config_drive': False
         }
     }
+    prep_os = prepare_os.PrepOS(mock_image_cfg, config.Config(env))
     with mock.patch.object(prepare_os.osclient, "OSClient") as mock_os:
-        p = prepare_os.PrepOS(img, env)
-        p.os_key = mock.MagicMock()
-        p.connect()
-        p.spawn_instance(1)
+        prep_os.os_key = mock.MagicMock()
+        prep_os.connect()
+        prep_os.spawn_instance(1)
         assert mock_os.return_value.boot_instance.call_args[1]['config_drive'] is False
 
 
-def test_spawn_instance_with_drive(prepare_os):
-    img = {
-        'glance': {
-            'name': 'name'
-        }
-    }
+def test_spawn_instance_with_drive(prepare_os, mock_image_cfg, config):
     env = {
         'keystone': {
         },
@@ -207,11 +188,11 @@ def test_spawn_instance_with_drive(prepare_os):
             'config_drive': True
         }
     }
+    prep_os = prepare_os.PrepOS(mock_image_cfg, config.Config(env))
     with mock.patch.object(prepare_os.osclient, "OSClient") as mock_os:
-        p = prepare_os.PrepOS(img, env)
-        p.os_key = mock.MagicMock()
-        p.connect()
-        p.spawn_instance(1)
+        prep_os.os_key = mock.MagicMock()
+        prep_os.connect()
+        prep_os.spawn_instance(1)
         assert mock_os.return_value.boot_instance.call_args[1]['config_drive'] is True
 
 
@@ -451,6 +432,32 @@ def refactor_test_grand_test_for_context_manager_fail_not_delete(prepare_os, cap
                 raise Exception
     output = capsys.readouterr()[0]
     assert "Instance ip is" in output
+
+
+def test_guess_flavor_flavor(prepare_os, mock_image_cfg, mock_env_cfg, config):
+    p = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg)
+    with mock.patch.object(p, 'os') as mock_os:
+        mock_os.fuzzy_find_flavor.return_value = sentinel.flavor
+        assert p.guess_flavor(config.Config({'nova': {'flavor': 'x'}})) == sentinel.flavor
+
+
+def test_guess_flavor_flavor_id(prepare_os, mock_image_cfg, mock_env_cfg, config):
+    p = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg)
+    with mock.patch.object(p, 'os') as mock_os:
+        mock_os.get_flavor = lambda x: x
+        assert p.guess_flavor(config.Config({'nova': {'flavor_id': 'x'}})) == 'x'
+
+
+@pytest.mark.parametrize('bad', [
+    {},
+    {'nova': {}},
+    {'nova': {'flavor_id': 'x', 'flavor': 'x'}}
+])
+def test_guess_flavor_flavor_bad(prepare_os, mock_image_cfg, mock_env_cfg, config, bad):
+    p = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg)
+    with mock.patch.object(p, 'os'):
+        with pytest.raises(prepare_os.FlavorError):
+            assert p.guess_flavor(config.Config(bad))
 
 
 if __name__ == "__main__":

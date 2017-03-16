@@ -22,6 +22,10 @@ class PreparationError(EnvironmentError):
     pass
 
 
+class FlavorError(EnvironmentError):
+    pass
+
+
 class PrepOS(object):
 
     'Provides test-specific image/instance/keypair with timeouts and cleanup at errors'
@@ -103,13 +107,25 @@ class PrepOS(object):
         self.override_keypair = None
         self.keypair_was_removed = False
 
+    def guess_flavor(self, tenv_item):
+        self.connect()
+        just_flavor = tenv_item.get('nova.flavor')
+        flavor_id = tenv_item.get('nova.flavor_id')
+        if flavor_id and just_flavor:
+            raise FlavorError("Found both flavor and flavor_id, shouldn't happen")
+        if flavor_id:
+            return self.os.get_flavor(flavor_id)
+        elif just_flavor:
+            return self.os.fuzzy_find_flavor(just_flavor)
+        else:
+            raise FlavorError("Neither flavor nor flavor_id is present")
+
     def prepare_instance(self, tenv_item, delete_instance_flag):
         self.instance_name = self.make_test_name('test')
         self.os_instance = None
         self.config_drive = tenv_item['nova'].get('config_drive', False)
         self.availability_zone = tenv_item['nova'].get('availability_zone', None)
         self.delete_instance = delete_instance_flag
-        self.flavor_id = tenv_item['nova']['flavor']
         self.nic_list = list(self.prepare_nics(tenv_item['nova']))
         self.main_nic_regexp = tenv_item['nova'].get('main_nic_regexp', None)
         self.override_instance = None
@@ -160,11 +176,12 @@ class PrepOS(object):
 
     def spawn_instance(self, timeout_s):
         print("Creating test instance (time limit is %s s)" % timeout_s)
+        flavor = self.guess_flavor(self.test_environment)
         with timeout.timeout(timeout_s, self.error_handler):
             self.os_instance = self.os.boot_instance(
                 name=self.instance_name,
                 image_uuid=self.os_image,
-                flavor=self.flavor_id,
+                flavor=flavor,
                 key_name=self.os_key.name,
                 nic_list=self.nic_list,
                 config_drive=self.config_drive,
