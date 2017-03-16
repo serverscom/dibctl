@@ -355,7 +355,7 @@ def main(line=None):
         osclient.OpenStackError,
         config.ConfigError,
         prepare_os.InstanceError,
-        keystone_exceptions.ConnectTimeout,
+        keystone_exceptions.ClientException,
         IOError
     ) as e:
         print("Error: %s" % str(e))
