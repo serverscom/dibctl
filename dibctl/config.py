@@ -297,6 +297,7 @@ class TestEnvConfig(EnvConfig):
                         'properties': {
                             # 'api_version': {"type": number}
                             'flavor': {"type": "string"},
+                            'flavor_id': {"type": "string"},
                             "nics": {
                                 "type": "array",
                                 'minItems': 1,
@@ -319,7 +320,11 @@ class TestEnvConfig(EnvConfig):
                             "cleanup_timeout": SCHEMA_TIMEOUT
                         },
                         "additionalProperties": False,
-                        "required": ['flavor']
+                        #"required": ['flavor']
+                        'oneOf': [
+                            {"required": ['flavor']},
+                            {"required": ['flavor_id']}
+                        ]
                     },
                     'glance': SCHEMA_GLANCE,
                     'neutron': {'type': 'object'},
