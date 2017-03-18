@@ -270,11 +270,11 @@ class ImageConfig(Config):
         }
     }
 
-    def __init__(self, config_file=None, filename=None):
+    def __init__(self, config_file=None, override_filename=None):
         self.common_init(config_file)
-        if filename:
+        if override_filename:
             for img_key in self.config:
-                self.config[img_key].update(filename=filename)
+                self.config[img_key].update(filename=override_filename)
 
 
 class EnvConfig(Config):

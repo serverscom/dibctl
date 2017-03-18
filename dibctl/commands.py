@@ -75,7 +75,7 @@ class GenericCommand(object):
         if 'img-config' in self.options:
             self.image_config = config.ImageConfig(
                 config_file=self.args.images_config,
-                filename=self.args.filename
+                override_filename=self.args.filename
             )
         if 'upload-config' in self.options:
             self.upload_config = config.UploadEnvConfig(
