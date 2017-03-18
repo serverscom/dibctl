@@ -27,11 +27,12 @@ def test_image_conf(config_module, conf):
 
 
 @pytest.mark.parametrize('conf', gather_configs('test'))
-def test_test_conf(config_modules, conf):
+def test_test_conf(config_module, conf):
         with pytest.raises(config_module.InvaidConfigError):
-            config_module.ImageConfig(config_file=conf)
+            config_module.TestEnvConfig(config_file=conf)
 
 
 @pytest.mark.parametrize('conf', gather_configs('upload'))
-def test_upload_conf(conf):
-    assert conf
+def test_upload_conf(config_module, conf):
+    with pytest.raises(config_module.InvaidConfigError):
+        config_module.UploadEnvConfig(config_file=conf)
