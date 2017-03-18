@@ -1,0 +1,8 @@
+either:
+    keystone:
+     auth_url: http://foo.bar/
+    nova:
+        #flavor: 'foo'
+        flavor_id: 'foobar'
+        nics:
+            - net_id: 46f8cd68-0b64-11e7-a186-a39b80022edd

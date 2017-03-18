@@ -2,8 +2,6 @@
 import os
 import inspect
 import pytest
-import mock
-from mock import sentinel
 
 
 @pytest.fixture
@@ -29,8 +27,9 @@ def test_image_conf(config_module, conf):
 
 
 @pytest.mark.parametrize('conf', gather_configs('test'))
-def test_test_conf(conf):
-    assert conf
+def test_test_conf(config_modules, conf):
+        with pytest.raises(config_module.InvaidConfigError):
+            config_module.ImageConfig(config_file=conf)
 
 
 @pytest.mark.parametrize('conf', gather_configs('upload'))
