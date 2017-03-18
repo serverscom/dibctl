@@ -325,6 +325,23 @@ class ValidateCommand(GenericCommand):
         return 0
 
 
+class HelpCommand():
+    #  special class to handle help messages
+    def __init__(self, subparser):
+        self.parser = subparser.add_parser('help', help='display help')
+        self.parser.add_argument('name', nargs='?', help='Command to show help for')
+        self.subparsers = subparser
+        self.parser.set_defaults(command=self.command)
+
+    def command(self, args):
+        if args.name:
+            self.subparsers.choices[args.name].print_help()
+        else:
+            print("Use help [name] to show help for given command")
+            print("List of available commands:")
+            print("\n".join(list(self.subparsers.choices.iterkeys())))
+
+
 class Main(object):
     def __init__(self, command_line=None):
         self.parser = argparse.ArgumentParser()
@@ -338,6 +355,7 @@ class Main(object):
         ObsoleteCommand(subparsers)
         TransferCommand(subparsers)
         ValidateCommand(subparsers)
+        HelpCommand(subparsers)
         self.args = self.parser.parse_args(command_line)
 
     def run(self):
