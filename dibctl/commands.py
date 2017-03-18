@@ -374,6 +374,7 @@ def main(line=None):
         config.ConfigError,
         prepare_os.InstanceError,
         keystone_exceptions.ClientException,
+        osclient.DiscoveryError,
         IOError
     ) as e:
         print("Error: %s" % str(e))
