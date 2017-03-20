@@ -186,11 +186,6 @@ class TestCommand(GenericCommand):
             action='store_true',
             help="Open ssh shell to the server if some test failed and there is ssh config for image"
         )
-        self.parser.add_argument(
-            '--shell-only',
-            action='store_true',
-            help='Run ssh shell to instance directly, skipping tests'
-        )
 
     def _prepare(self):
         tests = self.image.get('tests', None)
@@ -200,7 +195,7 @@ class TestCommand(GenericCommand):
             )
         env_label = self.args.envlabel or tests.get('environment_name', None)
         if not env_label:
-            raise TestEnvironmentNotFoundError('No environemnt name for tests were no given in config or command line')
+            raise TestEnvironmentNotFoundError('No environment name for tests were no given in config or command line')
         self.test_env = self.test_env_config[env_label]
 
     def _command(self):
@@ -216,7 +211,7 @@ class TestCommand(GenericCommand):
         if self.args.instance:
             dt.reconfigure_for_existing_instance(self.args.instance, self.args.private_key_file)
         try:
-            status = dt.process(shell_only=self.args.shell_only, shell_on_errors=self.args.shell)
+            status = dt.process(shell_only=False, shell_on_errors=self.args.shell)
         except do_tests.TestError as e:
             print("Error while testing: %s" % e)
             return 1
