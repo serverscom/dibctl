@@ -226,6 +226,59 @@ class TestCommand(GenericCommand):
             return 1
 
 
+class ShellCommand(GenericCommand):
+    name = 'shell'
+    help = 'Open shell to test instance'
+    options = ['imagelabel', 'input', 'img-config', 'test-env-config']
+
+    def add_options(self):
+        self.parser.add_argument(
+            '--environment',
+            dest='envlabel',
+            help='Use given environment for tests (override label from images.yaml)'
+        )
+        self.parser.add_argument(
+            '--use-existing-image',
+            help='Skip upload and use given image uuid for test (will not be removed after test)',
+            dest='uuid'
+        )
+        self.parser.add_argument(
+            '--use-existing-instance',
+            help='Skip upload/boot and use given instance for test (will not be removed after test)',
+            dest='instance'
+        )
+        self.parser.add_argument(
+            '--private-key-file',
+            help='Use private key file for tests (existing instance only)',
+            dest='private_key_file'
+        )
+
+    def _prepare(self):
+        env_label = self.image.get('tests.environment_name', self.args.envlabel)
+        if not env_label:
+            raise TestEnvironmentNotFoundError('No environemnt name for tests were no given in config or command line')
+        self.test_env = self.test_env_config[env_label]
+
+    def _command(self):
+        self._prepare()
+        dt = do_tests.DoTests(
+            self.image,
+            test_env=self.test_env,
+            image_uuid=self.args.uuid,
+            upload_only=False,
+            keep_failed_image=False,
+            keep_failed_instance=False
+        )
+        if self.args.instance:
+            dt.reconfigure_for_existing_instance(self.args.instance, self.args.private_key_file)
+        try:
+            status = dt.process(shell_only=True, shell_on_errors=False)
+        except do_tests.TestError as e:
+            print("Error on ssh: %s" % e)
+            return 1
+        return status
+
+
 class UploadCommand(GenericCommand):
     name = 'upload'
     help = 'Upload image'
@@ -350,6 +403,7 @@ class Main(object):
         subparsers = self.parser.add_subparsers(title='commands')
         BuildCommand(subparsers)
         TestCommand(subparsers)
+        ShellCommand(subparsers)
         UploadCommand(subparsers)
         RotateCommand(subparsers)
         ObsoleteCommand(subparsers)
