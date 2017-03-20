@@ -5,6 +5,8 @@ import novaclient.client
 import re
 from functools import partial
 import requests
+import urllib3
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import simplejson
 import copy
 
@@ -176,9 +178,13 @@ class OSClient(object):
         neutron_data,
         overrides={},
         ca_path='/etc/ssl/certs',
-        insecure=False
+        insecure=False,
+        disable_warnings=False
     ):
 
+        if disable_warnings:
+            requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+            urllib3.disable_warnings()
         self._set_api_version(dict(keystone_data), insecure)
         self.auth = self._prepare_auth(dict(keystone_data), overrides)
         self.session = self.create_session(self.api_version, self.auth, insecure)
@@ -238,6 +244,8 @@ class OSClient(object):
     def _prepare_auth(self, keystone_data, overrides):
         filtered_overrides = {k: v for k, v in overrides.items() if k.startswith('OS_')}
         creds = {}
+        for name in filtered_overrides.keys():
+            print("Found %s in the environment, will use it" % name)
         for target, cfg in self.OPTION_NAMINGS.iteritems():
             creds.update(self._get_generic_field(keystone_data, filtered_overrides, target, cfg))
         return self.map_creds(creds, self.api_version, self.OPTIONS_MAPPING)
@@ -378,6 +386,13 @@ class OSClient(object):
 
     def delete_keypair(self, key):
         self.nova.keypairs.delete(key)
+
+    def fuzzy_find_flavor(self, flavor):
+        try:
+            flavor = self.nova.flavors.find(id=flavor)
+        except:  # BAD! FIXME
+            flavor = self.nova.flavors.find(name=flavor)
+        return flavor
 
     def get_flavor(self, flavor):
         return self.nova.flavors.find(id=flavor)

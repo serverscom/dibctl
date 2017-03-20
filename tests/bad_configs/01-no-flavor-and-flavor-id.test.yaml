@@ -1,0 +1,9 @@
+both_flavor_and_flavor_id:
+  keystone:
+    auth_url: http://auth.example.com/
+  nova:
+    flavor_id: '30'
+    flavor: '30'
+    nics:
+    - net_id: fe2acef0-4383-4432-8fca-f9e23f835dd5
+

@@ -75,7 +75,7 @@ class GenericCommand(object):
         if 'img-config' in self.options:
             self.image_config = config.ImageConfig(
                 config_file=self.args.images_config,
-                filename=self.args.filename
+                override_filename=self.args.filename
             )
         if 'upload-config' in self.options:
             self.upload_config = config.UploadEnvConfig(
@@ -100,7 +100,8 @@ class GenericCommand(object):
                 neutron_data={},
                 overrides=os.environ,
                 ca_path=self.upload_env.get('ssl_ca_path', '/etc/ssl/cacerts'),
-                insecure=self.upload_env.get('ssl_insecure', False)
+                insecure=self.upload_env.get('ssl_insecure', False),
+                disable_warnings=self.upload_env.get('disable_warnings', False)
             )
         return self._command()
 
@@ -324,6 +325,23 @@ class ValidateCommand(GenericCommand):
         return 0
 
 
+class HelpCommand():
+    #  special class to handle help messages
+    def __init__(self, subparser):
+        self.parser = subparser.add_parser('help', help='display help')
+        self.parser.add_argument('name', nargs='?', help='Command to show help for')
+        self.subparsers = subparser
+        self.parser.set_defaults(command=self.command)
+
+    def command(self, args):
+        if args.name:
+            self.subparsers.choices[args.name].print_help()
+        else:
+            print("Use help [name] to show help for given command")
+            print("List of available commands:")
+            print("\n".join(list(self.subparsers.choices.iterkeys())))
+
+
 class Main(object):
     def __init__(self, command_line=None):
         self.parser = argparse.ArgumentParser()
@@ -337,6 +355,7 @@ class Main(object):
         ObsoleteCommand(subparsers)
         TransferCommand(subparsers)
         ValidateCommand(subparsers)
+        HelpCommand(subparsers)
         self.args = self.parser.parse_args(command_line)
 
     def run(self):
@@ -354,7 +373,8 @@ def main(line=None):
         osclient.OpenStackError,
         config.ConfigError,
         prepare_os.InstanceError,
-        keystone_exceptions.ConnectTimeout,
+        keystone_exceptions.ClientException,
+        osclient.DiscoveryError,
         IOError
     ) as e:
         print("Error: %s" % str(e))

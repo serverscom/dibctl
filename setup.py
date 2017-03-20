@@ -15,7 +15,7 @@ class PyTest(Command):
     def run(self):
         import pytest
         print("Running unit tests")
-        error_code = pytest.main(['build', '--ignore', 'build/doctest'])
+        error_code = pytest.main(['build', '--ignore', 'build/doctest', '--ignore', 'build/tests/test_bad_configs.py'])
         if error_code:
             sys.exit(error_code)
         print("Running integration tests for docs examples")
@@ -43,8 +43,10 @@ setup(
         'python-novaclient',
         'pytest-timeout',
         'jsonschema',
-        'pytest' # not a mistake - we use pytest as a part of the app
-        'semantic_version'
+        'pytest', # not a mistake - we use pytest as a part of the app
+        'semantic_version',
+        'requests',
+        'urllib3'
     ],
     entry_points="""
         [console_scripts]

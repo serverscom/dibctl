@@ -50,7 +50,7 @@ def test_imageconfig_filename(config):
     mock_config = mock.mock_open(read_data='{"image1":{"filename": "bad"}, "image2":{"filename":"bad"}}')
     with mock.patch.object(config, "open", mock_config):
         with mock.patch.object(config.os.path, "isfile", return_value=True):
-            conf = config.ImageConfig(filename='new')
+            conf = config.ImageConfig(override_filename='new')
             assert conf.get('image1') == {'filename': 'new'}
             assert conf.get('image2') == {'filename': 'new'}
 

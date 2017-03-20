@@ -270,11 +270,11 @@ class ImageConfig(Config):
         }
     }
 
-    def __init__(self, config_file=None, filename=None):
+    def __init__(self, config_file=None, override_filename=None):
         self.common_init(config_file)
-        if filename:
+        if override_filename:
             for img_key in self.config:
-                self.config[img_key].update(filename=filename)
+                self.config[img_key].update(filename=override_filename)
 
 
 class EnvConfig(Config):
@@ -297,6 +297,7 @@ class TestEnvConfig(EnvConfig):
                         'properties': {
                             # 'api_version': {"type": number}
                             'flavor': {"type": "string"},
+                            'flavor_id': {"type": "string"},
                             "nics": {
                                 "type": "array",
                                 'minItems': 1,
@@ -319,12 +320,17 @@ class TestEnvConfig(EnvConfig):
                             "cleanup_timeout": SCHEMA_TIMEOUT
                         },
                         "additionalProperties": False,
-                        "required": ['flavor']
+                        #"required": ['flavor']
+                        'oneOf': [
+                            {"required": ['flavor']},
+                            {"required": ['flavor_id']}
+                        ]
                     },
                     'glance': SCHEMA_GLANCE,
                     'neutron': {'type': 'object'},
                     'ssl_insecure': {'type': 'boolean'},
                     'ssl_ca_path': SCHEMA_PATH,
+                    'disable_warnings': {'type': 'boolean'},
                     'tests': {
                         'type': 'object',
                         'properties': {
@@ -353,7 +359,8 @@ class UploadEnvConfig(EnvConfig):
                     'keystone': SCHEMA_KEYSTONE,
                     'glance': SCHEMA_GLANCE,
                     'ssl_insecure': {'type': 'boolean'},
-                    'ssl_ca_path': SCHEMA_PATH
+                    'ssl_ca_path': SCHEMA_PATH,
+                    'disable_warnings': {'type': 'boolean'}
                 },
                 'required': ['keystone'],
                 "additionalProperties": False

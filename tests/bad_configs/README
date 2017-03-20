@@ -1,0 +1,4 @@
+This is examples of config files which should be threated as invalid.
+None of them should pass validation. They are used to ensure that
+config schemas are actually not only permissive (doctests) but also
+catches bad examples.

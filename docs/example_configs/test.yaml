@@ -1,6 +1,7 @@
 example_env:
   ssl_insecure: True
   ssl_ca_path: /etc/ssl/certs
+  disable_warnings: False
   keystone:
     api_version: 2
     #username: 'will be taken from OS_USERNAME enviroment variable'
@@ -13,7 +14,7 @@ example_env:
     # api_version: 2 #not implemented yet
     # create_timeout: 10 #not implemented yet
     # wait_for_active_timeout: 900 #not implemented yet
-    flavor: "30" # id, not name (TODO)
+    flavor: "30" # fuzzy search, try use it as id, then as name. Use flavor_id to use only flavor_id
     nics:
      - net_id: fe2acef0-4383-4432-8fca-f9e23f835dd5
        #fixed_ip: '192.168.0.1' # not implemented yet
@@ -44,3 +45,10 @@ example_env:
       key2: value2
     #tag:
     # - tag1
+example_env2:
+  keystone:
+    auth_url: http://auth.example.com/
+  nova:
+    flavor_id: '30'
+    nics:
+    - net_id: fe2acef0-4383-4432-8fca-f9e23f835dd5

@@ -5,6 +5,8 @@ non_production_environment:
     username: mock_user
     password: mock_password
   ssl_insecure: true
+  ssl_ca_path: /etc/ssl/certs
+  disable_warnings: True
 
 azure-us-1:
   keystone:

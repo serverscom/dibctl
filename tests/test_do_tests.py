@@ -425,6 +425,26 @@ def test_open_shell_no_ssh_config(do_tests):
         dt.open_shell(None, 'reason')
 
 
+@pytest.mark.parametrize('kins', [True, False])
+@pytest.mark.parametrize('kimg', [True, False])
+def test_check_if_keep_stuff_after_fail_code_coverage(do_tests, kins, kimg):
+    env = {
+        'nova': {
+            'flavor': 'some flavor'
+        },
+    }
+    image = {
+        'tests': {
+            'tests_list': [],
+            'wait_for_port': 22
+        }
+    }
+    dt = do_tests.DoTests(image, env)
+    dt.keep_failed_instance = kins
+    dt.keep_failed_image = kimg
+    dt.check_if_keep_stuff_after_fail(mock.MagicMock())
+
+
 if __name__ == "__main__":
     ourfilename = os.path.abspath(inspect.getfile(inspect.currentframe()))
     currentdir = os.path.dirname(ourfilename)
