@@ -1,12 +1,24 @@
-dibctl (0.4.9) UNRELEASED; urgency=medium
+dibctl (0.5.0) xenial; urgency=medium
+
+  * Restore reporting if overrdes from environment are in use (e.g. OS_USERNAME)
+  * Better handling for timeout/connection errors
+  * Add help command
+  * Add flavor name support in config. Flavor is fuzzy, flavor_id is strict.
+  * disable_warnings in test.yaml/upload.yaml (disable SSL warnings)
+  * Few typos
+
+ -- George Shuklin <george.shuklin@gmail.com>  Mon, 20 Mar 2017 12:01:57 +0200
+
+dibctl (0.4.9ubuntu1) xenial; urgency=medium
 
   * Now reports for ssh are printed if instance is not removed
   * Better handling of connection timeouts
   * Better handling for IOErrors
   * Add support for dib.min_version/dib.max_version for image config
   * Fix dib.cli_options (wasn't allowed in config Schema)
+  * 0.5.0
 
- -- George Shuklin <george.shuklin@gmail.com>  Wed, 15 Mar 2017 13:23:12 +0200
+ -- George Shuklin <george.shuklin@gmail.com>  Mon, 20 Mar 2017 12:00:27 +0200
 
 dibctl (0.4.8) xenial; urgency=medium
 
