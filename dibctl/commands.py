@@ -421,6 +421,7 @@ def main(line=None):
         osclient.CredNotFound,
         osclient.OpenStackError,
         config.ConfigError,
+        config.NotFoundInConfigError,
         prepare_os.InstanceError,
         keystone_exceptions.ClientException,
         osclient.DiscoveryError,
