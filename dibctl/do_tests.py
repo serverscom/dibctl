@@ -1,7 +1,6 @@
 import prepare_os
 import pytest_runner
 import shell_runner
-import ssh
 import config
 
 
@@ -104,7 +103,7 @@ class DoTests(object):
         success = True
 
         for test in self.tests_list:
-            if self.run_test(ssh, test, prep_os, self.environment_variables) is not True:
+            if self.run_test(self.ssh, test, prep_os, self.environment_variables) is not True:
                 self.check_if_keep_stuff_after_fail(prep_os)
                 success = False
                 break

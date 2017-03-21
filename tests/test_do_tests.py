@@ -332,6 +332,7 @@ def test_process_all_tests_fail(do_tests, capsys, Config):
         }
     }
     dt = do_tests.DoTests(Config(image), Config(env))
+    dt.ssh = mock.MagicMock()
     with mock.patch.object(do_tests.pytest_runner, "runner") as runner:
         runner.side_effect = [False, ValueError("Shouldn't be called")]
         with mock.patch.object(do_tests.prepare_os, "PrepOS") as mock_prep_os_class:
@@ -356,6 +357,7 @@ def test_process_all_tests_fail_open_shell(do_tests, Config):
         }
     }
     dt = do_tests.DoTests(Config(image), Config(env))
+    dt.ssh = mock.MagicMock()
     with mock.patch.object(do_tests.pytest_runner, "runner") as runner:
         runner.side_effect = [False, ValueError("Shouldn't be called")]
         with mock.patch.object(do_tests.prepare_os, "PrepOS") as mock_prep_os_class:
@@ -383,6 +385,7 @@ def test_run_all_tests(do_tests, result, Config):
     }
     with mock.patch.object(do_tests.DoTests, "run_test", return_value=result):
         dt = do_tests.DoTests(Config(image), Config(env))
+        dt.ssh = mock.MagicMock()
         assert dt.run_all_tests(mock.MagicMock()) is result
 
 
