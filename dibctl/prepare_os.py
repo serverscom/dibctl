@@ -304,10 +304,11 @@ class PrepOS(object):
             self.prepare()
             return self
         except Exception as e:
-            print("Exception while preparing instance for test: %s" % e)
-            print("Will print full trace after cleanup")
-            self.cleanup()
-            print("Continue tracing on original error: %s" % e)
+            if not isinstance(e, TimeoutError):
+                print("Exception while preparing instance for test: %s" % e)
+                print("Will print full trace after cleanup")
+                self.cleanup()
+                print("Continue tracing on original error: %s" % e)
             raise
 
     def __exit__(self, e_type, e_val, e_tb):
