@@ -303,7 +303,7 @@ class PrepOS(object):
         try:
             self.prepare()
             return self
-        except Exception as e:
+        except BaseException as e:
             if not isinstance(e, TimeoutError):
                 print("Exception while preparing instance for test: %s" % e)
                 print("Will print full trace after cleanup")
@@ -321,7 +321,7 @@ class PrepOS(object):
         env = {
             'instance_uuid': str(self.os_instance.id),
             'instance_name': str(self.instance_name).lower(),
-            'flavor_id': str(self.flavor_id),
+            'flavor_id': str(flavor.id),
             'main_ip': str(self.ip),
             # 'ssh_private_key': str(self.os_key_private_file),  REFACTOR!
             'flavor_ram': str(flavor.ram),
