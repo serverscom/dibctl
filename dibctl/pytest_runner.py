@@ -18,7 +18,7 @@ class DibCtlPlugin(object):
 
     @pytest.fixture
     def flavor(self, request):
-        return self.tos.flavor()
+        return self.tos.flavor
 
     def flavor_meta(self, request):
         return self.tos.flavor().get_keys()
