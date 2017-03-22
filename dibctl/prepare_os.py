@@ -177,6 +177,7 @@ class PrepOS(object):
     def spawn_instance(self, timeout_s):
         print("Creating test instance (time limit is %s s)" % timeout_s)
         flavor = self.guess_flavor(self.test_environment)
+        self.flavor = flavor
         with timeout.timeout(timeout_s, self.error_handler):
             self.os_instance = self.os.boot_instance(
                 name=self.instance_name,
@@ -317,28 +318,24 @@ class PrepOS(object):
         # self.report_if_fail()
 
     def get_env_config(self):
-        flavor = self.flavor()
         env = {
             'instance_uuid': str(self.os_instance.id),
             'instance_name': str(self.instance_name).lower(),
-            'flavor_id': str(flavor.id),
+            'flavor_id': str(self.flavor.id),
             'main_ip': str(self.ip),
             # 'ssh_private_key': str(self.os_key_private_file),  REFACTOR!
-            'flavor_ram': str(flavor.ram),
-            'flavor_name': str(flavor.name),
-            'flavor_vcpus': str(flavor.vcpus),
-            'flavor_disk': str(flavor.disk)
+            'flavor_ram': str(self.flavor.ram),
+            'flavor_name': str(self.flavor.name),
+            'flavor_vcpus': str(self.flavor.vcpus),
+            'flavor_disk': str(self.flavor.disk)
         }
         for num, ip in enumerate(self.ips()):
             env.update({'ip_' + str(num + 1): str(ip)})
         for num, iface in enumerate(self.network()):
             env.update({'iface_' + str(num + 1) + '_info': json.dumps(iface._info)})
-        for meta_name, meta_value in flavor.get_keys().items():
+        for meta_name, meta_value in self.flavor.get_keys().items():
             env.update({'flavor_meta_' + str(meta_name): str(meta_value)})
         return env
-
-    def flavor(self):
-        return self.os.get_flavor(self.flavor_id)
 
     def ips(self):
         result = []

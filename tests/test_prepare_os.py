@@ -359,11 +359,12 @@ def test_get_env_config(prepare_os, prep_os):
     flavor.name = sentinel.name
     flavor.vcpus = sentinel.vcpus
     flavor.disk = sentinel.disk
+    flavor.id = sentinel.flavor_id
     flavor.get_keys.return_value = {
         sentinel.name1: sentinel.value1,
         sentinel.name2: sentinel.value2
     }
-    prep_os.os.get_flavor.return_value = flavor
+    prep_os.flavor = flavor
     env = prep_os.get_env_config()
     assert env['instance_uuid'] == 'sentinel.uuid'
     assert env['instance_name'] == 'name'
