@@ -412,7 +412,7 @@ def test_open_shell(do_tests, retval, keep):
     mock_ssh.shell.return_value = retval
     dt.open_shell(mock_ssh, 'reason')
     assert dt.keep_failed_instance == keep
-    assert 'exit 42' in mock_ssh.shell.call_args[0][1]
+    assert 'exit 42' in mock_ssh.shell.call_args[0][2]
 
 
 def test_open_shell_no_ssh_config(do_tests):

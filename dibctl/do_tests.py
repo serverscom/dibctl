@@ -2,6 +2,7 @@ import prepare_os
 import pytest_runner
 import shell_runner
 import config
+import os
 
 
 class TestError(EnvironmentError):
@@ -151,7 +152,7 @@ class DoTests(object):
             if not result:
                 print("Some tests failed")
                 if shell_on_errors:
-                    self.open_shell(prep_os.ssh, 'There was an test error and asked to open --shell')
+                    self.open_shell(prep_os.ssh, os.environ, 'There was an test error and asked to open --shell')
                     self.check_if_keep_stuff_after_fail(prep_os)
                     return result
             else:
@@ -162,7 +163,7 @@ class DoTests(object):
         if not ssh:
             raise TestError('Asked to open ssh shell to server, but there is no ssh section in the image config')
         message = reason + '\nUse "exit 42" to keep instance\n'
-        status = ssh.shell({}, message)
+        status = ssh.shell({}, os.environ, message)
         if status == 42:  # magical constant!
             self.keep_failed_instance = True
         return status
