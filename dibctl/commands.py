@@ -8,6 +8,7 @@ import do_tests
 import prepare_os
 import version
 from keystoneauth1 import exceptions as keystone_exceptions
+from novaclient import exceptions as novaclient_exceptions
 
 
 class PrematureExitError(SystemExit):
@@ -424,6 +425,7 @@ def main(line=None):
         config.NotFoundInConfigError,
         prepare_os.InstanceError,
         keystone_exceptions.ClientException,
+        novaclient_exceptions.ClientException,
         osclient.DiscoveryError,
         IOError
     ) as e:
