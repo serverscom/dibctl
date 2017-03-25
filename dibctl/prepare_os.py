@@ -248,25 +248,25 @@ class PrepOS(object):
     def cleanup_instance(self):
         self._cleanup(
             'instance',
-            self.os_instance,
-            self.delete_instance,
-            self.os.delete_instance
+            obj=self.os_instance,
+            flag=self.delete_instance,
+            call=self.os.delete_instance
         )
 
     def cleanup_image(self):
         self._cleanup(
             'image',
-            self.os_image,
-            self.delete_image,
-            self.os.delete_image
+            obj=self.os_image,
+            flag=self.delete_image,
+            call=self.os.delete_image
         )
 
     def cleanup_ssh_key(self):
         self._cleanup(
             'ssh key',
-            self.os_key,
-            self.delete_keypair,
-            self.os.delete_keypair
+            obj=self.os_key,
+            flag=self.delete_keypair,
+            call=self.os.delete_keypair
         )
         if self.ssh:
             if self.delete_keypair:
