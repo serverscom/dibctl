@@ -294,6 +294,7 @@ class UploadCommand(GenericCommand):
         self.public = self.glance_info.get('public', False)
 
     def upload_to_glance(self):
+        print("Uploading image")
         self.image = self.os.upload_image(
             self.name,
             self.filename,
