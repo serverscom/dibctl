@@ -75,10 +75,18 @@ def mock_env_cfg(config):
     return env
 
 
+
 def test_init_normal(prepare_os, mock_image_cfg, mock_env_cfg):
     with mock.patch.object(prepare_os.osclient, "OSClient"):
         dt = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg)
         assert dt.delete_image is True
+        assert dt.delete_instance is True
+
+
+def test_init_override_image(prepare_os, mock_image_cfg, mock_env_cfg):
+    with mock.patch.object(prepare_os.osclient, "OSClient"):
+        dt = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg, override_image=sentinel.override_image)
+        assert dt.delete_image is False
         assert dt.delete_instance is True
 
 
