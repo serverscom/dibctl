@@ -223,6 +223,13 @@ If you want to use python-based test you will also need:
 - pytest-testinfra (it's new library and it may not be in your distro yet, use pip
 or build your onw package).
 
+Note: Due to bug [1] Ubuntu Xenial's bug, you may recieve pytest warnings when
+using pytest runner. Ubuntu's python-pytest-timeout package is obsolete. 
+Those warnings are harmless, but if you want to get rid of them, upgrade 
+python-pytest-timeout package to the newer one.
+
+[1] https://bugs.launchpad.net/ubuntu/+source/python-pytest-timeout/+bug/1676301
+
 TODO: set up ppa with dependencies
 
 Configuration
