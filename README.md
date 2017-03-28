@@ -154,7 +154,9 @@ Dibctl uses following concepts:
 Image lifecycle
 ---------------
 
-`BUILD -> TEST -> UPLOAD -> OBSOLETE -> ROTATE`
+`BUILD -> TEST -> UPLOAD and OBSOLETE -> ROTATE`
+
+Any of those stages is optional an may be ommited.
 
 ## Build stage
 It uses information from corresponding entry in images.yaml to execute diskimage-builder.
@@ -194,11 +196,11 @@ Obsolete image: If image is in the same tenant and have same glance name as fres
 it is obsolete. Obsoleted images recieve specific rename pattern (usually adds 'Obsolete ' before
 name), and specific set of properties.
 
-Obsoletion may be performed manually by using 'obsolete' command.
+Obsoletion may be performed manually by 'obsolete' command.
 
 ## Rotation stage
-If obsolete image is no longer used by any instances in region it's called unused obsoleted
-image and may be removed. That is done by 'rotate' command.
+If obsolete image is no longer used by any instances in installation it's called 'unused obsoleted
+image' and may be safely removed. That is done by 'rotate' command.
 
 Please note, rotation requires administrative privilege (dibctl needs to see all instances
 in the region). Normally it's performed periodically by administrator itself, without
@@ -279,8 +281,8 @@ purposes:
 This file contains configuration for upload.
 
 
-Variable ordering
------------------
+Variable override ordering
+--------------------------
 When dibctl performs tests or uploads it combines
 information from `images.yaml` and correspoding
 environment config (`test.yaml` or `upload.yaml`).
