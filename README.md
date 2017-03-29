@@ -312,6 +312,12 @@ For all other variables image has priority over environment.
 There are examples of configuration files in
 `docs/example_configs/` folder of this repository.
 
+Writing a test
+==============
+
+General conceptions for good py.test test are applied:
+- each test checks only one thing
+- use assert/raise to signal errors
 
 * `dibctl build imagelabel [-o filename] [--images-config images.yaml]`
   Build given image
