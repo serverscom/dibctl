@@ -3,8 +3,9 @@ Dibctl
 
 Dibctl is a software for image building, testing and  uploading.
 It uses diskimage-builder to build images, pytest and testinfra
-to test them and it provide a consistent way to upload tested
-images to multiple Openstack installations.
+to test them. It also provides a consistent way to upload tested
+images to multiple Openstack installations and manage previous
+copies lifecycle.
 
 Dibctl uses configuration files to describe how to build image,
 which name it should have after upload, what properties (if any)
@@ -12,57 +13,64 @@ should be set for a given image. Image configuration file also
 provide list of tests for each image, plus name of environment
 where tests should happen.
 
-Testing happens under directives from test.yaml. It contains
+Testing happens under directives from `test.yaml`. It contains
 information how to run test instance: region authorization URL,
 credentials, flavor, network list, availability zone, security
 groups and other nova parameters.
 
-Third configuration file provides information for uploading into
-any number of Openstack installations.
+Third configuration file (`upload.yaml`) provides information
+for uploading into any number of Openstack installations.
 
 Testing frameworks
 ------------------
-Dibctl provides few testing frameworks. Each of the frameworks
-provided with full information about image, it properties, created
-instance (it flavor, network settings, credentials to access instance
-SSH, etc).
+Dibctl provides few testing frameworks. Each of the frameworks provided 
+with full information about image, it properties, created instance 
+(it flavor, network settings, credentials to access instance SSH, etc).
 Test frameworks:
 - 'shell': each test is a simple shell script, which is executed
 outside test VM
-- 'ssh':each test is a simple shell script, which is executed
-inside guest machine (not yet implemented)
 - 'pytest' - tests are implemented by means of py.test, with optional
 support for testinfra (python library for server verification, similar to
 ServerSpec). Dibctl provides wast set of fixtures with all available
 information about image and instance, plus few handy operations
 (wait\_for\_port), and direct access to nova object for testing instance
 reactions on nova operations (hard reboot, rebuild, etc).
+- 'ssh': each test is a simple shell script, which is executed
+inside guest machine (not yet implemented)
+- 'image': passive check of image content (not implemented yet)
 
-Dibctl comes with some generic (applicable to any image of any provider).
+Dibctl comes with some generic tests (which should be applicable
+to any image of any provider).
 
-Examples of test shpped with dibctl:
+Few examples:
 - Does instance resize rootfs up to a flavor size at a first boot?
-- Does it receives IP addresses on all attached interfaces?
-- Does DNS set up properly?
+- Does it receive/configure IP addresses on all attached interfaces?
+- Does DNS resolver set up properly?
 - Does hostname match the name of the instance?
 - Does instance still work after reboot?
 - Can user install nginx (apache) and get access to http port 80?
 
 Workflow
 --------
-Dibctl was created to operates on following workflow:
-Beforhand operators describes configurations. After that, each image is:
-- build
-- test: new instance is spawned from tested image, and corresponding
-  test scripts are called. If they all report success, images passes
-  the test.
-- if test was successful, uploaded too one or more installations of Openstack.
+After operators describes configurations, following workflow excepted:
+- build: create new image py means of diskimage-builder
+- test: new instance is spawned from image under test, and corresponding
+  tests are called. If they all report success, images passes the test.
+- upload: If test was successful, the image is uploaded to to one or more
+  installations of Openstack.
 - Older copies of images marked as obsolete and removed (after they become
   unsed - see description below).
 
 That process may be repeated on regular basis via cron or CI server (Jenkins?).
-Comprehensive testing assures that image that passed the test may be
-uploaded safely in automated manner.
+Comprehensive testing assures that image that passed the test may be uploaded
+safely in automated manner.
+
+At the same time dibctl may be used by operators from command line and it
+provides some means of interfactive debug of faulty images:
+- `--shell` option allow to open shell to instance which failed some tests
+- `--keep-failed-instance` allow to keep instance alive (normally it should
+  be deleted at the end of the test)
+- `shell` command allow open shell without running any tests.
 
 Motivational introduction
 -------------------------
@@ -154,7 +162,9 @@ Dibctl uses following concepts:
 Image lifecycle
 ---------------
 
-`BUILD -> TEST -> UPLOAD -> OBSOLETE -> ROTATE`
+`BUILD -> TEST -> UPLOAD and OBSOLETE -> ROTATE`
+
+Any of those stages is optional an may be ommited.
 
 ## Build stage
 It uses information from corresponding entry in images.yaml to execute diskimage-builder.
@@ -194,11 +204,11 @@ Obsolete image: If image is in the same tenant and have same glance name as fres
 it is obsolete. Obsoleted images recieve specific rename pattern (usually adds 'Obsolete ' before
 name), and specific set of properties.
 
-Obsoletion may be performed manually by using 'obsolete' command.
+Obsoletion may be performed manually by 'obsolete' command.
 
 ## Rotation stage
-If obsolete image is no longer used by any instances in region it's called unused obsoleted
-image and may be removed. That is done by 'rotate' command.
+If obsolete image is no longer used by any instances in installation it's called 'unused obsoleted
+image' and may be safely removed. That is done by 'rotate' command.
 
 Please note, rotation requires administrative privilege (dibctl needs to see all instances
 in the region). Normally it's performed periodically by administrator itself, without
@@ -279,8 +289,8 @@ purposes:
 This file contains configuration for upload.
 
 
-Variable ordering
------------------
+Variable override ordering
+--------------------------
 When dibctl performs tests or uploads it combines
 information from `images.yaml` and correspoding
 environment config (`test.yaml` or `upload.yaml`).
