@@ -156,7 +156,7 @@ class PrepOS(object):
 
     @staticmethod
     def make_test_name(bare_name):
-        return 'DIBCTL-%s-%s' % (bare_name, str(uuid.uuid4()))
+        return 'DIBCTL-%s' % (str(uuid.uuid4()),)
 
     def init_keypair(self):
         with timeout.timeout(self.keypair_timeout, self.error_handler):

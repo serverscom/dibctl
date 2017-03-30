@@ -113,9 +113,9 @@ def test_prepare_ssh_normal(prepare_os, config, mock_image_cfg, mock_env_cfg):
 
 
 @pytest.mark.parametrize("name, output", [
-    ["Ubuntu 16.04 x86_64", "DIBCTL-Ubuntu 16.04 x86_64-deadbeef-dead-400-000-79880364a956"],
-    ["key", "DIBCTL-key-deadbeef-dead-400-000-79880364a956"],
-    ["test", "DIBCTL-test-deadbeef-dead-400-000-79880364a956"]
+    ["Ubuntu 16.04 x86_64", "DIBCTL-deadbeef-dead-400-000-79880364a956"],
+    ["key", "DIBCTL-deadbeef-dead-400-000-79880364a956"],
+    ["test", "DIBCTL-deadbeef-dead-400-000-79880364a956"]
 ])
 def test_make_test_name(prepare_os, name, output):
     with mock.patch.object(prepare_os.uuid, "uuid4", return_value='deadbeef-dead-400-000-79880364a956'):
