@@ -152,7 +152,7 @@ class DoTests(object):
             if not result:
                 print("Some tests failed")
                 if shell_on_errors:
-                    self.open_shell(prep_os.ssh, os.environ, 'There was an test error and asked to open --shell')
+                    self.open_shell(prep_os.ssh, 'There was an test error and asked to open --shell')
                     self.check_if_keep_stuff_after_fail(prep_os)
                     return result
             else:
