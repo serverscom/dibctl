@@ -163,7 +163,7 @@ class DoTests(object):
         if not ssh:
             raise TestError('Asked to open ssh shell to server, but there is no ssh section in the image config')
         message = reason + '\nUse "exit 42" to keep instance\n'
-        status = ssh.shell({}, os.environ, message)
+        status = ssh.shell(os.environ, message)
         if status == 42:  # magical constant!
             self.keep_failed_instance = True
         return status
