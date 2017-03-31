@@ -481,3 +481,99 @@ Example for the test below has timeout value 15:
 def test_hostname(ssh_backend, instance):
     assert ssh_backend.SystemInfo.hostname == instance.name.lower()
 ```
+
+Getting started
+---------------
+There are two distinct workflows you may follow:
+- git-based CI/CD style (git style)
+- system-wide configuration style (system config style)
+
+### git style
+In this mode all configuration files, tests and diskimage builder
+elements are stored in a single git repository.
+
+This example will operates on following assumptions:
+* You already has installed dibctl system-wide (via pip install or
+through apt-get)
+* You repository will be called `images`.
+* You have one images to build: Debian Jessie
+* You have two installations to upload images: cloud-us and cloud-uk
+
+Preparation:
+- `mkdir images`
+- `cd images`
+- `git init`
+- `mkdir dibctl`
+- `mkdir tests`
+
+Those commands will initialize new repository `images` with
+catalogues `dibctl` (we will store dibctl configuration files here),
+'tests' (where we'll store our tests there).
+
+
+#### Configuration file for images
+We will create it at `dibctl/images.yaml`:
+
+```
+debian:
+  filename: debian.img.qcow2
+  glance:
+    name: "Automated Debian Image"
+  dib:
+    environment_variables:
+      DIB_RELEASE: jessie
+    elements:
+      - debian
+      - vm
+  tests:
+    ssh:
+      username: debian
+    wait_for_port: 22
+    tests_list:
+      - shell: tests/reboot.sh
+      - pytest: tests/generic.py
+
+```
+Example above is a very short configuration file, there are
+many options to tweak, check docs/example\_configs to see
+all possible options.
+
+Comments:
+
+We use system-wide elements for diskimage-builder
+here. If we want to use custom elements, we need to specify
+environment variable ELEMENTS_PATH in section 'dib':
+```
+image-name
+  dib:
+    environment_variables:
+      ELEMENTS_PATH: 'elements'
+    elements:
+      my-custom-element
+```
+In this case path may be relative (to the working catalog
+of dibctl) or absolute path.
+
+`ssh` section in tests specify settings for ssh - in our
+case it's just a username.
+
+`wait_for_port` specify which port to wait after instance
+was created. Dibctl will wait (up to timeout, default is 61 seconds,
+but can be overriden with `port_wait_timeout` option) for
+given TCP port to start accepting connections (simple SYN/ACK test
+without actual transmission of anything).
+
+`tests_list` define which tests we want to run. Those tests will
+be created in a section below. We are using two test frameworks:
+- `shell` - shell scripts, which are executed outside of instnace
+and have special set of variables providing information about
+instance to test.
+
+- `pytest` - execure pytest tests outside of of instance but
+have special `ssh_backend` fixture which allows connection to
+'inside' of guests.
+
+
+#### Configuration file for test environment
+
+### system-config
