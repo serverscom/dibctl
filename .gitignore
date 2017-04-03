@@ -4,3 +4,8 @@ __pycache__
 .coverage
 dibctl.egg-info/
 build/
+os_cred
+images.yaml
+test.yaml
+upload.yaml
+dibtests
