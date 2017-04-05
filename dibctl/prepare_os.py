@@ -156,7 +156,7 @@ class PrepOS(object):
 
     @staticmethod
     def make_test_name(bare_name):
-        return 'DIBCTL-%s-%s' % (bare_name, str(uuid.uuid4()))
+        return 'DIBCTL-%s' % (str(uuid.uuid4()),)
 
     def init_keypair(self):
         with timeout.timeout(self.keypair_timeout, self.error_handler):
@@ -177,6 +177,7 @@ class PrepOS(object):
     def spawn_instance(self, timeout_s):
         print("Creating test instance (time limit is %s s)" % timeout_s)
         flavor = self.guess_flavor(self.test_environment)
+        self.flavor = flavor
         with timeout.timeout(timeout_s, self.error_handler):
             self.os_instance = self.os.boot_instance(
                 name=self.instance_name,
@@ -247,25 +248,25 @@ class PrepOS(object):
     def cleanup_instance(self):
         self._cleanup(
             'instance',
-            self.os_instance,
-            self.delete_instance,
-            self.os.delete_instance
+            obj=self.os_instance,
+            flag=self.delete_instance,
+            call=self.os.delete_instance
         )
 
     def cleanup_image(self):
         self._cleanup(
             'image',
-            self.os_image,
-            self.delete_image,
-            self.os.delete_image
+            obj=self.os_image,
+            flag=self.delete_image,
+            call=self.os.delete_image
         )
 
     def cleanup_ssh_key(self):
         self._cleanup(
             'ssh key',
-            self.os_key,
-            self.delete_keypair,
-            self.os.delete_keypair
+            obj=self.os_key,
+            flag=self.delete_keypair,
+            call=self.os.delete_keypair
         )
         if self.ssh:
             if self.delete_keypair:
@@ -303,11 +304,12 @@ class PrepOS(object):
         try:
             self.prepare()
             return self
-        except Exception as e:
-            print("Exception while preparing instance for test: %s" % e)
-            print("Will print full trace after cleanup")
-            self.cleanup()
-            print("Continue tracing on original error: %s" % e)
+        except BaseException as e:
+            if not isinstance(e, TimeoutError):
+                print("Exception while preparing instance for test: %s" % e)
+                print("Will print full trace after cleanup")
+                self.cleanup()
+                print("Continue tracing on original error: %s" % e)
             raise
 
     def __exit__(self, e_type, e_val, e_tb):
@@ -316,28 +318,24 @@ class PrepOS(object):
         # self.report_if_fail()
 
     def get_env_config(self):
-        flavor = self.flavor()
         env = {
             'instance_uuid': str(self.os_instance.id),
             'instance_name': str(self.instance_name).lower(),
-            'flavor_id': str(self.flavor_id),
+            'flavor_id': str(self.flavor.id),
             'main_ip': str(self.ip),
             # 'ssh_private_key': str(self.os_key_private_file),  REFACTOR!
-            'flavor_ram': str(flavor.ram),
-            'flavor_name': str(flavor.name),
-            'flavor_vcpus': str(flavor.vcpus),
-            'flavor_disk': str(flavor.disk)
+            'flavor_ram': str(self.flavor.ram),
+            'flavor_name': str(self.flavor.name),
+            'flavor_vcpus': str(self.flavor.vcpus),
+            'flavor_disk': str(self.flavor.disk)
         }
         for num, ip in enumerate(self.ips()):
             env.update({'ip_' + str(num + 1): str(ip)})
         for num, iface in enumerate(self.network()):
             env.update({'iface_' + str(num + 1) + '_info': json.dumps(iface._info)})
-        for meta_name, meta_value in flavor.get_keys().items():
+        for meta_name, meta_value in self.flavor.get_keys().items():
             env.update({'flavor_meta_' + str(meta_name): str(meta_value)})
         return env
-
-    def flavor(self):
-        return self.os.get_flavor(self.flavor_id)
 
     def ips(self):
         result = []

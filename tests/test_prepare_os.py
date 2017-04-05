@@ -75,10 +75,18 @@ def mock_env_cfg(config):
     return env
 
 
+
 def test_init_normal(prepare_os, mock_image_cfg, mock_env_cfg):
     with mock.patch.object(prepare_os.osclient, "OSClient"):
         dt = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg)
         assert dt.delete_image is True
+        assert dt.delete_instance is True
+
+
+def test_init_override_image(prepare_os, mock_image_cfg, mock_env_cfg):
+    with mock.patch.object(prepare_os.osclient, "OSClient"):
+        dt = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg, override_image=sentinel.override_image)
+        assert dt.delete_image is False
         assert dt.delete_instance is True
 
 
@@ -105,9 +113,9 @@ def test_prepare_ssh_normal(prepare_os, config, mock_image_cfg, mock_env_cfg):
 
 
 @pytest.mark.parametrize("name, output", [
-    ["Ubuntu 16.04 x86_64", "DIBCTL-Ubuntu 16.04 x86_64-deadbeef-dead-400-000-79880364a956"],
-    ["key", "DIBCTL-key-deadbeef-dead-400-000-79880364a956"],
-    ["test", "DIBCTL-test-deadbeef-dead-400-000-79880364a956"]
+    ["Ubuntu 16.04 x86_64", "DIBCTL-deadbeef-dead-400-000-79880364a956"],
+    ["key", "DIBCTL-deadbeef-dead-400-000-79880364a956"],
+    ["test", "DIBCTL-deadbeef-dead-400-000-79880364a956"]
 ])
 def test_make_test_name(prepare_os, name, output):
     with mock.patch.object(prepare_os.uuid, "uuid4", return_value='deadbeef-dead-400-000-79880364a956'):
@@ -359,11 +367,12 @@ def test_get_env_config(prepare_os, prep_os):
     flavor.name = sentinel.name
     flavor.vcpus = sentinel.vcpus
     flavor.disk = sentinel.disk
+    flavor.id = sentinel.flavor_id
     flavor.get_keys.return_value = {
         sentinel.name1: sentinel.value1,
         sentinel.name2: sentinel.value2
     }
-    prep_os.os.get_flavor.return_value = flavor
+    prep_os.flavor = flavor
     env = prep_os.get_env_config()
     assert env['instance_uuid'] == 'sentinel.uuid'
     assert env['instance_name'] == 'name'

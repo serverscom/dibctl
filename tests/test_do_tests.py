@@ -19,6 +19,25 @@ def do_tests():
     return do_tests
 
 
+@pytest.fixture
+def mock_env(Config):
+    return Config({
+        'nova': {
+            'flavor': 'some flavor'
+        }
+    })
+
+
+@pytest.fixture
+def mock_image(Config):
+    return Config({
+        'tests': {
+            'wait_for_port': 22,
+            'tests_list': [{'pytest': sentinel.path1}, {'shell': sentinel.path2}]
+        }
+    })
+
+
 def test_init_no_tests(do_tests):
     image = {}
     dt = do_tests.DoTests(image, sentinel.env)
@@ -142,6 +161,59 @@ def test_get_port_timeout_uses_max(do_tests, Config, env_timeout, image_timeout,
     mock_prep_os = mock.MagicMock()
     dt.wait_port(mock_prep_os)
     assert mock_prep_os.wait_for_port.call_args == mock.call(22, result)
+
+
+@pytest.mark.parametrize('true_value', [
+    'was_removed',
+    'preexisted',
+    'deletable'
+])
+def test_report_item_silent(do_tests, true_value, capsys):
+    data = {
+        'was_removed': False,
+        'preexisted': False,
+        'deletable': False,
+        'id': 'some_id',
+        'name': 'some name'
+    }
+    data[true_value] = True
+    do_tests.DoTests.report_item('name', data)
+    assert 'will not be removed' not in capsys.readouterr()[0]
+
+
+def test_report_ssh(do_tests, capsys):
+    ssh = mock.MagicMock()
+    ssh.command_line.return_value = ['some', 'command', 'line']
+    do_tests.DoTests.report_ssh(ssh)
+    assert 'some command line' in capsys.readouterr()[0]
+
+
+def test_report(do_tests, mock_env, mock_image):
+    dt = do_tests.DoTests(mock_image, mock_env)
+    prep_os = mock.MagicMock()
+    mock_status = {
+        'was_removed': False,
+        'preexisted': False,
+        'deletable': False,
+        'id': 'some_id',
+        'name': 'some_name'
+    }
+    prep_os.image_status.return_value = mock_status
+    prep_os.instance_status.return_value = mock_status
+    prep_os.keypair_status.return_value = mock_status
+    dt.report(prep_os)
+
+
+def test_report_item(do_tests, capsys):
+    data = {
+        'was_removed': False,
+        'preexisted': False,
+        'deletable': False,
+        'id': 'some_id',
+        'name': 'some name'
+    }
+    do_tests.DoTests.report_item('name', data)
+    assert 'will not be removed' in capsys.readouterr()[0]
 
 
 def test_get_port_timeout_uses_env(do_tests, Config):
@@ -332,6 +404,7 @@ def test_process_all_tests_fail(do_tests, capsys, Config):
         }
     }
     dt = do_tests.DoTests(Config(image), Config(env))
+    dt.ssh = mock.MagicMock()
     with mock.patch.object(do_tests.pytest_runner, "runner") as runner:
         runner.side_effect = [False, ValueError("Shouldn't be called")]
         with mock.patch.object(do_tests.prepare_os, "PrepOS") as mock_prep_os_class:
@@ -356,6 +429,7 @@ def test_process_all_tests_fail_open_shell(do_tests, Config):
         }
     }
     dt = do_tests.DoTests(Config(image), Config(env))
+    dt.ssh = mock.MagicMock()
     with mock.patch.object(do_tests.pytest_runner, "runner") as runner:
         runner.side_effect = [False, ValueError("Shouldn't be called")]
         with mock.patch.object(do_tests.prepare_os, "PrepOS") as mock_prep_os_class:
@@ -383,6 +457,7 @@ def test_run_all_tests(do_tests, result, Config):
     }
     with mock.patch.object(do_tests.DoTests, "run_test", return_value=result):
         dt = do_tests.DoTests(Config(image), Config(env))
+        dt.ssh = mock.MagicMock()
         assert dt.run_all_tests(mock.MagicMock()) is result
 
 

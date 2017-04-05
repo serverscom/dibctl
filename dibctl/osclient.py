@@ -416,4 +416,5 @@ class OSClient(object):
         elif len(found) == 1:
                 return found[0][0]
         else:
-            raise NoIPFoundError("No matching IP found")
+            raise NoIPFoundError("No matching IP found. Search regexp: %s, networks: %s" % (
+                str(regexp), str(instance.networks.values())))

@@ -88,7 +88,7 @@ SCHEMA_VERSION = {
 }
 
 
-class Config (object):
+class Config(object):
 
     DEFAULT_CONFIG_NAME = None  # should be overrided in subclasses
     CONFIG_SEARCH_PATH = ["./", "./dibctl/", "/etc/dibctl/"]

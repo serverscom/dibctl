@@ -8,6 +8,7 @@ import do_tests
 import prepare_os
 import version
 from keystoneauth1 import exceptions as keystone_exceptions
+from novaclient import exceptions as novaclient_exceptions
 
 
 class PrematureExitError(SystemExit):
@@ -186,11 +187,6 @@ class TestCommand(GenericCommand):
             action='store_true',
             help="Open ssh shell to the server if some test failed and there is ssh config for image"
         )
-        self.parser.add_argument(
-            '--shell-only',
-            action='store_true',
-            help='Run ssh shell to instance directly, skipping tests'
-        )
 
     def _prepare(self):
         tests = self.image.get('tests', None)
@@ -200,7 +196,7 @@ class TestCommand(GenericCommand):
             )
         env_label = self.args.envlabel or tests.get('environment_name', None)
         if not env_label:
-            raise TestEnvironmentNotFoundError('No environemnt name for tests were no given in config or command line')
+            raise TestEnvironmentNotFoundError('No environment name for tests were no given in config or command line')
         self.test_env = self.test_env_config[env_label]
 
     def _command(self):
@@ -216,7 +212,7 @@ class TestCommand(GenericCommand):
         if self.args.instance:
             dt.reconfigure_for_existing_instance(self.args.instance, self.args.private_key_file)
         try:
-            status = dt.process(shell_only=self.args.shell_only, shell_on_errors=self.args.shell)
+            status = dt.process(shell_only=False, shell_on_errors=self.args.shell)
         except do_tests.TestError as e:
             print("Error while testing: %s" % e)
             return 1
@@ -224,6 +220,59 @@ class TestCommand(GenericCommand):
             return 0
         else:
             return 1
+
+
+class ShellCommand(GenericCommand):
+    name = 'shell'
+    help = 'Open shell to test instance'
+    options = ['imagelabel', 'input', 'img-config', 'test-env-config']
+
+    def add_options(self):
+        self.parser.add_argument(
+            '--environment',
+            dest='envlabel',
+            help='Use given environment for tests (override label from images.yaml)'
+        )
+        self.parser.add_argument(
+            '--use-existing-image',
+            help='Skip upload and use given image uuid for test (will not be removed after test)',
+            dest='uuid'
+        )
+        self.parser.add_argument(
+            '--use-existing-instance',
+            help='Skip upload/boot and use given instance for test (will not be removed after test)',
+            dest='instance'
+        )
+        self.parser.add_argument(
+            '--private-key-file',
+            help='Use private key file for tests (existing instance only)',
+            dest='private_key_file'
+        )
+
+    def _prepare(self):
+        env_label = self.image.get('tests.environment_name', self.args.envlabel)
+        if not env_label:
+            raise TestEnvironmentNotFoundError('No environemnt name for tests were no given in config or command line')
+        self.test_env = self.test_env_config[env_label]
+
+    def _command(self):
+        self._prepare()
+        dt = do_tests.DoTests(
+            self.image,
+            test_env=self.test_env,
+            image_uuid=self.args.uuid,
+            upload_only=False,
+            keep_failed_image=False,
+            keep_failed_instance=False
+        )
+        if self.args.instance:
+            dt.reconfigure_for_existing_instance(self.args.instance, self.args.private_key_file)
+        try:
+            status = dt.process(shell_only=True, shell_on_errors=False)
+        except do_tests.TestError as e:
+            print("Error on ssh: %s" % e)
+            return 1
+        return status
 
 
 class UploadCommand(GenericCommand):
@@ -245,6 +294,7 @@ class UploadCommand(GenericCommand):
         self.public = self.glance_info.get('public', False)
 
     def upload_to_glance(self):
+        print("Uploading image")
         self.image = self.os.upload_image(
             self.name,
             self.filename,
@@ -350,6 +400,7 @@ class Main(object):
         subparsers = self.parser.add_subparsers(title='commands')
         BuildCommand(subparsers)
         TestCommand(subparsers)
+        ShellCommand(subparsers)
         UploadCommand(subparsers)
         RotateCommand(subparsers)
         ObsoleteCommand(subparsers)
@@ -372,8 +423,10 @@ def main(line=None):
         osclient.CredNotFound,
         osclient.OpenStackError,
         config.ConfigError,
+        config.NotFoundInConfigError,
         prepare_os.InstanceError,
         keystone_exceptions.ClientException,
+        novaclient_exceptions.ClientException,
         osclient.DiscoveryError,
         IOError
     ) as e:
