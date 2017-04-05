@@ -1,3 +1,21 @@
+dibctl (0.5.1) xenial; urgency=medium
+
+  * Name for test instance made smaller (bug with centos6)
+  * Fix trace on --shell
+  * Fix bugs with ssh module
+  * Upload operation now display notification
+  * Exceptions from novaclient now processed without trace
+  * Now environment variables are passed to ssh during --shell (and shell command)
+  * Better handling of NoIPFoundErrror
+  * Flavor_id bugfix
+  * Fix KeyboardInterrupt non-cleanup
+  * Fix some cases of double cleanup (cleanup after cleanup)
+  * Better handling of NotFoundInConfigError (regression)
+  * --shell-only option has been removed in favor or shell command
+  * Fix bug with ssh fixture in pytest runner
+
+ -- George Shuklin <george.shuklin@gmail.com>  Wed, 05 Apr 2017 10:04:40 +0300
+
 dibctl (0.5.0) xenial; urgency=medium
 
   * Restore reporting if overrdes from environment are in use (e.g. OS_USERNAME)
