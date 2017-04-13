@@ -12,17 +12,14 @@ example_env:
     #auth_url: 'same (OS_AUTH_URL)'
   nova:
     # api_version: 2 #not implemented yet
-    # create_timeout: 10 #not implemented yet
-    # wait_for_active_timeout: 900 #not implemented yet
     flavor: "30" # fuzzy search, try use it as id, then as name. Use flavor_id to use only flavor_id
     nics:
      - net_id: fe2acef0-4383-4432-8fca-f9e23f835dd5
+    userdata_file: path/to/file
        #fixed_ip: '192.168.0.1' # not implemented yet
     #security_group: # not implemented yet
     # - default
     # - allow_everything
-    #user-data: 'foo=bar'
-    #user-data-file: /user/data/from/local/machine/where/dibctl/runs
     #hint:
     #  key1: value1
     #  key2: value2
@@ -52,3 +49,5 @@ example_env2:
     flavor_id: '30'
     nics:
     - net_id: fe2acef0-4383-4432-8fca-f9e23f835dd5
+    userdata: '{"json": "here"}'
+    availability_zone: 'az2'
