@@ -75,7 +75,6 @@ def mock_env_cfg(config):
     return env
 
 
-
 def test_init_normal(prepare_os, mock_image_cfg, mock_env_cfg):
     with mock.patch.object(prepare_os.osclient, "OSClient"):
         dt = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg)
@@ -316,11 +315,9 @@ def test_error_handler_with_timeout(prepare_os, prep_os):
     assert prep_os.cleanup.called
 
 
-def test_is_port_available_instant(prepare_os, prep_os):
+def test_is_port_available_instant(prepare_os, prep_os, MockSocket):
     with mock.patch.object(prepare_os.time, "time", mock.MagicMock(return_value=0)):
-        mock_sock = mock.MagicMock()
-        mock_sock.connect_ex.return_value = 0
-        with mock.patch.object(prepare_os.socket, "socket", mock.MagicMock(return_value=mock_sock)):
+        with mock.patch.object(prepare_os, "socket", MockSocket([0])):
             prep_os.ip = sentinel.ip
             assert prep_os.wait_for_port(sentinel.port, 60) is True
 
@@ -390,31 +387,25 @@ def test_get_env_config(prepare_os, prep_os):
     assert env['flavor_meta_sentinel.name2'] == 'sentinel.value2'
 
 
-def test_wait_for_port_never(prepare_os, prep_os):
+def test_wait_for_port_never(prepare_os, prep_os, MockSocket):
     with mock.patch.object(prepare_os.time, "time", mock.MagicMock(side_effect=[0, 10, 60, 80])):
-        mock_sock = mock.MagicMock()
-        mock_sock.connect_ex.return_value = -1
-        with mock.patch.object(prepare_os.socket, "socket", mock.MagicMock(return_value=mock_sock)):
+        with mock.patch.object(prepare_os, "socket", MockSocket([None])):
             with mock.patch.object(prepare_os.time, "sleep"):
                 prep_os.ip = sentinel.ip
                 assert prep_os.wait_for_port(sentinel.port, 60) is False
 
 
-def test_wait_for_port_eventually_succeed(prepare_os, prep_os):
+def test_wait_for_port_eventually_succeed(prepare_os, prep_os, MockSocket):
     with mock.patch.object(prepare_os.time, "time", mock.MagicMock(side_effect=[0, 0, 10, 20, 80])):
-        mock_sock = mock.MagicMock()
-        mock_sock.connect_ex.side_effect = [-1, -1, 0]
-        with mock.patch.object(prepare_os.socket, "socket", mock.MagicMock(return_value=mock_sock)):
+        with mock.patch.object(prepare_os, "socket", MockSocket([-1, -1, 0])):
             with mock.patch.object(prepare_os.time, "sleep"):
                 prep_os.ip = sentinel.ip
                 assert prep_os.wait_for_port(sentinel.port, 60) is True
 
 
-def test_wait_for_port_eventually_fail(prepare_os, prep_os):
+def test_wait_for_port_eventually_fail(prepare_os, prep_os, MockSocket):
     with mock.patch.object(prepare_os.time, "time", mock.MagicMock(side_effect=[0, 0, 10, 20, 80])):
-        mock_sock = mock.MagicMock()
-        mock_sock.connect_ex.side_effect = [-1, -1, -1, 0]
-        with mock.patch.object(prepare_os.socket, "socket", mock.MagicMock(return_value=mock_sock)):
+        with mock.patch.object(prepare_os, "socket", MockSocket([-1, -1, -1, -1, 0])):
             with mock.patch.object(prepare_os.time, "sleep"):
                 prep_os.ip = sentinel.ip
                 assert prep_os.wait_for_port(sentinel.port, 60) is False

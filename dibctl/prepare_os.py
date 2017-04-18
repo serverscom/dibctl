@@ -136,7 +136,7 @@ class PrepOS(object):
         if 'userdata' in tenv_item:
             return tenv_item['userdata']
         elif 'userdata_file' in tenv_item:
-            return file(tenv_item['userdata_file'], 'r')
+            return open(tenv_item['userdata_file'], 'r')
         else:
             return None
 
@@ -366,7 +366,7 @@ class PrepOS(object):
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # add source IP
             result = sock.connect_ex((self.ip, port))
             if result == 0:
-                time.sleep(1)   # in many cases there is a race between port
+                # time.sleep(1)   # in many cases there is a race between port
                 # become availabe and actual service been available
                 print("Instance accepts connections on port %s" % port)
                 return True
