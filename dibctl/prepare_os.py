@@ -121,6 +121,7 @@ class PrepOS(object):
             raise FlavorError("Neither flavor nor flavor_id is present")
 
     def prepare_instance(self, tenv_item, delete_instance_flag):
+        self.userdata = self._userdata(tenv_item)
         self.instance_name = self.make_test_name('test')
         self.os_instance = None
         self.config_drive = tenv_item['nova'].get('config_drive', False)
@@ -130,6 +131,14 @@ class PrepOS(object):
         self.main_nic_regexp = tenv_item['nova'].get('main_nic_regexp', None)
         self.override_instance = None
         self.instance_was_removed = False
+
+    def _userdata(self, tenv_item):
+        if 'userdata' in tenv_item:
+            return tenv_item['userdata']
+        elif 'userdata_file' in tenv_item:
+            return open(tenv_item['userdata_file'], 'r')
+        else:
+            return None
 
     def connect(self):
         if not self.os:
@@ -186,6 +195,7 @@ class PrepOS(object):
                 key_name=self.os_key.name,
                 nic_list=self.nic_list,
                 config_drive=self.config_drive,
+                userdata=self.userdata,
                 availability_zone=self.availability_zone
             )
             print("Instance %s created." % self.os_instance.id)
@@ -356,7 +366,7 @@ class PrepOS(object):
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # add source IP
             result = sock.connect_ex((self.ip, port))
             if result == 0:
-                time.sleep(1)   # in many cases there is a race between port
+                # time.sleep(1)   # in many cases there is a race between port
                 # become availabe and actual service been available
                 print("Instance accepts connections on port %s" % port)
                 return True

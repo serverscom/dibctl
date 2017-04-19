@@ -366,7 +366,16 @@ class OSClient(object):
     def new_keypair(self, name):
         return self.nova.keypairs.create(name)
 
-    def boot_instance(self, name, image_uuid, flavor, key_name, nic_list, config_drive=None, availability_zone=None):
+    def boot_instance(
+        self, name,
+        image_uuid,
+        flavor,
+        key_name,
+        nic_list,
+        config_drive=None,
+        userdata=None,
+        availability_zone=None
+    ):
         instance = self.nova.servers.create(
             name,
             image_uuid,
@@ -374,6 +383,7 @@ class OSClient(object):
             key_name=key_name,
             nics=nic_list,
             config_drive=config_drive,
+            userdata=userdata,
             availability_zone=availability_zone
         )
         return instance

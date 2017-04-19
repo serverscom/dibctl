@@ -317,10 +317,11 @@ class TestEnvConfig(EnvConfig):
                             "create_timeout": SCHEMA_TIMEOUT,
                             "active_timeout": SCHEMA_TIMEOUT,
                             "keypair_timeout": SCHEMA_TIMEOUT,
-                            "cleanup_timeout": SCHEMA_TIMEOUT
+                            "cleanup_timeout": SCHEMA_TIMEOUT,
+                            "userdata": {"type": "string"},
+                            "userdata_file": SCHEMA_PATH
                         },
                         "additionalProperties": False,
-                        #"required": ['flavor']
                         'oneOf': [
                             {"required": ['flavor']},
                             {"required": ['flavor_id']}

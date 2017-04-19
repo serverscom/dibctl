@@ -1,3 +1,3 @@
-VERSION = '0.5.1'
+VERSION = '0.5.2'
 NAME = 'dibctl'
 VERSION_STRING = "%s %s" % (NAME, VERSION)
