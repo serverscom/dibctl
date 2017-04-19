@@ -1,3 +1,10 @@
+dibctl (0.5.2) xenial; urgency=medium
+
+  * Add userdata option for tests
+  * Remove 1 second delay after port ready
+
+ -- George Shuklin <george.shuklin@gmail.com>  Wed, 19 Apr 2017 14:57:31 +0300
+
 dibctl (0.5.1) xenial; urgency=medium
 
   * Name for test instance made smaller (bug with centos6)
