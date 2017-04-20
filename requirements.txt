@@ -9,3 +9,4 @@ testinfra
 jsonschema
 urllib3
 semantic_version
+pyvcr

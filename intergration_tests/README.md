@@ -4,7 +4,7 @@ test run.
 
 Those interactions are written in 'cassettes' directory.
 
-Other aspects of tests (pytest, shell, and wait_for_port function)
+Other aspects of tests (pytest, shell, socket (`wait_for_port` function), time.sleep)
 are mocked according to tested scenario.
 
 How to record new interaction
@@ -20,7 +20,7 @@ cassettes after recording session before commit.
 It can be:
 - 'none' (default mode every test is run with).
 - 'once'
-- 'new_episodes'
+- 'new\_episodes'
 - 'all'
 
 2. You need to remove (rename `integration_tests/*.yaml` files)
