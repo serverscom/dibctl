@@ -48,14 +48,12 @@ def test_integration_imageconfig_schema_from_docs_example(config):
 
 
 def test_call_actual_dibctl_validate(commands):
-    with mock.patch.object(commands.sys, "exit") as mock_exit:
-        commands.main([
-            'validate',
-            '--images-config', images_yaml,
-            '--upload-config', upload_yaml,
-            '--test-config', test_yaml
-        ])
-        assert mock_exit.call_args[0][0] == 0
+    commands.main([
+        'validate',
+        '--images-config', images_yaml,
+        '--upload-config', upload_yaml,
+        '--test-config', test_yaml
+    ]) == 0
 
 
 if __name__ == "__main__":

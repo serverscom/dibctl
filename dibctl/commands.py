@@ -9,6 +9,7 @@ import prepare_os
 import version
 from keystoneauth1 import exceptions as keystone_exceptions
 from novaclient import exceptions as novaclient_exceptions
+from glanceclient import exc as glanceclient_exceptions
 
 
 class PrematureExitError(SystemExit):
@@ -415,9 +416,18 @@ class Main(object):
 
 
 def main(line=None):
+    sad_table = {
+        config.ConfigError: 10,
+        config.NotFoundInConfigError: 11,
+        osclient.CredNotFound: 12,
+        glanceclient_exceptions.HTTPNotFound: 50
+    }
     m = Main(line)
     try:
         code = m.run()
+    except sad_table.keys() as e:
+        print("Error: %s" % str(e))
+        code = sad_table[e.__class__]
     except (
         PrematureExitError,
         osclient.CredNotFound,
@@ -428,16 +438,17 @@ def main(line=None):
         keystone_exceptions.ClientException,
         novaclient_exceptions.ClientException,
         osclient.DiscoveryError,
+        glanceclient_exceptions.HTTPNotFound,
         IOError
     ) as e:
         print("Error: %s" % str(e))
-        code = -1
-    sys.exit(code)
+        code = 1
+    return code
 
 
 def init():
     if __name__ == "__main__":
-        main()
+        sys.exit(main())
 
 
 init()

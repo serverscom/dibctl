@@ -396,17 +396,13 @@ def test_Main_build_error(commands, mock_image_cfg):
 def test_main_build(commands, mock_image_cfg):
     with mock.patch.object(commands.config, "ImageConfig", return_value={'label': mock_image_cfg}):
         with mock.patch.object(commands.dib.DIB, 'run', return_value=1):
-            with mock.patch.object(commands.sys, 'exit') as mock_exit:
-                commands.main(['build', 'label'])
-                assert mock_exit.call_args[0][0] == 1
+            commands.main(['build', 'label']) == 1
 
 
 def test_main_premature_exit_config(commands):
     with mock.patch.object(commands.config, "ImageConfig") as m:
         m.side_effect = commands.NotFoundInConfigError
-        with mock.patch.object(commands.sys, 'exit') as mock_exit:
-            commands.main(['build', 'label'])
-            assert mock_exit.call_args[0][0] == -1
+        commands.main(['build', 'label']) == 10
 
 
 @pytest.mark.parametrize('exc', [
@@ -416,9 +412,7 @@ def test_main_test_command_with_exceptions(commands, mock_image_cfg, mock_env_cf
     with mock.patch.object(commands.config, "ImageConfig", return_value={'label': mock_image_cfg}):
         with mock.patch.object(commands.config, "TestEnvConfig", return_value={'env': mock_env_cfg}):
             with mock.patch.object(commands.do_tests.DoTests, 'process', side_effect=exc):
-                with mock.patch.object(commands.sys, 'exit') as mock_exit:
-                    commands.main(['test', 'label'])
-                    assert mock_exit.call_args[0][0] == -1
+                commands.main(['test', 'label']) == 1
 
 
 def test_init(commands):

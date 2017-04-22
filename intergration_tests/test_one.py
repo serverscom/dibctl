@@ -17,21 +17,19 @@ def setup_module(module):
 
 def test_foo(quick_commands, MockSocket):
     with vcr.use_cassette('cassettes/test_foo.yaml'):
-        m = quick_commands.Main([
+        m = quick_commands.main([
                 'test',
                 'xenial',
                 '--use-existing-image',
                 '2eb14fc3-4edc-4068-8748-988f369302c2'
-            ])
-        assert m.run() == 0
+            ]) == 0
 
 
-def test_non_existing_image(quick_commands, MockSocket):
+def test_non_existing_image(quick_commands):
     with vcr.use_cassette('cassettes/test_non_existing_image.yaml'):
-        m = quick_commands.Main([
+        m = quick_commands.main([
                 'test',
                 'xenial',
                 '--use-existing-image',
                 'deadbeaf-0000-0000-0000-b7a14cdd1169'
-            ])
-        assert m.run() == 0
+            ]) == 50
