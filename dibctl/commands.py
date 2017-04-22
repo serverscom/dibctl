@@ -417,7 +417,7 @@ class Main(object):
 
 def main(line=None):
     sad_table = {
-        config.ConfigError: 10,
+        config.ConfigNotFound: 10,
         config.NotFoundInConfigError: 11,
         osclient.CredNotFound: 12,
         glanceclient_exceptions.HTTPNotFound: 50
@@ -425,15 +425,13 @@ def main(line=None):
     m = Main(line)
     try:
         code = m.run()
-    except sad_table.keys() as e:
-        print("Error: %s" % str(e))
+    except tuple(sad_table.keys()) as e:
         code = sad_table[e.__class__]
+        print("Error: %s, code %s" % (str(e), code))
     except (
         PrematureExitError,
         osclient.CredNotFound,
         osclient.OpenStackError,
-        config.ConfigError,
-        config.NotFoundInConfigError,
         prepare_os.InstanceError,
         keystone_exceptions.ClientException,
         novaclient_exceptions.ClientException,
@@ -441,8 +439,11 @@ def main(line=None):
         glanceclient_exceptions.HTTPNotFound,
         IOError
     ) as e:
-        print("Error: %s" % str(e))
+        print("Error: %s (%s)" % (str(e.message), e.__class__))
         code = 1
+    except Exception as e:
+        print "Bad exception: %s %s" %(e, e.__class__)
+        raise
     return code
 
 

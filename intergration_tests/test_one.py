@@ -11,13 +11,18 @@ def quick_commands(MockSocket):
             yield commands
 
 
-def setup_module(module):
-    print "hello"
+def test_no_configs(quick_commands, MockSocket):
+    with vcr.use_cassette('cassettes/test_existing_image_success.yaml'):
+        assert quick_commands.main([
+                'test',
+                'xenial',
+                '--images-config', 'not_existing_name'
+            ]) == 10
 
 
-def test_foo(quick_commands, MockSocket):
-    with vcr.use_cassette('cassettes/test_foo.yaml'):
-        m = quick_commands.main([
+def test_existing_image_success(quick_commands, MockSocket):
+    with vcr.use_cassette('cassettes/test_existing_image_success.yaml'):
+        assert quick_commands.main([
                 'test',
                 'xenial',
                 '--use-existing-image',
@@ -25,9 +30,9 @@ def test_foo(quick_commands, MockSocket):
             ]) == 0
 
 
-def test_non_existing_image(quick_commands):
+def test_non_existing_image_exit_code_50(quick_commands):
     with vcr.use_cassette('cassettes/test_non_existing_image.yaml'):
-        m = quick_commands.main([
+        assert quick_commands.main([
                 'test',
                 'xenial',
                 '--use-existing-image',
