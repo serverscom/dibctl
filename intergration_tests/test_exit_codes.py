@@ -12,12 +12,18 @@ def quick_commands(MockSocket):
 
 
 def test_no_configs(quick_commands, MockSocket):
-    with vcr.use_cassette('cassettes/test_existing_image_success.yaml'):
-        assert quick_commands.main([
-                'test',
-                'xenial',
-                '--images-config', 'not_existing_name'
-            ]) == 10
+    assert quick_commands.main([
+            'test',
+            'xenial',
+            '--images-config', 'not_existing_name'
+        ]) == 10
+
+
+def test_not_found_in_config(quick_commands, MockSocket):
+    assert quick_commands.main([
+            'test',
+            'no_such_image_in_config'
+        ]) == 11
 
 
 def test_existing_image_success(quick_commands, MockSocket):
