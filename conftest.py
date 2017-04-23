@@ -29,9 +29,26 @@ def MockSocket(request):
     return MockSock
 
 
+class MockTimeClass(object):
+    def __init__(self):
+        self.wallclock = 42
+
+    def sleep(self, shift):
+        self.wallclock += shift
+
+    def time(self):
+        self.wallclock += 1
+        return self.wallclock
+
+
+@pytest.fixture(scope="module")
+def MockTime(request):
+    return MockTimeClass
+
+
 @pytest.fixture
-def quick_commands(MockSocket):
+def quick_commands(MockSocket, MockTime):
     from dibctl import commands
-    with mock.patch.object(commands.prepare_os.time, "sleep"):
+    with mock.patch.object(commands.prepare_os, "time", MockTime()):
         with mock.patch.object(commands.prepare_os, "socket", MockSocket([0])):
             yield commands
