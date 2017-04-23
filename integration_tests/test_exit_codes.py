@@ -5,7 +5,8 @@ import os
 def setup_module(module):
     global curdir
     curdir = os.getcwd()
-    os.chdir('intergration_tests')
+    if 'integration_tests' not in curdir:
+        os.chdir('integration_tests')
 
 
 def teardown_modlue(module):
@@ -13,7 +14,7 @@ def teardown_modlue(module):
     os.chdir(curdir)
 
 
-def test_no_image_config_code_10(quick_commands, MockSocket):
+def test_no_image_config_code_10(quick_commands):
     assert quick_commands.main([
             'test',
             'xenial',
@@ -21,7 +22,7 @@ def test_no_image_config_code_10(quick_commands, MockSocket):
         ]) == 10
 
 
-def test_no_test_config_code_10(quick_commands, MockSocket):
+def test_no_test_config_code_10(quick_commands):
     assert quick_commands.main([
             'test',
             'xenial',
@@ -29,7 +30,7 @@ def test_no_test_config_code_10(quick_commands, MockSocket):
         ]) == 10
 
 
-def test_no_upload_config_code_10(quick_commands, MockSocket):
+def test_no_upload_config_code_10(quick_commands):
     assert quick_commands.main([
             'upload',
             'xenial',
@@ -38,14 +39,14 @@ def test_no_upload_config_code_10(quick_commands, MockSocket):
         ]) == 10
 
 
-def test_not_found_in_config_code_11(quick_commands, MockSocket):
+def test_not_found_in_config_code_11(quick_commands):
     assert quick_commands.main([
             'test',
             'no_such_image_in_config'
         ]) == 11
 
 
-def test_existing_image_success_code_0(quick_commands, MockSocket):
+def test_existing_image_success_code_0(quick_commands):
     with vcr.use_cassette('cassettes/test_existing_image_success.yaml'):
         assert quick_commands.main([
                 'test',
@@ -55,7 +56,7 @@ def test_existing_image_success_code_0(quick_commands, MockSocket):
             ]) == 0
 
 
-def test_non_existing_image_exit_code_50(quick_commands):
+def test_non_existing_image_code_50(quick_commands):
     with vcr.use_cassette('cassettes/test_non_existing_image.yaml'):
         assert quick_commands.main([
                 'test',
@@ -65,7 +66,7 @@ def test_non_existing_image_exit_code_50(quick_commands):
             ]) == 50
 
 
-def test_non_existing_network(quick_commands):
+def test_non_existing_network_code_60(quick_commands):
     with vcr.use_cassette('cassettes/test_non_existing_network.yaml'):
         assert quick_commands.main([
                 'test',
@@ -75,3 +76,14 @@ def test_non_existing_network(quick_commands):
                 '--environment',
                 'bad_network_id'
             ]) == 60
+
+
+def test_instance_is_not_answer_port(quick_commands):
+    with vcr.use_cassette('cassettes/instance_is_not_answer_port.yaml'):
+        quick_commands.prepare_os.socket.sequence = [None]
+        assert quick_commands.main([
+                'test',
+                'xenial',
+                '--use-existing-image',
+                '2eb14fc3-4edc-4068-8748-988f369302c2',
+            ]) == 71

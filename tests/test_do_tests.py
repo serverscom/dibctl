@@ -305,7 +305,7 @@ def test_wait_port_timeout(do_tests):
     dt = do_tests.DoTests(image, env)
     mock_prep_os = mock.MagicMock()
     mock_prep_os.wait_for_port.return_value = False
-    with pytest.raises(do_tests.TestError):
+    with pytest.raises(do_tests.PortWaitError):
         dt.wait_port(mock_prep_os)
 
 

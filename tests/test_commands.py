@@ -161,17 +161,6 @@ def test_TestCommand_actual(commands, status, exit_code):
                 assert obj.image
 
 
-def test_TestCommand__command_exception(commands):
-    parser, obj = create_subparser(commands.TestCommand)
-    args = parser.parse_args(['test', 'label'])
-    assert args.imagelabel == 'label'
-    with mock.patch.object(commands.config, "ImageConfig"):
-        with mock.patch.object(commands.config, "TestEnvConfig"):
-            with mock.patch.object(commands.do_tests, "DoTests") as dt:
-                dt.return_value.process.side_effect = commands.do_tests.TestError
-                assert args.command(args) == 1
-
-
 def test_TestCommand_input(commands):
     parser = create_subparser(commands.TestCommand)[0]
     args = parser.parse_args(['test', 'label', '--input', 'file'])

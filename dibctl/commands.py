@@ -212,11 +212,7 @@ class TestCommand(GenericCommand):
         )
         if self.args.instance:
             dt.reconfigure_for_existing_instance(self.args.instance, self.args.private_key_file)
-        try:
-            status = dt.process(shell_only=False, shell_on_errors=self.args.shell)
-        except do_tests.TestError as e:
-            print("Error while testing: %s" % e)
-            return 1
+        status = dt.process(shell_only=False, shell_on_errors=self.args.shell)
         if status:
             return 0
         else:
@@ -421,11 +417,14 @@ def main(line=None):
         config.NotFoundInConfigError: 11,
         osclient.CredNotFound: 12,
         glanceclient_exceptions.HTTPNotFound: 50,
-        novaclient_exceptions.BadRequest: 60
+        novaclient_exceptions.BadRequest: 60,
+        #prepare_os.InstanceError: 70,
+        do_tests.PortWaitError: 71
     }
     m = Main(line)
     try:
         code = m.run()
+        print "self code: %s", code
     except tuple(sad_table.keys()) as e:
         code = sad_table[e.__class__]
         print("Error: %s, code %s" % (str(e), code))
