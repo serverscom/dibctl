@@ -7,3 +7,4 @@ Exit codes
 11 - dibctl couldn't find requested item in configuration files (image, environment, etc)
 12 - There is not enough information to connect to openstack (there is no login/password neither in configs nor environment variables).
 50 - Glance return 'HTTPNotFoundError', which usually means that uuid in --use-existing-image is not found in Glance
+60 - Nova returns BadRequest (unfortunately there is no way to distinct between codes)

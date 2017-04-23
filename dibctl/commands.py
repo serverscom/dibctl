@@ -420,7 +420,8 @@ def main(line=None):
         config.ConfigNotFound: 10,
         config.NotFoundInConfigError: 11,
         osclient.CredNotFound: 12,
-        glanceclient_exceptions.HTTPNotFound: 50
+        glanceclient_exceptions.HTTPNotFound: 50,
+        novaclient_exceptions.BadRequest: 60
     }
     m = Main(line)
     try:
@@ -440,7 +441,8 @@ def main(line=None):
         IOError
     ) as e:
         print("Error: %s (%s)" % (str(e.message), e.__class__))
-        code = 1
+        #code = 1
+        raise
     except Exception as e:
         print "Bad exception: %s %s" %(e, e.__class__)
         raise
