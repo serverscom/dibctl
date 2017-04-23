@@ -1,5 +1,6 @@
 import pytest
 from mock import sentinel
+import mock
 
 
 class MockSock(object):
@@ -26,3 +27,11 @@ class MockSock(object):
 @pytest.fixture(scope="module")
 def MockSocket(request):
     return MockSock
+
+
+@pytest.fixture
+def quick_commands(MockSocket):
+    from dibctl import commands
+    with mock.patch.object(commands.prepare_os.time, "sleep"):
+        with mock.patch.object(commands.prepare_os, "socket", MockSocket([0])):
+            yield commands

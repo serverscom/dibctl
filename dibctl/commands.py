@@ -441,10 +441,9 @@ def main(line=None):
         IOError
     ) as e:
         print("Error: %s (%s)" % (str(e.message), e.__class__))
-        #code = 1
-        raise
+        code = 1
     except Exception as e:
-        print "Bad exception: %s %s" %(e, e.__class__)
+        print("Bad exception: %s %s" % (e, e.__class__))
         raise
     return code
 

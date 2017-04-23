@@ -1,14 +1,16 @@
-import pytest
-import mock
 import vcr
+import os
 
 
-@pytest.fixture
-def quick_commands(MockSocket):
-    from dibctl import commands
-    with mock.patch.object(commands.prepare_os.time, "sleep"):
-        with mock.patch.object(commands.prepare_os, "socket", MockSocket([0])):
-            yield commands
+def setup_module(module):
+    global curdir
+    curdir = os.getcwd()
+    os.chdir('intergration_tests')
+
+
+def teardown_modlue(module):
+    global curdir
+    os.chdir(curdir)
 
 
 def test_no_image_config_code_10(quick_commands, MockSocket):

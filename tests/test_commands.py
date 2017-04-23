@@ -401,7 +401,7 @@ def test_main_build(commands, mock_image_cfg):
 
 def test_main_premature_exit_config(commands):
     with mock.patch.object(commands.config, "ImageConfig") as m:
-        m.side_effect = commands.NotFoundInConfigError
+        m.side_effect = commands.config.NotFoundInConfigError
         commands.main(['build', 'label']) == 10
 
 

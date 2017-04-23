@@ -15,7 +15,12 @@ class PyTest(Command):
     def run(self):
         import pytest
         print("Running unit tests")
-        error_code = pytest.main(['build', '--ignore', 'build/doctest', '--ignore', 'build/tests/test_bad_configs.py'])
+        error_code = pytest.main([
+			'build',
+			'--ignore', 'build/doctest',
+			'--ignore', 'build/tests/test_bad_configs.py',
+			'--ignore', 'build/integration_tests'
+		])
         if error_code:
             sys.exit(error_code)
         print("Running integration tests for docs examples")
