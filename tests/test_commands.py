@@ -147,7 +147,7 @@ def test_BuildCommand_run_error(commands, mock_image_cfg, capsys):
 
 @pytest.mark.parametrize('status, exit_code', [
     [True, 0],
-    [False, 1]
+    [False, 80]
 ])
 def test_TestCommand_actual(commands, status, exit_code):
     parser, obj = create_subparser(commands.TestCommand)

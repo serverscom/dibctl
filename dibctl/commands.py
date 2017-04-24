@@ -216,7 +216,7 @@ class TestCommand(GenericCommand):
         if status:
             return 0
         else:
-            return 1
+            return 80
 
 
 class ShellCommand(GenericCommand):

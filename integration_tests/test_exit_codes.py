@@ -56,14 +56,14 @@ def test_existing_image_success_code_0(quick_commands):
             ]) == 0
 
 
-def test_existing_image_fail_code(quick_commands):
+def test_existing_image_fail_code_80(quick_commands):
     with vcr.use_cassette('cassettes/test_existing_image_fail.yaml'):
         assert quick_commands.main([
                 'test',
                 'xenial_fail',
                 '--use-existing-image',
                 '2eb14fc3-4edc-4068-8748-988f369302c2'
-            ]) == 0
+            ]) == 80  # this code is inside __command for TestCommand
 
 
 def test_non_existing_image_code_50(quick_commands):

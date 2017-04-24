@@ -40,6 +40,9 @@ passwords and tokens.
 
 7. Copy configs into `integration_tests` and replace passwords.
 
+8. Bump 'expires' for token  in cassette(at leat for few years ahead, please),
+otherwise tests would fail with message: CannotOverwriteExistingCassetteException: No match for the request (<Request (POST) https://auth.servers.nl01.cloud.servers.com:5000/v2.0/tokens>) was found. Can't overwrite existing cassette 
+
 9. Change (fake passwords, etc) in cassettes and in fake configs should match.
 
 10. Review changes before committing them!
