@@ -5,6 +5,7 @@ import sys
 import pytest
 import mock
 from mock import sentinel
+import tempfile
 
 
 @pytest.fixture
@@ -70,6 +71,27 @@ def mock_env_cfg(config):
                 {'net_id': sentinel.uuid1},
                 {'net_id': sentinel.uuid2}
             ]
+        }
+    })
+    return env
+
+
+@pytest.fixture
+def mock_env_cfg_with_userdata(config):
+    env = config.Config({
+        'keystone': {
+            'auth_url': sentinel.auth,
+            'tenant_name': sentinel.tenant,
+            'password': sentinel.password,
+            'username': sentinel.user
+        },
+        'nova': {
+            'flavor': 'example',
+            'nics': [
+                {'net_id': sentinel.uuid1},
+                {'net_id': sentinel.uuid2}
+            ],
+            'userdata': '{"userdata":"here"}'
         }
     })
     return env
@@ -184,6 +206,41 @@ def test_spawn_instance_no_config_drive2(prepare_os, mock_image_cfg, config):
         prep_os.connect()
         prep_os.spawn_instance(1)
         assert mock_os.return_value.boot_instance.call_args[1]['config_drive'] is False
+
+
+def test__userdata_no_userdata(prepare_os, mock_image_cfg, mock_env_cfg, config):
+    prep_os = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg)
+    assert prep_os._userdata(config.Config({})) is None
+
+
+def test__userdata_with_text_userdata(prepare_os, mock_image_cfg, mock_env_cfg_with_userdata):
+    prep_os = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg_with_userdata)
+    assert prep_os._userdata(mock_env_cfg_with_userdata) == '{"userdata":"here"}'
+
+
+def test__userdata_with_userdata_file(prepare_os, mock_image_cfg, config):
+    with tempfile.NamedTemporaryFile() as t:
+        t.write('{"foo":"bar"}')
+        t.flush()
+        env = config.Config({
+            'keystone': {
+                'auth_url': sentinel.auth,
+                'tenant_name': sentinel.tenant,
+                'password': sentinel.password,
+                'username': sentinel.user
+            },
+            'nova': {
+                'flavor': 'example',
+                'nics': [
+                    {'net_id': sentinel.uuid1},
+                    {'net_id': sentinel.uuid2}
+                ],
+                'userdata_file': t.name
+            }
+        })
+
+        prep_os = prepare_os.PrepOS(mock_image_cfg, env)
+        assert prep_os._userdata(env) == '{"foo":"bar"}'
 
 
 def test_spawn_instance_with_drive(prepare_os, mock_image_cfg, config):

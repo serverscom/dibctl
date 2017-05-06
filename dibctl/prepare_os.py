@@ -133,10 +133,10 @@ class PrepOS(object):
         self.instance_was_removed = False
 
     def _userdata(self, tenv_item):
-        if 'userdata' in tenv_item:
-            return tenv_item['userdata']
-        elif 'userdata_file' in tenv_item:
-            return open(tenv_item['userdata_file'], 'r')
+        if 'nova.userdata' in tenv_item:
+            return tenv_item['nova.userdata']
+        elif 'nova.userdata_file' in tenv_item:
+            return open(tenv_item['nova.userdata_file'], 'r').read()
         else:
             return None
 
