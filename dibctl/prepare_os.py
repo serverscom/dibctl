@@ -168,11 +168,11 @@ class PrepOS(object):
         return 'DIBCTL-%s' % (str(uuid.uuid4()),)
 
     def init_keypair(self):
-        with timeout.timeout(self.keypair_timeout, self.error_handler):
+        with timeout.timeout(self.keypair_timeout):
             self.os_key = self.os.new_keypair(self.key_name)
 
     def upload_image(self, timeout_s):
-        with timeout.timeout(timeout_s, self.error_handler):
+        with timeout.timeout(timeout_s):
             if not self.override_image:
                 filename = self.image['filename']
                 print("Uploading image from %s (time limit is %s s)" % (filename, timeout_s))
@@ -187,7 +187,7 @@ class PrepOS(object):
         print("Creating test instance (time limit is %s s)" % timeout_s)
         flavor = self.guess_flavor(self.test_environment)
         self.flavor = flavor
-        with timeout.timeout(timeout_s, self.error_handler):
+        with timeout.timeout(timeout_s):
             self.os_instance = self.os.boot_instance(
                 name=self.instance_name,
                 image_uuid=self.os_image,
@@ -206,7 +206,7 @@ class PrepOS(object):
 
     def wait_for_instance(self, timeout_s):
         print("Waiting for instance to become active (time limit is %s s)" % timeout_s)
-        with timeout.timeout(timeout_s, self.error_handler):
+        with timeout.timeout(timeout_s):
             while self.os_instance.status != 'ACTIVE':
                 if self.os_instance.status in ('ERROR', 'DELETED'):
                     raise InstanceError(
@@ -293,13 +293,6 @@ class PrepOS(object):
         self.cleanup_image()
         print("\nClearing done\n")
 
-    def error_handler(self, signum, frame, timeout=True):
-        if timeout:
-            print("Timeout!")
-        print("Clearing up due to error")
-        self.cleanup()
-        if timeout:
-            raise TimeoutError("Timeout")
 
     def report_if_fail(self):
         if self.report and self.os_instance and not self.delete_instance:

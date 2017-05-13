@@ -299,7 +299,7 @@ def test_wait_for_instance_long_error(prepare_os, prep_os):
 
 def test_wait_for_instance_timeout(prepare_os, prep_os):
     prep_os.os_instance = mock.MagicMock(status='BUILDING')
-    with pytest.raises(prepare_os.TimeoutError):
+    with pytest.raises(prepare_os.timeout.TimeoutError):
         prep_os.wait_for_instance(1)
 
 
@@ -357,19 +357,6 @@ def test_cleanup_ssh_key_delete(prep_os):
     prep_os._cleanup = mock.create_autospec(prep_os._cleanup)
     prep_os.cleanup_image()
     assert prep_os._cleanup.called
-
-
-def test_error_handler_no_timeout(prep_os):
-    prep_os.cleanup = mock.MagicMock()
-    prep_os.error_handler(sentinel.signum, sentinel.frame, timeout=False)
-    assert prep_os.cleanup.called
-
-
-def test_error_handler_with_timeout(prepare_os, prep_os):
-    prep_os.cleanup = mock.MagicMock()
-    with pytest.raises(prepare_os.TimeoutError):
-        prep_os.error_handler(sentinel.signum, sentinel.frame, timeout=True)
-    assert prep_os.cleanup.called
 
 
 def test_is_port_available_instant(prepare_os, prep_os, MockSocket):
