@@ -1,11 +1,12 @@
 Dibctl
 ------
 
-Dibctl is a software for image building, testing and  uploading.
+Dibctl is a software for image lifecycle management.
+It help to build, test, upload and delete images in multipies
+openstack regions in a consitent way.
+
 It uses diskimage-builder to build images, pytest and testinfra
-to test them. It also provides a consistent way to upload tested
-images to multiple Openstack installations and manage previous
-copies lifecycle.
+to test them.
 
 Dibctl uses configuration files to describe how to build image,
 which name it should have after upload, what properties (if any)
@@ -21,11 +22,26 @@ groups and other nova parameters.
 Third configuration file (`upload.yaml`) provides information
 for uploading into any number of Openstack installations.
 
+Image Lifecycle
+---------------
+Dibctl assumes following image lifecycle:
+- Image developed and debugged by operator using command line
+  interface.
+- Resulting configuration is used in CI server to build image
+- Newly build image is then tested
+- If tests passed image is uploaded to one or more regions
+- During upload process older copies of image are marked as obsolete
+- Obosolete images which are no longer in use deleted
+
+Steps "build, test, upload, obsolete, delete" repeated on
+periodic basis.
+
 Testing frameworks
 ------------------
-Dibctl provides few testing frameworks. Each of the frameworks provided 
-with full information about image, it properties, created instance 
-(it flavor, network settings, credentials to access instance SSH, etc).
+Dibctl provides few frameworks for image testing.
+Each of those frameworks provides tests with full information
+about image,it properties, created instance (it flavor, network
+settings, credentials to access instance SSH, etc).
 Test frameworks:
 - 'shell': each test is a simple shell script, which is executed
 outside test VM
@@ -37,21 +53,21 @@ information about image and instance, plus few handy operations
 reactions on nova operations (hard reboot, rebuild, etc).
 - 'ssh': each test is a simple shell script, which is executed
 inside guest machine (not yet implemented)
-- 'image': passive check of image content (not implemented yet)
+- 'image': passive check of the image content (not implemented yet)
 
 Dibctl comes with some generic tests (which should be applicable
 to any image of any provider).
 
 Few examples:
 - Does instance resize rootfs up to a flavor size at a first boot?
-- Does it receive/configure IP addresses on all attached interfaces?
+- Does it receive settings and configure IP addresses on all attached interfaces?
 - Does DNS resolver set up properly?
 - Does hostname match the name of the instance?
-- Does instance still work after reboot?
-- Can user install nginx (apache) and get access to http port 80?
+- Does instance work after reboot?
+- Can user install nginx and get access to http port 80?
 
-Workflow
---------
+Workflow in details
+-------------------
 After operators describes configurations, following workflow excepted:
 - build: create new image py means of diskimage-builder
 - test: new instance is spawned from image under test, and corresponding
@@ -161,8 +177,6 @@ Dibctl uses following concepts:
 
 Image lifecycle
 ---------------
-
-`BUILD -> TEST -> UPLOAD and OBSOLETE -> ROTATE`
 
 Any of those stages is optional an may be ommited.
 
