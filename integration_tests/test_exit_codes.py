@@ -107,3 +107,14 @@ def test_instance_is_not_answer_port(quick_commands):
                 '--use-existing-image',
                 '2eb14fc3-4edc-4068-8748-988f369302c2',
             ]) == 71
+
+
+def test_instance_is_not_answer_port_with_upload(quick_commands):
+    with vcr.use_cassette('cassettes/instance_is_not_answer_port_with_upload.yaml'):
+        quick_commands.prepare_os.socket.sequence = [None]
+        assert quick_commands.main([
+                'test',
+                'xenial',
+                '--input',
+                'empty.img.qcow2',
+            ]) == 71
