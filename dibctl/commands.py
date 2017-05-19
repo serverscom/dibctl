@@ -418,7 +418,7 @@ def main(line=None):
         osclient.CredNotFound: 12,
         glanceclient_exceptions.HTTPNotFound: 50,
         novaclient_exceptions.BadRequest: 60,
-        # prepare_os.InstanceError: 70,
+        prepare_os.InstanceError: 70,
         do_tests.PortWaitError: 71
     }
     m = Main(line)

@@ -1,5 +1,6 @@
 import vcr
 import os
+import mock
 
 
 def setup_module(module):
@@ -118,3 +119,29 @@ def test_instance_is_not_answer_port_with_upload(quick_commands):
                 '--input',
                 'empty.img.qcow2',
             ]) == 71
+
+
+def test_instance_in_error(quick_commands):
+    def full_read(ignore_self, filename):
+        return open(filename, 'rb', buffering=65536).read()
+    with mock.patch.object(quick_commands.do_tests.prepare_os.osclient.OSClient, '_file_to_upload', full_read):
+        with vcr.use_cassette('cassettes/instance_in_error.yaml'):
+            assert quick_commands.main([
+                    'test',
+                    'xenial',
+                    '--input',
+                    'damaged.img.qcow2'
+                ]) == 70
+
+
+def test_normal_upload(quick_commands):
+    def full_read(ignore_self, filename):
+        return open(filename, 'rb', buffering=65536).read()
+    with mock.patch.object(quick_commands.do_tests.prepare_os.osclient.OSClient, '_file_to_upload', full_read):
+        with vcr.use_cassette('cassettes/normal_upload.yaml'):
+            assert quick_commands.main([
+                    'test',
+                    'xenial'
+                ]) == 0
+
+
