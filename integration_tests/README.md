@@ -1,11 +1,28 @@
+Security consideration
+----------------------
+
+- PLEASE BE CAREFUL WITH YOUR TOKENS. Use only exipired tokens or replace them
+  in cassettes prior uploading to public. Rule of thumb: wait until you see
+  that recorded test start to fail due to expired token, then you can use this
+  cassette in public.
+- Use `clear_creds.py` script to clean username and password from configs
+  and cassettes.
+- Never upload unprocessed configuration files. Normally they should be in
+  .gitignore file.
+
+
+What's this?
+------------
+
 Here are integration tests. They record once actual interaction with actual
 external servers (Openstack only at this moment) and reply it every time
 test run.
 
 Those interactions are written in 'cassettes' directory.
 
-Other aspects of tests (pytest, shell, socket (`wait_for_port` function), time.sleep)
-are mocked according to tested scenario.
+Other aspects of tests (pytest and shell tests, socket (`wait_for_port` function),
+time.sleep) are mocked according to tested scenario.
+
 
 How to record new interaction
 -----------------------------
@@ -27,7 +44,7 @@ It can be:
 
 3. You need to place real configuration files into /etc/dibctl or
    in `integration_tests/dibctl` folder. By agreement fake configs are
-   stored in `integration_tests`, and real one in `integration_tests/dibctl`
+   stored in `integration_tests/dibctl`, and real one in `dibctl`
    and later should not be committed to git.
 
 4. Update tests if needed (tests usually specify some uuids or image names).

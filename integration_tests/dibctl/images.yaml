@@ -1,0 +1,45 @@
+xenial:
+  filename: xenial.img.qcow2
+  glance:
+    upload_timeout: 7200
+    name: 'LAB Ubuntu Xenial 16.04 (x86_64)'
+    properties:
+      display_order: "4"
+    public: False
+  dib:
+    environment_variables:
+      ARCH: 'amd64'
+      ELEMENTS_PATH: "elements"
+    elements:
+      - serverscom-ubuntu-xenial
+  tests:
+    ssh:
+      username: cloud-user
+    wait_for_port: 22
+    port_wait_timeout: 30
+    environment_name: nl01
+    tests_list:
+      - shell: ./simple_success.bash
+xenial_fail:
+  filename: xenial.img.qcow2
+  glance:
+    upload_timeout: 1200
+    name: 'LAB Ubuntu Xenial 16.04 (x86_64)'
+    properties:
+      display_order: "4"
+    public: False
+  dib:
+    environment_variables:
+      ARCH: 'amd64'
+      ELEMENTS_PATH: "elements"
+    elements:
+      - serverscom-ubuntu-xenial
+  tests:
+    ssh:
+      username: cloud-user
+    wait_for_port: 22
+    port_wait_timeout: 30
+    environment_name: nl01
+    tests_list:
+      - shell: ./simple_fail.bash
+

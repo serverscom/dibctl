@@ -1,0 +1,17 @@
+nl01:
+  keystone: {auth_url: 'https://auth.servers.nl01.cloud.servers.com:5000/v2.0', password: password,
+    tenant_name: '28', username: username}
+  nova:
+    flavor: SSD.30
+    main_nic_regexp: internet
+    nics:
+    - {net_id: c7ccdf1c-e6c3-4257-8b2e-740748c14564}
+    - {net_id: a3af8097-f348-4767-97c3-b9bf75263ef9}
+    - {net_id: db6e78cb-99fa-4223-9a6f-3b4a9b486d9b}
+bad_network_id:
+  keystone: {auth_url: 'https://auth.servers.nl01.cloud.servers.com:5000/v2.0', password: password,
+    tenant_name: 'tenant', username: username}
+  nova:
+    flavor: '30'
+    nics:
+    - {net_id: 2ea90ca0-7577-4706-9a41-fc88d8bee945}

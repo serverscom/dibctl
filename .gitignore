@@ -5,7 +5,8 @@ __pycache__
 dibctl.egg-info/
 build/
 os_cred
-images.yaml
-test.yaml
-upload.yaml
 dibtests
+integration_tests/cassettes/*.old
+integration_tests/images.yaml
+integration_tests/test.yaml
+integration_tests/upload.yaml

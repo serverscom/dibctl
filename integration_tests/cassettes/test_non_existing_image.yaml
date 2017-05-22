@@ -1,0 +1,92 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.12.4]
+    method: GET
+    uri: https://auth.servers.nl01.cloud.servers.com:5000/v2.0
+  response:
+    body: {string: !!python/unicode '{"version": {"status": "stable", "updated": "2014-04-17T00:00:00Z",
+        "media-types": [{"base": "application/json", "type": "application/vnd.openstack.identity-v2.0+json"}],
+        "id": "v2.0", "links": [{"href": "https://auth.servers.nl01.cloud.servers.com:5000/v2.0/",
+        "rel": "self"}, {"href": "http://docs.openstack.org/", "type": "text/html",
+        "rel": "describedby"}]}}'}
+    headers:
+      content-length: ['362']
+      content-type: [application/json]
+      date: ['Thu, 18 May 2017 16:41:36 GMT']
+      vary: [X-Auth-Token]
+      x-distribution: [Ubuntu]
+      x-openstack-request-id: [req-5dcc61e7-0707-481c-a816-e6d67ee6d64b]
+    status: {code: 200, message: OK}
+- request:
+    body: !!python/unicode '{"auth": {"tenantName": "28", "passwordCredentials": {"username":
+      "username", "password": "password"}}}'
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['109']
+      Content-Type: [application/json]
+      User-Agent: [dibctl keystoneauth1/2.18.0 python-requests/2.12.4 CPython/2.7.13]
+    method: POST
+    uri: https://auth.servers.nl01.cloud.servers.com:5000/v2.0/tokens
+  response:
+    body: {string: !!python/unicode '{"access": {"token": {"issued_at": "2017-05-18T16:41:37.000000Z",
+        "expires": "2037-05-19T16:41:37Z", "id": "e5c3fb28c3ba469fb0f160707045a5b2",
+        "tenant": {"description": "28 tenant (by test, used by username)", "enabled":
+        true, "id": "1d7f6604ebb54c69820f9d157bcea5f9", "name": "28"}, "audit_ids":
+        ["yBWiaGjWTN-cpbqi3h_1_A"]}, "serviceCatalog": [{"endpoints": [{"adminURL":
+        "http://glance-api.p.nova-ams-1.servers.com:29292/v2", "region": "ams-1",
+        "id": "50cef89163cc43ca8bda7e369cc52e43", "internalURL": "http://glance-api.p.nova-ams-1.servers.com:29292/v2",
+        "publicURL": "https://images.servers.nl01.cloud.servers.com:9292/v2"}], "endpoints_links":
+        [], "type": "image", "name": "glance"}, {"endpoints": [{"adminURL": "http://nova-api.p.nova-ams-1.servers.com:28774/v2/1d7f6604ebb54c69820f9d157bcea5f9",
+        "region": "ams-1", "id": "1728d1eb1fce49299f3b9af2b483ea07", "internalURL":
+        "http://nova-api.p.nova-ams-1.servers.com:28774/v2/1d7f6604ebb54c69820f9d157bcea5f9",
+        "publicURL": "https://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9"}],
+        "endpoints_links": [], "type": "compute", "name": "nova"}, {"endpoints": [{"adminURL":
+        "http://ceilometer-api.p.nova-ams-1.servers.com:28777", "region": "ams-1",
+        "id": "1143aedd4705418dbefc5ca672f12371", "internalURL": "http://ceilometer-api.p.nova-ams-1.servers.com:28777",
+        "publicURL": "https://metering.servers.nl01.cloud.servers.com:8777"}], "endpoints_links":
+        [], "type": "metering", "name": "ceilometer"}, {"endpoints": [{"adminURL":
+        "http://keystone.p.nova-ams-1.servers.com:35357/v2.0", "region": "ams-1",
+        "id": "50072ef2be7d4a23911ddfde497605bf", "internalURL": "http://keystone.p.nova-ams-1.servers.com:5001/v2.0",
+        "publicURL": "https://auth.servers.nl01.cloud.servers.com:5000/v2.0"}], "endpoints_links":
+        [], "type": "identity", "name": "keystone"}, {"endpoints": [{"adminURL": "http://neutron-server.p.nova-ams-1.servers.com:29696",
+        "region": "ams-1", "id": "604ba7d60702440ab82f7cccb01a63d7", "internalURL":
+        "http://neutron-server.p.nova-ams-1.servers.com:29696", "publicURL": "https://network.servers.nl01.cloud.servers.com:9696"}],
+        "endpoints_links": [], "type": "network", "name": "neutron"}], "user": {"username":
+        "username", "roles_links": [], "id": "16665fa4f4a54f0da3e72e9bf8f08ffc",
+        "roles": [{"name": "_member_"}], "name": "username"}, "metadata": {"is_admin":
+        0, "roles": ["9fe2ff9ee4384b1894a90878d3e92bab"]}}}'}
+    headers:
+      content-length: ['2420']
+      content-type: [application/json]
+      date: ['Thu, 18 May 2017 16:41:37 GMT']
+      vary: [X-Auth-Token]
+      x-distribution: [Ubuntu]
+      x-openstack-request-id: [req-fcaeac0f-0020-48c6-8353-583fe0c6ca54]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Type: [application/octet-stream]
+      User-Agent: [python-glanceclient]
+      X-Auth-Token: [!!python/unicode e5c3fb28c3ba469fb0f160707045a5b2]
+    method: HEAD
+    uri: https://images.servers.nl01.cloud.servers.com:9292/v2/v1/images/deadbeaf-0000-0000-0000-b7a14cdd1169
+  response:
+    body: {string: !!python/unicode ''}
+    headers:
+      content-length: ['0']
+      content-type: [text/plain; charset=UTF-8]
+      date: ['Thu, 18 May 2017 16:41:37 GMT']
+      x-openstack-request-id: [req-ea98ada7-505d-4ecf-90eb-62ba166d19b9]
+    status: {code: 404, message: Not Found}
+version: 1
