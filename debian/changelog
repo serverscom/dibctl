@@ -1,3 +1,14 @@
+dibctl (0.5.3) xenial; urgency=medium
+
+  * Integration tests
+  * Better timeout/error handling
+  * Fix leaked ssh key in tests (wasn't removed)
+  * Fix bug with userdata
+  * Add different exit codes for different errors
+  * Fix if test has no '/' in path (add './')
+
+ -- George Shuklin <george.shuklin@gmail.com>  Wed, 24 May 2017 15:42:34 +0300
+
 dibctl (0.5.2) xenial; urgency=medium
 
   * Add userdata option for tests
