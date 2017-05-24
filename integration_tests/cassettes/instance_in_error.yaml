@@ -72,7 +72,7 @@ interactions:
       x-openstack-request-id: [req-c5c79602-10ef-48df-a9b8-c8d6b5a639da]
     status: {code: 200, message: OK}
 - request:
-    body: !!python/unicode '{"keypair": {"name": "DIBCTL-24ee209f-c608-4536-b109-427eee070282"}}'
+    body: !!python/unicode '{"keypair": {"name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000"}}'
     headers:
       Accept: [application/json]
       Accept-Encoding: ['gzip, deflate']
@@ -87,7 +87,7 @@ interactions:
     body: {string: !!python/unicode '{"keypair": {"public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDEf3xV2SLYnb2h27Z8uhzg1FUjI+Uz56Ei/6nDiXqd9ChMBBEaIq0s3gYU1V95+uBJzlFyZUOza04Nlku/uTmQOZQuX1CqTSq9hUEYjL+i11cwxO7CsaTHSzmXrB1EYRJN3xccJPEVIi08wAG+ksuLXVRoiOORQxn6vk3f2T67iTsm0MsxJA/XUl33tQQvXzY6o1VVlZ41lQezFFIZOViDzfk5uY+/LcS0vvU2WeV8TOubORAhUNToq/RfTiYdttbhJ5L+LGYPsajH6KMucldlOGlZJfk75SnRcmnTcAnudZEtYBE2Kp9GvF7zORZ9oTfO2nbvKHxy8/dN7Ybmpxxd
         Generated-by-Nova", "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIEqQIBAAKCAQEAxH98Vdki2J29odu2fLoc4NRVIyPlM+ehIv+pw4l6nfQoTAQR\nGiKtLN4GFNVfefrgSc5RcmVDs2tODZZLv7k5kDmULl9Qqk0qvYVBGIy/otdXMMTu\nwrGkx0s5l6wdRGESTd8XHCTxFSItPMABvpLLi11UaIjjkUMZ+r5N39k+u4k7JtDL\nMSQP11Jd97UEL182OqNVVZWeNZUHsxRSGTlYg835ObmPvy3EtL71NlnlfEzrmzkQ\nIVDU6Kv0X04mHbbW4SeS/ixmD7Gox+ijLnJXZThpWSX5O+Up0XJp03AJ7nWRLWAR\nNiqfRrxe8zkWfaE3ztp27yh8cvP3Te2G5qccXQIDAQABAoIBAQCPQfLAFAJXswki\nDDFLVdTgBW3cpLrh0Kml/ociTATdS7hlU0G0sDtZTrVYUwe8wq7qoES5BiMJl93c\nAgtPyBazk4b5F/yTbJcQfSosX9EHQ8AJikoYH7NmqO1gKtdblvnlVBRhLH2nTrd0\nZvfenN9Qx8ZWQBbJPQafzEayQIx/5BGh811Bl1q9Z5jJOjx9bs4ghsYnBFqRMQbP\nkZVkefg1eI9yDp31/EFFpSA3Or9zMgJhigrbceWP+Kz7FkFTyDMk5mpdZ0S/tD94\nSSBm7mBaijiHnf7uXA5Wv1NIQnWNxNtU1fF8EwVSa+uC838MIoelD4MZUfM2xP91\nhXonPhuBAoIAgQDWaE0GvTkAHpQzjjjI/Blca1rl5zmAHVTkk3LnZQPc/bQUjB5a\nORD3n3mVnG1jHIM2ZiAdRNOdP5hI0p5PWlUTQ/MQrr+X05ZEWBBP+ix1oE/TMk+u\nr7mQVoOGRWHMMNOmIkmJuvEtE3mTwm1aGEM0IDS8bbSmBP9ZuaDVNBhwhQKCAIEA\n6p3Ii6dvuJOs1lTlELQJlm61Hy6F8Ye9XJ8J/2gQ5Sm6HFfj8px/IhILHMwUSxd9\nz2uuboNv3DO0ozFJDQnXNv7nOxKdbBrs9F5PkQiwDsVCU1F46/JchifFEKYtoPI7\n62CM3KO6Mw4dBVymby4WOEcHwXHuMAJ0JJAuAYE4b/kCggCAXZlW1vRQJ+8xf3g8\n7fCwGZp8KhVREs67OrXr2XxNvXG75aRts7Fp6M/jwh5x2myeE2dt6ZkcUG9syY24\nsqeasDhfqg6/cUZbOSbAqElsk0US0/4IrxfjiFFcRYeQdBV0r/gT5l6H3se7sXeV\nSVmCLQVKQGAcFsXju4W/4pNFgAkCggCARtiqjHFdLTF6yaYNHcQf+QspKmdUDyFc\nLzHfRP7ZyzmUd6aasNJNGa61KFb/8cUAOrhbjgemqan7bCQf2Q4VrQfAL3hpjRF8\naDZqdHNZJryuUJaTmzwucFxmB6cGtEkxitw27RGL0or6fHoD0CLslsXsM6ABuwGi\nrL/VBKNOtZECggCBAJ4hNiLILPBVQ1acqpQfEW4oyHsMHQyYs+e6amppQpbsQk9G\nODn8XZH7GElpUKqjE5wBt7JNeGX917GmKXllzc9XOjosJ/xF7H1WbE6L/2fKMXar\nYMzghI2VuC3YoGD1pAWn1ByN4Jn+RmLg2DjqCC213Z7noYFWE+XY46tLz6F9\n-----END
         RSA PRIVATE KEY-----\n", "user_id": "16665fa4f4a54f0da3e72e9bf8f08ffc", "name":
-        "DIBCTL-24ee209f-c608-4536-b109-427eee070282", "fingerprint": "a8:7a:8b:fa:56:73:cc:c1:4a:33:f2:22:06:19:1e:98"}}'}
+        "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "fingerprint": "a8:7a:8b:fa:56:73:cc:c1:4a:33:f2:22:06:19:1e:98"}}'}
     headers:
       content-length: ['2326']
       content-type: [application/json]
@@ -108,7 +108,7 @@ interactions:
       x-image-meta-container_format: [bare]
       x-image-meta-disk_format: [qcow2]
       x-image-meta-is_public: ['False']
-      x-image-meta-name: [DIBCTL-0c87cd2c-5e70-4bbb-9938-bccba68c531e]
+      x-image-meta-name: [DIBCTL-deadbeaf-4078-11e7-8228-000000000000]
       x-image-meta-property-display_order: ['4']
     method: POST
     uri: https://images.servers.nl01.cloud.servers.com:9292/v2/v1/images
@@ -117,7 +117,7 @@ interactions:
         "container_format": "bare", "min_ram": 0, "updated_at": "2017-05-19T09:01:21.000000",
         "owner": "1d7f6604ebb54c69820f9d157bcea5f9", "min_disk": 0, "is_public": false,
         "deleted_at": null, "id": "96ed1880-3ca8-494d-a64b-211ad52fd518", "size":
-        57, "virtual_size": null, "name": "DIBCTL-0c87cd2c-5e70-4bbb-9938-bccba68c531e",
+        57, "virtual_size": null, "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
         "checksum": "eb683fae72975eb263720dfb96328ad7", "created_at": "2017-05-19T09:01:21.000000",
         "disk_format": "qcow2", "properties": {"display_order": "4"}, "protected":
         false}}'}
@@ -248,8 +248,8 @@ interactions:
       x-compute-request-id: [req-adc63179-b10e-47a3-beb4-9cce6849f5e2]
     status: {code: 200, message: OK}
 - request:
-    body: !!python/unicode '{"server": {"name": "DIBCTL-b30ceb9c-fa32-4ad9-8780-dc83fd50565a",
-      "imageRef": "96ed1880-3ca8-494d-a64b-211ad52fd518", "key_name": "DIBCTL-24ee209f-c608-4536-b109-427eee070282",
+    body: !!python/unicode '{"server": {"name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+      "imageRef": "96ed1880-3ca8-494d-a64b-211ad52fd518", "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
       "flavorRef": "30", "max_count": 1, "min_count": 1, "networks": [{"uuid": "c7ccdf1c-e6c3-4257-8b2e-740748c14564"},
       {"uuid": "a3af8097-f348-4767-97c3-b9bf75263ef9"}, {"uuid": "db6e78cb-99fa-4223-9a6f-3b4a9b486d9b"}]}}'
     headers:
@@ -289,7 +289,7 @@ interactions:
     body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-05-19T09:01:22Z",
         "hostId": "", "addresses": {}, "links": [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
         "rel": "self"}, {"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
-        "rel": "bookmark"}], "key_name": "DIBCTL-24ee209f-c608-4536-b109-427eee070282",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
         "image": {"id": "96ed1880-3ca8-494d-a64b-211ad52fd518", "links": [{"href":
         "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/images/96ed1880-3ca8-494d-a64b-211ad52fd518",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "scheduling", "OS-EXT-STS:vm_state":
@@ -297,7 +297,7 @@ interactions:
         [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/flavors/30",
         "rel": "bookmark"}]}, "id": "1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd", "OS-SRV-USG:terminated_at":
         null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "16665fa4f4a54f0da3e72e9bf8f08ffc",
-        "name": "DIBCTL-b30ceb9c-fa32-4ad9-8780-dc83fd50565a", "created": "2017-05-19T09:01:23Z",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-05-19T09:01:23Z",
         "tenant_id": "1d7f6604ebb54c69820f9d157bcea5f9", "OS-DCF:diskConfig": "MANUAL",
         "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
         "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
@@ -322,7 +322,7 @@ interactions:
     body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-05-19T09:01:23Z",
         "hostId": "", "addresses": {}, "links": [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
         "rel": "self"}, {"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
-        "rel": "bookmark"}], "key_name": "DIBCTL-24ee209f-c608-4536-b109-427eee070282",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
         "image": {"id": "96ed1880-3ca8-494d-a64b-211ad52fd518", "links": [{"href":
         "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/images/96ed1880-3ca8-494d-a64b-211ad52fd518",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
@@ -330,7 +330,7 @@ interactions:
         [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/flavors/30",
         "rel": "bookmark"}]}, "id": "1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd", "OS-SRV-USG:terminated_at":
         null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "16665fa4f4a54f0da3e72e9bf8f08ffc",
-        "name": "DIBCTL-b30ceb9c-fa32-4ad9-8780-dc83fd50565a", "created": "2017-05-19T09:01:23Z",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-05-19T09:01:23Z",
         "tenant_id": "1d7f6604ebb54c69820f9d157bcea5f9", "OS-DCF:diskConfig": "MANUAL",
         "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
         "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
@@ -356,7 +356,7 @@ interactions:
         "hostId": "5a17e4ea4ab8ed1c1f2d745f57246997fd33955066229974bc201ead", "addresses":
         {}, "links": [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
         "rel": "self"}, {"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
-        "rel": "bookmark"}], "key_name": "DIBCTL-24ee209f-c608-4536-b109-427eee070282",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
         "image": {"id": "96ed1880-3ca8-494d-a64b-211ad52fd518", "links": [{"href":
         "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/images/96ed1880-3ca8-494d-a64b-211ad52fd518",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
@@ -364,7 +364,7 @@ interactions:
         [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/flavors/30",
         "rel": "bookmark"}]}, "id": "1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd", "OS-SRV-USG:terminated_at":
         null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "16665fa4f4a54f0da3e72e9bf8f08ffc",
-        "name": "DIBCTL-b30ceb9c-fa32-4ad9-8780-dc83fd50565a", "created": "2017-05-19T09:01:23Z",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-05-19T09:01:23Z",
         "tenant_id": "1d7f6604ebb54c69820f9d157bcea5f9", "OS-DCF:diskConfig": "MANUAL",
         "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
         "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
@@ -390,7 +390,7 @@ interactions:
         "hostId": "5a17e4ea4ab8ed1c1f2d745f57246997fd33955066229974bc201ead", "addresses":
         {}, "links": [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
         "rel": "self"}, {"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
-        "rel": "bookmark"}], "key_name": "DIBCTL-24ee209f-c608-4536-b109-427eee070282",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
         "image": {"id": "96ed1880-3ca8-494d-a64b-211ad52fd518", "links": [{"href":
         "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/images/96ed1880-3ca8-494d-a64b-211ad52fd518",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "networking", "OS-EXT-STS:vm_state":
@@ -398,7 +398,7 @@ interactions:
         [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/flavors/30",
         "rel": "bookmark"}]}, "id": "1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd", "OS-SRV-USG:terminated_at":
         null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "16665fa4f4a54f0da3e72e9bf8f08ffc",
-        "name": "DIBCTL-b30ceb9c-fa32-4ad9-8780-dc83fd50565a", "created": "2017-05-19T09:01:23Z",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-05-19T09:01:23Z",
         "tenant_id": "1d7f6604ebb54c69820f9d157bcea5f9", "OS-DCF:diskConfig": "MANUAL",
         "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
         "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
@@ -424,7 +424,7 @@ interactions:
         "hostId": "5a17e4ea4ab8ed1c1f2d745f57246997fd33955066229974bc201ead", "addresses":
         {}, "links": [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
         "rel": "self"}, {"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
-        "rel": "bookmark"}], "key_name": "DIBCTL-24ee209f-c608-4536-b109-427eee070282",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
         "image": {"id": "96ed1880-3ca8-494d-a64b-211ad52fd518", "links": [{"href":
         "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/images/96ed1880-3ca8-494d-a64b-211ad52fd518",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
@@ -432,7 +432,7 @@ interactions:
         [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/flavors/30",
         "rel": "bookmark"}]}, "id": "1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd", "OS-SRV-USG:terminated_at":
         null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "16665fa4f4a54f0da3e72e9bf8f08ffc",
-        "name": "DIBCTL-b30ceb9c-fa32-4ad9-8780-dc83fd50565a", "created": "2017-05-19T09:01:23Z",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-05-19T09:01:23Z",
         "tenant_id": "1d7f6604ebb54c69820f9d157bcea5f9", "OS-DCF:diskConfig": "MANUAL",
         "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
         "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
@@ -458,7 +458,7 @@ interactions:
         "hostId": "5a17e4ea4ab8ed1c1f2d745f57246997fd33955066229974bc201ead", "addresses":
         {}, "links": [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
         "rel": "self"}, {"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
-        "rel": "bookmark"}], "key_name": "DIBCTL-24ee209f-c608-4536-b109-427eee070282",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
         "image": {"id": "96ed1880-3ca8-494d-a64b-211ad52fd518", "links": [{"href":
         "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/images/96ed1880-3ca8-494d-a64b-211ad52fd518",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
@@ -466,7 +466,7 @@ interactions:
         [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/flavors/30",
         "rel": "bookmark"}]}, "id": "1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd", "OS-SRV-USG:terminated_at":
         null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "16665fa4f4a54f0da3e72e9bf8f08ffc",
-        "name": "DIBCTL-b30ceb9c-fa32-4ad9-8780-dc83fd50565a", "created": "2017-05-19T09:01:23Z",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-05-19T09:01:23Z",
         "tenant_id": "1d7f6604ebb54c69820f9d157bcea5f9", "OS-DCF:diskConfig": "MANUAL",
         "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
         "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
@@ -492,7 +492,7 @@ interactions:
         "hostId": "5a17e4ea4ab8ed1c1f2d745f57246997fd33955066229974bc201ead", "addresses":
         {}, "links": [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
         "rel": "self"}, {"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
-        "rel": "bookmark"}], "key_name": "DIBCTL-24ee209f-c608-4536-b109-427eee070282",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
         "image": {"id": "96ed1880-3ca8-494d-a64b-211ad52fd518", "links": [{"href":
         "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/images/96ed1880-3ca8-494d-a64b-211ad52fd518",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
@@ -500,7 +500,7 @@ interactions:
         [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/flavors/30",
         "rel": "bookmark"}]}, "id": "1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd", "OS-SRV-USG:terminated_at":
         null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "16665fa4f4a54f0da3e72e9bf8f08ffc",
-        "name": "DIBCTL-b30ceb9c-fa32-4ad9-8780-dc83fd50565a", "created": "2017-05-19T09:01:23Z",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-05-19T09:01:23Z",
         "tenant_id": "1d7f6604ebb54c69820f9d157bcea5f9", "OS-DCF:diskConfig": "MANUAL",
         "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
         "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
@@ -526,7 +526,7 @@ interactions:
         "hostId": "5a17e4ea4ab8ed1c1f2d745f57246997fd33955066229974bc201ead", "addresses":
         {}, "links": [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
         "rel": "self"}, {"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
-        "rel": "bookmark"}], "key_name": "DIBCTL-24ee209f-c608-4536-b109-427eee070282",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
         "image": {"id": "96ed1880-3ca8-494d-a64b-211ad52fd518", "links": [{"href":
         "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/images/96ed1880-3ca8-494d-a64b-211ad52fd518",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
@@ -534,7 +534,7 @@ interactions:
         [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/flavors/30",
         "rel": "bookmark"}]}, "id": "1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd", "OS-SRV-USG:terminated_at":
         null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "16665fa4f4a54f0da3e72e9bf8f08ffc",
-        "name": "DIBCTL-b30ceb9c-fa32-4ad9-8780-dc83fd50565a", "created": "2017-05-19T09:01:23Z",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-05-19T09:01:23Z",
         "tenant_id": "1d7f6604ebb54c69820f9d157bcea5f9", "OS-DCF:diskConfig": "MANUAL",
         "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
         "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
@@ -560,7 +560,7 @@ interactions:
         "hostId": "5a17e4ea4ab8ed1c1f2d745f57246997fd33955066229974bc201ead", "addresses":
         {}, "links": [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
         "rel": "self"}, {"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
-        "rel": "bookmark"}], "key_name": "DIBCTL-24ee209f-c608-4536-b109-427eee070282",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
         "image": {"id": "96ed1880-3ca8-494d-a64b-211ad52fd518", "links": [{"href":
         "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/images/96ed1880-3ca8-494d-a64b-211ad52fd518",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
@@ -568,7 +568,7 @@ interactions:
         [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/flavors/30",
         "rel": "bookmark"}]}, "id": "1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd", "OS-SRV-USG:terminated_at":
         null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "16665fa4f4a54f0da3e72e9bf8f08ffc",
-        "name": "DIBCTL-b30ceb9c-fa32-4ad9-8780-dc83fd50565a", "created": "2017-05-19T09:01:23Z",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-05-19T09:01:23Z",
         "tenant_id": "1d7f6604ebb54c69820f9d157bcea5f9", "OS-DCF:diskConfig": "MANUAL",
         "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
         "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
@@ -594,7 +594,7 @@ interactions:
         "hostId": "5a17e4ea4ab8ed1c1f2d745f57246997fd33955066229974bc201ead", "addresses":
         {}, "links": [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
         "rel": "self"}, {"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
-        "rel": "bookmark"}], "key_name": "DIBCTL-24ee209f-c608-4536-b109-427eee070282",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
         "image": {"id": "96ed1880-3ca8-494d-a64b-211ad52fd518", "links": [{"href":
         "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/images/96ed1880-3ca8-494d-a64b-211ad52fd518",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
@@ -602,7 +602,7 @@ interactions:
         [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/flavors/30",
         "rel": "bookmark"}]}, "id": "1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd", "OS-SRV-USG:terminated_at":
         null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "16665fa4f4a54f0da3e72e9bf8f08ffc",
-        "name": "DIBCTL-b30ceb9c-fa32-4ad9-8780-dc83fd50565a", "created": "2017-05-19T09:01:23Z",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-05-19T09:01:23Z",
         "tenant_id": "1d7f6604ebb54c69820f9d157bcea5f9", "OS-DCF:diskConfig": "MANUAL",
         "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
         "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
@@ -628,7 +628,7 @@ interactions:
         "hostId": "5a17e4ea4ab8ed1c1f2d745f57246997fd33955066229974bc201ead", "addresses":
         {}, "links": [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
         "rel": "self"}, {"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
-        "rel": "bookmark"}], "key_name": "DIBCTL-24ee209f-c608-4536-b109-427eee070282",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
         "image": {"id": "96ed1880-3ca8-494d-a64b-211ad52fd518", "links": [{"href":
         "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/images/96ed1880-3ca8-494d-a64b-211ad52fd518",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
@@ -636,7 +636,7 @@ interactions:
         [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/flavors/30",
         "rel": "bookmark"}]}, "id": "1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd", "OS-SRV-USG:terminated_at":
         null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "16665fa4f4a54f0da3e72e9bf8f08ffc",
-        "name": "DIBCTL-b30ceb9c-fa32-4ad9-8780-dc83fd50565a", "created": "2017-05-19T09:01:23Z",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-05-19T09:01:23Z",
         "tenant_id": "1d7f6604ebb54c69820f9d157bcea5f9", "OS-DCF:diskConfig": "MANUAL",
         "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
         "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
@@ -662,7 +662,7 @@ interactions:
         "hostId": "5a17e4ea4ab8ed1c1f2d745f57246997fd33955066229974bc201ead", "addresses":
         {}, "links": [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
         "rel": "self"}, {"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
-        "rel": "bookmark"}], "key_name": "DIBCTL-24ee209f-c608-4536-b109-427eee070282",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
         "image": {"id": "96ed1880-3ca8-494d-a64b-211ad52fd518", "links": [{"href":
         "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/images/96ed1880-3ca8-494d-a64b-211ad52fd518",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
@@ -670,7 +670,7 @@ interactions:
         [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/flavors/30",
         "rel": "bookmark"}]}, "id": "1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd", "OS-SRV-USG:terminated_at":
         null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "16665fa4f4a54f0da3e72e9bf8f08ffc",
-        "name": "DIBCTL-b30ceb9c-fa32-4ad9-8780-dc83fd50565a", "created": "2017-05-19T09:01:23Z",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-05-19T09:01:23Z",
         "tenant_id": "1d7f6604ebb54c69820f9d157bcea5f9", "OS-DCF:diskConfig": "MANUAL",
         "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
         "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
@@ -695,7 +695,7 @@ interactions:
     body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-05-19T09:01:25Z",
         "hostId": "", "addresses": {}, "links": [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
         "rel": "self"}, {"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
-        "rel": "bookmark"}], "key_name": "DIBCTL-24ee209f-c608-4536-b109-427eee070282",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
         "image": {"id": "96ed1880-3ca8-494d-a64b-211ad52fd518", "links": [{"href":
         "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/images/96ed1880-3ca8-494d-a64b-211ad52fd518",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
@@ -703,7 +703,7 @@ interactions:
         [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/flavors/30",
         "rel": "bookmark"}]}, "id": "1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd", "OS-SRV-USG:terminated_at":
         null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "16665fa4f4a54f0da3e72e9bf8f08ffc",
-        "name": "DIBCTL-b30ceb9c-fa32-4ad9-8780-dc83fd50565a", "created": "2017-05-19T09:01:23Z",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-05-19T09:01:23Z",
         "tenant_id": "1d7f6604ebb54c69820f9d157bcea5f9", "OS-DCF:diskConfig": "MANUAL",
         "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
         "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
@@ -728,7 +728,7 @@ interactions:
     body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-05-19T09:01:25Z",
         "hostId": "", "addresses": {}, "links": [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
         "rel": "self"}, {"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
-        "rel": "bookmark"}], "key_name": "DIBCTL-24ee209f-c608-4536-b109-427eee070282",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
         "image": {"id": "96ed1880-3ca8-494d-a64b-211ad52fd518", "links": [{"href":
         "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/images/96ed1880-3ca8-494d-a64b-211ad52fd518",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
@@ -736,7 +736,7 @@ interactions:
         [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/flavors/30",
         "rel": "bookmark"}]}, "id": "1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd", "OS-SRV-USG:terminated_at":
         null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "16665fa4f4a54f0da3e72e9bf8f08ffc",
-        "name": "DIBCTL-b30ceb9c-fa32-4ad9-8780-dc83fd50565a", "created": "2017-05-19T09:01:23Z",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-05-19T09:01:23Z",
         "tenant_id": "1d7f6604ebb54c69820f9d157bcea5f9", "OS-DCF:diskConfig": "MANUAL",
         "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
         "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
@@ -761,7 +761,7 @@ interactions:
     body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-05-19T09:01:25Z",
         "hostId": "", "addresses": {}, "links": [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
         "rel": "self"}, {"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
-        "rel": "bookmark"}], "key_name": "DIBCTL-24ee209f-c608-4536-b109-427eee070282",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
         "image": {"id": "96ed1880-3ca8-494d-a64b-211ad52fd518", "links": [{"href":
         "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/images/96ed1880-3ca8-494d-a64b-211ad52fd518",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
@@ -769,7 +769,7 @@ interactions:
         [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/flavors/30",
         "rel": "bookmark"}]}, "id": "1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd", "OS-SRV-USG:terminated_at":
         null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "16665fa4f4a54f0da3e72e9bf8f08ffc",
-        "name": "DIBCTL-b30ceb9c-fa32-4ad9-8780-dc83fd50565a", "created": "2017-05-19T09:01:23Z",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-05-19T09:01:23Z",
         "tenant_id": "1d7f6604ebb54c69820f9d157bcea5f9", "OS-DCF:diskConfig": "MANUAL",
         "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
         "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
@@ -794,7 +794,7 @@ interactions:
     body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-05-19T09:01:25Z",
         "hostId": "", "addresses": {}, "links": [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
         "rel": "self"}, {"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
-        "rel": "bookmark"}], "key_name": "DIBCTL-24ee209f-c608-4536-b109-427eee070282",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
         "image": {"id": "96ed1880-3ca8-494d-a64b-211ad52fd518", "links": [{"href":
         "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/images/96ed1880-3ca8-494d-a64b-211ad52fd518",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
@@ -802,7 +802,7 @@ interactions:
         [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/flavors/30",
         "rel": "bookmark"}]}, "id": "1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd", "OS-SRV-USG:terminated_at":
         null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "16665fa4f4a54f0da3e72e9bf8f08ffc",
-        "name": "DIBCTL-b30ceb9c-fa32-4ad9-8780-dc83fd50565a", "created": "2017-05-19T09:01:23Z",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-05-19T09:01:23Z",
         "tenant_id": "1d7f6604ebb54c69820f9d157bcea5f9", "OS-DCF:diskConfig": "MANUAL",
         "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
         "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
@@ -827,7 +827,7 @@ interactions:
     body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-05-19T09:01:25Z",
         "hostId": "", "addresses": {}, "links": [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
         "rel": "self"}, {"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
-        "rel": "bookmark"}], "key_name": "DIBCTL-24ee209f-c608-4536-b109-427eee070282",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
         "image": {"id": "96ed1880-3ca8-494d-a64b-211ad52fd518", "links": [{"href":
         "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/images/96ed1880-3ca8-494d-a64b-211ad52fd518",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
@@ -835,7 +835,7 @@ interactions:
         [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/flavors/30",
         "rel": "bookmark"}]}, "id": "1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd", "OS-SRV-USG:terminated_at":
         null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "16665fa4f4a54f0da3e72e9bf8f08ffc",
-        "name": "DIBCTL-b30ceb9c-fa32-4ad9-8780-dc83fd50565a", "created": "2017-05-19T09:01:23Z",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-05-19T09:01:23Z",
         "tenant_id": "1d7f6604ebb54c69820f9d157bcea5f9", "OS-DCF:diskConfig": "MANUAL",
         "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
         "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
@@ -860,7 +860,7 @@ interactions:
     body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-05-19T09:01:26Z",
         "hostId": "", "addresses": {}, "links": [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
         "rel": "self"}, {"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
-        "rel": "bookmark"}], "key_name": "DIBCTL-24ee209f-c608-4536-b109-427eee070282",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
         "image": {"id": "96ed1880-3ca8-494d-a64b-211ad52fd518", "links": [{"href":
         "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/images/96ed1880-3ca8-494d-a64b-211ad52fd518",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
@@ -868,7 +868,7 @@ interactions:
         [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/flavors/30",
         "rel": "bookmark"}]}, "id": "1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd", "OS-SRV-USG:terminated_at":
         null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "16665fa4f4a54f0da3e72e9bf8f08ffc",
-        "name": "DIBCTL-b30ceb9c-fa32-4ad9-8780-dc83fd50565a", "created": "2017-05-19T09:01:23Z",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-05-19T09:01:23Z",
         "tenant_id": "1d7f6604ebb54c69820f9d157bcea5f9", "OS-DCF:diskConfig": "MANUAL",
         "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
         "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
@@ -893,7 +893,7 @@ interactions:
     body: {string: !!python/unicode '{"server": {"status": "ERROR", "updated": "2017-05-19T09:01:26Z",
         "hostId": "", "addresses": {}, "links": [{"href": "http://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
         "rel": "self"}, {"href": "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/servers/1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd",
-        "rel": "bookmark"}], "key_name": "DIBCTL-24ee209f-c608-4536-b109-427eee070282",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
         "image": {"id": "96ed1880-3ca8-494d-a64b-211ad52fd518", "links": [{"href":
         "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/images/96ed1880-3ca8-494d-a64b-211ad52fd518",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
@@ -901,7 +901,7 @@ interactions:
         "http://compute.servers.nl01.cloud.servers.com:8774/1d7f6604ebb54c69820f9d157bcea5f9/flavors/30",
         "rel": "bookmark"}]}, "id": "1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd", "OS-SRV-USG:terminated_at":
         null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "16665fa4f4a54f0da3e72e9bf8f08ffc",
-        "name": "DIBCTL-b30ceb9c-fa32-4ad9-8780-dc83fd50565a", "created": "2017-05-19T09:01:23Z",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-05-19T09:01:23Z",
         "tenant_id": "1d7f6604ebb54c69820f9d157bcea5f9", "OS-DCF:diskConfig": "MANUAL",
         "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
         "", "fault": {"message": "Build of instance 1ee3f6d3-81f9-49a5-8e7b-640cbf56b3bd
@@ -944,7 +944,7 @@ interactions:
       User-Agent: [python-novaclient]
       X-Auth-Token: [!!python/unicode 1d6dd7b73d0745b88fa4746dcb939355]
     method: DELETE
-    uri: https://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/os-keypairs/DIBCTL-24ee209f-c608-4536-b109-427eee070282
+    uri: https://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/os-keypairs/DIBCTL-deadbeaf-4078-11e7-8228-000000000000
   response:
     body: {string: !!python/unicode ''}
     headers:
@@ -980,7 +980,7 @@ interactions:
       x-image-meta-is_public: ['False']
       x-image-meta-min_disk: ['0']
       x-image-meta-min_ram: ['0']
-      x-image-meta-name: [DIBCTL-0c87cd2c-5e70-4bbb-9938-bccba68c531e]
+      x-image-meta-name: [DIBCTL-deadbeaf-4078-11e7-8228-000000000000]
       x-image-meta-owner: [1d7f6604ebb54c69820f9d157bcea5f9]
       x-image-meta-property-display_order: ['4']
       x-image-meta-protected: ['False']

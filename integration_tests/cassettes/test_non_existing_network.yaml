@@ -23,13 +23,13 @@ interactions:
       x-openstack-request-id: [req-28af39fe-16cf-4398-9c91-01d0bcf4526a]
     status: {code: 200, message: OK}
 - request:
-    body: !!python/unicode '{"auth": {"tenantName": "28", "passwordCredentials": {"username":
+    body: !!python/unicode '{"auth": {"tenantName": "tenant", "passwordCredentials": {"username":
       "username", "password": "password"}}}'
     headers:
       Accept: [application/json]
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Content-Length: ['103']
+      Content-Length: ['107']
       Content-Type: [application/json]
       User-Agent: [dibctl keystoneauth1/2.18.0 python-requests/2.12.4 CPython/2.7.13]
     method: POST
@@ -108,7 +108,7 @@ interactions:
       x-openstack-request-id: [req-bb5d005f-b13b-424b-840d-41c5c81bd9ac]
     status: {code: 200, message: OK}
 - request:
-    body: !!python/unicode '{"keypair": {"name": "DIBCTL-4c5bf843-3e40-4b0e-9947-6c5edb222966"}}'
+    body: !!python/unicode '{"keypair": {"name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000"}}'
     headers:
       Accept: [application/json]
       Accept-Encoding: ['gzip, deflate']
@@ -123,7 +123,7 @@ interactions:
     body: {string: !!python/unicode '{"keypair": {"public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDY6j2UxOIzymsFSheCfNHACtg1Dsi2HiMoWKDUS+p8PtQHG93QQ32Ij7Yd02fkHrUKYXulRv8dB4DkApV2zsg7GA3+mIc/bM5f2W7YJjwssHlCiRtciKj99kQjhQwYaxHN78EugnGuDmsoxjVsUKVx7/Cz0KQhCyvq0OkXzY1iDvVJVuGPKWR6xC8NfyA9csN4CbKMEd1YE+pWeC2STNpSgVY7jIQAJzI7DGkpJVHQ9UHymMwHpOB5BxTGIICfaUp+UAz0GfKfnv+63sPAEtmx6rwzHPBfvLb3CT9kSKaw8Tnld/XEj2BZB4Q7RBB+qm+Ywp1TlSHDYbke7ZRaZ1g/
         Generated-by-Nova", "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIEqQIBAAKCAQEA2Oo9lMTiM8prBUoXgnzRwArYNQ7Ith4jKFig1EvqfD7UBxvd\n0EN9iI+2HdNn5B61CmF7pUb/HQeA5AKVds7IOxgN/piHP2zOX9lu2CY8LLB5Qokb\nXIio/fZEI4UMGGsRze/BLoJxrg5rKMY1bFClce/ws9CkIQsr6tDpF82NYg71SVbh\njylkesQvDX8gPXLDeAmyjBHdWBPqVngtkkzaUoFWO4yEACcyOwxpKSVR0PVB8pjM\nB6TgeQcUxiCAn2lKflAM9Bnyn57/ut7DwBLZseq8MxzwX7y29wk/ZEimsPE55Xf1\nxI9gWQeEO0QQfqpvmMKdU5Uhw2G5Hu2UWmdYPwIDAQABAoIBAQCCGhzNejlibuo5\nxfLL5Sm5UcfUKwXflbvomx/7tXzzAIwTp3cnTxOgMPI+eWo6vOBBVa7ftvGU68c2\n+wXCuMwIBal/JuUX+Z7ehn+hTW2SMFbKvYmXurABgw/jbg2PJ8kKB9+Kkdq1VxiW\n4Ctyx/wzloJ8l4uZ9iVlNeBY0oUWZl+yJJ6K6bcisb+5UTVIroMDzxQPSUqHhjJz\njs4ARzJ8kZwj61pdShkn85Tqn/2cQauCPL3XbY9+F0h2mAPGwxg2qiXUllrHtyDN\nCRmX3ECY6G4DOAMOWkcYrj7wlh2b2FUTtz5o0uM6Wzzz7ztHWg1UMSBQpuinJzR+\ntC0SqfRhAoIAgQDrBSD0xESrLZZVXNZ4kCAqb2BZVjrvj1yKx17fQLucGrwgsO25\nJxWecohtv9Ukhj+jxy6fkxRTafc7wKtcI0+QYWJe898TS8NSGS3ceVSaZUYETln1\nPVA/hqWatOytjVFDLqdDYcaKEG16ykox9ORcc0Y5YdjO8zXhV/TUw4NUZQKCAIEA\n7EdcWGKIYwuGkC5fkN7R/NGg/LBfhto+YY2vFlDN2E8jHgH8318mAtmZmTZGJVhC\nrw0QZwrNhEGHsLVtQoDMBkYSuHSY3gmgl4og+3xD6Qm9FS7w12dRrVGQApRJJnsJ\nzTcPhGfvIZaHfkizVEU5yZc7tAndFjSzpbixCEdCldMCggCBAIz0NIHYvP6VhtaH\nqbIBbulEh1rNVuea6fvp+0KWxm6nsjFBLDKh+FthgeWg6irPwZduvM3EHqqwoTFb\nKutF2lBTt/YO+bnO9MRmiZTzyAQZvVaTz2xAa8LN9MDGxjSIzzYl4veMytC/bYn5\njWpM4DF6iaGcx7XHNIeEgzigUkHpAoIAgDdrlZF1qx/wOCPhfLDyUrbGRMiAZiev\nUSp4nTTSxzWRel8zgCi0nKnWeFyjiliAF0QQAGTq98GpzTX5mCMdKr3d+c4iKykJ\ngQ2KbKoQP62NhzhMxlj/9vx8QRcZyP6ppWbpH06jQkfSkv1f+BAwHJnYSzyzg5QN\n0IVyiLO0Yz3ZAoIAgAnVFLN9qxgiswDvH9UJoAbcOU6JwU1cMF9vw4ObU6zjzpqh\nCBrVB4A5+EPWNtMLt/okHg9QTYUjId4dmVvaeoPzVZmeVdMCxPh71SilHcX7b910\nx/GZDEi7ncUJq/HPgLPCQh4C49mYZI05tqs1vMVCtRsWiNCYuEq/OF32ZAEf\n-----END
         RSA PRIVATE KEY-----\n", "user_id": "16665fa4f4a54f0da3e72e9bf8f08ffc", "name":
-        "DIBCTL-4c5bf843-3e40-4b0e-9947-6c5edb222966", "fingerprint": "a7:4f:96:bf:7e:86:7c:5f:b0:26:f5:4f:bf:bd:39:99"}}'}
+        "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "fingerprint": "a7:4f:96:bf:7e:86:7c:5f:b0:26:f5:4f:bf:bd:39:99"}}'}
     headers:
       content-length: ['2326']
       content-type: [application/json]
@@ -186,8 +186,8 @@ interactions:
       x-compute-request-id: [req-ec868659-ed95-4633-9cd2-578b03013b75]
     status: {code: 200, message: OK}
 - request:
-    body: !!python/unicode '{"server": {"name": "DIBCTL-4cbc6890-6bd6-4514-b412-2ca7aa0b643c",
-      "imageRef": "2eb14fc3-4edc-4068-8748-988f369302c2", "key_name": "DIBCTL-4c5bf843-3e40-4b0e-9947-6c5edb222966",
+    body: !!python/unicode '{"server": {"name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+      "imageRef": "2eb14fc3-4edc-4068-8748-988f369302c2", "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
       "flavorRef": "30", "max_count": 1, "min_count": 1, "networks": [{"uuid": "2ea90ca0-7577-4706-9a41-fc88d8bee945"}]}}'
     headers:
       Accept: [application/json]
@@ -218,7 +218,7 @@ interactions:
       User-Agent: [python-novaclient]
       X-Auth-Token: [!!python/unicode f41cb0b9b3134efe8cf4723d7e53e360]
     method: DELETE
-    uri: https://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/os-keypairs/DIBCTL-4c5bf843-3e40-4b0e-9947-6c5edb222966
+    uri: https://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/os-keypairs/DIBCTL-deadbeaf-4078-11e7-8228-000000000000
   response:
     body: {string: !!python/unicode ''}
     headers:
