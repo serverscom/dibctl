@@ -1,6 +1,8 @@
 import vcr
 import os
 import mock
+import logging
+import sys
 
 
 def setup_module(module):
@@ -23,8 +25,25 @@ def setup_module(module):
     VCR = vcr.VCR(
         cassette_library_dir='cassettes/',
         record_mode='once',
-        match_on=['uri', 'method']
+        match_on=['uri', 'method', 'headers', 'body']
     )
+    VCR.filter_headers = ('Content-Length', 'Accept-Encoding', 'User-Agent', 'date', 'x-distribution')
+    logging.basicConfig()
+    vcr_log = logging.getLogger('vcr')
+    vcr_log.setLevel(logging.DEBUG)
+    ch = logging.FileHandler('/tmp/requests.log', mode='w')
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    ch.setFormatter(formatter)
+    ch.setLevel(logging.INFO)
+    vcr_log.addHandler(ch)
+    vcr_log.info('Set up logging')
+    root = logging.getLogger()
+    root.setLevel(logging.DEBUG)
+    ch = logging.StreamHandler(sys.stdout)
+    ch.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    ch.setFormatter(formatter)
+    root.addHandler(ch)
 
 
 def teardown_modlue(module):
@@ -65,13 +84,16 @@ def test_not_found_in_config_code_11(quick_commands):
 
 
 def test_existing_image_success_code_0(quick_commands):
-    with VCR.use_cassette('test_existing_image_success.yaml'):
-        assert quick_commands.main([
-                'test',
-                'xenial',
-                '--use-existing-image',
-                '2eb14fc3-4edc-4068-8748-988f369302c2'
-            ]) == 0
+    try:
+        with VCR.use_cassette('test_existing_image_success.yaml'):
+            assert quick_commands.main([
+                    'test',
+                    'xenial',
+                    '--use-existing-image',
+                    '2eb14fc3-4edc-4068-8748-988f369302c2'
+                ]) == 0
+    except Exception as e:
+        raise e
 
 
 def test_existing_image_fail_code_80(quick_commands):

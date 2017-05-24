@@ -51,4 +51,9 @@ def quick_commands(MockSocket, MockTime):
     from dibctl import commands
     with mock.patch.object(commands.prepare_os, "time", MockTime()):
         with mock.patch.object(commands.prepare_os, "socket", MockSocket([0])):
-            yield commands
+            with mock.patch.object(
+                commands.prepare_os.uuid,
+                "uuid4",
+                return_value='deadbeaf-4078-11e7-8228-000000000000'
+            ):
+                yield commands
