@@ -19,6 +19,13 @@ def setup_module(module):
     if 'integration_tests' not in curdir:
         os.chdir('integration_tests')
 
+    global VCR
+    VCR = vcr.VCR(
+        cassette_library_dir='cassettes/',
+        record_mode='once',
+        match_on=['uri', 'method']
+    )
+
 
 def teardown_modlue(module):
     global curdir
@@ -58,7 +65,7 @@ def test_not_found_in_config_code_11(quick_commands):
 
 
 def test_existing_image_success_code_0(quick_commands):
-    with vcr.use_cassette('cassettes/test_existing_image_success.yaml'):
+    with VCR.use_cassette('test_existing_image_success.yaml'):
         assert quick_commands.main([
                 'test',
                 'xenial',
@@ -68,7 +75,7 @@ def test_existing_image_success_code_0(quick_commands):
 
 
 def test_existing_image_fail_code_80(quick_commands):
-    with vcr.use_cassette('cassettes/test_existing_image_fail.yaml'):
+    with VCR.use_cassette('test_existing_image_fail.yaml'):
         assert quick_commands.main([
                 'test',
                 'xenial_fail',
@@ -78,7 +85,7 @@ def test_existing_image_fail_code_80(quick_commands):
 
 
 def test_non_existing_image_code_50(quick_commands):
-    with vcr.use_cassette('cassettes/test_non_existing_image.yaml'):
+    with VCR.use_cassette('test_non_existing_image.yaml'):
         assert quick_commands.main([
                 'test',
                 'xenial',
@@ -88,7 +95,7 @@ def test_non_existing_image_code_50(quick_commands):
 
 
 def test_non_existing_network_code_60(quick_commands):
-    with vcr.use_cassette('cassettes/test_non_existing_network.yaml'):
+    with VCR.use_cassette('test_non_existing_network.yaml'):
         assert quick_commands.main([
                 'test',
                 'xenial',
@@ -100,7 +107,7 @@ def test_non_existing_network_code_60(quick_commands):
 
 
 def test_instance_is_not_answer_port(quick_commands):
-    with vcr.use_cassette('cassettes/instance_is_not_answer_port.yaml'):
+    with VCR.use_cassette('instance_is_not_answer_port.yaml'):
         quick_commands.prepare_os.socket.sequence = [None]
         assert quick_commands.main([
                 'test',
@@ -111,7 +118,7 @@ def test_instance_is_not_answer_port(quick_commands):
 
 
 def test_instance_is_not_answer_port_with_upload(quick_commands):
-    with vcr.use_cassette('cassettes/instance_is_not_answer_port_with_upload.yaml'):
+    with VCR.use_cassette('instance_is_not_answer_port_with_upload.yaml'):
         quick_commands.prepare_os.socket.sequence = [None]
         assert quick_commands.main([
                 'test',
@@ -125,7 +132,7 @@ def test_instance_in_error(quick_commands):
     def full_read(ignore_self, filename):
         return open(filename, 'rb', buffering=65536).read()
     with mock.patch.object(quick_commands.do_tests.prepare_os.osclient.OSClient, '_file_to_upload', full_read):
-        with vcr.use_cassette('cassettes/instance_in_error.yaml'):
+        with VCR.use_cassette('instance_in_error.yaml'):
             assert quick_commands.main([
                     'test',
                     'xenial',
@@ -138,10 +145,8 @@ def test_normal_upload(quick_commands):
     def full_read(ignore_self, filename):
         return open(filename, 'rb', buffering=65536).read()
     with mock.patch.object(quick_commands.do_tests.prepare_os.osclient.OSClient, '_file_to_upload', full_read):
-        with vcr.use_cassette('cassettes/normal_upload.yaml'):
+        with VCR.use_cassette('normal_upload.yaml'):
             assert quick_commands.main([
                     'test',
                     'xenial'
                 ]) == 0
-
-
