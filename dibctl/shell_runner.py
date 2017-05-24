@@ -34,7 +34,10 @@ def gather_tests(path):
         all_files = map(gather_tests, filelist)
         return list(itertools.chain.from_iterable(filter(None, all_files)))
     elif os.path.isfile(path) and os.access(path, os.X_OK):
-        return [path]
+        if '/' not in path:
+            return ['./' + path]
+        else:
+            return [path]
     else:
         return None
 

@@ -15,14 +15,19 @@ class PyTest(Command):
     def run(self):
         import pytest
         print("Running unit tests")
-        error_code = pytest.main(['build', '--ignore', 'build/doctest', '--ignore', 'build/tests/test_bad_configs.py'])
+        error_code = pytest.main([
+			'build',
+			'--ignore', 'build/doctests',
+			'--ignore', 'build/tests/test_bad_configs.py',
+			'--ignore', 'build/integration_tests'
+		])
         if error_code:
             sys.exit(error_code)
         print("Running integration tests for docs examples")
         # doctests should be run against current dir, not 'build'
         # because config examples are not copied to build
         # (they are installed as config files)
-        error_code = pytest.main(['doctest/'])
+        error_code = pytest.main(['doctests/'])
         if error_code:
             sys.exit(error_code)
 

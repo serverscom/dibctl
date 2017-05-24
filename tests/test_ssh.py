@@ -98,6 +98,7 @@ def test_key_file_keep_key_file(ssh):
     with pytest.raises(IOError):
         open(f1, 'r')
     assert 'secret' == open(f2, 'r').read()
+    os.remove(f2)
 
 
 def test_command_line(ssh):

@@ -9,6 +9,7 @@ import prepare_os
 import version
 from keystoneauth1 import exceptions as keystone_exceptions
 from novaclient import exceptions as novaclient_exceptions
+from glanceclient import exc as glanceclient_exceptions
 
 
 class PrematureExitError(SystemExit):
@@ -211,15 +212,11 @@ class TestCommand(GenericCommand):
         )
         if self.args.instance:
             dt.reconfigure_for_existing_instance(self.args.instance, self.args.private_key_file)
-        try:
-            status = dt.process(shell_only=False, shell_on_errors=self.args.shell)
-        except do_tests.TestError as e:
-            print("Error while testing: %s" % e)
-            return 1
+        status = dt.process(shell_only=False, shell_on_errors=self.args.shell)
         if status:
             return 0
         else:
-            return 1
+            return 80
 
 
 class ShellCommand(GenericCommand):
@@ -415,29 +412,43 @@ class Main(object):
 
 
 def main(line=None):
+    sad_table = {
+        config.ConfigNotFound: 10,
+        config.NotFoundInConfigError: 11,
+        osclient.CredNotFound: 12,
+        glanceclient_exceptions.HTTPNotFound: 50,
+        novaclient_exceptions.BadRequest: 60,
+        prepare_os.InstanceError: 70,
+        do_tests.PortWaitError: 71
+    }
     m = Main(line)
     try:
         code = m.run()
+    except tuple(sad_table.keys()) as e:
+        code = sad_table[e.__class__]
+        print("Error: %s, code %s" % (str(e), code))
     except (
         PrematureExitError,
         osclient.CredNotFound,
         osclient.OpenStackError,
-        config.ConfigError,
-        config.NotFoundInConfigError,
         prepare_os.InstanceError,
         keystone_exceptions.ClientException,
         novaclient_exceptions.ClientException,
         osclient.DiscoveryError,
+        glanceclient_exceptions.HTTPNotFound,
         IOError
     ) as e:
-        print("Error: %s" % str(e))
-        code = -1
-    sys.exit(code)
+        print("Error: %s (%s)" % (str(e.message), e.__class__))
+        code = 1
+    except Exception as e:
+        print("Bad exception: %s %s" % (e, e.__class__))
+        raise
+    return code
 
 
 def init():
     if __name__ == "__main__":
-        main()
+        sys.exit(main())
 
 
 init()

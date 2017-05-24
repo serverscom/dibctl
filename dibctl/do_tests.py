@@ -5,7 +5,12 @@ import config
 import os
 
 
+
 class TestError(EnvironmentError):
+    pass
+
+
+class PortWaitError(EnvironmentError):
     pass
 
 
@@ -126,7 +131,7 @@ class DoTests(object):
             port_available = prep_os.wait_for_port(port, port_wait_timeout)
             if not port_available:
                 self.check_if_keep_stuff_after_fail(prep_os)
-                raise TestError("Timeout while waiting instance to accept connection on port %s." % port)
+                raise PortWaitError("Timeout while waiting instance to accept connection on port %s." % port)
             return True
         else:
             return False
