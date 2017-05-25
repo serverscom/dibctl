@@ -335,9 +335,9 @@ class TestEnvConfig(EnvConfig):
                     'tests': {
                         'type': 'object',
                         'properties': {
-                            'port_wait_timeout': SCHEMA_TIMEOUT
+                            'port_wait_timeout': SCHEMA_TIMEOUT,
+                            "environment_variables": {"type": "object"}
                         },
-                        'required': ['port_wait_timeout'],
                         'additionalProperties': False
                     }
                 },
