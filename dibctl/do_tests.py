@@ -5,7 +5,6 @@ import config
 import os
 
 
-
 class TestError(EnvironmentError):
     pass
 
@@ -52,8 +51,15 @@ class DoTests(object):
         else:
             self.delete_image = True
         self.tests_list = image.get('tests.tests_list', [])
-        self.environment_variables = image.get('tests.environment_variables', None)
+        self.environment_variables = self.make_env_vars(image, test_env)
         self.test_env = test_env
+
+    def make_env_vars(self, image_cfg, test_env_cfg):
+        combined = {}
+        combined.update(os.environ)
+        combined.update(image_cfg.get('tests.environment_variables', {}))
+        combined.update(test_env_cfg.get('tests.environment_variables', {}))
+        return combined
 
     def check_if_keep_stuff_after_fail(self, prep_os):
         if self.keep_failed_instance:
