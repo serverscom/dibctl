@@ -399,6 +399,26 @@ def test_osclient_upload_image_simple(osclient, mock_os):
         assert mock_os.glance.images.create.called
 
 
+def test_osclient_upload_image_all_args(osclient, mock_os):
+    with mock.patch.object(osclient, "open", return_value=sentinel.opened_file):
+        mock_os.upload_image(
+            name=sentinel.name,
+            filename=sentinel.filename,
+            public=True,
+            disk_format=sentinel.disk_format,
+            container_format=sentinel.container_format,
+            meta={sentinel.key: sentinel.value}
+        )
+        assert mock_os.glance.images.create.call_args == mock.call(
+            name=sentinel.name,
+            is_public='True',
+            container_format=sentinel.container_format,
+            disk_format=sentinel.disk_format,
+            data=sentinel.opened_file,
+            properties={sentinel.key: sentinel.value}
+        )
+
+
 def test_osclient_older_images(osclient, mock_os):
     mock_os.glance.images.list.return_value = [mock.MagicMock(id=42), mock.MagicMock(id=43)]
     assert mock_os.older_images(sentinel.name, 42) == set([43, ])

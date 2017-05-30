@@ -324,9 +324,9 @@ class OSClient(object):
     def _file_to_upload(self, filename):
         # there is a bug in vcrpy with fileobject, this function is a workaround
         # to make monkeypatching easier (patched version do open().read())
-        # see https://github.com/kevin1024/vcrpy/issues/218 
+        # see https://github.com/kevin1024/vcrpy/issues/218
         return open(filename, 'rb', buffering=65536)
- 
+
     def upload_image(
         self,
         name,
@@ -340,8 +340,8 @@ class OSClient(object):
         img = self.glance.images.create(
             name=name,
             is_public=str(public),
-            disk_format="qcow2",
-            container_format="bare",
+            disk_format=disk_format,
+            container_format=container_format,
             data=self._file_to_upload(filename),
             properties=meta
         )
