@@ -104,6 +104,22 @@ def test_init_normal(prepare_os, mock_image_cfg, mock_env_cfg):
         assert dt.delete_instance is True
 
 
+def test_init_proper_join_of_glance_sections1(prepare_os):
+    img = {'glance': {'name': 'foo', 'disk_format': 'qcow2'}}
+    env = {'nova': {}, 'glance': {'disk_format': 'raw'}}
+    with mock.patch.object(prepare_os.osclient, "OSClient"):
+        dt = prepare_os.PrepOS(img, env)
+        assert dt.combined_glance_section['disk_format'] == 'raw'
+
+
+def test_init_proper_join_of_glance_sections2(prepare_os):
+    img = {'glance': {'name': 'foo', 'disk_format': 'qcow2'}}
+    env = {'nova': {}}
+    with mock.patch.object(prepare_os.osclient, "OSClient"):
+        dt = prepare_os.PrepOS(img, env)
+        assert dt.combined_glance_section['disk_format'] == 'qcow2'
+
+
 def test_init_override_image(prepare_os, mock_image_cfg, mock_env_cfg):
     with mock.patch.object(prepare_os.osclient, "OSClient"):
         dt = prepare_os.PrepOS(mock_image_cfg, mock_env_cfg, override_image=sentinel.override_image)
@@ -158,11 +174,14 @@ def test_upload_image_normal(prep_os):
             'properties': sentinel.meta
         }
     }
+    prep_os.combined_glance_section = prep_os.image['glance']
     prep_os.upload_image(1)
     assert prep_os.os_image
     assert prep_os.os.upload_image.call_args == mock.call(
         sentinel.image_name,
         sentinel.filename,
+        disk_format="qcow2",
+        container_format="bare",
         meta=sentinel.meta
     )
 

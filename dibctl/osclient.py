@@ -104,7 +104,7 @@ def smart_join_glance_config(img_conf, env_conf):
         ('disk_format', 'second'),
         ('container_format', 'second')
     ):
-        _smart_merge(common_config, key, img_conf, env_conf, policy)
+        _smart_merge(common_config, key, dict(img_conf), dict(env_conf), policy)
     return config.Config(common_config)
 
 

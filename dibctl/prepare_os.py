@@ -46,7 +46,10 @@ class PrepOS(object):
         self.prepare_key()
         self.prepare_instance(test_environment, delete_instance)
         self.ssh = None
-        self.combined_glance_section = osclient.smart_join_glance_config(image, test_environment)
+        self.combined_glance_section = osclient.smart_join_glance_config(
+            image.get('glance', {}),
+            test_environment.get('glance', {})
+        )
 
     def set_timeouts(self, image_item, tenv_item):
         self.upload_timeout = config.get_max(
@@ -176,12 +179,14 @@ class PrepOS(object):
         with timeout.timeout(timeout_s):
             if not self.override_image:
                 filename = self.image['filename']
+                disk_format = self.combined_glance_section.get('disk_format', 'qcow2')
+                container_format = self.combined_glance_section.get('container_format', 'bare')
                 print("Uploading image from %s (time limit is %s s)" % (filename, timeout_s))
                 self.os_image = self.os.upload_image(
                     self.image_name,
                     filename,
-                    #disk_format = disk_format,
-                    #container_format = container_format,
+                    disk_format=disk_format,
+                    container_format=container_format,
                     meta=self.image['glance'].get('properties', {})
                 )
                 print("Image %s uploaded." % self.os_image.id)

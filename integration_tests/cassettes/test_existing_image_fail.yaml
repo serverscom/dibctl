@@ -251,13 +251,12 @@ interactions:
 - request:
     body: !!python/unicode '{"server": {"name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
       "imageRef": "2eb14fc3-4edc-4068-8748-988f369302c2", "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
-      "flavorRef": "30", "max_count": 1, "min_count": 1, "networks": [{"uuid": "c7ccdf1c-e6c3-4257-8b2e-740748c14564"},
-      {"uuid": "a3af8097-f348-4767-97c3-b9bf75263ef9"}, {"uuid": "db6e78cb-99fa-4223-9a6f-3b4a9b486d9b"}]}}'
+      "flavorRef": "30", "max_count": 1, "min_count": 1, "networks": [{"uuid": "c7ccdf1c-e6c3-4257-8b2e-740748c14565"}]}}'
     headers:
       Accept: [application/json]
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Content-Length: ['393']
+      Content-Length: ['293']
       Content-Type: [application/json]
       User-Agent: [python-novaclient]
       X-Auth-Token: [!!python/unicode 94a8fce9f06c4c67ba36ebb942547875]

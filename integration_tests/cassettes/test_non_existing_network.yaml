@@ -15,7 +15,7 @@ interactions:
         "rel": "self"}, {"href": "http://docs.openstack.org/", "type": "text/html",
         "rel": "describedby"}]}}'}
     headers:
-      content-length: ['362']
+      content-length: ['103']
       content-type: [application/json]
       date: ['Thu, 18 May 2017 16:41:38 GMT']
       vary: [X-Auth-Token]
@@ -23,7 +23,7 @@ interactions:
       x-openstack-request-id: [req-28af39fe-16cf-4398-9c91-01d0bcf4526a]
     status: {code: 200, message: OK}
 - request:
-    body: !!python/unicode '{"auth": {"tenantName": "tenant", "passwordCredentials": {"username":
+    body: !!python/unicode '{"auth": {"tenantName": "28", "passwordCredentials": {"username":
       "username", "password": "password"}}}'
     headers:
       Accept: [application/json]
