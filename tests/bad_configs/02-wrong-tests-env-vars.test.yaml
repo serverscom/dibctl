@@ -1,0 +1,4 @@
+example_env:
+  tests:
+    environment_variables:
+      foo: 3  #must be string
