@@ -46,6 +46,7 @@ class PrepOS(object):
         self.prepare_key()
         self.prepare_instance(test_environment, delete_instance)
         self.ssh = None
+        self.combined_glance_section = osclient.smart_join_glance_config(image, test_environment)
 
     def set_timeouts(self, image_item, tenv_item):
         self.upload_timeout = config.get_max(
@@ -179,6 +180,8 @@ class PrepOS(object):
                 self.os_image = self.os.upload_image(
                     self.image_name,
                     filename,
+                    #disk_format = disk_format,
+                    #container_format = container_format,
                     meta=self.image['glance'].get('properties', {})
                 )
                 print("Image %s uploaded." % self.os_image.id)
@@ -292,7 +295,6 @@ class PrepOS(object):
         self.cleanup_ssh_key()
         self.cleanup_image()
         print("\nClearing done\n")
-
 
     def report_if_fail(self):
         if self.report and self.os_instance and not self.delete_instance:

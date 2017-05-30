@@ -9,6 +9,7 @@ import urllib3
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import simplejson
 import copy
+import config
 
 
 class UnknownPolicy(ValueError):
@@ -90,19 +91,21 @@ def smart_join_glance_config(img_conf, env_conf):
         join together two glance sections with
         special logic for each field during merge.
     '''
-    # default policy is 'second', so we'll join both, and than process special cases
-    common_config = copy.deepcopy(env_conf)
+    # default policy is 'second', so we'll join both, and than process special in reverse
+    common_config = dict(copy.deepcopy(env_conf))
     # should cover 'name' and 'public'
-    common_config.update(img_conf)
+    common_config.update(dict(img_conf))
     for key, policy in (
         ('api_version', 'second'),  # test/upload_env has priority here
         ('upload_timeout', 'max'),
         ('properties', 'mergedict'),  # envs has priority on conflicting entries
         ('tags', 'mergelist'),
         ('endpoint', 'second'),  # envs has priority. I don't know why anyone wants to put endpoint into image config.
+        ('disk_format', 'second'),
+        ('container_format', 'second')
     ):
         _smart_merge(common_config, key, img_conf, env_conf, policy)
-    return common_config
+    return config.Config(common_config)
 
 
 class OSClient(object):
