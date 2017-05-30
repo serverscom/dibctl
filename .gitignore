@@ -12,4 +12,4 @@ integration_tests/test.yaml
 integration_tests/images.yaml
 integration_tests/test.yaml.secret
 integration_tests/upload.yaml.secret
-integration_tests/upload.yaml.secret
+integration_tests/images.yaml.secret

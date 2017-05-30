@@ -311,6 +311,7 @@ class UploadCommand(GenericCommand):
         self.upload_to_glance()
         if not self.args.no_obsolete:
             self.obsolete_old_images()
+        return 0
 
 
 class RotateCommand(GenericCommand):
