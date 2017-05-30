@@ -4,6 +4,8 @@ xenial:
     endpoint: "http://foo.example.com" #not implmented yet
     name: 'Example of Ubuntu Xenial'
     upload_timeout: 1800
+    container_format: bare
+    disk_format: qcow2
     properties:
      foo: "bar"
     public: False
