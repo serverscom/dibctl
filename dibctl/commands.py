@@ -420,7 +420,8 @@ def main(line=None):
         glanceclient_exceptions.HTTPNotFound: 50,
         novaclient_exceptions.BadRequest: 60,
         prepare_os.InstanceError: 70,
-        do_tests.PortWaitError: 71
+        do_tests.PortWaitError: 71,
+        keystone_exceptions.http.Unauthorized: 20
     }
     m = Main(line)
     try:
