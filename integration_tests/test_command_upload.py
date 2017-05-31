@@ -63,6 +63,18 @@ def test_upload_empty_image_normal_no_obsolete(quick_commands):
                 ]) == 0
 
 
+def test_upload_empty_image_normal_no_obsolete_format_raw_temporaly(quick_commands):
+    def full_read(ignore_self, filename):
+        return open(filename, 'rb', buffering=65536).read()
+    with mock.patch.object(quick_commands.do_tests.prepare_os.osclient.OSClient, '_file_to_upload', full_read):
+        with VCR.use_cassette('test_upload_empty_image_normal_no_obsolete_format_raw_temporaly.yaml'):
+            assert quick_commands.main([
+                    'upload',
+                    'overrided_raw_format',
+                    'upload_env_raw'
+                ]) == 0
+
+
 def test_upload_empty_image_normal_obsolete(quick_commands):
     def full_read(ignore_self, filename):
         return open(filename, 'rb', buffering=65536).read()

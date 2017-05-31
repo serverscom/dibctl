@@ -91,14 +91,14 @@ class GenericCommand(object):
             self.image = self.image_config[self.args.imagelabel]
         if 'uploadlabel' in self.options:
             self.upload_env = self.upload_config[self.args.envlabel]
-            glance_data = osclient.smart_join_glance_config(
-                {'name': 'foo'},
-                {}
+            self.glance_data = osclient.smart_join_glance_config(
+                self.image.get('glance', {}),
+                self.upload_env.get('glance', {})
             )
             self.os = osclient.OSClient(
                 keystone_data=self.upload_env['keystone'],
                 nova_data={},
-                glance_data=glance_data,
+                glance_data=self.glance_data,
                 neutron_data={},
                 overrides=os.environ,
                 ca_path=self.upload_env.get('ssl_ca_path', '/etc/ssl/cacerts'),
@@ -281,14 +281,18 @@ class UploadCommand(GenericCommand):
         self.parser.add_argument('--no-obsolete', action='store_true', help='Do not obsolete images with same name')
 
     def _prepare(self):
+        if 'preprocessing' in self.upload_env:
+            raise NotImplementedError("conversion not yet supported")
+        else:
+            self.filename = self.image['filename']
         try:
-            self.glance_info = self.image['glance']
+            self.name = self.glance_data['name']
         except KeyError as e:
-            raise NotFoundInConfigError("Glance section not found int the image config")
-        self.name = self.glance_info['name']
-        self.meta = self.glance_info.get('properties', {})
-        self.filename = self.image['filename']
-        self.public = self.glance_info.get('public', False)
+            raise NotFoundInConfigError("Image name is not found in glance section in config files")
+        self.meta = self.glance_data.get('properties', {})
+        self.container_format = self.glance_data.get('container_format', 'bare')
+        self.disk_format = self.glance_data.get('disk_format', 'qcow2')
+        self.public = self.glance_data.get('public', False)
 
     def upload_to_glance(self):
         print("Uploading image")
@@ -296,6 +300,8 @@ class UploadCommand(GenericCommand):
             self.name,
             self.filename,
             self.public,
+            container_format=self.container_format,
+            disk_format=self.disk_format,
             meta=self.meta
         )
         print("Image ''%s' uploaded with uuid %s" % (self.image.name, self.image.id))
