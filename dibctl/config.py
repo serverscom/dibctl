@@ -184,6 +184,9 @@ class Config(object):
     def __repr__(self):
         return "Config(" + repr(self.config) + ")"
 
+    def __nonzero__(self):
+        return bool(self.config)
+
 
 class ImageConfig(Config):
 

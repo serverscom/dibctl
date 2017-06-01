@@ -266,6 +266,14 @@ def test_get_max(config, conf1, conf2, path, result):
     assert config.get_max(c1, c2, path, 99) == result
 
 
+def test_non_zero_true(config):
+    assert bool(config.Config({'a': 1})) is True
+
+
+def test_non_zero_false(config):
+    assert bool(config.Config({})) is False
+
+
 if __name__ == "__main__":
     file_to_test = os.path.join(
         parentdir,
