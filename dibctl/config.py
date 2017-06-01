@@ -187,6 +187,8 @@ class Config(object):
     def __nonzero__(self):
         return bool(self.config)
 
+    def __len__(self):
+        return len(self.config)
 
 class ImageConfig(Config):
 

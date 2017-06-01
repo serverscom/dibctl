@@ -7,6 +7,7 @@ import osclient
 import do_tests
 import prepare_os
 import version
+import image_preprocessing
 from keystoneauth1 import exceptions as keystone_exceptions
 from novaclient import exceptions as novaclient_exceptions
 from glanceclient import exc as glanceclient_exceptions
@@ -89,6 +90,8 @@ class GenericCommand(object):
             )
         if 'imagelabel' in self.options:
             self.image = self.image_config[self.args.imagelabel]
+        else:
+            self.image = {}
         if 'uploadlabel' in self.options:
             self.upload_env = self.upload_config[self.args.envlabel]
             self.glance_data = osclient.smart_join_glance_config(
@@ -281,6 +284,7 @@ class UploadCommand(GenericCommand):
         self.parser.add_argument('--no-obsolete', action='store_true', help='Do not obsolete images with same name')
 
     def _prepare(self):
+
         if 'preprocessing' in self.upload_env:
             raise NotImplementedError("conversion not yet supported")
         else:
@@ -296,15 +300,20 @@ class UploadCommand(GenericCommand):
 
     def upload_to_glance(self):
         print("Uploading image")
-        self.image = self.os.upload_image(
-            self.name,
-            self.filename,
-            self.public,
-            container_format=self.container_format,
-            disk_format=self.disk_format,
-            meta=self.meta
-        )
-        print("Image ''%s' uploaded with uuid %s" % (self.image.name, self.image.id))
+        with image_preprocessing.Preprocess(
+            input_filename=self.image['filename'],
+            glance_data=self.glance_data,
+            preprocessing_settings=self.upload_env.get('preprocessing', {})
+        ) as upload_filename:
+            self.image = self.os.upload_image(
+                self.name,
+                upload_filename,
+                self.public,
+                container_format=self.container_format,
+                disk_format=self.disk_format,
+                meta=self.meta
+            )
+            print("Image ''%s' uploaded with uuid %s from file %s" % (self.image.name, self.image.id, upload_filename))
 
     def obsolete_old_images(self):
         candidates = self.os.older_images(self.name, self.image.id)

@@ -274,6 +274,15 @@ def test_non_zero_false(config):
     assert bool(config.Config({})) is False
 
 
+@pytest.mark.parametrize('data', [
+    {},
+    {'a': 1},
+    {'a': 1, 'b': 2}
+])
+def test_non_zero_false(config, data):
+    assert len(config.Config(data)) == len(data)
+
+
 if __name__ == "__main__":
     file_to_test = os.path.join(
         parentdir,

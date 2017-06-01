@@ -168,6 +168,18 @@ def test_context_no_file_created(i_p):
             pass
 
 
+def test_context_manager_without_processing(i_p):
+    with tempfile.NamedTemporaryFile() as t:
+        tempname = t.name
+    del t
+    with i_p.Preprocess(
+        tempname,
+        {},
+        {}
+    ) as new_name:
+        assert tempname == new_name
+
+
 if __name__ == "__main__":
     ourfilename = os.path.abspath(inspect.getfile(inspect.currentframe()))
     currentdir = os.path.dirname(ourfilename)
