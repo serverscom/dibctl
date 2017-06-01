@@ -70,9 +70,11 @@ class Preprocess(object):
                 os.remove(self.output_filename)
         sys.stdout.flush()
         try:
+            print("Preprocessing...")
             subprocess.check_call(self.command_line, shell=True, stdout=sys.stdout, stderr=sys.stderr, stdin=None)
         except subprocess.CalledProcessError as e:
             raise PreprocessError('Preprocessing failed with code %s' % e.returncode)
         if not os.path.isfile(self.output_filename):
             raise PreprocessError('There is no output file %s after preprocess had finished')
+        print("Preprocessing done.")
         sys.stdout.flush()
