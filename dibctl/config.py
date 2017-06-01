@@ -43,6 +43,8 @@ SCHEMA_GLANCE = {
         "properties": {  # it's a name, 'properties'
             "type": "object"
         },
+        "container_format": {'type': 'string'},
+        "disk_format": {'type': 'string'},
         "endpoint": {"type": "string"},
         "public": {"type": "boolean"}
     },
@@ -182,6 +184,11 @@ class Config(object):
     def __repr__(self):
         return "Config(" + repr(self.config) + ")"
 
+    def __nonzero__(self):
+        return bool(self.config)
+
+    def __len__(self):
+        return len(self.config)
 
 class ImageConfig(Config):
 
@@ -361,7 +368,18 @@ class UploadEnvConfig(EnvConfig):
                     'glance': SCHEMA_GLANCE,
                     'ssl_insecure': {'type': 'boolean'},
                     'ssl_ca_path': SCHEMA_PATH,
-                    'disable_warnings': {'type': 'boolean'}
+                    'disable_warnings': {'type': 'boolean'},
+                    'preprocessing': {
+                        'type': 'object',
+                        'properties': {
+                            'cmdline': {'type': 'string'},
+                            'output_filename': {'type': 'string'},
+                            'use_existing': {'type': 'boolean'},
+                            'delete_processed_after_upload': {'type': 'boolean'}
+                        },
+                        'additionalProperties': False,
+                        'required': ['cmdline', 'output_filename']
+                    }
                 },
                 'required': ['keystone'],
                 "additionalProperties": False

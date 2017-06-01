@@ -1,0 +1,12 @@
+upload_env_1:
+  keystone: {auth_url: 'https://auth.nova-lab-1.mgm.servers.com:5000/v2.0', password: password,
+    tenant_name: public_images, username: username}
+  ssl_insecure: true
+upload_env_bad_credentials:
+  keystone: {auth_url: 'https://auth.servers.nl01.cloud.servers.com:5000/v2.0', password: password,
+    tenant_name: bad_tenant, username: username}
+upload_env_raw:
+  glance: {container_format: bare, disk_format: raw}
+  keystone: {auth_url: 'https://auth.nova-lab-1.mgm.servers.com:5000/v2.0', password: password,
+    tenant_name: public_images, username: username}
+  ssl_insecure: true

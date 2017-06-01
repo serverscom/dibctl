@@ -9,6 +9,7 @@ import urllib3
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import simplejson
 import copy
+import config
 
 
 class UnknownPolicy(ValueError):
@@ -90,19 +91,21 @@ def smart_join_glance_config(img_conf, env_conf):
         join together two glance sections with
         special logic for each field during merge.
     '''
-    # default policy is 'second', so we'll join both, and than process special cases
-    common_config = copy.deepcopy(env_conf)
+    # default policy is 'second', so we'll join both, and than process special in reverse
+    common_config = dict(copy.deepcopy(env_conf))
     # should cover 'name' and 'public'
-    common_config.update(img_conf)
+    common_config.update(dict(img_conf))
     for key, policy in (
         ('api_version', 'second'),  # test/upload_env has priority here
         ('upload_timeout', 'max'),
         ('properties', 'mergedict'),  # envs has priority on conflicting entries
         ('tags', 'mergelist'),
         ('endpoint', 'second'),  # envs has priority. I don't know why anyone wants to put endpoint into image config.
+        ('disk_format', 'second'),
+        ('container_format', 'second')
     ):
-        _smart_merge(common_config, key, img_conf, env_conf, policy)
-    return common_config
+        _smart_merge(common_config, key, dict(img_conf), dict(env_conf), policy)
+    return config.Config(common_config)
 
 
 class OSClient(object):
@@ -324,9 +327,9 @@ class OSClient(object):
     def _file_to_upload(self, filename):
         # there is a bug in vcrpy with fileobject, this function is a workaround
         # to make monkeypatching easier (patched version do open().read())
-        # see https://github.com/kevin1024/vcrpy/issues/218 
+        # see https://github.com/kevin1024/vcrpy/issues/218
         return open(filename, 'rb', buffering=65536)
- 
+
     def upload_image(
         self,
         name,
@@ -340,8 +343,8 @@ class OSClient(object):
         img = self.glance.images.create(
             name=name,
             is_public=str(public),
-            disk_format="qcow2",
-            container_format="bare",
+            disk_format=disk_format,
+            container_format=container_format,
             data=self._file_to_upload(filename),
             properties=meta
         )

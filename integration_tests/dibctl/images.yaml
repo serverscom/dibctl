@@ -20,6 +20,7 @@ xenial:
     environment_name: nl01
     tests_list:
       - shell: ./simple_success.bash
+
 xenial_fail:
   filename: xenial.img.qcow2
   glance:
@@ -43,3 +44,11 @@ xenial_fail:
     tests_list:
       - shell: ./simple_fail.bash
 
+overrided_raw_format:
+  filename: empty.img.qcow2
+  glance:
+    name: "Empty image"
+  tests:
+    environment_name: env_with_format_override
+    tests_list:
+      - shell: ./simple_success.bash

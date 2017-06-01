@@ -15,6 +15,12 @@ def commands():
 
 
 @pytest.fixture
+def config():
+    from dibctl import config
+    return config
+
+
+@pytest.fixture
 def cred():
     return {
         'os_auth_url': 'mock',
@@ -261,7 +267,7 @@ def test_TestCommand_actual_proper_env_override(commands):
             assert obj.test_env == 'bar'
 
 
-def test_UploadCommand_actual_with_obsolete(commands, cred, mock_env_cfg, mock_image_cfg):
+def test_UploadCommand_actual_with_obsolete(commands, cred, mock_env_cfg, mock_image_cfg, config):
     parser, obj = create_subparser(commands.UploadCommand)
     args = parser.parse_args(['upload', 'label', 'uploadlabel'])
     assert args.imagelabel == 'label'
@@ -270,20 +276,20 @@ def test_UploadCommand_actual_with_obsolete(commands, cred, mock_env_cfg, mock_i
     assert args.filename is None
 
     with mock.patch.object(commands.config, "UploadEnvConfig", autospec=True, strict=True) as uec:
-        uec.return_value.get.return_value = mock_env_cfg
+        uec.return_value = config.Config({'uploadlabel': mock_env_cfg})
         with mock.patch.object(commands.osclient, "OSClient") as mock_os:
             mock_os.return_value.older_images.return_value = [sentinel.one, sentinel.two]
             with mock.patch.object(commands.config, "ImageConfig", autospec=True, strict=True) as ic:
-                ic.return_value.get.return_value = mock_image_cfg
+                ic.return_value = config.Config({'label': mock_image_cfg})
                 args.command(args)
 
 
-def test_UploadCommand_no_glance_section(commands, mock_env_cfg):
-    img_config = {}
+def test_UploadCommand_no_glance_section(commands, mock_env_cfg, config):
+    img_config = {'filename': 'foobar'}
     parser, obj = create_subparser(commands.UploadCommand)
     args = parser.parse_args(['upload', 'label', 'uploadlabel'])
     with mock.patch.object(commands.config, "UploadEnvConfig") as uec:
-        uec.return_value.get.return_value = mock_env_cfg
+        uec.return_value = config.Config({"uploadlabel": mock_env_cfg})
         with mock.patch.object(commands.osclient, "OSClient"):
             with mock.patch.object(commands.config, "ImageConfig") as ic:
                 ic.return_value.__getitem__.return_value = img_config
@@ -297,22 +303,22 @@ def test_UploadCommand_obsolete(commands):
     assert args.no_obsolete is True
 
 
-def test_RotateCommand_actual(commands, mock_env_cfg):
+def test_RotateCommand_actual(commands, mock_env_cfg, config):
     parser, obj = create_subparser(commands.RotateCommand)
     args = parser.parse_args(['rotate', 'uploadlabel'])
     with mock.patch.object(commands.config, "UploadEnvConfig") as uec:
-        uec.return_value.get.return_value = mock_env_cfg
+        uec.return_value = config.Config({"uploadlabel": mock_env_cfg})
         with mock.patch.object(commands.osclient, "OSClient"):
             args.command(args)
     assert obj.upload_env
 
 
-def test_ObsoleteCommand_actual(commands, mock_env_cfg):
+def test_ObsoleteCommand_actual(commands, mock_env_cfg, config):
     parser, obj = create_subparser(commands.ObsoleteCommand)
     args = parser.parse_args(['mark-obsolete', 'uploadlabel', 'myuuid'])
     assert args.uuid == 'myuuid'
     with mock.patch.object(commands.config, "UploadEnvConfig") as uec:
-        uec.return_value.get.return_value = mock_env_cfg
+        uec.return_value = config.Config({'uploadlabel': mock_env_cfg})
         with mock.patch.object(commands.osclient, "OSClient"):
             args.command(args)
     assert obj.upload_env

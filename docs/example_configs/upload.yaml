@@ -14,3 +14,25 @@ azure-us-1:
     tenant_name: tenantname
     #username: may use OS_USERNAME environemnt variable
     password: mock_password
+region3:
+  keystone:
+    auth_url: https://auth.lab-2.azure.com:5000/v2.0
+    tenant_name: tenantname
+    username: mock_user
+    password: mock_password
+  preprocessing:
+    # order of interpolating:
+    # 1. input_filename is set according to image 'filename' attribute
+    #    or --input command line option
+    # 2. output_filename is processed
+    # 3. cmdline is processed
+    # available variable names:
+    # - input_filename
+    # - output_filename
+    # - disk_format
+    # - container_format
+    cmdline: "qemu-img convert %(input_filename) %(output_filename) -O raw"
+    output_filename: "%(input_filename).raw"
+  glance:
+    disk_format: raw
+    container_format: bare

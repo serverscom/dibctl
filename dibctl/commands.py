@@ -7,6 +7,7 @@ import osclient
 import do_tests
 import prepare_os
 import version
+import image_preprocessing
 from keystoneauth1 import exceptions as keystone_exceptions
 from novaclient import exceptions as novaclient_exceptions
 from glanceclient import exc as glanceclient_exceptions
@@ -89,16 +90,18 @@ class GenericCommand(object):
             )
         if 'imagelabel' in self.options:
             self.image = self.image_config[self.args.imagelabel]
+        else:
+            self.image = {}
         if 'uploadlabel' in self.options:
             self.upload_env = self.upload_config[self.args.envlabel]
-            glance_data = osclient.smart_join_glance_config(
-                {'name': 'foo'},
-                {}
+            self.glance_data = osclient.smart_join_glance_config(
+                self.image.get('glance', {}),
+                self.upload_env.get('glance', {})
             )
             self.os = osclient.OSClient(
                 keystone_data=self.upload_env['keystone'],
                 nova_data={},
-                glance_data=glance_data,
+                glance_data=self.glance_data,
                 neutron_data={},
                 overrides=os.environ,
                 ca_path=self.upload_env.get('ssl_ca_path', '/etc/ssl/cacerts'),
@@ -282,23 +285,30 @@ class UploadCommand(GenericCommand):
 
     def _prepare(self):
         try:
-            self.glance_info = self.image['glance']
+            self.name = self.glance_data['name']
         except KeyError as e:
-            raise NotFoundInConfigError("Glance section not found int the image config")
-        self.name = self.glance_info['name']
-        self.meta = self.glance_info.get('properties', {})
-        self.filename = self.image['filename']
-        self.public = self.glance_info.get('public', False)
+            raise NotFoundInConfigError("Image name is not found in glance section in config files")
+        self.meta = self.glance_data.get('properties', {})
+        self.container_format = self.glance_data.get('container_format', 'bare')
+        self.disk_format = self.glance_data.get('disk_format', 'qcow2')
+        self.public = self.glance_data.get('public', False)
 
     def upload_to_glance(self):
         print("Uploading image")
-        self.image = self.os.upload_image(
-            self.name,
-            self.filename,
-            self.public,
-            meta=self.meta
-        )
-        print("Image ''%s' uploaded with uuid %s" % (self.image.name, self.image.id))
+        with image_preprocessing.Preprocess(
+            input_filename=self.image['filename'],
+            glance_data=self.glance_data,
+            preprocessing_settings=self.upload_env.get('preprocessing', {})
+        ) as upload_filename:
+            self.image = self.os.upload_image(
+                self.name,
+                upload_filename,
+                self.public,
+                container_format=self.container_format,
+                disk_format=self.disk_format,
+                meta=self.meta
+            )
+            print("Image ''%s' uploaded with uuid %s from file %s" % (self.image.name, self.image.id, upload_filename))
 
     def obsolete_old_images(self):
         candidates = self.os.older_images(self.name, self.image.id)
@@ -311,6 +321,7 @@ class UploadCommand(GenericCommand):
         self.upload_to_glance()
         if not self.args.no_obsolete:
             self.obsolete_old_images()
+        return 0
 
 
 class RotateCommand(GenericCommand):
@@ -419,7 +430,8 @@ def main(line=None):
         glanceclient_exceptions.HTTPNotFound: 50,
         novaclient_exceptions.BadRequest: 60,
         prepare_os.InstanceError: 70,
-        do_tests.PortWaitError: 71
+        do_tests.PortWaitError: 71,
+        keystone_exceptions.http.Unauthorized: 20
     }
     m = Main(line)
     try:
