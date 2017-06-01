@@ -284,11 +284,6 @@ class UploadCommand(GenericCommand):
         self.parser.add_argument('--no-obsolete', action='store_true', help='Do not obsolete images with same name')
 
     def _prepare(self):
-
-        if 'preprocessing' in self.upload_env:
-            raise NotImplementedError("conversion not yet supported")
-        else:
-            self.filename = self.image['filename']
         try:
             self.name = self.glance_data['name']
         except KeyError as e:
