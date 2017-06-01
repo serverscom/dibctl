@@ -1,3 +1,14 @@
+dibctl (0.5.4) xenial; urgency=medium
+
+  * New feature: preprocessing of images prior to upload (upload.yaml)
+  * Fix minor bugs in configuration handling
+  * exit code 20 for auth failures
+  * Fix no defined exit code for upload command
+  * Fix trace if there is no ssh section in tests
+  * glance section (all configs) now support disk_format and container_format
+
+ -- George Shuklin <george.shuklin@gmail.com>  Thu, 01 Jun 2017 17:51:04 +0300
+
 dibctl (0.5.3) xenial; urgency=medium
 
   * Integration tests
