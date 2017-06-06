@@ -34,6 +34,12 @@ def test_timeout_check_no_error(timeout):
         pass
 
 
+def test_timeout_bad_signal(timeout):
+    t = timeout.timeout(1)
+    with pytest.raises(RuntimeError):
+        t.raise_timeout("NOT A TIMEOUT", sentinel.frame)
+
+
 if __name__ == "__main__":
     ourfilename = os.path.abspath(inspect.getfile(inspect.currentframe()))
     currentdir = os.path.dirname(ourfilename)
