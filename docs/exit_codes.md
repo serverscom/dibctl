@@ -10,6 +10,7 @@ Exit codes
 20 - Authorization failure from keystone
 50 - Glance return 'HTTPNotFoundError', which usually means that uuid in --use-existing-image is not found in Glance
 60 - Nova returns BadRequest (unfortunately there is no way to distinct between codes)
+61 - Nova request was rejected (Forbidden). Mostly affects rotate command which requires higher priveleges
 70 - Instance become ERROR after creation
 71 - Timeout while waiting for port (after instance become ACTIVE).
 80 - Some tests have failed.

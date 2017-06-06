@@ -1,0 +1,44 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Connection: [keep-alive]
+    method: GET
+    uri: https://auth.servers.nl01.cloud.servers.com:5000/v2.0
+  response:
+    body: {string: !!python/unicode '{"version": {"status": "stable", "updated": "2014-04-17T00:00:00Z",
+        "media-types": [{"base": "application/json", "type": "application/vnd.openstack.identity-v2.0+json"}],
+        "id": "v2.0", "links": [{"href": "https://auth.servers.nl01.cloud.servers.com:5000/v2.0/",
+        "rel": "self"}, {"href": "http://docs.openstack.org/", "type": "text/html",
+        "rel": "describedby"}]}}'}
+    headers:
+      content-length: ['362']
+      content-type: [application/json]
+      date: ['Tue, 06 Jun 2017 11:42:26 GMT']
+      vary: [X-Auth-Token]
+      x-distribution: [Ubuntu]
+      x-openstack-request-id: [req-dda39c6c-03ff-4424-ba1e-a8f57aa250eb]
+    status: {code: 200, message: OK}
+- request:
+    body: !!python/unicode '{"auth": {"tenantName": "bad_tenant", "passwordCredentials":
+      {"username": "username", "password": "password"}}}'
+    headers:
+      Accept: [application/json]
+      Connection: [keep-alive]
+      Content-Type: [application/json]
+    method: POST
+    uri: https://auth.servers.nl01.cloud.servers.com:5000/v2.0/tokens
+  response:
+    body: {string: !!python/unicode '{"error": {"message": "The request you have made
+        requires authentication.", "code": 401, "title": "Unauthorized"}}'}
+    headers:
+      content-length: ['114']
+      content-type: [application/json]
+      date: ['Tue, 06 Jun 2017 11:42:27 GMT']
+      vary: [X-Auth-Token]
+      www-authenticate: ['Keystone uri="https://auth.servers.nl01.cloud.servers.com:5000"']
+      x-distribution: [Ubuntu]
+      x-openstack-request-id: [req-10031186-b198-4c92-a81e-66de04e0e515]
+    status: {code: 401, message: Unauthorized}
+version: 1
