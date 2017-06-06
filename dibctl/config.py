@@ -190,6 +190,7 @@ class Config(object):
     def __len__(self):
         return len(self.config)
 
+
 class ImageConfig(Config):
 
     DEFAULT_CONFIG_NAME = "images.yaml"
