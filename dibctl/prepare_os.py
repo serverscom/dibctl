@@ -218,9 +218,10 @@ class PrepOS(object):
             while self.os_instance.status != 'ACTIVE':
                 if self.os_instance.status in ('ERROR', 'DELETED'):
                     raise InstanceError(
-                        "Instance %s state is '%s' (expected 'ACTIVE')." % (
+                        "Instance %s state is '%s' (expected 'ACTIVE'). Error message is: %s" % (
                             self.os_instance.id,
-                            self.os_instance.status
+                            self.os_instance.status,
+                            self.os_instance.fault.get('message', 'no message')
                         )
                     )
                 time.sleep(self.SLEEP_DELAY)
