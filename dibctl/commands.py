@@ -329,8 +329,27 @@ class RotateCommand(GenericCommand):
     help = 'Remove unused obsolete images'
     options = ['upload-config', 'uploadlabel']
 
+    def add_options(self):
+        self.parser.add_argument(
+            '--dry-run',
+            action='store_true',
+            help="Do not delete anything, just print candidates"
+        )
+
     def _command(self):
-        pass
+        candidate_list = self.os.find_obsolete_unused_candidates()
+        if not candidate_list:
+            print("No unused obsolete images found.")
+            return 0
+        if self.args.dry_run:
+            print("Images are obsolete and unused, but wouldn't be removed per --dry-run:")
+        else:
+            print("Images are obsolete and unused and will be removed:")
+        for candidate in candidate_list:
+            print("%s" % (candidate,))
+            if not self.args.dry_run:
+                self.os.delete_image(candidate)
+        return 0
 
 
 class ObsoleteCommand(GenericCommand):
@@ -427,11 +446,14 @@ def main(line=None):
         config.ConfigNotFound: 10,
         config.NotFoundInConfigError: 11,
         osclient.CredNotFound: 12,
+        image_preprocessing.PreprocessError: 18,
+        keystone_exceptions.http.Unauthorized: 20,
         glanceclient_exceptions.HTTPNotFound: 50,
         novaclient_exceptions.BadRequest: 60,
+        novaclient_exceptions.Forbidden: 61,
         prepare_os.InstanceError: 70,
-        do_tests.PortWaitError: 71,
-        keystone_exceptions.http.Unauthorized: 20
+        do_tests.PortWaitError: 71
+        # 80 is not handled here, but it is
     }
     m = Main(line)
     try:

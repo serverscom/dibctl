@@ -97,3 +97,10 @@ def test_upload_bad_credentials(quick_commands):
                     'overrided_raw_format',
                     'upload_env_bad_credentials'
                 ]) == 20
+
+def test_upload_error_for_convertion(quick_commands):
+    assert quick_commands.main([
+        'upload',
+        'xenial',
+        'env_with_failed_convertion'
+    ]) == 18

@@ -400,6 +400,13 @@ class OSClient(object):
     def get_instance(self, instance_uuid):
         return self.nova.servers.get(instance_uuid)
 
+    def find_obsolete_unused_candidates(self):
+        all_instances = self.nova.servers.list(search_opts={'all_tenants': 1})
+        all_obsolete_images = self.glance.images.list(filters={"properties": {'obsolete': 'true'}})
+        used_images_set = set(instance.image["id"] for instance in all_instances)
+        obsolete_images_set = set(image.id for image in all_obsolete_images)
+        return obsolete_images_set - used_images_set
+
     def delete_instance(self, uuid):
         self.nova.servers.delete(uuid)
 
