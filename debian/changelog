@@ -1,3 +1,12 @@
+dibctl (0.5.5) xenial; urgency=medium
+
+  * rotate command implemented (remove unused obsolete images)
+  * Exit codes for nova forbidden
+  * If instance is in ERROR state, message with reason will be printed
+  * Few more tests
+
+ -- George Shuklin <george.shuklin@gmail.com>  Tue, 06 Jun 2017 16:46:11 +0300
+
 dibctl (0.5.4) xenial; urgency=medium
 
   * New feature: preprocessing of images prior to upload (upload.yaml)
