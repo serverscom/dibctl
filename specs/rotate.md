@@ -30,3 +30,15 @@ I see two ways to use rotate command:
 # Command line options
 --dry-run should just print candidates for removal without actual deletion.
 
+# Priveleges
+To allow dibctl perform rotation properly it should be able to see all tenants instances.
+To do this one need to update `/etc/nova/policy.json`:
+Default value:
+```
+"os_compute_api:servers:detail:get_all_tenants": "is_admin:True"
+```
+Proposed value:
+```
+"os_compute_api:servers:detail:get_all_tenants": "is_admin:True or role:imagerole"
+```
+Where `imagerole` is a role assined to user for image manipulations (you should create it manually with keystone)
