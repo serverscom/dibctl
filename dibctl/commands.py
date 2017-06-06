@@ -427,11 +427,13 @@ def main(line=None):
         config.ConfigNotFound: 10,
         config.NotFoundInConfigError: 11,
         osclient.CredNotFound: 12,
+        image_preprocessing.PreprocessError: 18,
+        keystone_exceptions.http.Unauthorized: 20,
         glanceclient_exceptions.HTTPNotFound: 50,
         novaclient_exceptions.BadRequest: 60,
         prepare_os.InstanceError: 70,
-        do_tests.PortWaitError: 71,
-        keystone_exceptions.http.Unauthorized: 20
+        do_tests.PortWaitError: 71
+        # 80 is not handled here, but it is
     }
     m = Main(line)
     try:

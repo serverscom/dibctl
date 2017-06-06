@@ -10,3 +10,13 @@ upload_env_raw:
   keystone: {auth_url: 'https://auth.nova-lab-1.mgm.servers.com:5000/v2.0', password: password,
     tenant_name: public_images, username: username}
   ssl_insecure: true
+env_with_failed_convertion:
+    keystone:
+        username: bad_username
+        tenant_name: bad_tenant
+        password: bad_password
+        auth_url: https://auth.servers.nl01.cloud.servers.com:5000/v2.0
+    preprocessing:
+        cmdline: "exit 1"
+        output_filename: doesntmatter
+
