@@ -37,3 +37,10 @@ xenial:
         timeout: 300
       - pytest: docs/tests_examples/pytest_examples/example.py
         timeout: 300
+
+external_build:
+    filename: external.iso
+    external_tests:
+        - cmdline: test image %(filename)%s
+        - cmdline: test2 %(filename)%s
+          timeout: 30

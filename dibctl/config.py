@@ -272,6 +272,18 @@ class ImageConfig(Config):
                             }
                         }
                     },
+                    "external_tests": {
+                        "type": "array",
+                        "items": {
+                             "type": "object",
+                             "properties": {
+                                 "cmdline": {"type": "string"},
+                                 "timeout":  SCHEMA_TIMEOUT
+                             },
+                             "additionalProperties": False,
+                             "required": ["cmdline"]
+                        }
+                    }
                 },
                 "required": ["filename"]
             }
@@ -380,9 +392,20 @@ class UploadEnvConfig(EnvConfig):
                         },
                         'additionalProperties': False,
                         'required': ['cmdline', 'output_filename']
+                    },
+                    'external_upload': {
+                        'type': 'array',
+                        'items': {
+                            'type': 'object',
+                            'properties': {
+                                'cmdline': {'type': 'string'},
+                                'timeout': SCHEMA_TIMEOUT
+                            },
+                            'required': ['cmdline']
+                        }
                     }
                 },
-                'required': ['keystone'],
+
                 "additionalProperties": False
             }
         }

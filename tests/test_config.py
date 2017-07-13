@@ -240,9 +240,7 @@ def test_config_in(config, input, query, result):
 
 @pytest.mark.parametrize('bad_config', [
     '{"foo": "bar"}',
-    '{"foo": {}}',
     '{"foo": {"keystone": {"api_version": 4}}}',
-    '{"foo": {"glance": {}}}'
 ])
 def test_uploadenv_config_schema_bad(config, bad_config):
     mock_config = mock.mock_open(read_data=bad_config)
