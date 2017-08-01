@@ -1,3 +1,11 @@
+dibctl (0.5.6) xenial; urgency=medium
+
+  * Notice on rotate permissions
+  * Fix bug (trace if server's image was deleted) in rotate
+  * initial work on external commands
+
+ -- George Shuklin <george.shuklin@gmail.com>  Tue, 01 Aug 2017 16:03:53 +0300
+
 dibctl (0.5.5) xenial; urgency=medium
 
   * rotate command implemented (remove unused obsolete images)
