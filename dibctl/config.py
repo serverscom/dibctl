@@ -88,6 +88,17 @@ SCHEMA_VERSION = {
     'type': 'string',
     'pattern': '\d+\.\d+\.\d+'
 }
+SCHEMA_EXTERNAL_COMMAND = {
+    'type': 'array',
+    'items': {
+        'type': 'object',
+        'properties': {
+            'cmdline': {'type': 'string'}
+        },
+        'required': ['cmdline']
+    }
+
+}
 
 
 class Config(object):
@@ -272,6 +283,8 @@ class ImageConfig(Config):
                             }
                         }
                     },
+                    'external_tests': SCHEMA_EXTERNAL_COMMAND,
+                    "external_build": SCHEMA_EXTERNAL_COMMAND
                 },
                 "required": ["filename"]
             }
@@ -380,9 +393,10 @@ class UploadEnvConfig(EnvConfig):
                         },
                         'additionalProperties': False,
                         'required': ['cmdline', 'output_filename']
-                    }
+                    },
+                    'external_upload': SCHEMA_EXTERNAL_COMMAND
                 },
-                'required': ['keystone'],
+
                 "additionalProperties": False
             }
         }

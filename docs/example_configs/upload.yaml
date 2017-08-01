@@ -36,3 +36,8 @@ region3:
   glance:
     disk_format: raw
     container_format: bare
+
+external_upload_example:
+  external_upload:
+  - cmdline: upload-command1 %(output_filename)s
+  - cmdline: other-command %(output_filensme)s

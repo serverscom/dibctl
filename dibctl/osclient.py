@@ -149,7 +149,8 @@ class OSClient(object):
         'project_domain': {
             'names': (
                 'os_project_domain', 'project_domain', 'os_projectdomain',
-                'projectdomain', 'os_project_domain_name', 'project_domain_name'
+                'projectdomain', 'os_project_domain_name',
+                'project_domain_name'
             ),
             'default': 'default'
         }
@@ -190,7 +191,11 @@ class OSClient(object):
             urllib3.disable_warnings()
         self._set_api_version(dict(keystone_data), insecure)
         self.auth = self._prepare_auth(dict(keystone_data), overrides)
-        self.session = self.create_session(self.api_version, self.auth, insecure)
+        self.session = self.create_session(
+            self.api_version,
+            self.auth,
+            insecure
+        )
         self.nova = self.get_nova(self.session)
         self.glance = self.get_glance(self.session)
 
@@ -358,13 +363,19 @@ class OSClient(object):
         raise NotImplementedError("Image sharing not implemented!")
 
     def older_images(self, image_name, image_uuid):
-        all_duplicates = list(self.glance.images.list(filters={"name": image_name}))
+        all_duplicates = list(
+            self.glance.images.list(filters={"name": image_name})
+        )
         return set(map(lambda x: x.id, all_duplicates)) - set((image_uuid,))
 
     def mark_image_obsolete(self, name, uuid):
         obsoleted_name = self.OBSOLETE_PREFIX + " " + name
         meta = {self.OBSOLETE_PROP: str(True)}
-        return self.glance.images.update(uuid, name=obsoleted_name, properties=meta)
+        return self.glance.images.update(
+            uuid,
+            name=obsoleted_name,
+            properties=meta
+        )
 
     def get_image(self, uuid):
         return self.glance.images.get(uuid)
@@ -400,10 +411,19 @@ class OSClient(object):
     def get_instance(self, instance_uuid):
         return self.nova.servers.get(instance_uuid)
 
-    def find_obsolete_unused_candidates(self):
+    def _all_used_images(self):
         all_instances = self.nova.servers.list(search_opts={'all_tenants': 1})
-        all_obsolete_images = self.glance.images.list(filters={"properties": {'obsolete': 'true'}})
-        used_images_set = set(instance.image["id"] for instance in all_instances)
+        for instance in all_instances:
+            if instance.image:
+                yield instance.image["id"]
+            # else:
+                # print("Image for instance %s has been deleted" % instance)
+
+    def find_obsolete_unused_candidates(self):
+        all_obsolete_images = self.glance.images.list(
+            filters={"properties": {'obsolete': 'true'}}
+        )
+        used_images_set = set(self._all_used_images())
         obsolete_images_set = set(image.id for image in all_obsolete_images)
         return obsolete_images_set - used_images_set
 
