@@ -106,7 +106,7 @@ class DIB():
         print("Will run disk-image-create:")
         print("Environment:")
         pprint.pprint(env)
-        print("Comand line: %s" % " ".join(self.cmdline))
+        print("Command line: %s" % " ".join(self.cmdline))
 
     def run(self):
         env = self._prep_env()
