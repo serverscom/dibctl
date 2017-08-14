@@ -407,6 +407,9 @@ def test_osclient_upload_image_all_args(osclient, mock_os):
             public=True,
             disk_format=sentinel.disk_format,
             container_format=sentinel.container_format,
+            min_disk=sentinel.disk_size,
+            min_ram=sentinel.min_ram,
+            protected=sentinel.protected,
             meta={sentinel.key: sentinel.value}
         )
         assert mock_os.glance.images.create.call_args == mock.call(
@@ -415,6 +418,9 @@ def test_osclient_upload_image_all_args(osclient, mock_os):
             container_format=sentinel.container_format,
             disk_format=sentinel.disk_format,
             data=sentinel.opened_file,
+            min_disk=sentinel.disk_size,
+            min_ram=sentinel.min_ram,
+            protected=sentinel.protected,
             properties={sentinel.key: sentinel.value}
         )
 

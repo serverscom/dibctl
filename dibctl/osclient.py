@@ -250,12 +250,19 @@ class OSClient(object):
         return new_creds
 
     def _prepare_auth(self, keystone_data, overrides):
-        filtered_overrides = {k: v for k, v in overrides.items() if k.startswith('OS_')}
+        filtered_overrides = {
+            k: v for k, v in overrides.items() if k.startswith('OS_')
+        }
         creds = {}
         for name in filtered_overrides.keys():
             print("Found %s in the environment, will use it" % name)
         for target, cfg in self.OPTION_NAMINGS.iteritems():
-            creds.update(self._get_generic_field(keystone_data, filtered_overrides, target, cfg))
+            creds.update(self._get_generic_field(
+                keystone_data,
+                filtered_overrides,
+                target,
+                cfg
+            ))
         return self.map_creds(creds, self.api_version, self.OPTIONS_MAPPING)
 
     def _set_api_version(self, keystone_data, insecure):
@@ -330,7 +337,7 @@ class OSClient(object):
         raise MissmatchError(message)
 
     def _file_to_upload(self, filename):
-        # there is a bug in vcrpy with fileobject, this function is a workaround
+        # there is a bug in vcrpy with fileobject, this is a workaround
         # to make monkeypatching easier (patched version do open().read())
         # see https://github.com/kevin1024/vcrpy/issues/218
         return open(filename, 'rb', buffering=65536)
@@ -340,6 +347,9 @@ class OSClient(object):
         name,
         filename,
         public=False,
+        min_disk=0,
+        min_ram=0,
+        protected=False,
         disk_format="qcow2",
         container_format="bare",
         share_with_tenants=[],
@@ -349,6 +359,9 @@ class OSClient(object):
             name=name,
             is_public=str(public),
             disk_format=disk_format,
+            min_disk=min_disk,
+            min_ram=min_ram,
+            protected=protected,
             container_format=container_format,
             data=self._file_to_upload(filename),
             properties=meta
