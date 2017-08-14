@@ -98,9 +98,20 @@ def test_upload_bad_credentials(quick_commands):
                     'upload_env_bad_credentials'
                 ]) == 20
 
+
 def test_upload_error_for_convertion(quick_commands):
     assert quick_commands.main([
         'upload',
         'xenial',
         'env_with_failed_convertion'
     ]) == 18
+
+def test_normal_upload(quick_commands):
+    def full_read(ignore_self, filename):
+        return open(filename, 'rb', buffering=65536).read()
+    with mock.patch.object(quick_commands.do_tests.prepare_os.osclient.OSClient, '_file_to_upload', full_read):
+        with VCR.use_cassette('normal_upload.yaml'):
+            assert quick_commands.main([
+                    'test',
+                    'xenial'
+                ]) == 0
