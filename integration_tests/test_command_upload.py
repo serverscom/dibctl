@@ -1,12 +1,11 @@
-import vcr
+
 import os
 import mock
-import logging
-import sys
 
 
 def setup_module(module):
     global curdir
+    global log
     curdir = os.getcwd()
     for forbidden in [
         'OS_AUTH_URL',
@@ -20,30 +19,6 @@ def setup_module(module):
             del os.environ[forbidden]
     if 'integration_tests' not in curdir:
         os.chdir('integration_tests')
-
-    global VCR
-    VCR = vcr.VCR(
-        cassette_library_dir='cassettes/',
-        record_mode='once',
-        match_on=['uri', 'method', 'headers', 'body']
-    )
-    VCR.filter_headers = ('Content-Length', 'Accept-Encoding', 'User-Agent', 'date', 'x-distribution')
-    logging.basicConfig()
-    vcr_log = logging.getLogger('vcr')
-    vcr_log.setLevel(logging.DEBUG)
-    ch = logging.FileHandler('/tmp/requests.log', mode='w')
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    ch.setFormatter(formatter)
-    ch.setLevel(logging.INFO)
-    vcr_log.addHandler(ch)
-    vcr_log.info('Set up logging')
-    root = logging.getLogger()
-    root.setLevel(logging.DEBUG)
-    ch = logging.StreamHandler(sys.stdout)
-    ch.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    ch.setFormatter(formatter)
-    root.addHandler(ch)
 
 
 def teardown_modlue(module):
@@ -115,3 +90,18 @@ def test_normal_upload(quick_commands):
                     'test',
                     'xenial'
                 ]) == 0
+
+
+def test_remove_this_new_auth_clearance(quick_commands, happy_vcr):
+    with happy_vcr.VCR.use_cassette('killme.yaml', before_record_request=happy_vcr.filter_request, before_record_response=happy_vcr.filter_response):
+        assert quick_commands.main([
+            'upload',
+            '--images-config',
+            '../temp/images.yaml',
+            '--upload-config',
+            '../temp/upload.yaml',
+            '--input',
+            '../temp/blob.img',
+            'blob',
+            'nova-lab-1'
+        ]) == 0
