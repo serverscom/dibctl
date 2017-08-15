@@ -14,8 +14,8 @@ class HappyVCR(object):
             match_on=['uri', 'method', 'headers', 'body']
         )
         # self.VCR.filter_headers = ('Content-Length', 'Accept-Encoding', 'User-Agent', 'date', 'x-distribution')
-        #self.VCR.before_record_request = self.filter_request
-        #self.VCR.before_record_response = self.filter_response
+        # self.VCR.before_record_request = self.filter_request
+        # self.VCR.before_record_response = self.filter_response
         self.VCR.decode_compressed_response = True
         logging.basicConfig()
         vcr_log = logging.getLogger('vcr')
@@ -23,7 +23,7 @@ class HappyVCR(object):
         ch = logging.FileHandler('/tmp/requests.log', mode='w')
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         ch.setFormatter(formatter)
-        ch.setLevel(logging.INFO)
+        ch.setLevel(logging.DEBUG)
         vcr_log.addHandler(ch)
         vcr_log.info('Set up logging')
         self.log = vcr_log
@@ -34,22 +34,29 @@ class HappyVCR(object):
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         ch.setFormatter(formatter)
         root.addHandler(ch)
+        self.count = 0
 
     def filter_request(self, request):
+        if 'pytest-filtered' in request.headers:
+            return request
+        request.add_header('pytest-filtered', 'true')
+        self.log.info("filter request: %s, %s, %s, %s:%s"% (self.count, request.method, request.uri, id(request), id(self)))
+        return request
         if 'X-Auth-Token' in request.headers:
             self.log.info("old token %s" % request.headers['X-Auth-Token'])
             request.headers.pop('X-Auth-Token')
-            self.log.info('Consealing X-Auth-Token header')
+            self.log.info('Consealing X-Auth-Token header in %s (%s)' % (request.uri, self.count))
         request.headers.pop('x-distribution', None)
         if 'tokens' in request.uri and request.method == 'POST':
             unsafe = json.loads(request.body)
-            replacement = '{"tenantName": "pyvcr", "passwordCredentials": {"username": "username", "password": "password"}}'
+            replacement = '{"tenantName": "pyvcr", ' + \
+                '"passwordCredentials": {"username": "username", "password": "password"}}'
             if 'auth' in unsafe:
                 self.log.info("old creds %s" % str(unsafe['auth']))
                 unsafe['auth'] = replacement
                 safe = unsafe
             request.body = json.dumps(safe)
-            self.log.info('Consealing request credentials')
+            self.log.info('Consealing request credentials in %s (%s)' % (request.uri, self.count))
         if 'images' in request.uri and request.method == 'POST':
             if len(request.body) > 256:
                 self.log.info("Body is too large (%s bytes), truncating" % len(request.body))
@@ -92,6 +99,7 @@ class HappyVCR(object):
 def happy_vcr_cassette(request):
     vcr = HappyVCR()
     return vcr.VCR.use_cassette
+
 
 @pytest.fixture(scope="function")
 def happy_vcr(request):

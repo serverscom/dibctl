@@ -81,6 +81,7 @@ def test_upload_error_for_convertion(quick_commands):
         'env_with_failed_convertion'
     ]) == 18
 
+
 def test_normal_upload(quick_commands):
     def full_read(ignore_self, filename):
         return open(filename, 'rb', buffering=65536).read()
@@ -93,7 +94,11 @@ def test_normal_upload(quick_commands):
 
 
 def test_remove_this_new_auth_clearance(quick_commands, happy_vcr):
-    with happy_vcr.VCR.use_cassette('killme.yaml', before_record_request=happy_vcr.filter_request, before_record_response=happy_vcr.filter_response):
+    with happy_vcr.VCR.use_cassette(
+        'killme.yaml',
+        before_record_request=happy_vcr.filter_request,
+        before_record_response=happy_vcr.filter_response
+    ):
         assert quick_commands.main([
             'upload',
             '--images-config',
