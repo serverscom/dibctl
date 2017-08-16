@@ -1,13 +1,11 @@
-import vcr
 import os
 import mock
-import logging
-import sys
 
 
 def setup_module(module):
-    global curdir
-    curdir = os.getcwd()
+    global saved_curdir
+    global log
+    saved_curdir = os.getcwd()
     for forbidden in [
         'OS_AUTH_URL',
         'OS_USERNAME',
@@ -18,61 +16,87 @@ def setup_module(module):
     ]:
         if forbidden in os.environ:
             del os.environ[forbidden]
-    if 'integration_tests' not in curdir:
+    if 'integration_tests' not in saved_curdir:
         os.chdir('integration_tests')
-
-    global VCR
-    VCR = vcr.VCR(
-        cassette_library_dir='cassettes/',
-        record_mode='once',
-        match_on=['uri', 'method', 'headers', 'body']
-    )
-    VCR.filter_headers = ('Content-Length', 'Accept-Encoding', 'User-Agent', 'date', 'x-distribution')
-    logging.basicConfig()
-    vcr_log = logging.getLogger('vcr')
-    vcr_log.setLevel(logging.DEBUG)
-    ch = logging.FileHandler('/tmp/requests.log', mode='w')
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    ch.setFormatter(formatter)
-    ch.setLevel(logging.INFO)
-    vcr_log.addHandler(ch)
-    vcr_log.info('Set up logging')
-    root = logging.getLogger()
-    root.setLevel(logging.DEBUG)
-    ch = logging.StreamHandler(sys.stdout)
-    ch.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    ch.setFormatter(formatter)
-    root.addHandler(ch)
 
 
 def teardown_modlue(module):
-    global curdir
-    os.chdir(curdir)
+    global saved_curdir
+    os.chdir(saved_curdir)
 
 
-def test_test_with_overrided_disk_format(quick_commands):
+# HAPPY tests
+
+def test_test_normal(quick_commands, happy_vcr, capfd):
+    '''
+        This test check if we can do test
+        workflow:
+            - Upload new image
+            - Create new keypair
+            - Start new instance
+            - cleanup
+
+            Please not: it does not upload real image (it's too slow to do),
+            Mocked functions:
+            - check if port is alive
+            - test successfull anyway (simple_success.bash)
+
+            To update this test:
+            - check if network uuids are vaild (in config)
+            - it need normal user priveleges
+    '''
     def full_read(ignore_self, filename):
         return open(filename, 'rb', buffering=65536).read()
-    with mock.patch.object(quick_commands.do_tests.prepare_os.osclient.OSClient, '_file_to_upload', full_read):
-        with VCR.use_cassette('test_test_with_overrided_disk_format.yaml'):
+    with mock.patch.object(
+        quick_commands.do_tests.prepare_os.osclient.OSClient,
+        '_file_to_upload',
+        full_read
+    ):
+        with happy_vcr('test_test_normal.yaml'):
             assert quick_commands.main([
                     'test',
-                    'overrided_raw_format'
+                    'xenial'
                 ]) == 0
+            out = capfd.readouterr()[0]
+            assert 'All tests passed successfully' in out
+            assert 'Removing instance' in out
+            assert 'Removing ssh key' in out
+            assert 'Removing image' in out
+            assert 'Clearing done' in out
 
 
-def test_existing_image_success_code_0(quick_commands):
-    try:
-        with VCR.use_cassette('test_existing_image_success.yaml'):
-            assert quick_commands.main([
-                    'test',
-                    'xenial',
-                    '--use-existing-image',
-                    '2eb14fc3-4edc-4068-8748-988f369302c2'
-                ]) == 0
-    except Exception as e:
-        raise e
+def test_test_existing_image_success(quick_commands, happy_vcr, capfd):
+    '''
+        This test check if we can do test
+        workflow:
+            - Create new keypair
+            - Start new instance
+            - cleanup
+
+            Please not: it does not upload real image (it's too slow to do),
+            Mocked functions:
+            - check if port is alive
+            - test successfull anyway (simple_success.bash)
+
+            To update this test:
+            - check if network uuids are vaild (in config)
+            - check if image uuid is valid (it should be uploaded)
+            - it need normal user priveleges
+    '''
+    with happy_vcr('test_test_existing_image_success.yaml'):
+        assert quick_commands.main([
+                'test',
+                'xenial',
+                '--use-existing-image',
+                'f4ffd69e-20c9-40e6-b22a-808f00bf6458'
+            ]) == 0
+        out = capfd.readouterr()[0]
+        assert 'All tests passed successfully' in out
+        assert 'Removing instance' in out
+        assert 'Removing ssh key' in out
+        assert 'Not removing image' in out
+        assert 'Removing image' not in out
+        assert 'Clearing done' in out
 
 
 def test_existing_image_fail_code_80(quick_commands):
