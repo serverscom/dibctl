@@ -1,4 +1,5 @@
 import os
+import pytest
 
 
 def setup_module(module):
@@ -22,6 +23,92 @@ def setup_module(module):
 def teardown_modlue(module):
     global saved_curdir
     os.chdir(saved_curdir)
+
+
+# HAPPY tests
+# to rewrite cassette one need to run (update) upload tests
+# test order is important.
+
+def test_command_rotate_dry_run_with_candidates(
+    quick_commands,
+    capsys,
+    happy_vcr
+):
+    '''
+        This test checks if:
+        - rotate can see images
+        - dry run is respected (we ran this test twice)
+
+        This test is hard to update as it depends on
+        precise uuid values in the output. If cassette was
+        overwritten, one need to update values in assert.
+
+        This test need to have no used images (with booted instances)
+    '''
+    with happy_vcr('test_command_rotate_dry_run_with_candidates.yaml'):
+        for interation in (1, 2):
+            assert quick_commands.main([
+                'rotate',
+                'upload_env_1',
+                '--dry-run'
+            ]) == 0
+            out = capsys.readouterr()[0]
+            assert '7b055f53-3221-43b3-a047-9ad7ddebbb5f' in out  # first
+            assert '45d69b26-6c4b-48de-adc5-0a83183e01dd' in out  # last
+
+
+def test_command_rotate_with_candidates(quick_commands, capsys, happy_vcr):
+    '''
+        This test check actually remove unused obsolete images
+        This test need to have no used images (with booted instances)
+
+        Cassette update to this test is destructive, and to repeat it
+        one need to update upload tests.
+    '''
+    with happy_vcr('test_command_rotate_with_candidates.yaml'):
+        assert quick_commands.main([
+            'rotate',
+            'upload_env_1'
+        ]) == 0
+        out = capsys.readouterr()[0]
+        assert 'will be removed' in out
+        assert '7b055f53-3221-43b3-a047-9ad7ddebbb5f' in out  # first
+        assert '45d69b26-6c4b-48de-adc5-0a83183e01dd' in out  # last
+
+
+def test_command_rotate_no_candidates(quick_commands, capsys, happy_vcr):
+    '''
+        This test checks if we have no images to remove
+        it expected to be updated after test_command_rotate_with_candidates
+    '''
+    with happy_vcr('test_command_rotate_no_candidates.yaml'):
+        assert quick_commands.main([
+            'rotate',
+            'upload_env_1'
+        ]) == 0
+        out = capsys.readouterr()[0]
+        assert 'No unused obsolete images found' in out
+
+
+def test_command_rotate_dry_run_no_candidates(
+    quick_commands,
+    capsys,
+    happy_vcr
+):
+    '''
+        This test checks if we can works fine if there are no images to remove
+        (no unused images).
+
+        To update this test one should update test_command_rotate_no_candidates
+        first.
+    '''
+    with happy_vcr('test_command_rotate_dry_run_no_candidates.yaml'):
+        assert quick_commands.main([
+            'rotate',
+            'upload_env_1'
+        ]) == 0
+        out = capsys.readouterr()[0]
+        assert 'No unused obsolete images found' in out
 
 
 # SAD tests
@@ -63,57 +150,3 @@ def test_command_rotate_nova_forbidden(quick_commands, happy_vcr):
             'rotate',
             'upload_env_1_no_enough_priveleges'
         ]) == 61
-
-
-def test_command_rotate_dry_run_with_candidates(quick_commands, capsys):
-    with VCR.use_cassette('test_command_rotate_dry_run_with_candidates.yaml'):
-        assert quick_commands.main([
-            'rotate',
-            'upload_env_2',
-            '--dry-run'
-        ]) == 0
-        out = capsys.readouterr()[0]
-        assert '8b52d0b9-a60f-48a5-aef3-d7e13272a506' in out  # first
-        assert '33f0fd30-bd5d-428f-b220-ba42c47c5005' in out  # last
-
-
-def test_command_rotate_with_candidates(quick_commands, capsys):
-    # this test do real rotate and then run rotate once more
-    # second run should yield empty list
-    with VCR.use_cassette('test_command_rotate_with_candidates.yaml'):
-        assert quick_commands.main([
-            'rotate',
-            'upload_env_2'
-        ]) == 0
-        out = capsys.readouterr()[0]
-        assert 'will be removed' in out
-        assert quick_commands.main([
-            'rotate',
-            'upload_env_2'
-        ]) == 0
-        out = capsys.readouterr()[0]
-        assert 'No unused obsolete images found' in out
-
-
-def test_command_rotate_no_candidates(quick_commands, capsys):
-    # this test do real rotate and then run rotate once more
-    # second run should yield empty list
-    with VCR.use_cassette('test_command_rotate_no_candidates.yaml'):
-        assert quick_commands.main([
-            'rotate',
-            'upload_env_2'
-        ]) == 0
-        out = capsys.readouterr()[0]
-        assert 'No unused obsolete images found' in out
-
-
-def test_command_rotate_dry_run_no_candidates(quick_commands, capsys):
-    # this test do real rotate and then run rotate once more
-    # second run should yield empty list
-    with VCR.use_cassette('test_command_rotate_dry_run_no_candidates.yaml'):
-        assert quick_commands.main([
-            'rotate',
-            'upload_env_2'
-        ]) == 0
-        out = capsys.readouterr()[0]
-        assert 'No unused obsolete images found' in out
