@@ -3,7 +3,10 @@ interactions:
     body: null
     headers:
       Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
+      User-Agent: [python-requests/2.12.4]
+      pytest-filtered: ['true']
     method: GET
     uri: https://auth.nova-lab-1.mgm.servers.com:5000/v2.0
   response:
@@ -15,37 +18,40 @@ interactions:
     headers:
       content-length: ['358']
       content-type: [application/json]
-      date: ['Tue, 06 Jun 2017 12:21:12 GMT']
+      date: ['Wed, 16 Aug 2017 13:21:53 GMT']
       vary: [X-Auth-Token]
       x-distribution: [Ubuntu]
-      x-openstack-request-id: [req-76ac117d-fbd1-4b39-a183-fc081315b446]
+      x-openstack-request-id: [req-9ec1c1b0-9770-41a9-ac6d-5c84d4770eb6]
     status: {code: 200, message: OK}
 - request:
-    body: !!python/unicode '{"auth": {"tenantName": "public_images", "passwordCredentials":
-      {"username": "username", "password": "password"}}}'
+    body: !!python/unicode '{"auth": "{\"tenantName\": \"pyvcr\", \"passwordCredentials\":
+      {\"username\": \"username\", \"password\": \"password\"}}"}'
     headers:
       Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
+      Content-Length: ['120']
       Content-Type: [application/json]
+      User-Agent: [dibctl keystoneauth1/2.20.0 python-requests/2.12.4 CPython/2.7.13]
+      pytest-filtered: ['true']
     method: POST
     uri: https://auth.nova-lab-1.mgm.servers.com:5000/v2.0/tokens
   response:
-    body: {string: !!python/unicode '{"access": {"token": {"issued_at": "2017-06-06T12:21:12.000000Z",
-        "expires": "2037-06-07T12:21:12Z", "id": "af6a9529a97842b583398e1becbed7ab",
-        "tenant": {"description": "For images manipulations", "enabled": true, "id":
-        "61ed529dc6024dc5968acf32b6f4142c", "name": "public_images"}, "audit_ids":
-        ["H3uIH0h-T2uV1ceP7hL3yg"]}, "serviceCatalog": [{"endpoints": [{"adminURL":
-        "http://nova-api.p.nova-lab-1.servers.com:28774/v2/61ed529dc6024dc5968acf32b6f4142c",
-        "region": "lab-1", "internalURL": "http://nova-api.p.nova-lab-1.servers.com:28774/v2/61ed529dc6024dc5968acf32b6f4142c",
-        "id": "2e61ac6cc99345a1b152779600918c2e", "publicURL": "https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c"}],
+    body: {string: !!python/unicode '{"access": {"token": {"issued_at": "2017-08-16T13:21:54.000000Z",
+        "expires": "2038-01-15T16:17:18Z", "id": "consealed id", "tenant": {"id":
+        "4e632076f7004f908c8da67345a7592e", "enabled": true, "description": "", "name":
+        "consealed name"}, "audit_ids": ["bTNG410dQ5-waBBc5ao2sA"]}, "serviceCatalog":
+        [{"endpoints": [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28774/v2/4e632076f7004f908c8da67345a7592e",
+        "region": "lab-1", "internalURL": "http://nova-api.p.nova-lab-1.servers.com:28774/v2/4e632076f7004f908c8da67345a7592e",
+        "id": "2e61ac6cc99345a1b152779600918c2e", "publicURL": "https://compute.nova-lab-1.mgm.servers.com:8774/v2/4e632076f7004f908c8da67345a7592e"}],
         "endpoints_links": [], "type": "compute", "name": "nova"}, {"endpoints": [{"adminURL":
         "http://neutron-server.p.nova-lab-1.servers.com:29696", "region": "lab-1",
         "internalURL": "http://neutron-server.p.nova-lab-1.servers.com:29696", "id":
         "6ec649b0f7cc4554a041defadf552fc1", "publicURL": "https://network.nova-lab-1.mgm.servers.com:9696"}],
         "endpoints_links": [], "type": "network", "name": "neutron"}, {"endpoints":
-        [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/61ed529dc6024dc5968acf32b6f4142c",
-        "region": "lab-1", "internalURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/61ed529dc6024dc5968acf32b6f4142c",
-        "id": "09d47ca5543b41849da1a7690acd5844", "publicURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/61ed529dc6024dc5968acf32b6f4142c"}],
+        [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/4e632076f7004f908c8da67345a7592e",
+        "region": "lab-1", "internalURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/4e632076f7004f908c8da67345a7592e",
+        "id": "09d47ca5543b41849da1a7690acd5844", "publicURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/4e632076f7004f908c8da67345a7592e"}],
         "endpoints_links": [], "type": "volumev2", "name": "cinderv2"}, {"endpoints":
         [{"adminURL": "http://glance-api.p.nova-lab-1.servers.com:29292/v2", "region":
         "lab-1", "internalURL": "http://glance-api.p.nova-lab-1.servers.com:29292/v2",
@@ -55,41 +61,42 @@ interactions:
         "internalURL": "http://ceilometer-api.p.nova-lab-1.servers.com:28777", "id":
         "1cc0a58b1bab45509ec3991bf7111a3f", "publicURL": "https://metering.nova-lab-1.mgm.servers.com:8777"}],
         "endpoints_links": [], "type": "metering", "name": "ceilometer"}, {"endpoints":
-        [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v1/61ed529dc6024dc5968acf32b6f4142c",
-        "region": "lab-1", "internalURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v1/61ed529dc6024dc5968acf32b6f4142c",
-        "id": "6ae4b74962fc4b5abb4fed44dbf534a5", "publicURL": "https://volume.nova-lab-1.mgm.servers.com:8776/v1/61ed529dc6024dc5968acf32b6f4142c"}],
+        [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v1/4e632076f7004f908c8da67345a7592e",
+        "region": "lab-1", "internalURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v1/4e632076f7004f908c8da67345a7592e",
+        "id": "6ae4b74962fc4b5abb4fed44dbf534a5", "publicURL": "https://volume.nova-lab-1.mgm.servers.com:8776/v1/4e632076f7004f908c8da67345a7592e"}],
         "endpoints_links": [], "type": "volume", "name": "cinder"}, {"endpoints":
         [{"adminURL": "http://keystone.p.nova-lab-1.servers.com:35357/v2.0", "region":
         "lab-1", "internalURL": "http://keystone.p.nova-lab-1.servers.com:5001/v2.0",
         "id": "19226f12c0bb4438a6032b9c55c1a8e9", "publicURL": "https://auth.nova-lab-1.mgm.servers.com:5000/v2.0"}],
         "endpoints_links": [], "type": "identity", "name": "keystone"}], "user": {"username":
-        "username", "roles_links": [], "id": "155f21999dd34a679797a5eb86b0ee20",
-        "roles": [{"name": "images"}, {"name": "_member_"}], "name": "username"},
-        "metadata": {"is_admin": 0, "roles": ["d80c47ca65a6448fb92b0b948178aa88",
-        "9fe2ff9ee4384b1894a90878d3e92bab"]}}}'}
+        "consealed username", "roles_links": [], "id": "cc876061ad6a459eb7ff29e1ee04a3a6",
+        "roles": [{"name": "_member_"}], "name": "consealed name"}, "metadata": {"is_admin":
+        0, "roles": ["9fe2ff9ee4384b1894a90878d3e92bab"]}}}'}
     headers:
-      content-length: ['3326']
+      content-length: ['3266']
       content-type: [application/json]
-      date: ['Tue, 06 Jun 2017 12:21:12 GMT']
+      date: ['Wed, 16 Aug 2017 13:21:54 GMT']
       vary: [X-Auth-Token]
       x-distribution: [Ubuntu]
-      x-openstack-request-id: [req-d76bc20a-49af-46ae-a13a-a25823312b6e]
+      x-openstack-request-id: [req-f9a72f9d-275e-4165-aeb6-64baf563ef18]
     status: {code: 200, message: OK}
 - request:
     body: null
     headers:
       Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      X-Auth-Token: [!!python/unicode af6a9529a97842b583398e1becbed7ab]
+      User-Agent: [python-novaclient]
+      pytest-filtered: ['true']
     method: GET
-    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/detail?all_tenants=1
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/4e632076f7004f908c8da67345a7592e/servers/detail?all_tenants=1
   response:
     body: {string: !!python/unicode '{"forbidden": {"message": "Policy doesn''t allow
         os_compute_api:servers:detail:get_all_tenants to be performed.", "code": 403}}'}
     headers:
       content-length: ['126']
       content-type: [application/json; charset=UTF-8]
-      date: ['Tue, 06 Jun 2017 12:21:13 GMT']
-      x-compute-request-id: [req-ea2e4287-db2a-45b6-b104-d74d0d740361]
+      date: ['Wed, 16 Aug 2017 13:21:55 GMT']
+      x-compute-request-id: [req-b76dc82f-d49a-42a0-95c9-fb4263f454c6]
     status: {code: 403, message: Forbidden}
 version: 1
