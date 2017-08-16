@@ -1,5 +1,4 @@
 import os
-import pytest
 
 
 def setup_module(module):
@@ -59,7 +58,7 @@ def test_command_rotate_dry_run_with_candidates(
 
 def test_command_rotate_with_candidates(quick_commands, capsys, happy_vcr):
     '''
-        This test check actually remove unused obsolete images
+        This test removes unused obsolete images
         This test need to have no used images (with booted instances)
 
         Cassette update to this test is destructive, and to repeat it
@@ -90,25 +89,64 @@ def test_command_rotate_no_candidates(quick_commands, capsys, happy_vcr):
         assert 'No unused obsolete images found' in out
 
 
-def test_command_rotate_dry_run_no_candidates(
+def test_command_rotate_used_and_unused_images(
     quick_commands,
     capsys,
     happy_vcr
 ):
     '''
-        This test checks if we can works fine if there are no images to remove
-        (no unused images).
+        This test checks if we realy remove only unused images.
+        It requires specfial configuration for reproduction:
+        - Image with used and unsued obsolete copy
 
-        To update this test one should update test_command_rotate_no_candidates
-        first.
+        To update this test:
+        - Clean environment from obsolete images
+        - Boot any image to instance
+        - Upload new copy of image twice. 1st copy cause 'used obsolete'
+          and second copy cause 'unused obosolete'
+
+        - UUID updates (inside test) is required
     '''
-    with happy_vcr('test_command_rotate_dry_run_no_candidates.yaml'):
+    with happy_vcr('test_command_rotate_used_and_unused_images.yaml'):
+        assert quick_commands.main([
+            'rotate',
+            'upload_env_1'
+        ]) == 0
+        out = capsys.readouterr()[0]
+        assert 'will be removed' in out
+        assert '8b6dad09-3dc1-49bd-b43e-07cfc7ef02a7' in out  # unused
+        assert 'a7eb42e6-9d60-409d-b1b9-cdc8a45de50a' not in out  # used & obs.
+        assert '8b68b1bd-bdbf-48f8-b472-dc336c17c032' not in out  # current
+
+
+def test_command_rotate_only_used_obsolete(
+    quick_commands,
+    capsys,
+    happy_vcr
+):
+    '''
+        This test checks if we ignore used obsolete images
+        It's very similar to test_command_rotate_no_candidates,
+        and the difference is in the environment (inside Openstack)
+        It requires specfial configuration for reproduction:
+        - Image with used obsolete copy
+
+        To update this test:
+        - Clean environment from obsolete images
+        - Boot any image to instance
+        - Upload new copy of image once.
+
+        - UUID updates (inside test) is required
+    '''
+    with happy_vcr('test_command_rotate_only_used_obsolete.yaml'):
         assert quick_commands.main([
             'rotate',
             'upload_env_1'
         ]) == 0
         out = capsys.readouterr()[0]
         assert 'No unused obsolete images found' in out
+        assert 'a7eb42e6-9d60-409d-b1b9-cdc8a45de50a' not in out  # used & obs.
+        assert '8b68b1bd-bdbf-48f8-b472-dc336c17c032' not in out  # current
 
 
 # SAD tests
