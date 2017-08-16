@@ -4,9 +4,9 @@ import mock
 
 
 def setup_module(module):
-    global curdir
+    global saved_curdir
     global log
-    curdir = os.getcwd()
+    saved_curdir = os.getcwd()
     for forbidden in [
         'OS_AUTH_URL',
         'OS_USERNAME',
@@ -17,20 +17,42 @@ def setup_module(module):
     ]:
         if forbidden in os.environ:
             del os.environ[forbidden]
-    if 'integration_tests' not in curdir:
+    if 'integration_tests' not in saved_curdir:
         os.chdir('integration_tests')
 
 
 def teardown_modlue(module):
-    global curdir
-    os.chdir(curdir)
+    global saved_curdir
+    os.chdir(saved_curdir)
 
 
-def test_upload_empty_image_normal_no_obsolete(quick_commands):
+# HAPPY TESTS (normal workflow)
+
+def test_upload_image_normal_no_obsolete(quick_commands, happy_vcr):
     def full_read(ignore_self, filename):
         return open(filename, 'rb', buffering=65536).read()
-    with mock.patch.object(quick_commands.do_tests.prepare_os.osclient.OSClient, '_file_to_upload', full_read):
-        with VCR.use_cassette('test_upload_empty_image_normal_no_obsolete.yaml'):
+    with mock.patch.object(
+        quick_commands.do_tests.prepare_os.osclient.OSClient,
+        '_file_to_upload',
+        full_read
+    ):
+        with happy_vcr('test_upload_image_normal_no_obsolete.yaml'):
+            assert quick_commands.main([
+                    'upload',
+                    'overrided_raw_format',
+                    'upload_env_1'
+                ]) == 0
+
+
+def test_upload_image_normal_obsolete(quick_commands, happy_vcr):
+    def full_read(ignore_self, filename):
+        return open(filename, 'rb', buffering=65536).read()
+    with mock.patch.object(
+        quick_commands.do_tests.prepare_os.osclient.OSClient,
+        '_file_to_upload',
+        full_read
+    ):
+        with happy_vcr('test_upload_image_normal_obsolete.yaml'):
             assert quick_commands.main([
                     'upload',
                     'overrided_raw_format',
@@ -50,16 +72,7 @@ def test_upload_empty_image_normal_no_obsolete_format_raw_temporaly(quick_comman
                 ]) == 0
 
 
-def test_upload_empty_image_normal_obsolete(quick_commands):
-    def full_read(ignore_self, filename):
-        return open(filename, 'rb', buffering=65536).read()
-    with mock.patch.object(quick_commands.do_tests.prepare_os.osclient.OSClient, '_file_to_upload', full_read):
-        with VCR.use_cassette('test_upload_empty_image_normal_obsolete.yaml'):
-            assert quick_commands.main([
-                    'upload',
-                    'overrided_raw_format',
-                    'upload_env_1'
-                ]) == 0
+
 
 
 def test_upload_bad_credentials(quick_commands):
@@ -94,10 +107,8 @@ def test_normal_upload(quick_commands):
 
 
 def test_remove_this_new_auth_clearance(quick_commands, happy_vcr):
-    with happy_vcr.VCR.use_cassette(
-        'killme.yaml',
-        before_record_request=happy_vcr.filter_request,
-        before_record_response=happy_vcr.filter_response
+    with happy_vcr(
+        'killme.yaml'
     ):
         assert quick_commands.main([
             'upload',
