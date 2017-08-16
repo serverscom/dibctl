@@ -6,6 +6,10 @@ upload_env_1:
   keystone: {auth_url: 'https://auth.nova-lab-1.mgm.servers.com:5000/v2.0', password: password,
     tenant_name: public_images, username: username}
   ssl_insecure: true
+upload_env_1_no_enough_priveleges:
+  keystone: {auth_url: 'https://auth.nova-lab-1.mgm.servers.com:5000/v2.0', password: password,
+    tenant_name: demotenant, username: username}
+  ssl_insecure: true
 upload_env_2:
   keystone: {auth_url: 'https://auth.nova-lab-1.mgm.servers.com:5000/v2.0', password: password,
     tenant_name: demotenant, username: username}
