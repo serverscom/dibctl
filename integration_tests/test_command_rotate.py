@@ -1,13 +1,10 @@
-import vcr
 import os
-import mock
-import logging
-import sys
 
 
 def setup_module(module):
-    global curdir
-    curdir = os.getcwd()
+    global saved_curdir
+    global log
+    saved_curdir = os.getcwd()
     for forbidden in [
         'OS_AUTH_URL',
         'OS_USERNAME',
@@ -18,59 +15,53 @@ def setup_module(module):
     ]:
         if forbidden in os.environ:
             del os.environ[forbidden]
-    if 'integration_tests' not in curdir:
+    if 'integration_tests' not in saved_curdir:
         os.chdir('integration_tests')
-
-    global VCR
-    VCR = vcr.VCR(
-        cassette_library_dir='cassettes/',
-        record_mode='once',
-        match_on=['uri', 'method', 'headers', 'body']
-    )
-    VCR.filter_headers = ('Content-Length', 'Accept-Encoding', 'User-Agent', 'date', 'x-distribution')
-    logging.basicConfig()
-    vcr_log = logging.getLogger('vcr')
-    vcr_log.setLevel(logging.DEBUG)
-    ch = logging.FileHandler('/tmp/requests.log', mode='w')
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    ch.setFormatter(formatter)
-    ch.setLevel(logging.INFO)
-    vcr_log.addHandler(ch)
-    vcr_log.info('Set up logging')
-    root = logging.getLogger()
-    root.setLevel(logging.DEBUG)
-    ch = logging.StreamHandler(sys.stdout)
-    ch.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    ch.setFormatter(formatter)
-    root.addHandler(ch)
 
 
 def teardown_modlue(module):
-    global curdir
-    os.chdir(curdir)
+    global saved_curdir
+    os.chdir(saved_curdir)
 
+
+# SAD tests
 
 def test_command_rotate_no_env(quick_commands):
+    ''' This test check how dibctl fails if env is not found in config '''
     assert quick_commands.main([
         'rotate',
         'unknown_upload_env'
     ]) == 11
 
 
-def test_command_rotate_bad_passwd(quick_commands):
-    with VCR.use_cassette('test_command_rotate_bad_passwd.yaml'):
+def test_command_rotate_bad_passwd(quick_commands, happy_vcr):
+    '''
+        This test check fail code for bad password situation
+    '''
+    with happy_vcr('test_command_rotate_bad_passwd.yaml'):
         assert quick_commands.main([
             'rotate',
             'upload_env_bad_credentials'
         ]) == 20
 
 
-def test_command_rotate_nova_forbidden(quick_commands):
-    with VCR.use_cassette('test_command_rotate_nova_forbidden.yaml'):
+def test_command_rotate_nova_forbidden(quick_commands, happy_vcr):
+    '''
+        This test check if forbidden message from nova is handled
+        correctly.
+        If user has no permissions to view instances of other users,
+        than nova return message:
+        Policy doesn't allow os_compute_api:servers:detail:get_all_tenants
+        to be performed
+
+        To update cassette one need to change
+        os_compute_api:servers:detail:get_all_tenants in policy.json or
+        use account withous special privelege.
+    '''
+    with happy_vcr('test_command_rotate_nova_forbidden.yaml'):
         assert quick_commands.main([
             'rotate',
-            'upload_env_1'
+            'upload_env_1_no_enough_priveleges'
         ]) == 61
 
 

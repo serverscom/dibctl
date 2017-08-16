@@ -1,7 +1,7 @@
 import os
 
 
-# this file contains test which did not require vcr or http
+# this file contains tests which do not require vcr or http
 
 def setup_module(module):
     global curdir
