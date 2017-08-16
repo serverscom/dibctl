@@ -5,6 +5,7 @@ import pytest
 import sys
 import copy
 
+
 class HappyVCR(object):
 
     def __init__(self):

@@ -29,6 +29,10 @@ def teardown_modlue(module):
 # HAPPY TESTS (normal workflow)
 
 def test_upload_image_normal_no_obsolete(quick_commands, happy_vcr):
+    '''
+        Thise test check if we can upload image.
+        It assumes that we have no other copies of image to obsolete
+    '''
     def full_read(ignore_self, filename):
         return open(filename, 'rb', buffering=65536).read()
     with mock.patch.object(
@@ -45,6 +49,10 @@ def test_upload_image_normal_no_obsolete(quick_commands, happy_vcr):
 
 
 def test_upload_image_normal_obsolete(quick_commands, happy_vcr):
+    '''
+        Thise test check if we can upload image and obsolete older copy.
+        It assumes that we have older copy of the image
+    '''
     def full_read(ignore_self, filename):
         return open(filename, 'rb', buffering=65536).read()
     with mock.patch.object(
@@ -60,11 +68,22 @@ def test_upload_image_normal_obsolete(quick_commands, happy_vcr):
                 ]) == 0
 
 
-def test_upload_empty_image_normal_no_obsolete_format_raw_temporaly(quick_commands):
+def test_upload_image_normal_no_obsolete_convertion(quick_commands, happy_vcr):
+    '''
+        Thise test check if we can convert image before upload and then
+        upload it.
+        It assumes that we have older copy of the image to obsolete.
+        (obsoletion is not the part of the test but it makes easier to
+        rerecord test)
+    '''
     def full_read(ignore_self, filename):
         return open(filename, 'rb', buffering=65536).read()
-    with mock.patch.object(quick_commands.do_tests.prepare_os.osclient.OSClient, '_file_to_upload', full_read):
-        with VCR.use_cassette('test_upload_empty_image_normal_no_obsolete_format_raw_temporaly.yaml'):
+    with mock.patch.object(
+        quick_commands.do_tests.prepare_os.osclient.OSClient,
+        '_file_to_upload',
+        full_read
+    ):
+        with happy_vcr('test_upload_image_normal_no_obsolete_convertion.yaml'):
             assert quick_commands.main([
                     'upload',
                     'overrided_raw_format',
@@ -72,14 +91,22 @@ def test_upload_empty_image_normal_no_obsolete_format_raw_temporaly(quick_comman
                 ]) == 0
 
 
+# SAD TESTS (handling errors)
 
-
-
-def test_upload_bad_credentials(quick_commands):
+def test_upload_image_bad_credentials(quick_commands, happy_vcr):
+    '''
+        This test should fail due to bad credentials
+        it's a bit akward as we conseal 'bad credentials' from cassette,
+        but nevertheless it's still valid
+    '''
     def full_read(ignore_self, filename):
         return open(filename, 'rb', buffering=65536).read()
-    with mock.patch.object(quick_commands.do_tests.prepare_os.osclient.OSClient, '_file_to_upload', full_read):
-        with VCR.use_cassette('test_upload_bad_credentials.yaml'):
+    with mock.patch.object(
+        quick_commands.do_tests.prepare_os.osclient.OSClient,
+        '_file_to_upload',
+        full_read
+    ):
+        with happy_vcr('test_upload_bad_credentials.yaml'):
             assert quick_commands.main([
                     'upload',
                     'overrided_raw_format',
@@ -87,37 +114,13 @@ def test_upload_bad_credentials(quick_commands):
                 ]) == 20
 
 
-def test_upload_error_for_convertion(quick_commands):
+def test_upload_image_error_for_convertion(quick_commands):
+    '''
+        This test should fail on convertion, no actual upload
+        should happen
+    '''
     assert quick_commands.main([
         'upload',
         'xenial',
         'env_with_failed_convertion'
     ]) == 18
-
-
-def test_normal_upload(quick_commands):
-    def full_read(ignore_self, filename):
-        return open(filename, 'rb', buffering=65536).read()
-    with mock.patch.object(quick_commands.do_tests.prepare_os.osclient.OSClient, '_file_to_upload', full_read):
-        with VCR.use_cassette('normal_upload.yaml'):
-            assert quick_commands.main([
-                    'test',
-                    'xenial'
-                ]) == 0
-
-
-def test_remove_this_new_auth_clearance(quick_commands, happy_vcr):
-    with happy_vcr(
-        'killme.yaml'
-    ):
-        assert quick_commands.main([
-            'upload',
-            '--images-config',
-            '../temp/images.yaml',
-            '--upload-config',
-            '../temp/upload.yaml',
-            '--input',
-            '../temp/blob.img',
-            'blob',
-            'nova-lab-1'
-        ]) == 0
