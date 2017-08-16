@@ -38,7 +38,8 @@ for cfgname in CFG_LIST:
         if 'password' in obj[e]['keystone']:
             pw_replacements.append(obj[e]['keystone']['password'])
             obj[e]['keystone']['password'] = "password"
-
+        if 'tenant_name' in obj[e]['keystone']:
+            obj[e]['keystone']['tenant_name'] = "pyvcr"
     open(os.path.join(PUBLIC_CONFIG_LOCATION, cfgname), 'w').write(
         yaml.dump(obj)
     )
