@@ -1,3 +1,10 @@
+dibctl (0.5.7) xenial; urgency=medium
+
+  * Glance section now supports min_size, max_size and protection flag
+  * Minor typos
+
+ -- George Shuklin <george.shuklin@gmail.com>  Thu, 17 Aug 2017 14:52:55 +0300
+
 dibctl (0.5.6) xenial; urgency=medium
 
   * Notice on rotate permissions
