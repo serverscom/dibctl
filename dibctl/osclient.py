@@ -103,7 +103,10 @@ def smart_join_glance_config(img_conf, env_conf):
         ('tags', 'mergelist'),
         ('endpoint', 'second'),  # envs has priority.
         ('disk_format', 'second'),
-        ('container_format', 'second')
+        ('container_format', 'second'),
+        ('protected', 'max'),
+        ('min_disk', 'max'),
+        ('min_ram', 'max')
     ):
         _smart_merge(
             common_config, key, dict(img_conf), dict(env_conf), policy

@@ -6,6 +6,9 @@ xenial:
     upload_timeout: 1800
     container_format: bare
     disk_format: qcow2
+    min_disk: 4
+    min_ram: 1024
+    protected: False
     properties:
      foo: "bar"
     public: False

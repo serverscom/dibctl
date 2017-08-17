@@ -157,12 +157,12 @@ Key concepts
 
 Dibctl uses following concepts:
 - *label* (for image and environment) - internal 'name' for a given image or environment to
-  use in command line and in cross-reference fields. 
+  use in command line and in cross-reference fields.
   All entries in dibctl configuration have label, or 'namelabel'.
 - *image*: set of attirbutes to build and test actual image.
-- *test instance*: Instance which is used for image testing. Test instance is created 
+- *test instance*: Instance which is used for image testing. Test instance is created
   at test time and   removed afterwards. Dibctl creates custom SSH key for each test.
-- test image: image which is uploaded for testing. Dibctl uses separate upload stage 
+- test image: image which is uploaded for testing. Dibctl uses separate upload stage
   for testing and actual 'upload to procution'. Test images normally uploaded to specific
   project and are not public. Production images are normally public (or upload to
   selected tenant and shared  with specific tenants). Test image is removed after test
@@ -248,8 +248,8 @@ If you want to use python-based test you will also need:
 or build your onw package).
 
 Note: Due to bug [1] Ubuntu Xenial's bug, you may recieve pytest warnings when
-using pytest runner. Ubuntu's python-pytest-timeout package is obsolete. 
-Those warnings are harmless, but if you want to get rid of them, upgrade 
+using pytest runner. Ubuntu's python-pytest-timeout package is obsolete.
+Those warnings are harmless, but if you want to get rid of them, upgrade
 python-pytest-timeout package to the newer one.
 
 [1] https://bugs.launchpad.net/ubuntu/+source/python-pytest-timeout/+bug/1676301
@@ -264,7 +264,7 @@ or local configuration files (./dibctl). Local configuration files usually
 used within git repository, containing custom image and enviroment
 configs, custom diskimage-builder elements and custom tests.
 
-## Configuration file prioriy
+## Configuration file priority
 Dibctl stops searching file as soon as file is found.
 Each file is searched independently
 (f.e. /etc/dibctl/images.yaml and ./dibctl/test.yaml)
@@ -327,6 +327,9 @@ Special priority rules for `glance` section:
    environments have priority over image.
 - `tags` - merged (this is a simple list)
 - `endpoint` - environment have priority over image
+- `protected` - max of all values (True > False)
+- `min_disk` - max of all values
+- `min_ram` - max of all values
 
 Special priority rules for all timeout values.
 For all timeout values maximum value is use.
