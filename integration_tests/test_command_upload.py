@@ -91,6 +91,30 @@ def test_upload_image_normal_no_obsolete_convertion(quick_commands, happy_vcr):
                 ]) == 0
 
 
+def test_upload_image_with_sizes_and_protection(quick_commands, happy_vcr):
+    '''
+        Thise test check if we honor min_disk/min_ram/protected
+        in glance section of upload config.
+        It assumes that we have no other copies of image to obsolete
+
+        To update this test, remove older copy of image (mind that image
+        is protected!)
+    '''
+    def full_read(ignore_self, filename):
+        return open(filename, 'rb', buffering=65536).read()
+    with mock.patch.object(
+        quick_commands.do_tests.prepare_os.osclient.OSClient,
+        '_file_to_upload',
+        full_read
+    ):
+        with happy_vcr('test_upload_image_with_sizes_and_protection.yaml'):
+            assert quick_commands.main([
+                    'upload',
+                    'overrided_raw_format',
+                    'env_with_sizes'
+                ]) == 0
+
+
 # SAD TESTS (handling errors)
 
 def test_upload_image_bad_credentials(quick_commands, happy_vcr):
