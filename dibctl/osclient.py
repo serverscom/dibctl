@@ -91,20 +91,23 @@ def smart_join_glance_config(img_conf, env_conf):
         join together two glance sections with
         special logic for each field during merge.
     '''
-    # default policy is 'second', so we'll join both, and than process special in reverse
+    # default policy is 'second', so we'll join both, and than process
+    # special in reverse
     common_config = dict(copy.deepcopy(env_conf))
     # should cover 'name' and 'public'
     common_config.update(dict(img_conf))
     for key, policy in (
         ('api_version', 'second'),  # test/upload_env has priority here
         ('upload_timeout', 'max'),
-        ('properties', 'mergedict'),  # envs has priority on conflicting entries
+        ('properties', 'mergedict'),  # envs has priority in conflicts
         ('tags', 'mergelist'),
-        ('endpoint', 'second'),  # envs has priority. I don't know why anyone wants to put endpoint into image config.
+        ('endpoint', 'second'),  # envs has priority.
         ('disk_format', 'second'),
         ('container_format', 'second')
     ):
-        _smart_merge(common_config, key, dict(img_conf), dict(env_conf), policy)
+        _smart_merge(
+            common_config, key, dict(img_conf), dict(env_conf), policy
+        )
     return config.Config(common_config)
 
 
@@ -207,7 +210,9 @@ class OSClient(object):
         elif api_version == 'v3':
             auth = identity.v3.Password(**auth_data)
         else:
-            raise DiscoveryError('Auth version %s is not supported' % api_version)
+            raise DiscoveryError(
+                'Auth version %s is not supported' % api_version
+            )
 
         # TODO we need to respect CACERT!
         return session.Session(
@@ -285,7 +290,8 @@ class OSClient(object):
                 )
             except DiscoveryError as e:
                 message = 'Unable to discover keystone version.' \
-                          'Try to use "version" variable to force specific version.' \
+                          'Try to use "version" variable to force' \
+                          'specific version.' \
                           'Error details: ' + str(e)
                 raise DiscoveryError(message)
 
@@ -314,7 +320,9 @@ class OSClient(object):
 
     def _ask_for_version(self, keystone_data, lib_versions, insecure):
         try:
-            r = requests.get(keystone_data['auth_url'], verify=not insecure).json()
+            r = requests.get(
+                keystone_data['auth_url'], verify=not insecure
+            ).json()
             if 'version' in r:
                 versions = [r['version']['id']]
             else:
@@ -323,13 +331,19 @@ class OSClient(object):
                 major = self._major_version(version)
                 if self._issupported_version(major, lib_versions):
                     return major
-        except (requests.exceptions.ConnectionError, TypeError, KeyError, simplejson.scanner.JSONDecodeError) as e:
+        except (
+            requests.exceptions.ConnectionError,
+            TypeError,
+            KeyError,
+            simplejson.scanner.JSONDecodeError
+        ) as e:
             raise DiscoveryError(e.message)
 
-        message = "Unable to find common version to use for keystone authorisation." \
-                  "keystoneauth1 library supports: {lib_versions}," \
-                  "remote server supports: {remote_versions}," \
-                  "this application supports: {app_versions} ".format(
+        message = "Unable to find common version to use for keystone " \
+                  "authorization. keystoneauth1 library " \
+                  "supports: {lib_versions}, remote server supports: "\
+                  "{remote_versions}, this application supports: " \
+                  "{app_versions} ".format(
                     lib_versions=str(lib_versions),
                     remote_versions=str(versions),
                     app_versions=str(self.SUPPORTED_VERSIONS)
@@ -468,12 +482,17 @@ class OSClient(object):
             found = instance.networks.values()
 
         if len(found) > 1:
-                raise MultipleIPError("More than one network match: %s, matching regexp is '%s'" % (
-                    str(found),
-                    str(regexp)
-                ))
+                raise MultipleIPError(
+                    "More than one network match: "
+                    "%s, matching regexp is '%s'" % (
+                        str(found),
+                        str(regexp)
+                    )
+                )
         elif len(found) == 1:
                 return found[0][0]
         else:
-            raise NoIPFoundError("No matching IP found. Search regexp: %s, networks: %s" % (
-                str(regexp), str(instance.networks.values())))
+            raise NoIPFoundError(
+                "No matching IP found. Search regexp: %s, networks: %s" % (
+                    str(regexp), str(instance.networks.values()))
+                )
