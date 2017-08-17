@@ -13,6 +13,10 @@ class HappyVCR(object):
             cassette_library_dir='cassettes/',
             record_mode='once',
             match_on=['uri', 'method', 'headers', 'body'],
+            filter_headers=(
+                'Content-Length', 'User-Agent',
+                'Accept-Encoding', 'Connection', 'Accept'
+            ),
             before_record_request=self.filter_request,
             before_record_response=self.filter_response
         )

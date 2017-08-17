@@ -1,6 +1,6 @@
 bad_network_id:
   keystone: {auth_url: 'https://auth.servers.nl01.cloud.servers.com:5000/v2.0', password: password,
-    tenant_name: '28', username: username}
+    tenant_name: pyvcr, username: username}
   nova:
     flavor: SSD.30
     nics:
@@ -8,14 +8,14 @@ bad_network_id:
 env_with_format_override:
   glance: {disk_format: raw}
   keystone: {auth_url: 'https://auth.servers.nl01.cloud.servers.com:5000/v2.0', password: password,
-    tenant_name: '28', username: username}
+    tenant_name: pyvcr, username: username}
   nova:
     flavor: SSD.30
     nics:
     - {net_id: c7ccdf1c-e6c3-4257-8b2e-740748c14564}
 lab1:
   keystone: {auth_url: 'https://auth.nova-lab-1.mgm.servers.com:5000/v2.0', password: password,
-    tenant_name: public_images, username: username}
+    tenant_name: pyvcr, username: username}
   nova:
     flavor: SSD.30
     main_nic_regexp: internet
@@ -24,7 +24,7 @@ lab1:
   ssl_insecure: true
 nl01:
   keystone: {auth_url: 'https://auth.servers.nl01.cloud.servers.com:5000/v2.0', password: password,
-    tenant_name: '28', username: username}
+    tenant_name: pyvcr, username: username}
   nova:
     flavor: SSD.30
     main_nic_regexp: internet
