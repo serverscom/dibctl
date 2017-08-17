@@ -18,10 +18,10 @@ interactions:
     headers:
       content-length: ['358']
       content-type: [application/json]
-      date: ['Wed, 16 Aug 2017 13:48:18 GMT']
+      date: ['Wed, 16 Aug 2017 14:49:01 GMT']
       vary: [X-Auth-Token]
       x-distribution: [Ubuntu]
-      x-openstack-request-id: [req-05c2ed85-c791-4fef-aab7-f65251137368]
+      x-openstack-request-id: [req-34cefd9c-9981-4350-925b-5cce7cd45c3e]
     status: {code: 200, message: OK}
 - request:
     body: !!python/unicode '{"auth": "{\"tenantName\": \"pyvcr\", \"passwordCredentials\":
@@ -37,49 +37,49 @@ interactions:
     method: POST
     uri: https://auth.nova-lab-1.mgm.servers.com:5000/v2.0/tokens
   response:
-    body: {string: !!python/unicode '{"access": {"token": {"issued_at": "2017-08-16T13:48:19.000000Z",
+    body: {string: !!python/unicode '{"access": {"token": {"issued_at": "2017-08-16T14:49:01.000000Z",
         "expires": "2038-01-15T16:17:18Z", "id": "consealed id", "tenant": {"id":
         "61ed529dc6024dc5968acf32b6f4142c", "enabled": true, "description": "", "name":
-        "consealed name"}, "audit_ids": ["Eqzd72oKRVavxHaoVg7vPA"]}, "serviceCatalog":
+        "consealed name"}, "audit_ids": ["ngY4tdUcSs-inaJl5NzUjg"]}, "serviceCatalog":
         [{"endpoints": [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28774/v2/61ed529dc6024dc5968acf32b6f4142c",
-        "region": "lab-1", "internalURL": "http://nova-api.p.nova-lab-1.servers.com:28774/v2/61ed529dc6024dc5968acf32b6f4142c",
-        "id": "2e61ac6cc99345a1b152779600918c2e", "publicURL": "https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c"}],
+        "region": "lab-1", "id": "2e61ac6cc99345a1b152779600918c2e", "internalURL":
+        "http://nova-api.p.nova-lab-1.servers.com:28774/v2/61ed529dc6024dc5968acf32b6f4142c",
+        "publicURL": "https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c"}],
         "endpoints_links": [], "type": "compute", "name": "nova"}, {"endpoints": [{"adminURL":
         "http://neutron-server.p.nova-lab-1.servers.com:29696", "region": "lab-1",
-        "internalURL": "http://neutron-server.p.nova-lab-1.servers.com:29696", "id":
-        "6ec649b0f7cc4554a041defadf552fc1", "publicURL": "https://network.nova-lab-1.mgm.servers.com:9696"}],
-        "endpoints_links": [], "type": "network", "name": "neutron"}, {"endpoints":
-        [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/61ed529dc6024dc5968acf32b6f4142c",
-        "region": "lab-1", "internalURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/61ed529dc6024dc5968acf32b6f4142c",
-        "id": "09d47ca5543b41849da1a7690acd5844", "publicURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/61ed529dc6024dc5968acf32b6f4142c"}],
+        "id": "6ec649b0f7cc4554a041defadf552fc1", "internalURL": "http://neutron-server.p.nova-lab-1.servers.com:29696",
+        "publicURL": "https://network.nova-lab-1.mgm.servers.com:9696"}], "endpoints_links":
+        [], "type": "network", "name": "neutron"}, {"endpoints": [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/61ed529dc6024dc5968acf32b6f4142c",
+        "region": "lab-1", "id": "09d47ca5543b41849da1a7690acd5844", "internalURL":
+        "http://nova-api.p.nova-lab-1.servers.com:28776/v2/61ed529dc6024dc5968acf32b6f4142c",
+        "publicURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/61ed529dc6024dc5968acf32b6f4142c"}],
         "endpoints_links": [], "type": "volumev2", "name": "cinderv2"}, {"endpoints":
         [{"adminURL": "http://glance-api.p.nova-lab-1.servers.com:29292/v2", "region":
-        "lab-1", "internalURL": "http://glance-api.p.nova-lab-1.servers.com:29292/v2",
-        "id": "2982f5e7320040acb9fe1dac441a8551", "publicURL": "https://images.nova-lab-1.mgm.servers.com:9292/v2"}],
-        "endpoints_links": [], "type": "image", "name": "glance"}, {"endpoints": [{"adminURL":
-        "http://ceilometer-api.p.nova-lab-1.servers.com:28777", "region": "lab-1",
-        "internalURL": "http://ceilometer-api.p.nova-lab-1.servers.com:28777", "id":
-        "1cc0a58b1bab45509ec3991bf7111a3f", "publicURL": "https://metering.nova-lab-1.mgm.servers.com:8777"}],
+        "lab-1", "id": "2982f5e7320040acb9fe1dac441a8551", "internalURL": "http://glance-api.p.nova-lab-1.servers.com:29292/v2",
+        "publicURL": "https://images.nova-lab-1.mgm.servers.com:9292/v2"}], "endpoints_links":
+        [], "type": "image", "name": "glance"}, {"endpoints": [{"adminURL": "http://ceilometer-api.p.nova-lab-1.servers.com:28777",
+        "region": "lab-1", "id": "1cc0a58b1bab45509ec3991bf7111a3f", "internalURL":
+        "http://ceilometer-api.p.nova-lab-1.servers.com:28777", "publicURL": "https://metering.nova-lab-1.mgm.servers.com:8777"}],
         "endpoints_links": [], "type": "metering", "name": "ceilometer"}, {"endpoints":
         [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v1/61ed529dc6024dc5968acf32b6f4142c",
-        "region": "lab-1", "internalURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v1/61ed529dc6024dc5968acf32b6f4142c",
-        "id": "6ae4b74962fc4b5abb4fed44dbf534a5", "publicURL": "https://volume.nova-lab-1.mgm.servers.com:8776/v1/61ed529dc6024dc5968acf32b6f4142c"}],
+        "region": "lab-1", "id": "6ae4b74962fc4b5abb4fed44dbf534a5", "internalURL":
+        "http://nova-api.p.nova-lab-1.servers.com:28776/v1/61ed529dc6024dc5968acf32b6f4142c",
+        "publicURL": "https://volume.nova-lab-1.mgm.servers.com:8776/v1/61ed529dc6024dc5968acf32b6f4142c"}],
         "endpoints_links": [], "type": "volume", "name": "cinder"}, {"endpoints":
         [{"adminURL": "http://keystone.p.nova-lab-1.servers.com:35357/v2.0", "region":
-        "lab-1", "internalURL": "http://keystone.p.nova-lab-1.servers.com:5001/v2.0",
-        "id": "19226f12c0bb4438a6032b9c55c1a8e9", "publicURL": "https://auth.nova-lab-1.mgm.servers.com:5000/v2.0"}],
-        "endpoints_links": [], "type": "identity", "name": "keystone"}], "user": {"username":
-        "consealed username", "roles_links": [], "id": "155f21999dd34a679797a5eb86b0ee20",
-        "roles": [{"name": "images"}, {"name": "_member_"}], "name": "consealed name"},
-        "metadata": {"is_admin": 0, "roles": ["d80c47ca65a6448fb92b0b948178aa88",
-        "9fe2ff9ee4384b1894a90878d3e92bab"]}}}'}
+        "lab-1", "id": "19226f12c0bb4438a6032b9c55c1a8e9", "internalURL": "http://keystone.p.nova-lab-1.servers.com:5001/v2.0",
+        "publicURL": "https://auth.nova-lab-1.mgm.servers.com:5000/v2.0"}], "endpoints_links":
+        [], "type": "identity", "name": "keystone"}], "user": {"username": "consealed
+        username", "roles_links": [], "id": "155f21999dd34a679797a5eb86b0ee20", "roles":
+        [{"name": "images"}, {"name": "_member_"}], "name": "consealed name"}, "metadata":
+        {"is_admin": 0, "roles": ["d80c47ca65a6448fb92b0b948178aa88", "9fe2ff9ee4384b1894a90878d3e92bab"]}}}'}
     headers:
       content-length: ['3326']
       content-type: [application/json]
-      date: ['Wed, 16 Aug 2017 13:48:19 GMT']
+      date: ['Wed, 16 Aug 2017 14:49:01 GMT']
       vary: [X-Auth-Token]
       x-distribution: [Ubuntu]
-      x-openstack-request-id: [req-81619da6-33f4-428c-bcf2-934a08c167c2]
+      x-openstack-request-id: [req-98098c83-fec1-4933-88a5-c776d7ddf007]
     status: {code: 200, message: OK}
 - request:
     body: null
@@ -92,9 +92,25 @@ interactions:
     method: GET
     uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/detail?all_tenants=1
   response:
-    body: {string: !!python/unicode '{"servers": [{"status": "SHUTOFF", "updated":
-        "2017-08-02T10:51:02Z", "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46",
-        "addresses": {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:13:4b:46",
+    body: {string: !!python/unicode '{"servers": [{"status": "ACTIVE", "updated":
+        "2017-08-16T14:26:34Z", "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023",
+        "addresses": {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:d1:b4:8e",
+        "version": 4, "addr": "188.42.163.201", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/30462bc7-4912-4a35-9c4b-93973dd9b1c8",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/30462bc7-4912-4a35-9c4b-93973dd9b1c8",
+        "rel": "bookmark"}], "key_name": null, "image": {"id": "a7eb42e6-9d60-409d-b1b9-cdc8a45de50a",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/a7eb42e6-9d60-409d-b1b9-cdc8a45de50a",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-08-16T14:26:34.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "30462bc7-4912-4a35-9c4b-93973dd9b1c8", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "6fd02e32d66e4e7483cfe2b5c2e15477",
+        "name": "killme", "created": "2017-08-16T14:26:17Z", "tenant_id": "4e632076f7004f908c8da67345a7592e",
+        "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached": [],
+        "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:13:4b:46",
         "version": 4, "addr": "188.42.163.197", "OS-EXT-IPS:type": "fixed"}]}, "links":
         [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/648437c7-29d1-4e50-bb82-a795997217cd",
         "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/648437c7-29d1-4e50-bb82-a795997217cd",
@@ -589,10 +605,10 @@ interactions:
         [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
         1, "config_drive": "", "metadata": {}}]}'}
     headers:
-      content-length: ['50100']
+      content-length: ['51695']
       content-type: [application/json]
-      date: ['Wed, 16 Aug 2017 13:48:20 GMT']
-      x-compute-request-id: [req-7474012d-ce7e-4bea-9630-dfc2bfe1a921]
+      date: ['Wed, 16 Aug 2017 14:49:02 GMT']
+      x-compute-request-id: [req-5996fbf8-8ab9-4943-8c38-180bb51fecc0]
     status: {code: 200, message: OK}
 - request:
     body: null
@@ -606,11 +622,19 @@ interactions:
     method: GET
     uri: https://images.nova-lab-1.mgm.servers.com:9292/v2/v1/images/detail?property-obsolete=true&limit=20
   response:
-    body: {string: !!python/unicode '{"images": []}'}
+    body: {string: !!python/unicode '{"images": [{"status": "active", "deleted_at":
+        null, "name": "Obsolete Debian 9 (64 bit)", "deleted": false, "container_format":
+        "bare", "created_at": "2017-08-04T15:51:35.000000", "disk_format": "qcow2",
+        "updated_at": "2017-08-16T14:30:20.000000", "min_disk": 0, "protected": false,
+        "id": "a7eb42e6-9d60-409d-b1b9-cdc8a45de50a", "min_ram": 0, "checksum": "ee41da5a2790212ad556f2d9be4d4f32",
+        "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": true, "virtual_size":
+        null, "properties": {"os_distro": "debian", "display_priority": "600", "obsolete":
+        "True", "os_arch": "x86_64", "os_version": "9", "architecture": "x86_64"},
+        "size": 224683520}]}'}
     headers:
-      content-length: ['14']
+      content-length: ['650']
       content-type: [application/json; charset=UTF-8]
-      date: ['Wed, 16 Aug 2017 13:48:21 GMT']
-      x-openstack-request-id: [req-f7bd3d5a-3f11-4e39-b9da-4e35f519ff5c]
+      date: ['Wed, 16 Aug 2017 14:49:03 GMT']
+      x-openstack-request-id: [req-0effaf17-1426-4d9b-96da-3b63eb62466a]
     status: {code: 200, message: OK}
 version: 1

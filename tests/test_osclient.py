@@ -407,6 +407,9 @@ def test_osclient_upload_image_all_args(osclient, mock_os):
             public=True,
             disk_format=sentinel.disk_format,
             container_format=sentinel.container_format,
+            min_disk=sentinel.disk_size,
+            min_ram=sentinel.min_ram,
+            protected=sentinel.protected,
             meta={sentinel.key: sentinel.value}
         )
         assert mock_os.glance.images.create.call_args == mock.call(
@@ -415,6 +418,9 @@ def test_osclient_upload_image_all_args(osclient, mock_os):
             container_format=sentinel.container_format,
             disk_format=sentinel.disk_format,
             data=sentinel.opened_file,
+            min_disk=sentinel.disk_size,
+            min_ram=sentinel.min_ram,
+            protected=sentinel.protected,
             properties={sentinel.key: sentinel.value}
         )
 
@@ -483,11 +489,12 @@ def test_osclient_fuzzy_find_flavor_ok_flavor_id(mock_os):
     assert mock_os.nova.flavors.find.call_args == mock.call(id='flavor')
 
 
-def test_osclient_fuzzy_find_flavor_ok_flavor_id(mock_os):
-    mock_os.nova.flavors.find.side_effect=[IOError, 'value']
+def test_osclient_fuzzy_find_flavor_ok_flavor(mock_os):
+    mock_os.nova.flavors.find.side_effect = [IOError, 'value']
     assert mock_os.fuzzy_find_flavor('flavor')
     assert mock_os.nova.flavors.find.call_args == mock.call(name='flavor')
     assert mock_os.nova.flavors.find.call_count == 2
+
 
 @pytest.mark.parametrize("networks, regexp, output", [
     [{"internet_8.8.0.0/16": ["8.8.8.8"]}, "internet", "8.8.8.8"],

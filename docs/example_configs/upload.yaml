@@ -36,6 +36,8 @@ region3:
   glance:
     disk_format: raw
     container_format: bare
+    protected: True
+    min_disk: 35
 
 external_upload_example:
   external_upload:

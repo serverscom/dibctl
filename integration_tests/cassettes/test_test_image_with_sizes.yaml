@@ -1,0 +1,1211 @@
+interactions:
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://auth.nova-lab-1.mgm.servers.com:5000/v2.0
+  response:
+    body: {string: !!python/unicode '{"version": {"status": "stable", "updated": "2014-04-17T00:00:00Z",
+        "media-types": [{"base": "application/json", "type": "application/vnd.openstack.identity-v2.0+json"}],
+        "id": "v2.0", "links": [{"href": "https://auth.nova-lab-1.mgm.servers.com:5000/v2.0/",
+        "rel": "self"}, {"href": "http://docs.openstack.org/", "type": "text/html",
+        "rel": "describedby"}]}}'}
+    headers:
+      content-length: ['358']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:02 GMT']
+      vary: [X-Auth-Token]
+      x-distribution: [Ubuntu]
+      x-openstack-request-id: [req-d70b9a57-6b91-4412-b058-1d285895f245]
+    status: {code: 200, message: OK}
+- request:
+    body: !!python/unicode '{"auth": "{\"tenantName\": \"pyvcr\", \"passwordCredentials\":
+      {\"username\": \"username\", \"password\": \"password\"}}"}'
+    headers:
+      Content-Type: [application/json]
+      pytest-filtered: ['true']
+    method: POST
+    uri: https://auth.nova-lab-1.mgm.servers.com:5000/v2.0/tokens
+  response:
+    body: {string: !!python/unicode '{"access": {"token": {"issued_at": "2017-08-17T11:32:03.000000Z",
+        "expires": "2038-01-15T16:17:18Z", "id": "consealed id", "tenant": {"id":
+        "61ed529dc6024dc5968acf32b6f4142c", "enabled": true, "description": "", "name":
+        "consealed name"}, "audit_ids": ["c0_Fw7jkR6-98E0EHmdMfA"]}, "serviceCatalog":
+        [{"endpoints": [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28774/v2/61ed529dc6024dc5968acf32b6f4142c",
+        "region": "lab-1", "id": "2e61ac6cc99345a1b152779600918c2e", "internalURL":
+        "http://nova-api.p.nova-lab-1.servers.com:28774/v2/61ed529dc6024dc5968acf32b6f4142c",
+        "publicURL": "https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c"}],
+        "endpoints_links": [], "type": "compute", "name": "nova"}, {"endpoints": [{"adminURL":
+        "http://neutron-server.p.nova-lab-1.servers.com:29696", "region": "lab-1",
+        "id": "6ec649b0f7cc4554a041defadf552fc1", "internalURL": "http://neutron-server.p.nova-lab-1.servers.com:29696",
+        "publicURL": "https://network.nova-lab-1.mgm.servers.com:9696"}], "endpoints_links":
+        [], "type": "network", "name": "neutron"}, {"endpoints": [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/61ed529dc6024dc5968acf32b6f4142c",
+        "region": "lab-1", "id": "09d47ca5543b41849da1a7690acd5844", "internalURL":
+        "http://nova-api.p.nova-lab-1.servers.com:28776/v2/61ed529dc6024dc5968acf32b6f4142c",
+        "publicURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/61ed529dc6024dc5968acf32b6f4142c"}],
+        "endpoints_links": [], "type": "volumev2", "name": "cinderv2"}, {"endpoints":
+        [{"adminURL": "http://glance-api.p.nova-lab-1.servers.com:29292/v2", "region":
+        "lab-1", "id": "2982f5e7320040acb9fe1dac441a8551", "internalURL": "http://glance-api.p.nova-lab-1.servers.com:29292/v2",
+        "publicURL": "https://images.nova-lab-1.mgm.servers.com:9292/v2"}], "endpoints_links":
+        [], "type": "image", "name": "glance"}, {"endpoints": [{"adminURL": "http://ceilometer-api.p.nova-lab-1.servers.com:28777",
+        "region": "lab-1", "id": "1cc0a58b1bab45509ec3991bf7111a3f", "internalURL":
+        "http://ceilometer-api.p.nova-lab-1.servers.com:28777", "publicURL": "https://metering.nova-lab-1.mgm.servers.com:8777"}],
+        "endpoints_links": [], "type": "metering", "name": "ceilometer"}, {"endpoints":
+        [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v1/61ed529dc6024dc5968acf32b6f4142c",
+        "region": "lab-1", "id": "6ae4b74962fc4b5abb4fed44dbf534a5", "internalURL":
+        "http://nova-api.p.nova-lab-1.servers.com:28776/v1/61ed529dc6024dc5968acf32b6f4142c",
+        "publicURL": "https://volume.nova-lab-1.mgm.servers.com:8776/v1/61ed529dc6024dc5968acf32b6f4142c"}],
+        "endpoints_links": [], "type": "volume", "name": "cinder"}, {"endpoints":
+        [{"adminURL": "http://keystone.p.nova-lab-1.servers.com:35357/v2.0", "region":
+        "lab-1", "id": "19226f12c0bb4438a6032b9c55c1a8e9", "internalURL": "http://keystone.p.nova-lab-1.servers.com:5001/v2.0",
+        "publicURL": "https://auth.nova-lab-1.mgm.servers.com:5000/v2.0"}], "endpoints_links":
+        [], "type": "identity", "name": "keystone"}], "user": {"username": "consealed
+        username", "roles_links": [], "id": "155f21999dd34a679797a5eb86b0ee20", "roles":
+        [{"name": "images"}, {"name": "_member_"}], "name": "consealed name"}, "metadata":
+        {"is_admin": 0, "roles": ["d80c47ca65a6448fb92b0b948178aa88", "9fe2ff9ee4384b1894a90878d3e92bab"]}}}'}
+    headers:
+      content-length: ['3326']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:03 GMT']
+      vary: [X-Auth-Token]
+      x-distribution: [Ubuntu]
+      x-openstack-request-id: [req-0ee366ae-67ff-4cc1-ab15-bf3d7b0d066a]
+    status: {code: 200, message: OK}
+- request:
+    body: !!python/unicode '{"keypair": {"name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000"}}'
+    headers:
+      Content-Type: [application/json]
+      pytest-filtered: ['true']
+    method: POST
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/os-keypairs
+  response:
+    body: {string: !!python/unicode '{"keypair": {"public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7Yd31ICMz6Ft6EfCPmTO3TrZn39/O8Dvzj3irA2z4nXnunpI6WOfhsQRa33xPuQeRo+pfx8aJcrO+fEgzV7SzE+wc5tmyHSQRFoN+lsL85grWj0DB/tEL2UbA+e9eDIOSBp+zCiZSphqd+y3AcfBKFZT13m3vxkv3FgGgS/M+hqsClMn0HZZehb4E87C5YQMPt0ZMGYPRan6AJG0bdR8QV3mHHCLDJV8b13QGW4ds0Q35HPnSH727owAKEu46wMrVbebErDQbxhlG/DZHAyf4QaGaKIuJ6F1z7BhqBy5XpKq/yuKFeVEtYbXbfF81cfrjD7I6b5xFddLXKZIV3FYB
+        Generated-by-Nova", "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIEqgIBAAKCAQEAu2Hd9SAjM+hbehHwj5kzt062Z9/fzvA78494qwNs+J157p6S\nOljn4bEEWt98T7kHkaPqX8fGiXKzvnxIM1e0sxPsHObZsh0kERaDfpbC/OYK1o9A\nwf7RC9lGwPnvXgyDkgafswomUqYanfstwHHwShWU9d5t78ZL9xYBoEvzPoarApTJ\n9B2WXoW+BPOwuWEDD7dGTBmD0Wp+gCRtG3UfEFd5hxwiwyVfG9d0BluHbNEN+Rz5\n0h+9u6MAChLuOsDK1W3mxKw0G8YZRvw2RwMn+EGhmiiLiehdc+wYagcuV6Sqv8ri\nhXlRLWG123xfNXH64w+yOm+cRXXS1ymSFdxWAQIDAQABAoIBAA9UuIY/tOGgVyur\noBT/od2TkRT6miMiQKVyzZqgUyAcMke1rZ0cfQxYIVUWB+O17cqasKhZfgLs4Yvq\nOzYILP6h2KWctZ7/B15miyemShnK8IQRgGje4len1UQgrtbxCyq9Y/+QCwakFHVs\ngZfHOrO1BFUBd9kwTjLPGB73V9V7p0SpnVGZso93Bub5UiP3AZpmGEaxeivXfgFC\n4Ns4xNBIdLUL7JCICvZJhs9ModV7djKDB0G96fG+2hyStIR2tmOrJ/988dTHQdv8\nRvHJFAo+ypU2rX7x8GGlbq1c/gObjROKPe/sLXZVBdk7Dw9+ZZJDfnWhc1R5I8JQ\nTweZ7GECggCBAM1+bj2gBCUDDP4shW8DYWdSmuZXUP7Tp82+km+GMIJabT1EzXiT\n+SeHrxPIDeK0JAfK2ge/2v+nvr5moarwdD/i84CYnZcWf+sVJC59DZt7QpPU/qai\nTHGzWHPzbjE0Bcqc50a/LhhgdAOyUEfkEJi1s4awgry6X1TpSK0tN2NdAoIAgQDp\nb92Abh5mgwXcfc2YQYuc0UXhHLVhgLBdQ8WkrhzK4EAgTh4UoViMEZqfCMMJvazA\nw1pyRfdpx3bV3IEoNjAkeMETQkKvp1vTU9Sk3JP4OsjHHBeG3kdBnVnbhWnxjn21\nf0Hg/qAjk/7HiaqAbCSB8VfvIy+SlaoadUaF/81W9QKCAIEAj4XnXzk8y9D2qSvV\nQjT9OdnzAEAp/OE9STD6O9RgWxrnQyyjybyn/1kACfPm5tjkdWDTqSfxwC+bxIYQ\nEkEBIIHVipKNNrJrQ3ivnZyP/XE4jeHsvduLQrp9Y/a4lrr79Ihj7ACpJDNxtAc9\nlQiQIuh9a+wqU8Bjxv1sWi/DiK0CggCBAM6gYDZAQtSGgXesO4Hb8tJ6QxqBqOOH\nX5UOWjHslDvXx6tQujuUnaZOJslCnjFPHUz7HmIsIFYXYs7mgcSwQmjmIjED47dL\nsnIasAzF2oxMrE/iQ8jzk6s2tsUjEKXqdMdkv1GC0QjtBQZmiu9lyeLjV+yq/n8H\nzyvgRu5xgLbJAoIAgQDDzcvakpphXL9+KqnRqqR08Yzw4TO8y3XOFlyC5ipVbWyF\nNIb8Y0oZ4YkB/cAlBb2QrPmR0Uhl2y0w/RTL86jAGLE4ITwlAFoW1wzhQuz4I11F\nU5+06qv1YV39n1ys4gBkv1p7vrxMbb+FeSCXrnaC6J8beBodo5x1K4Uy9LWSQQ==\n-----END
+        RSA PRIVATE KEY-----\n", "user_id": "155f21999dd34a679797a5eb86b0ee20", "name":
+        "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "fingerprint": "cc:c0:41:d9:55:20:7e:a8:ad:59:de:a7:e7:81:e4:a7"}}'}
+    headers:
+      content-length: ['2330']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:04 GMT']
+      x-compute-request-id: [req-89360820-42a4-426f-9a19-5459000deeb5]
+    status: {code: 200, message: OK}
+- request:
+    body: !!binary |
+      UUZJ+wAAAAMAAAAAAAAAAAAAAAAAAAAQAAAAAHbDAAAAAAAAAAAABAAAAAAAAwAAAAAAAAABAAAA
+      AAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAGgAAAAAAAAAAAAA
+      0PcN5BWbvjXKH973/wMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+      AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+    headers:
+      Content-Type: [application/octet-stream]
+      pytest-filtered: ['true']
+      x-image-meta-container_format: [bare]
+      x-image-meta-disk_format: [qcow2]
+      x-image-meta-is_public: ['False']
+      x-image-meta-min_disk: ['4']
+      x-image-meta-min_ram: ['1000']
+      x-image-meta-name: [DIBCTL-deadbeaf-4078-11e7-8228-000000000000]
+      x-image-meta-property-display_order: ['4']
+      x-image-meta-protected: ['False']
+    method: POST
+    uri: https://images.nova-lab-1.mgm.servers.com:9292/v2/v1/images
+  response:
+    body: {string: !!python/unicode '{"image": {"status": "active", "deleted": false,
+        "container_format": "bare", "min_ram": 1000, "updated_at": "2017-08-17T11:32:06.000000",
+        "owner": "61ed529dc6024dc5968acf32b6f4142c", "min_disk": 4, "is_public": false,
+        "deleted_at": null, "id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "size":
+        196, "virtual_size": null, "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "checksum": "5a6bd5f5a3d933d6cce528464ab13ffc", "created_at": "2017-08-17T11:32:05.000000",
+        "disk_format": "qcow2", "properties": {"display_order": "4"}, "protected":
+        false}}'}
+    headers:
+      content-length: ['548']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:06 GMT']
+      etag: [5a6bd5f5a3d933d6cce528464ab13ffc]
+      location: ['http://images.nova-lab-1.mgm.servers.com:9292/v1/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5']
+      x-openstack-request-id: [req-c05fc311-c436-44ea-bc91-290a6a343e01]
+    status: {code: 201, message: Created}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/detail
+  response:
+    body: {string: !!python/unicode '{"flavors": [{"name": "SSD.100", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/100",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/100",
+        "rel": "bookmark"}], "ram": 6144, "OS-FLV-DISABLED:disabled": false, "vcpus":
+        4, "swap": "", "os-flavor-access:is_public": true, "rxtx_factor": 1.0, "OS-FLV-EXT-DATA:ephemeral":
+        0, "disk": 100, "id": "100"}, {"name": "SSD.120", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/120",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/120",
+        "rel": "bookmark"}], "ram": 8192, "OS-FLV-DISABLED:disabled": false, "vcpus":
+        4, "swap": "", "os-flavor-access:is_public": true, "rxtx_factor": 1.0, "OS-FLV-EXT-DATA:ephemeral":
+        0, "disk": 120, "id": "120"}, {"name": "SSD.180", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/180",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/180",
+        "rel": "bookmark"}], "ram": 16384, "OS-FLV-DISABLED:disabled": false, "vcpus":
+        6, "swap": "", "os-flavor-access:is_public": true, "rxtx_factor": 1.0, "OS-FLV-EXT-DATA:ephemeral":
+        0, "disk": 180, "id": "180"}, {"name": "SSD.30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}], "ram": 1024, "OS-FLV-DISABLED:disabled": false, "vcpus":
+        1, "swap": "", "os-flavor-access:is_public": true, "rxtx_factor": 1.0, "OS-FLV-EXT-DATA:ephemeral":
+        0, "disk": 30, "id": "30"}, {"name": "SSD.320", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/320",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/320",
+        "rel": "bookmark"}], "ram": 32768, "OS-FLV-DISABLED:disabled": false, "vcpus":
+        8, "swap": "", "os-flavor-access:is_public": true, "rxtx_factor": 1.0, "OS-FLV-EXT-DATA:ephemeral":
+        0, "disk": 320, "id": "320"}, {"name": "SSD.480", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/480",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/480",
+        "rel": "bookmark"}], "ram": 49152, "OS-FLV-DISABLED:disabled": false, "vcpus":
+        12, "swap": "", "os-flavor-access:is_public": true, "rxtx_factor": 1.0, "OS-FLV-EXT-DATA:ephemeral":
+        0, "disk": 480, "id": "480"}, {"name": "SSD.50", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/50",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/50",
+        "rel": "bookmark"}], "ram": 2048, "OS-FLV-DISABLED:disabled": false, "vcpus":
+        2, "swap": "", "os-flavor-access:is_public": true, "rxtx_factor": 1.0, "OS-FLV-EXT-DATA:ephemeral":
+        0, "disk": 50, "id": "50"}, {"name": "SSD.640", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/640",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/640",
+        "rel": "bookmark"}], "ram": 65536, "OS-FLV-DISABLED:disabled": false, "vcpus":
+        16, "swap": "", "os-flavor-access:is_public": true, "rxtx_factor": 1.0, "OS-FLV-EXT-DATA:ephemeral":
+        0, "disk": 640, "id": "640"}, {"name": "2G", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/666",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/666",
+        "rel": "bookmark"}], "ram": 4096, "OS-FLV-DISABLED:disabled": false, "vcpus":
+        4, "swap": "", "os-flavor-access:is_public": true, "rxtx_factor": 1.0, "OS-FLV-EXT-DATA:ephemeral":
+        0, "disk": 2, "id": "666"}, {"name": "SSD.80", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/80",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/80",
+        "rel": "bookmark"}], "ram": 4096, "OS-FLV-DISABLED:disabled": false, "vcpus":
+        2, "swap": "", "os-flavor-access:is_public": true, "rxtx_factor": 1.0, "OS-FLV-EXT-DATA:ephemeral":
+        0, "disk": 80, "id": "80"}]}'}
+    headers:
+      content-length: ['4647']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:06 GMT']
+      x-compute-request-id: [req-c3f6b5e2-e207-4eb9-a177-084d4264136f]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors
+  response:
+    body: {string: !!python/unicode '{"flavors": [{"id": "100", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/100",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/100",
+        "rel": "bookmark"}], "name": "SSD.100"}, {"id": "120", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/120",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/120",
+        "rel": "bookmark"}], "name": "SSD.120"}, {"id": "180", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/180",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/180",
+        "rel": "bookmark"}], "name": "SSD.180"}, {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}], "name": "SSD.30"}, {"id": "320", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/320",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/320",
+        "rel": "bookmark"}], "name": "SSD.320"}, {"id": "480", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/480",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/480",
+        "rel": "bookmark"}], "name": "SSD.480"}, {"id": "50", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/50",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/50",
+        "rel": "bookmark"}], "name": "SSD.50"}, {"id": "640", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/640",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/640",
+        "rel": "bookmark"}], "name": "SSD.640"}, {"id": "666", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/666",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/666",
+        "rel": "bookmark"}], "name": "2G"}, {"id": "80", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/80",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/80",
+        "rel": "bookmark"}], "name": "SSD.80"}]}'}
+    headers:
+      content-length: ['2916']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:06 GMT']
+      x-compute-request-id: [req-7e238d12-a979-4d68-ada5-dd97b925d923]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/30
+  response:
+    body: {string: !!python/unicode '{"flavor": {"name": "SSD.30", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}], "ram": 1024, "OS-FLV-DISABLED:disabled": false, "vcpus":
+        1, "swap": "", "os-flavor-access:is_public": true, "rxtx_factor": 1.0, "OS-FLV-EXT-DATA:ephemeral":
+        0, "disk": 30, "id": "30"}}'}
+    headers:
+      content-length: ['470']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:06 GMT']
+      x-compute-request-id: [req-d5b72bce-ce5a-4d9e-84c7-86af2ff99de7]
+    status: {code: 200, message: OK}
+- request:
+    body: !!python/unicode '{"server": {"name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+      "imageRef": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+      "flavorRef": "30", "max_count": 1, "min_count": 1, "networks": [{"uuid": "89e03f44-d874-4c79-bbb5-30d5c576fef3"}]}}'
+    headers:
+      Content-Type: [application/json]
+      pytest-filtered: ['true']
+    method: POST
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers
+  response:
+    body: {string: !!python/unicode '{"server": {"security_groups": [{"name": "default"}],
+        "OS-DCF:diskConfig": "MANUAL", "id": "79b44903-a610-4a68-9344-720eb93130da",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "adminPass": "e6VeuDsUAg3t"}}'}
+    headers:
+      content-length: ['484']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:07 GMT']
+      location: ['http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da']
+      x-compute-request-id: [req-327a44a3-5cbd-4b9c-9eea-c67619386916]
+    status: {code: 202, message: Accepted}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:07Z",
+        "hostId": "", "addresses": {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "scheduling", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1464']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:07 GMT']
+      x-compute-request-id: [req-07dcc4c4-1e36-4145-a40d-5b689ad2d07f]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1512']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:07 GMT']
+      x-compute-request-id: [req-edb758d6-bbeb-4b36-a24a-61b3a0a6e285]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "block_device_mapping", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1530']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:07 GMT']
+      x-compute-request-id: [req-1928c90d-03b3-4413-af1e-bc4dbed94314]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:08 GMT']
+      x-compute-request-id: [req-360137ed-6b68-4f29-bcf5-8a336b42e0e7]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:08 GMT']
+      x-compute-request-id: [req-76776fda-fbef-4446-b841-4c776849921b]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:08 GMT']
+      x-compute-request-id: [req-d086ea75-1484-414f-8a5d-4ca1dc9702e9]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:09 GMT']
+      x-compute-request-id: [req-f398bb32-7deb-44b4-b641-633521b1454d]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:09 GMT']
+      x-compute-request-id: [req-bcc66c79-5e7d-4658-aca5-30b5e8aa4cff]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:09 GMT']
+      x-compute-request-id: [req-f8b56025-bd84-445b-911d-8ae427a5958e]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:10 GMT']
+      x-compute-request-id: [req-32d772d4-723d-4299-ab77-92bd3288db38]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:10 GMT']
+      x-compute-request-id: [req-ec382d17-ebd3-4f15-b90f-a05803850da9]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:10 GMT']
+      x-compute-request-id: [req-97380728-90ee-4680-b634-aefc9a18d5ed]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:10 GMT']
+      x-compute-request-id: [req-89140e76-b5ae-4816-9c4f-b62ce3d0c305]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:10 GMT']
+      x-compute-request-id: [req-88bba721-fccc-4e32-9d03-96c5f4dd3c1b]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:11 GMT']
+      x-compute-request-id: [req-8335da12-e157-4cc2-b82c-316a7a78bf84]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:11 GMT']
+      x-compute-request-id: [req-5de7f8c3-75cd-4d3e-8104-0e85f4122898]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:11 GMT']
+      x-compute-request-id: [req-16c404a3-24ba-402d-be23-f77f3ef29537]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:12 GMT']
+      x-compute-request-id: [req-be00aa29-6fe3-4671-9c84-33bdefc246f1]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:12 GMT']
+      x-compute-request-id: [req-a10ba83a-31e0-4ad5-8610-8f632300e121]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:12 GMT']
+      x-compute-request-id: [req-cb0a5930-f590-44e1-87c1-3dcf85d7505a]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:12 GMT']
+      x-compute-request-id: [req-5ea971d2-65b0-4cd1-b80f-2a655d0f0517]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:12 GMT']
+      x-compute-request-id: [req-dad9c373-ca95-4c6e-b3c5-527226147627]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:13 GMT']
+      x-compute-request-id: [req-8c977a4d-5f9b-4a02-860d-e961c1c17513]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:13 GMT']
+      x-compute-request-id: [req-43a87d72-9a38-403b-9bee-c17025ea5829]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:14 GMT']
+      x-compute-request-id: [req-4d885c56-130d-40b7-bc52-f260e4bfbc00]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:14 GMT']
+      x-compute-request-id: [req-0a2a319d-2564-4e6f-bb5a-010922cee7ad]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "BUILD", "updated": "2017-08-17T11:32:08Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": "spawning", "OS-EXT-STS:vm_state":
+        "building", "OS-SRV-USG:launched_at": null, "flavor": {"id": "30", "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 0, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1518']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:14 GMT']
+      x-compute-request-id: [req-bb325f8f-ee6e-4b9b-a6a0-3a3eb26c8a53]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode '{"server": {"status": "ACTIVE", "updated": "2017-08-17T11:32:15Z",
+        "hostId": "e1f93b8b0905975dae83bda6b79be1f5f3af141d2aad449d5c045dd9", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:97:fe:5c",
+        "version": 4, "addr": "188.42.163.203", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da",
+        "rel": "bookmark"}], "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+        "image": {"id": "9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5", "links": [{"href":
+        "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-08-17T11:32:15.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "79b44903-a610-4a68-9344-720eb93130da", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "155f21999dd34a679797a5eb86b0ee20",
+        "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "created": "2017-08-17T11:32:07Z",
+        "tenant_id": "61ed529dc6024dc5968acf32b6f4142c", "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6":
+        "", "progress": 0, "OS-EXT-STS:power_state": 1, "config_drive": "", "metadata":
+        {}}}'}
+    headers:
+      content-length: ['1683']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:15 GMT']
+      x-compute-request-id: [req-bd94e38a-bf77-4f0a-8296-8d046338080c]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da/os-interface
+  response:
+    body: {string: !!python/unicode '{"interfaceAttachments": [{"port_state": "ACTIVE",
+        "fixed_ips": [{"subnet_id": "715be532-8931-4c9c-ae87-9eae511cfdfc", "ip_address":
+        "188.42.163.203"}], "port_id": "f23980a7-2ce0-4981-bad8-816ddcc419bb", "net_id":
+        "89e03f44-d874-4c79-bbb5-30d5c576fef3", "mac_addr": "fa:16:3e:97:fe:5c"}]}'}
+    headers:
+      content-length: ['288']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:16 GMT']
+      x-compute-request-id: [req-9745b277-6cf6-44d4-a34f-fb37e53d5f2c]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/flavors/30/os-extra_specs
+  response:
+    body: {string: !!python/unicode '{"extra_specs": {"tenant": "public"}}'}
+    headers:
+      content-length: ['37']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:16 GMT']
+      x-compute-request-id: [req-ec654499-24a5-4d6d-a053-a559927c3a82]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: DELETE
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/79b44903-a610-4a68-9344-720eb93130da
+  response:
+    body: {string: !!python/unicode ''}
+    headers:
+      content-length: ['0']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:17 GMT']
+      x-compute-request-id: [req-783a124d-9a82-43b5-8bad-74dfcec4a937]
+    status: {code: 204, message: No Content}
+- request:
+    body: null
+    headers:
+      pytest-filtered: ['true']
+    method: DELETE
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/os-keypairs/DIBCTL-deadbeaf-4078-11e7-8228-000000000000
+  response:
+    body: {string: !!python/unicode ''}
+    headers:
+      content-length: ['0']
+      content-type: [application/json]
+      date: ['Thu, 17 Aug 2017 11:32:17 GMT']
+      x-compute-request-id: [req-f28e7dfb-b3d3-44ef-b4ed-e0099b40f597]
+    status: {code: 202, message: Accepted}
+- request:
+    body: null
+    headers:
+      Content-Type: [application/octet-stream]
+      pytest-filtered: ['true']
+    method: HEAD
+    uri: https://images.nova-lab-1.mgm.servers.com:9292/v2/v1/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5
+  response:
+    body: {string: !!python/unicode ''}
+    headers:
+      content-length: ['0']
+      content-type: [text/html; charset=UTF-8]
+      date: ['Thu, 17 Aug 2017 11:32:17 GMT']
+      etag: [5a6bd5f5a3d933d6cce528464ab13ffc]
+      x-image-meta-checksum: [5a6bd5f5a3d933d6cce528464ab13ffc]
+      x-image-meta-container_format: [bare]
+      x-image-meta-created_at: ['2017-08-17T11:32:05.000000']
+      x-image-meta-deleted: ['False']
+      x-image-meta-disk_format: [qcow2]
+      x-image-meta-id: [9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5]
+      x-image-meta-is_public: ['False']
+      x-image-meta-min_disk: ['4']
+      x-image-meta-min_ram: ['1000']
+      x-image-meta-name: [DIBCTL-deadbeaf-4078-11e7-8228-000000000000]
+      x-image-meta-owner: [61ed529dc6024dc5968acf32b6f4142c]
+      x-image-meta-property-display_order: ['4']
+      x-image-meta-protected: ['False']
+      x-image-meta-size: ['196']
+      x-image-meta-status: [active]
+      x-image-meta-updated_at: ['2017-08-17T11:32:06.000000']
+      x-openstack-request-id: [req-e00528e7-20a9-4d11-a74e-ca356f1d9079]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Content-Type: [application/octet-stream]
+      pytest-filtered: ['true']
+    method: DELETE
+    uri: https://images.nova-lab-1.mgm.servers.com:9292/v2/v1/images/9b0dad02-39d6-4af7-8a4e-e86c4cf7d8d5
+  response:
+    body: {string: !!python/unicode ''}
+    headers:
+      content-length: ['0']
+      content-type: [text/html; charset=UTF-8]
+      date: ['Thu, 17 Aug 2017 11:32:17 GMT']
+      x-openstack-request-id: [req-f7a75b2f-f22b-4783-b83e-5ce738884ed0]
+    status: {code: 200, message: OK}
+version: 1

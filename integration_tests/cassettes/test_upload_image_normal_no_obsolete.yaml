@@ -2,8 +2,7 @@ interactions:
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Connection: [keep-alive]
+      pytest-filtered: ['true']
     method: GET
     uri: https://auth.nova-lab-1.mgm.servers.com:5000/v2.0
   response:
@@ -15,27 +14,25 @@ interactions:
     headers:
       content-length: ['358']
       content-type: [application/json]
-      date: ['Tue, 30 May 2017 15:00:46 GMT']
+      date: ['Thu, 17 Aug 2017 09:25:13 GMT']
       vary: [X-Auth-Token]
       x-distribution: [Ubuntu]
-      x-openstack-request-id: [req-489d5b9e-83fb-4379-878c-e944fc18b178]
+      x-openstack-request-id: [req-cf439cae-dc7d-4385-8e07-3cea5fc1c1ac]
     status: {code: 200, message: OK}
 - request:
-    body: !!python/unicode '{"auth": {"tenantName": "public_images", "passwordCredentials":
-      {"username": "username", "password": "password"}}}'
+    body: !!python/unicode '{"auth": "{\"tenantName\": \"pyvcr\", \"passwordCredentials\":
+      {\"username\": \"username\", \"password\": \"password\"}}"}'
     headers:
-      Accept: [application/json]
-      Connection: [keep-alive]
       Content-Type: [application/json]
+      pytest-filtered: ['true']
     method: POST
     uri: https://auth.nova-lab-1.mgm.servers.com:5000/v2.0/tokens
   response:
-    body: {string: !!python/unicode '{"access": {"token": {"issued_at": "2017-05-30T15:00:46.000000Z",
-        "expires": "2035-05-31T15:00:46Z", "id": "964fb692f55946c19878a2959d09c9fa",
-        "tenant": {"description": "For images manipulations", "enabled": true, "id":
-        "61ed529dc6024dc5968acf32b6f4142c", "name": "public_images"}, "audit_ids":
-        ["jiPzq0I8T-qzV9BHrstyHQ"]}, "serviceCatalog": [{"endpoints": [{"adminURL":
-        "http://nova-api.p.nova-lab-1.servers.com:28774/v2/61ed529dc6024dc5968acf32b6f4142c",
+    body: {string: !!python/unicode '{"access": {"token": {"issued_at": "2017-08-17T09:25:13.000000Z",
+        "expires": "2038-01-15T16:17:18Z", "id": "consealed id", "tenant": {"id":
+        "61ed529dc6024dc5968acf32b6f4142c", "enabled": true, "description": "", "name":
+        "consealed name"}, "audit_ids": ["1Q6aQW1JSCG2sp-iJ_rKOw"]}, "serviceCatalog":
+        [{"endpoints": [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28774/v2/61ed529dc6024dc5968acf32b6f4142c",
         "region": "lab-1", "id": "2e61ac6cc99345a1b152779600918c2e", "internalURL":
         "http://nova-api.p.nova-lab-1.servers.com:28774/v2/61ed529dc6024dc5968acf32b6f4142c",
         "publicURL": "https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c"}],
@@ -63,102 +60,99 @@ interactions:
         [{"adminURL": "http://keystone.p.nova-lab-1.servers.com:35357/v2.0", "region":
         "lab-1", "id": "19226f12c0bb4438a6032b9c55c1a8e9", "internalURL": "http://keystone.p.nova-lab-1.servers.com:5001/v2.0",
         "publicURL": "https://auth.nova-lab-1.mgm.servers.com:5000/v2.0"}], "endpoints_links":
-        [], "type": "identity", "name": "keystone"}], "user": {"username": "username",
-        "roles_links": [], "id": "155f21999dd34a679797a5eb86b0ee20", "roles": [{"name":
-        "images"}, {"name": "_member_"}], "name": "username"}, "metadata": {"is_admin":
-        0, "roles": ["d80c47ca65a6448fb92b0b948178aa88", "9fe2ff9ee4384b1894a90878d3e92bab"]}}}'}
+        [], "type": "identity", "name": "keystone"}], "user": {"username": "consealed
+        username", "roles_links": [], "id": "155f21999dd34a679797a5eb86b0ee20", "roles":
+        [{"name": "images"}, {"name": "_member_"}], "name": "consealed name"}, "metadata":
+        {"is_admin": 0, "roles": ["d80c47ca65a6448fb92b0b948178aa88", "9fe2ff9ee4384b1894a90878d3e92bab"]}}}'}
     headers:
       content-length: ['3326']
       content-type: [application/json]
-      date: ['Tue, 30 May 2017 15:00:46 GMT']
+      date: ['Thu, 17 Aug 2017 09:25:13 GMT']
       vary: [X-Auth-Token]
       x-distribution: [Ubuntu]
-      x-openstack-request-id: [req-edb95669-14ed-49c5-a563-9f5bca208457]
+      x-openstack-request-id: [req-f7432cb0-cc31-4633-b947-2beec8ca166e]
     status: {code: 200, message: OK}
 - request:
     body: !!python/unicode 'test
 
 '
     headers:
-      Accept: ['*/*']
-      Connection: [keep-alive]
       Content-Type: [application/octet-stream]
-      X-Auth-Token: [!!python/unicode 964fb692f55946c19878a2959d09c9fa]
+      pytest-filtered: ['true']
       x-image-meta-container_format: [bare]
       x-image-meta-disk_format: [qcow2]
       x-image-meta-is_public: ['False']
+      x-image-meta-min_disk: ['0']
+      x-image-meta-min_ram: ['0']
       x-image-meta-name: [Empty image]
+      x-image-meta-protected: ['False']
     method: POST
     uri: https://images.nova-lab-1.mgm.servers.com:9292/v2/v1/images
   response:
     body: {string: !!python/unicode '{"image": {"status": "active", "deleted": false,
-        "container_format": "bare", "min_ram": 0, "updated_at": "2017-05-30T15:00:48.000000",
+        "container_format": "bare", "min_ram": 0, "updated_at": "2017-08-17T09:25:15.000000",
         "owner": "61ed529dc6024dc5968acf32b6f4142c", "min_disk": 0, "is_public": false,
-        "deleted_at": null, "id": "639b53aa-ab0b-4ba0-8af8-2190761c6030", "size":
+        "deleted_at": null, "id": "06957589-e664-47db-af4a-3712f9476cac", "size":
         5, "virtual_size": null, "name": "Empty image", "checksum": "d8e8fca2dc0f896fd7cb4cb0031ba249",
-        "created_at": "2017-05-30T15:00:47.000000", "disk_format": "qcow2", "properties":
+        "created_at": "2017-08-17T09:25:15.000000", "disk_format": "qcow2", "properties":
         {}, "protected": false}}'}
     headers:
       content-length: ['491']
       content-type: [application/json]
-      date: ['Tue, 30 May 2017 15:00:48 GMT']
+      date: ['Thu, 17 Aug 2017 09:25:15 GMT']
       etag: [d8e8fca2dc0f896fd7cb4cb0031ba249]
-      location: ['http://images.nova-lab-1.mgm.servers.com:9292/v1/images/639b53aa-ab0b-4ba0-8af8-2190761c6030']
-      x-openstack-request-id: [req-2fbffe26-b5e0-4975-b5fe-744d80ae139d]
+      location: ['http://images.nova-lab-1.mgm.servers.com:9292/v1/images/06957589-e664-47db-af4a-3712f9476cac']
+      x-openstack-request-id: [req-52c20f65-eeec-48bb-a927-afed283e920f]
     status: {code: 201, message: Created}
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Connection: [keep-alive]
       Content-Type: [application/octet-stream]
-      X-Auth-Token: [!!python/unicode 964fb692f55946c19878a2959d09c9fa]
+      pytest-filtered: ['true']
     method: GET
     uri: https://images.nova-lab-1.mgm.servers.com:9292/v2/v1/images/detail?limit=20&name=Empty+image
   response:
     body: {string: !!python/unicode '{"images": [{"status": "active", "deleted_at":
         null, "name": "Empty image", "deleted": false, "container_format": "bare",
-        "created_at": "2017-05-30T15:00:47.000000", "disk_format": "qcow2", "updated_at":
-        "2017-05-30T15:00:48.000000", "min_disk": 0, "protected": false, "id": "639b53aa-ab0b-4ba0-8af8-2190761c6030",
+        "created_at": "2017-08-17T09:25:15.000000", "disk_format": "qcow2", "updated_at":
+        "2017-08-17T09:25:15.000000", "min_disk": 0, "protected": false, "id": "06957589-e664-47db-af4a-3712f9476cac",
         "min_ram": 0, "checksum": "d8e8fca2dc0f896fd7cb4cb0031ba249", "owner": "61ed529dc6024dc5968acf32b6f4142c",
         "is_public": false, "virtual_size": null, "properties": {}, "size": 5}, {"status":
         "active", "deleted_at": null, "name": "Empty image", "deleted": false, "container_format":
-        "bare", "created_at": "2017-05-30T15:00:45.000000", "disk_format": "qcow2",
-        "updated_at": "2017-05-30T15:00:46.000000", "min_disk": 0, "protected": false,
-        "id": "22a643bd-b411-49ee-96a0-307666060dff", "min_ram": 0, "checksum": "d8e8fca2dc0f896fd7cb4cb0031ba249",
+        "bare", "created_at": "2017-08-16T12:47:24.000000", "disk_format": "raw",
+        "updated_at": "2017-08-16T12:47:25.000000", "min_disk": 0, "protected": false,
+        "id": "0389c7ea-130b-44eb-8dc5-02aa909e5450", "min_ram": 0, "checksum": "d8e8fca2dc0f896fd7cb4cb0031ba249",
         "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": false, "virtual_size":
         null, "properties": {}, "size": 5}]}'}
     headers:
-      content-length: ['976']
+      content-length: ['974']
       content-type: [application/json; charset=UTF-8]
-      date: ['Tue, 30 May 2017 15:00:48 GMT']
-      x-openstack-request-id: [req-ce717498-97ca-43a0-ab38-09f69719365c]
+      date: ['Thu, 17 Aug 2017 09:25:15 GMT']
+      x-openstack-request-id: [req-608e9dbb-6fb7-49ac-8fbc-dcf12e3444ab]
     status: {code: 200, message: OK}
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Connection: [keep-alive]
       Content-Type: [application/octet-stream]
-      X-Auth-Token: [!!python/unicode 964fb692f55946c19878a2959d09c9fa]
+      pytest-filtered: ['true']
       x-glance-registry-purge-props: ['false']
       x-image-meta-name: [Obsolete Empty image]
       x-image-meta-property-obsolete: ['True']
     method: PUT
-    uri: https://images.nova-lab-1.mgm.servers.com:9292/v2/v1/images/22a643bd-b411-49ee-96a0-307666060dff
+    uri: https://images.nova-lab-1.mgm.servers.com:9292/v2/v1/images/0389c7ea-130b-44eb-8dc5-02aa909e5450
   response:
     body: {string: !!python/unicode '{"image": {"status": "active", "deleted": false,
-        "container_format": "bare", "min_ram": 0, "updated_at": "2017-05-30T15:00:49.000000",
+        "container_format": "bare", "min_ram": 0, "updated_at": "2017-08-17T09:25:16.000000",
         "owner": "61ed529dc6024dc5968acf32b6f4142c", "min_disk": 0, "is_public": false,
-        "deleted_at": null, "id": "22a643bd-b411-49ee-96a0-307666060dff", "size":
+        "deleted_at": null, "id": "0389c7ea-130b-44eb-8dc5-02aa909e5450", "size":
         5, "virtual_size": null, "name": "Obsolete Empty image", "checksum": "d8e8fca2dc0f896fd7cb4cb0031ba249",
-        "created_at": "2017-05-30T15:00:45.000000", "disk_format": "qcow2", "properties":
+        "created_at": "2017-08-16T12:47:24.000000", "disk_format": "raw", "properties":
         {"obsolete": "True"}, "protected": false}}'}
     headers:
-      content-length: ['518']
+      content-length: ['516']
       content-type: [application/json]
-      date: ['Tue, 30 May 2017 15:00:48 GMT']
+      date: ['Thu, 17 Aug 2017 09:25:16 GMT']
       etag: [d8e8fca2dc0f896fd7cb4cb0031ba249]
-      x-openstack-request-id: [req-c360221f-b0c1-4711-8ec8-cd6fed04116b]
+      x-openstack-request-id: [req-042aa4b4-07e4-4c9b-925a-610caad64202]
     status: {code: 200, message: OK}
 version: 1

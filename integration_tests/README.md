@@ -1,88 +1,44 @@
-Security consideration
+HOWTO
+-----
+
+Add a new test
+--------------
+1. copy test.yaml.secret to test.yaml
+2. copy upload.yaml.secret to upload.yaml
+3. Add new test
+4. Run `./clear_creds.py` script
+
+Updating existing test
 ----------------------
-
-- PLEASE BE CAREFUL WITH YOUR TOKENS. Use only exipired tokens or replace them
-  in cassettes prior uploading to public. Rule of thumb: wait until you see
-  that recorded test start to fail due to expired token, then you can use this
-  cassette in public.
-- Use `clear_creds.py` script to clean username and password from configs
-  and cassettes.
-- Never upload unprocessed configuration files. Normally they should be in
-  .gitignore file.
+1. copy test.yaml.secret to test.yaml
+2. copy upload.yaml.secret to upload.yaml
+3. Remove it's cassete from cassetes directory
+4. Check your test instruction (in test docstring)
+5. Update your configs
+6. Run test
+7. Run `./clear_creds.py` script
 
 
-What's this?
-------------
+New users
+---------
+If you want just to run tests - use `py.test`.
 
-Here are integration tests. They record once actual interaction with actual
-external servers (Openstack only at this moment) and reply it every time
-test run.
+If you want to update cassettes, then you need
+a well configured Openstack. Some tests
+require special policy.json - check docstrings
+for details
+1. Copy dibctl/test.yaml into test.yaml
+2. Copy dibctl/upload.yaml into upload.yaml
+3. Fill credentials with actual openstack credentials
+   in both files
+4. VERY CAREFULY read docstring for test. Some tests
+   need to be updated in parallel, some require to
+   update test code (uuids) after cassette run,
+   some require manual preparation of installation
+   (mostly rotate command).
+4. Remove correponding cassettes
+5. Run tests in a proper order (`py.test ... -k`)
+6. Run `./clear\_creds.py`
 
-Those interactions are written in 'cassettes' directory.
-
-Other aspects of tests (pytest and shell tests, socket (`wait_for_port` function),
-time.sleep) are mocked according to tested scenario.
-
-
-How to record new interaction
------------------------------
-Please note, you need to be very careful about updating those tests:
-- If you run tests against broken Openstack, those changes would be
-recorded.
-- Any passwords and tokens will be recorded as well. If you commit them
-to git, they would become publicly available. I usually replace them in
-cassettes after recording session before commit.
-
-1. You can change record mode with special environment variable `VCR_RECORD_MODE`.
-It can be:
-- 'none' (default mode every test is run with).
-- 'once'
-- 'new\_episodes'
-- 'all'
-
-2. You need to remove (rename `integration_tests/*.yaml` files)
-
-3. You need to place real configuration files into /etc/dibctl or
-   in `integration_tests/dibctl` folder. By agreement fake configs are
-   stored in `integration_tests/dibctl`, and real one in `dibctl`
-   and later should not be committed to git.
-
-4. Update tests if needed (tests usually specify some uuids or image names).
-
-5. Run tests from `integration_tests`. This will write/update cassettes
-in `integration_tests/secret_cassettes` directory.
-
-6. Copy cassettes to `integration_tests/secret_cassettes` and replace all
-passwords and tokens.
-
-7. Copy configs into `integration_tests` and replace passwords.
-
-8. Bump 'expires' for token  in cassette(at leat for few years ahead, please),
-otherwise tests would fail with message: CannotOverwriteExistingCassetteException: No match for the request (<Request (POST) https://auth.servers.nl01.cloud.servers.com:5000/v2.0/tokens>) was found. Can't overwrite existing cassette 
-
-9. Change (fake passwords, etc) in cassettes and in fake configs should match.
-
-10. Review changes before committing them!
-
-Those modes are described in the pyVCR documentation:
-https://vcrpy.readthedocs.io/en/latest/usage.html
-
-Configuration
--------------
-There is a bit of a problem with dibctl Configuration for those
-tests. They should use actual configs, but at the same time
-I don't want to disclose my passwords in git. At the same time
-I want to have (fake) passwords in configuration to match (fake) passwords
-in cassettes.
-
-This done by using two sets of configuration files: 'fake' (public) are stored
-in `integration_tests`, real one stored in 'integration_tests/dibctl'.
-If VCR_RECORD_MODE is not none,
-cassettes location changed into `secret_cassettes` (and this location,
-together with integration_tests/*.yaml files is hidden by .gitignore).
-
-After recording is done one need manually copy files (do not forget to
-replace passwords and tokens with fake ones) from `secret_cassettes` into
-`cassettes` and update configuration files in `integration_tests/dibctl`.
-
-For now this is done manually, may be I write some script to fix this later.
+Please be careful not to send your '.secret' files
+into git.

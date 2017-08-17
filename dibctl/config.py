@@ -24,7 +24,11 @@ class NotFoundInConfigError(KeyError):
 
 SCHEMA_UUID = {
     "type": "string",
-    "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+    "pattern": "^[a-fA-F0-9]{8}-"
+               "[a-fA-F0-9]{4}-"
+               "[a-fA-F0-9]{4}-"
+               "[a-fA-F0-9]{4}-"
+               "[a-fA-F0-9]{12}$"
 }
 SCHEMA_TIMEOUT = {'type': 'integer', "minimum": 0}
 SCHEMA_PORT = {'type': 'integer', 'minimum': 1, 'maximum': 65535}
@@ -36,7 +40,7 @@ SCHEMA_GLANCE = {
         'api_version': {
             'type': 'integer',
             'minimum': 1,
-            'maximum': 1
+            'maximum': 1  # PIN to version 1. Remove when v2 is introduced
         },
         "name": {"type": "string"},
         "upload_timeout": SCHEMA_TIMEOUT,
@@ -46,7 +50,16 @@ SCHEMA_GLANCE = {
         "container_format": {'type': 'string'},
         "disk_format": {'type': 'string'},
         "endpoint": {"type": "string"},
-        "public": {"type": "boolean"}
+        "public": {"type": "boolean"},
+        "min_disk": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "min_ram": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "protected": {"type": "boolean"}
     },
     "additionalProperties": False
     # "required": ["name"]  # TODO reintroduce it back
@@ -131,7 +144,9 @@ class Config(object):
         try:
             jsonschema.validate(content, self.SCHEMA)
         except jsonschema.exceptions.ValidationError as e:
-            error_message = "There is an error in the file '%s': %s" % (name, e.message)
+            error_message = "There is an error in the file '%s': %s" % (
+                name, e.message
+            )
             raise InvaidConfigError(error_message)
         return content
 
@@ -146,7 +161,9 @@ class Config(object):
             if os.path.isfile(candidate):
                 return candidate
 
-        raise ConfigNotFound("Unable to file %s in %s" % (self.DEFAULT_CONFIG_NAME, ", ".join(self.CONFIG_SEARCH_PATH)))
+        raise ConfigNotFound("Unable to file %s in %s" % (
+            self.DEFAULT_CONFIG_NAME, ", ".join(self.CONFIG_SEARCH_PATH))
+        )
 
     def get(self, label, default_value=None):
         path = label.split('.')
@@ -171,7 +188,9 @@ class Config(object):
             else:
                 return retval
         except KeyError:
-            raise NotFoundInConfigError("Unable to find '%s' in %s" % (label, self.config_file))
+            raise NotFoundInConfigError(
+                "Unable to find '%s' in %s" % (label, self.config_file)
+            )
 
     def __iter__(self):
         return self.config.iteritems()
@@ -389,7 +408,9 @@ class UploadEnvConfig(EnvConfig):
                             'cmdline': {'type': 'string'},
                             'output_filename': {'type': 'string'},
                             'use_existing': {'type': 'boolean'},
-                            'delete_processed_after_upload': {'type': 'boolean'}
+                            'delete_processed_after_upload': {
+                                'type': 'boolean'
+                            }
                         },
                         'additionalProperties': False,
                         'required': ['cmdline', 'output_filename']

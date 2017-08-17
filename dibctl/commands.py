@@ -214,7 +214,10 @@ class TestCommand(GenericCommand):
             keep_failed_instance=self.args.keep_failed_instance
         )
         if self.args.instance:
-            dt.reconfigure_for_existing_instance(self.args.instance, self.args.private_key_file)
+            dt.reconfigure_for_existing_instance(
+                self.args.instance,
+                self.args.private_key_file
+            )
         status = dt.process(shell_only=False, shell_on_errors=self.args.shell)
         if status:
             return 0
@@ -250,9 +253,13 @@ class ShellCommand(GenericCommand):
         )
 
     def _prepare(self):
-        env_label = self.image.get('tests.environment_name', self.args.envlabel)
+        env_label = self.image.get(
+            'tests.environment_name', self.args.envlabel)
         if not env_label:
-            raise TestEnvironmentNotFoundError('No environemnt name for tests were no given in config or command line')
+            raise TestEnvironmentNotFoundError(
+                'No environemnt name for tests were no given '
+                'in config or command line'
+            )
         self.test_env = self.test_env_config[env_label]
 
     def _command(self):
@@ -266,7 +273,9 @@ class ShellCommand(GenericCommand):
             keep_failed_instance=False
         )
         if self.args.instance:
-            dt.reconfigure_for_existing_instance(self.args.instance, self.args.private_key_file)
+            dt.reconfigure_for_existing_instance(
+                self.args.instance, self.args.private_key_file
+            )
         try:
             status = dt.process(shell_only=True, shell_on_errors=False)
         except do_tests.TestError as e:
@@ -278,20 +287,32 @@ class ShellCommand(GenericCommand):
 class UploadCommand(GenericCommand):
     name = 'upload'
     help = 'Upload image'
-    options = ['imagelabel', 'input', 'img-config', 'upload-config', 'uploadlabel']
+    options = ['imagelabel', 'input', 'img-config',
+               'upload-config', 'uploadlabel']
 
     def add_options(self):
-        self.parser.add_argument('--no-obsolete', action='store_true', help='Do not obsolete images with same name')
+        self.parser.add_argument(
+            '--no-obsolete', action='store_true',
+            help='Do not obsolete images with same name'
+        )
 
     def _prepare(self):
         try:
             self.name = self.glance_data['name']
         except KeyError as e:
-            raise NotFoundInConfigError("Image name is not found in glance section in config files")
+            raise NotFoundInConfigError(
+                "Image name is not found in glance section"
+                "in config files"
+            )
         self.meta = self.glance_data.get('properties', {})
-        self.container_format = self.glance_data.get('container_format', 'bare')
+        self.container_format = self.glance_data.get(
+            'container_format', 'bare'
+        )
         self.disk_format = self.glance_data.get('disk_format', 'qcow2')
         self.public = self.glance_data.get('public', False)
+        self.min_disk = self.glance_data.get('min_disk', 0)
+        self.min_ram = self.glance_data.get('min_ram', 0)
+        self.protected = self.glance_data.get('protected', False)
 
     def upload_to_glance(self):
         print("Uploading image")
@@ -306,9 +327,16 @@ class UploadCommand(GenericCommand):
                 self.public,
                 container_format=self.container_format,
                 disk_format=self.disk_format,
+                min_disk=self.min_disk,
+                min_ram=self.min_ram,
+                protected=self.protected,
                 meta=self.meta
             )
-            print("Image ''%s' uploaded with uuid %s from file %s" % (self.image.name, self.image.id, upload_filename))
+            print(
+                "Image ''%s' uploaded with uuid %s from file %s" % (
+                    self.image.name, self.image.id, upload_filename
+                )
+            )
 
     def obsolete_old_images(self):
         candidates = self.os.older_images(self.name, self.image.id)

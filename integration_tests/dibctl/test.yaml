@@ -1,23 +1,54 @@
 bad_network_id:
   keystone: {auth_url: 'https://auth.servers.nl01.cloud.servers.com:5000/v2.0', password: password,
-    tenant_name: '28', username: username}
+    tenant_name: pyvcr, username: username}
   nova:
-    flavor: '30'
+    flavor: SSD.30
     nics:
-    - {net_id: 2ea90ca0-7577-4706-9a41-fc88d8bee945}
+    - {net_id: deadbeaf-7577-4706-9a41-fc88d8bee945}
 env_with_format_override:
   glance: {disk_format: raw}
   keystone: {auth_url: 'https://auth.servers.nl01.cloud.servers.com:5000/v2.0', password: password,
-    tenant_name: '28', username: username}
+    tenant_name: pyvcr, username: username}
   nova:
     flavor: SSD.30
     nics:
     - {net_id: c7ccdf1c-e6c3-4257-8b2e-740748c14564}
-nl01:
-  keystone: {auth_url: 'https://auth.servers.nl01.cloud.servers.com:5000/v2.0', password: password,
-    tenant_name: '28', username: username}
+env_with_sizes:
+  glance: {min_disk: 20, min_ram: 2, protected: false}
+  keystone: {auth_url: 'https://auth.nova-lab-1.mgm.servers.com:5000/v2.0', password: password,
+    tenant_name: pyvcr, username: username}
+  nova:
+    flavor: SSD.50
+    main_nic_regexp: internet
+    nics:
+    - {net_id: 89e03f44-d874-4c79-bbb5-30d5c576fef3}
+  ssl_insecure: true
+lab1:
+  keystone: {auth_url: 'https://auth.nova-lab-1.mgm.servers.com:5000/v2.0', password: password,
+    tenant_name: pyvcr, username: username}
   nova:
     flavor: SSD.30
     main_nic_regexp: internet
     nics:
-    - {net_id: c7ccdf1c-e6c3-4257-8b2e-740748c14565}
+    - {net_id: 89e03f44-d874-4c79-bbb5-30d5c576fef3}
+  ssl_insecure: true
+lab1-size-too-big:
+  glance: {min_disk: 50, min_ram: 16768}
+  keystone: {auth_url: 'https://auth.nova-lab-1.mgm.servers.com:5000/v2.0', password: password,
+    tenant_name: pyvcr, username: username}
+  nova:
+    flavor: SSD.30
+    main_nic_regexp: internet
+    nics:
+    - {net_id: 89e03f44-d874-4c79-bbb5-30d5c576fef3}
+  ssl_insecure: true
+nl01:
+  keystone: {auth_url: 'https://auth.servers.nl01.cloud.servers.com:5000/v2.0', password: password,
+    tenant_name: pyvcr, username: username}
+  nova:
+    flavor: SSD.30
+    main_nic_regexp: internet
+    nics:
+    - {net_id: fe2acef0-4383-4432-8fca-f9e23f835dd5}
+    - {net_id: a3af8097-f348-4767-97c3-b9bf75263ef9}
+    - {net_id: c7ccdf1c-e6c3-4257-8b2e-740748c14564}

@@ -3,7 +3,10 @@ interactions:
     body: null
     headers:
       Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
+      User-Agent: [python-requests/2.12.4]
+      pytest-filtered: ['true']
     method: GET
     uri: https://auth.nova-lab-1.mgm.servers.com:5000/v2.0
   response:
@@ -15,36 +18,40 @@ interactions:
     headers:
       content-length: ['358']
       content-type: [application/json]
-      date: ['Tue, 06 Jun 2017 12:22:52 GMT']
+      date: ['Wed, 16 Aug 2017 13:40:16 GMT']
       vary: [X-Auth-Token]
       x-distribution: [Ubuntu]
-      x-openstack-request-id: [req-6bfe8c8e-b20c-46b7-8b91-064fff779c4f]
+      x-openstack-request-id: [req-8d1a8ab5-7ede-44d2-9a2d-874be08c4d90]
     status: {code: 200, message: OK}
 - request:
-    body: !!python/unicode '{"auth": {"tenantName": "demotenant", "passwordCredentials":
-      {"username": "username", "password": "password"}}}'
+    body: !!python/unicode '{"auth": "{\"tenantName\": \"pyvcr\", \"passwordCredentials\":
+      {\"username\": \"username\", \"password\": \"password\"}}"}'
     headers:
       Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
+      Content-Length: ['120']
       Content-Type: [application/json]
+      User-Agent: [dibctl keystoneauth1/2.20.0 python-requests/2.12.4 CPython/2.7.13]
+      pytest-filtered: ['true']
     method: POST
     uri: https://auth.nova-lab-1.mgm.servers.com:5000/v2.0/tokens
   response:
-    body: {string: !!python/unicode '{"access": {"token": {"issued_at": "2017-06-06T12:22:52.000000Z",
-        "expires": "2037-06-07T12:22:52Z", "id": "d81e808b9f4e44f7988bf0ab359e0b89",
-        "tenant": {"description": "Use in demo environment", "enabled": true, "id":
-        "4e632076f7004f908c8da67345a7592e", "name": "demotenant"}, "audit_ids": ["-ADygTIsTsOykQ0YgYM2hQ"]},
-        "serviceCatalog": [{"endpoints": [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28774/v2/4e632076f7004f908c8da67345a7592e",
-        "region": "lab-1", "internalURL": "http://nova-api.p.nova-lab-1.servers.com:28774/v2/4e632076f7004f908c8da67345a7592e",
-        "id": "2e61ac6cc99345a1b152779600918c2e", "publicURL": "https://compute.nova-lab-1.mgm.servers.com:8774/v2/4e632076f7004f908c8da67345a7592e"}],
+    body: {string: !!python/unicode '{"access": {"token": {"issued_at": "2017-08-16T13:40:16.000000Z",
+        "expires": "2038-01-15T16:17:18Z", "id": "consealed id", "tenant": {"id":
+        "61ed529dc6024dc5968acf32b6f4142c", "enabled": true, "description": "", "name":
+        "consealed name"}, "audit_ids": ["_-W2T2VTSHSoSlHspDSNCw"]}, "serviceCatalog":
+        [{"endpoints": [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28774/v2/61ed529dc6024dc5968acf32b6f4142c",
+        "region": "lab-1", "internalURL": "http://nova-api.p.nova-lab-1.servers.com:28774/v2/61ed529dc6024dc5968acf32b6f4142c",
+        "id": "2e61ac6cc99345a1b152779600918c2e", "publicURL": "https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c"}],
         "endpoints_links": [], "type": "compute", "name": "nova"}, {"endpoints": [{"adminURL":
         "http://neutron-server.p.nova-lab-1.servers.com:29696", "region": "lab-1",
         "internalURL": "http://neutron-server.p.nova-lab-1.servers.com:29696", "id":
         "6ec649b0f7cc4554a041defadf552fc1", "publicURL": "https://network.nova-lab-1.mgm.servers.com:9696"}],
         "endpoints_links": [], "type": "network", "name": "neutron"}, {"endpoints":
-        [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/4e632076f7004f908c8da67345a7592e",
-        "region": "lab-1", "internalURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/4e632076f7004f908c8da67345a7592e",
-        "id": "09d47ca5543b41849da1a7690acd5844", "publicURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/4e632076f7004f908c8da67345a7592e"}],
+        [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/61ed529dc6024dc5968acf32b6f4142c",
+        "region": "lab-1", "internalURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/61ed529dc6024dc5968acf32b6f4142c",
+        "id": "09d47ca5543b41849da1a7690acd5844", "publicURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/61ed529dc6024dc5968acf32b6f4142c"}],
         "endpoints_links": [], "type": "volumev2", "name": "cinderv2"}, {"endpoints":
         [{"adminURL": "http://glance-api.p.nova-lab-1.servers.com:29292/v2", "region":
         "lab-1", "internalURL": "http://glance-api.p.nova-lab-1.servers.com:29292/v2",
@@ -54,500 +61,1206 @@ interactions:
         "internalURL": "http://ceilometer-api.p.nova-lab-1.servers.com:28777", "id":
         "1cc0a58b1bab45509ec3991bf7111a3f", "publicURL": "https://metering.nova-lab-1.mgm.servers.com:8777"}],
         "endpoints_links": [], "type": "metering", "name": "ceilometer"}, {"endpoints":
-        [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v1/4e632076f7004f908c8da67345a7592e",
-        "region": "lab-1", "internalURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v1/4e632076f7004f908c8da67345a7592e",
-        "id": "6ae4b74962fc4b5abb4fed44dbf534a5", "publicURL": "https://volume.nova-lab-1.mgm.servers.com:8776/v1/4e632076f7004f908c8da67345a7592e"}],
+        [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v1/61ed529dc6024dc5968acf32b6f4142c",
+        "region": "lab-1", "internalURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v1/61ed529dc6024dc5968acf32b6f4142c",
+        "id": "6ae4b74962fc4b5abb4fed44dbf534a5", "publicURL": "https://volume.nova-lab-1.mgm.servers.com:8776/v1/61ed529dc6024dc5968acf32b6f4142c"}],
         "endpoints_links": [], "type": "volume", "name": "cinder"}, {"endpoints":
         [{"adminURL": "http://keystone.p.nova-lab-1.servers.com:35357/v2.0", "region":
         "lab-1", "internalURL": "http://keystone.p.nova-lab-1.servers.com:5001/v2.0",
         "id": "19226f12c0bb4438a6032b9c55c1a8e9", "publicURL": "https://auth.nova-lab-1.mgm.servers.com:5000/v2.0"}],
         "endpoints_links": [], "type": "identity", "name": "keystone"}], "user": {"username":
-        "username", "roles_links": [], "id": "6fd02e32d66e4e7483cfe2b5c2e15477", "roles":
-        [{"name": "_member_"}, {"name": "admin"}], "name": "username"}, "metadata":
-        {"is_admin": 0, "roles": ["9fe2ff9ee4384b1894a90878d3e92bab", "77d755e95a7f448ca599c1a0628c28f8"]}}}'}
+        "consealed username", "roles_links": [], "id": "155f21999dd34a679797a5eb86b0ee20",
+        "roles": [{"name": "images"}, {"name": "_member_"}], "name": "consealed name"},
+        "metadata": {"is_admin": 0, "roles": ["d80c47ca65a6448fb92b0b948178aa88",
+        "9fe2ff9ee4384b1894a90878d3e92bab"]}}}'}
     headers:
-      content-length: ['3309']
+      content-length: ['3326']
       content-type: [application/json]
-      date: ['Tue, 06 Jun 2017 12:22:53 GMT']
+      date: ['Wed, 16 Aug 2017 13:40:16 GMT']
       vary: [X-Auth-Token]
       x-distribution: [Ubuntu]
-      x-openstack-request-id: [req-8441ae65-32a9-4cc7-b79d-80d05d4a2347]
+      x-openstack-request-id: [req-3d8ac554-feb9-49c0-84ed-62d9087252ff]
     status: {code: 200, message: OK}
 - request:
     body: null
     headers:
       Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      X-Auth-Token: [!!python/unicode d81e808b9f4e44f7988bf0ab359e0b89]
+      User-Agent: [python-novaclient]
+      pytest-filtered: ['true']
     method: GET
-    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/4e632076f7004f908c8da67345a7592e/servers/detail?all_tenants=1
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/detail?all_tenants=1
   response:
-    body: {string: !!python/unicode '{"servers": [{"status": "ACTIVE", "updated":
-        "2017-06-06T11:35:58Z", "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023",
-        "OS-EXT-SRV-ATTR:host": "compute2", "addresses": {"internet_188.42.163.160/27":
-        [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:ec:13:77", "version": 6, "addr": "2a00:1178:3:101:f816:3eff:feec:1377",
-        "OS-EXT-IPS:type": "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:ec:13:77",
-        "version": 4, "addr": "188.42.163.181", "OS-EXT-IPS:type": "fixed"}]}, "links":
-        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/4e632076f7004f908c8da67345a7592e/servers/9f51f3e1-1819-4460-bddb-204d2d114e76",
-        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/servers/9f51f3e1-1819-4460-bddb-204d2d114e76",
-        "rel": "bookmark"}], "key_name": "x220", "image": {"id": "a2b83581-cddf-438a-996d-50ae59ff783c",
-        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/images/a2b83581-cddf-438a-996d-50ae59ff783c",
+    body: {string: !!python/unicode '{"servers": [{"status": "SHUTOFF", "updated":
+        "2017-08-02T10:51:02Z", "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46",
+        "addresses": {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:13:4b:46",
+        "version": 4, "addr": "188.42.163.197", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/648437c7-29d1-4e50-bb82-a795997217cd",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/648437c7-29d1-4e50-bb82-a795997217cd",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
-        "active", "OS-EXT-SRV-ATTR:instance_name": "9f51f3e1-1819-4460-bddb-204d2d114e76",
-        "OS-SRV-USG:launched_at": "2017-06-06T11:35:58.000000", "OS-EXT-SRV-ATTR:hypervisor_hostname":
-        "compute2.nova-lab-1.servers.com", "flavor": {"id": "30", "links": [{"href":
-        "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/flavors/30",
-        "rel": "bookmark"}]}, "id": "9f51f3e1-1819-4460-bddb-204d2d114e76", "OS-SRV-USG:terminated_at":
-        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "6fd02e32d66e4e7483cfe2b5c2e15477",
-        "name": "hoggingup2", "created": "2017-06-06T11:35:35Z", "tenant_id": "4e632076f7004f908c8da67345a7592e",
-        "OS-DCF:diskConfig": "AUTO", "os-extended-volumes:volumes_attached": [], "accessIPv4":
-        "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state": 1, "config_drive":
-        "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-06-06T11:35:38Z",
-        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "OS-EXT-SRV-ATTR:host":
-        "compute1", "addresses": {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr":
-        "fa:16:3e:38:6e:fa", "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe38:6efa",
-        "OS-EXT-IPS:type": "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:38:6e:fa",
-        "version": 4, "addr": "188.42.163.180", "OS-EXT-IPS:type": "fixed"}]}, "links":
-        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/4e632076f7004f908c8da67345a7592e/servers/48f76378-138d-440d-af1d-1ef924e3d9c9",
-        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/servers/48f76378-138d-440d-af1d-1ef924e3d9c9",
-        "rel": "bookmark"}], "key_name": "x220", "image": {"id": "0ed23e78-706f-45bb-a7d2-0543f20ac841",
-        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/images/0ed23e78-706f-45bb-a7d2-0543f20ac841",
-        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
-        "active", "OS-EXT-SRV-ATTR:instance_name": "48f76378-138d-440d-af1d-1ef924e3d9c9",
-        "OS-SRV-USG:launched_at": "2017-06-06T11:35:38.000000", "OS-EXT-SRV-ATTR:hypervisor_hostname":
-        "compute1.nova-lab-1.servers.com", "flavor": {"id": "30", "links": [{"href":
-        "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/flavors/30",
-        "rel": "bookmark"}]}, "id": "48f76378-138d-440d-af1d-1ef924e3d9c9", "OS-SRV-USG:terminated_at":
-        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "6fd02e32d66e4e7483cfe2b5c2e15477",
-        "name": "hoggingup1", "created": "2017-06-06T11:35:06Z", "tenant_id": "4e632076f7004f908c8da67345a7592e",
-        "OS-DCF:diskConfig": "AUTO", "os-extended-volumes:volumes_attached": [], "accessIPv4":
-        "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state": 1, "config_drive":
-        "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-04-21T14:18:48Z",
-        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "OS-EXT-SRV-ATTR:host":
-        "compute2", "addresses": {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr":
-        "fa:16:3e:12:c3:e5", "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe12:c3e5",
-        "OS-EXT-IPS:type": "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:12:c3:e5",
-        "version": 4, "addr": "188.42.163.177", "OS-EXT-IPS:type": "fixed"}]}, "links":
-        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/4e632076f7004f908c8da67345a7592e/servers/55506489-80f9-4f40-af4a-3f4cbc59e3e8",
-        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/servers/55506489-80f9-4f40-af4a-3f4cbc59e3e8",
-        "rel": "bookmark"}], "key_name": "x220", "image": {"id": "02bdad7f-248b-4357-9d85-9e71fc71c7eb",
-        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/images/02bdad7f-248b-4357-9d85-9e71fc71c7eb",
-        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
-        "active", "OS-EXT-SRV-ATTR:instance_name": "55506489-80f9-4f40-af4a-3f4cbc59e3e8",
-        "OS-SRV-USG:launched_at": "2017-04-21T14:18:48.000000", "OS-EXT-SRV-ATTR:hypervisor_hostname":
-        "compute2.nova-lab-1.servers.com", "flavor": {"id": "30", "links": [{"href":
-        "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/flavors/30",
-        "rel": "bookmark"}]}, "id": "55506489-80f9-4f40-af4a-3f4cbc59e3e8", "OS-SRV-USG:terminated_at":
-        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "6fd02e32d66e4e7483cfe2b5c2e15477",
-        "name": "ipv5", "created": "2017-04-21T14:18:40Z", "tenant_id": "4e632076f7004f908c8da67345a7592e",
-        "OS-DCF:diskConfig": "AUTO", "os-extended-volumes:volumes_attached": [], "accessIPv4":
-        "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state": 1, "config_drive":
-        "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-04-21T12:41:13Z",
-        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "OS-EXT-SRV-ATTR:host":
-        "compute2", "addresses": {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr":
-        "fa:16:3e:69:66:44", "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe69:6644",
-        "OS-EXT-IPS:type": "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:69:66:44",
-        "version": 4, "addr": "188.42.163.176", "OS-EXT-IPS:type": "fixed"}]}, "links":
-        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/4e632076f7004f908c8da67345a7592e/servers/28129220-c7ee-4855-aeac-78de189cd39c",
-        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/servers/28129220-c7ee-4855-aeac-78de189cd39c",
-        "rel": "bookmark"}], "key_name": "x220", "image": {"id": "02bdad7f-248b-4357-9d85-9e71fc71c7eb",
-        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/images/02bdad7f-248b-4357-9d85-9e71fc71c7eb",
-        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
-        "active", "OS-EXT-SRV-ATTR:instance_name": "28129220-c7ee-4855-aeac-78de189cd39c",
-        "OS-SRV-USG:launched_at": "2017-04-21T12:41:13.000000", "OS-EXT-SRV-ATTR:hypervisor_hostname":
-        "compute2.nova-lab-1.servers.com", "flavor": {"id": "30", "links": [{"href":
-        "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/flavors/30",
-        "rel": "bookmark"}]}, "id": "28129220-c7ee-4855-aeac-78de189cd39c", "OS-SRV-USG:terminated_at":
-        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "6fd02e32d66e4e7483cfe2b5c2e15477",
-        "name": "ipv3", "created": "2017-04-21T12:40:53Z", "tenant_id": "4e632076f7004f908c8da67345a7592e",
-        "OS-DCF:diskConfig": "AUTO", "os-extended-volumes:volumes_attached": [], "accessIPv4":
-        "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state": 1, "config_drive":
-        "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-04-19T11:30:49Z",
-        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "OS-EXT-SRV-ATTR:host":
-        "compute2", "addresses": {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr":
-        "fa:16:3e:16:f4:44", "version": 4, "addr": "188.42.163.199", "OS-EXT-IPS:type":
-        "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/4e632076f7004f908c8da67345a7592e/servers/8a6e9041-4823-41be-98bd-9048f7a6e894",
-        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/servers/8a6e9041-4823-41be-98bd-9048f7a6e894",
-        "rel": "bookmark"}], "key_name": "vills", "image": {"id": "074028fd-f95b-4490-b558-978614e6751e",
-        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/images/074028fd-f95b-4490-b558-978614e6751e",
-        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
-        "active", "OS-EXT-SRV-ATTR:instance_name": "8a6e9041-4823-41be-98bd-9048f7a6e894",
-        "OS-SRV-USG:launched_at": "2017-04-19T11:30:49.000000", "OS-EXT-SRV-ATTR:hypervisor_hostname":
-        "compute2.nova-lab-1.servers.com", "flavor": {"id": "30", "links": [{"href":
-        "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/flavors/30",
-        "rel": "bookmark"}]}, "id": "8a6e9041-4823-41be-98bd-9048f7a6e894", "OS-SRV-USG:terminated_at":
-        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "43dc6b9b73e64985b79261738a1c6c23",
-        "name": "centos-1510", "created": "2017-04-19T11:30:31Z", "tenant_id": "4e632076f7004f908c8da67345a7592e",
-        "OS-DCF:diskConfig": "AUTO", "os-extended-volumes:volumes_attached": [], "accessIPv4":
-        "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state": 1, "config_drive":
-        "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-04-14T14:36:25Z",
-        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "OS-EXT-SRV-ATTR:host":
-        "compute1", "addresses": {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr":
-        "fa:16:3e:bf:6b:f1", "version": 4, "addr": "188.42.163.198", "OS-EXT-IPS:type":
-        "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/4e632076f7004f908c8da67345a7592e/servers/a7f6999b-dc96-45ba-86b1-b27929628bbb",
-        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/servers/a7f6999b-dc96-45ba-86b1-b27929628bbb",
-        "rel": "bookmark"}], "key_name": null, "image": {"id": "8c7e07c2-1227-4faa-8bbe-088c531c9fa7",
-        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/images/8c7e07c2-1227-4faa-8bbe-088c531c9fa7",
-        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
-        "active", "OS-EXT-SRV-ATTR:instance_name": "a7f6999b-dc96-45ba-86b1-b27929628bbb",
-        "OS-SRV-USG:launched_at": "2017-04-14T14:36:24.000000", "OS-EXT-SRV-ATTR:hypervisor_hostname":
-        "compute1.nova-lab-1.servers.com", "flavor": {"id": "80", "links": [{"href":
-        "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/flavors/80",
-        "rel": "bookmark"}]}, "id": "a7f6999b-dc96-45ba-86b1-b27929628bbb", "OS-SRV-USG:terminated_at":
-        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "2ee763904e5a4ba5ba6d07cea1741fa8",
-        "name": "aak_test", "created": "2017-04-14T14:35:02Z", "tenant_id": "4e632076f7004f908c8da67345a7592e",
-        "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached": [],
-        "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
-        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-04-14T08:04:31Z",
-        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "OS-EXT-SRV-ATTR:host":
-        "compute2", "addresses": {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr":
-        "fa:16:3e:85:71:6a", "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe85:716a",
-        "OS-EXT-IPS:type": "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:85:71:6a",
-        "version": 4, "addr": "188.42.163.173", "OS-EXT-IPS:type": "fixed"}]}, "links":
-        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/4e632076f7004f908c8da67345a7592e/servers/cc8723e8-9b99-414f-aebd-0e357d3d9fba",
-        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/servers/cc8723e8-9b99-414f-aebd-0e357d3d9fba",
-        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "79664e16-a65a-4a4a-9694-0e1ce1280790",
-        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/images/79664e16-a65a-4a4a-9694-0e1ce1280790",
-        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
-        "active", "OS-EXT-SRV-ATTR:instance_name": "cc8723e8-9b99-414f-aebd-0e357d3d9fba",
-        "OS-SRV-USG:launched_at": "2017-04-14T08:04:30.000000", "OS-EXT-SRV-ATTR:hypervisor_hostname":
-        "compute2.nova-lab-1.servers.com", "flavor": {"id": "30", "links": [{"href":
-        "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/flavors/30",
-        "rel": "bookmark"}]}, "id": "cc8723e8-9b99-414f-aebd-0e357d3d9fba", "OS-SRV-USG:terminated_at":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:30:26.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "648437c7-29d1-4e50-bb82-a795997217cd", "OS-SRV-USG:terminated_at":
         null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
-        "name": "test_dso", "created": "2017-04-14T07:38:14Z", "tenant_id": "4e632076f7004f908c8da67345a7592e",
-        "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached": [],
-        "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
-        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-04-06T16:40:10Z",
-        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "OS-EXT-SRV-ATTR:host":
-        "compute1", "addresses": {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr":
-        "fa:16:3e:89:bd:3b", "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe89:bd3b",
-        "OS-EXT-IPS:type": "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:89:bd:3b",
-        "version": 4, "addr": "188.42.163.164", "OS-EXT-IPS:type": "fixed"}]}, "links":
-        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/4e632076f7004f908c8da67345a7592e/servers/680ed10b-e365-479b-aa75-18428de95fb3",
-        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/servers/680ed10b-e365-479b-aa75-18428de95fb3",
-        "rel": "bookmark"}], "key_name": "vills", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
-        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:59Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:cd:39:f9",
+        "version": 4, "addr": "188.42.163.195", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/b3d11e44-2ac4-4df9-a575-32c52718be7a",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/b3d11e44-2ac4-4df9-a575-32c52718be7a",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
-        "active", "OS-EXT-SRV-ATTR:instance_name": "680ed10b-e365-479b-aa75-18428de95fb3",
-        "OS-SRV-USG:launched_at": "2017-04-06T16:39:20.000000", "OS-EXT-SRV-ATTR:hypervisor_hostname":
-        "compute1.nova-lab-1.servers.com", "flavor": {"id": "50", "links": [{"href":
-        "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/flavors/50",
-        "rel": "bookmark"}]}, "id": "680ed10b-e365-479b-aa75-18428de95fb3", "OS-SRV-USG:terminated_at":
-        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "43dc6b9b73e64985b79261738a1c6c23",
-        "name": "test-secgroup", "created": "2017-04-06T16:37:08Z", "tenant_id": "4e632076f7004f908c8da67345a7592e",
-        "OS-DCF:diskConfig": "AUTO", "os-extended-volumes:volumes_attached": [], "accessIPv4":
-        "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state": 1, "config_drive":
-        "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-04-03T14:16:59Z",
-        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "OS-EXT-SRV-ATTR:host":
-        "compute1", "addresses": {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr":
-        "fa:16:3e:ae:ec:92", "version": 6, "addr": "2a00:1178:3:101:f816:3eff:feae:ec92",
-        "OS-EXT-IPS:type": "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:ae:ec:92",
-        "version": 4, "addr": "188.42.163.163", "OS-EXT-IPS:type": "fixed"}]}, "links":
-        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/4e632076f7004f908c8da67345a7592e/servers/3c7ba90d-be2c-40f5-a6bf-369e449da6f2",
-        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/servers/3c7ba90d-be2c-40f5-a6bf-369e449da6f2",
-        "rel": "bookmark"}], "key_name": "cyberflow_default", "image": {"id": "deb48e1d-6994-4a8a-b903-38cfb7771ace",
-        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/images/deb48e1d-6994-4a8a-b903-38cfb7771ace",
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:30:24.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "b3d11e44-2ac4-4df9-a575-32c52718be7a", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:56Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:b5:c9:d4",
+        "version": 4, "addr": "188.42.163.194", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/0d1ab3e4-c36b-4c38-9a5a-69565b696359",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/0d1ab3e4-c36b-4c38-9a5a-69565b696359",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
-        "active", "OS-EXT-SRV-ATTR:instance_name": "3c7ba90d-be2c-40f5-a6bf-369e449da6f2",
-        "OS-SRV-USG:launched_at": "2017-04-03T14:16:59.000000", "OS-EXT-SRV-ATTR:hypervisor_hostname":
-        "compute1.nova-lab-1.servers.com", "flavor": {"id": "30", "links": [{"href":
-        "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/flavors/30",
-        "rel": "bookmark"}]}, "id": "3c7ba90d-be2c-40f5-a6bf-369e449da6f2", "OS-SRV-USG:terminated_at":
-        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "b2864d65488b4a47ae977eb087a5d42c",
-        "name": "test_cow_snapshot", "created": "2017-04-03T14:08:31Z", "tenant_id":
-        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "AUTO", "os-extended-volumes:volumes_attached":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:30:24.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "0d1ab3e4-c36b-4c38-9a5a-69565b696359", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:54Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:b3:79:b7",
+        "version": 4, "addr": "188.42.163.222", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/afd2bbf7-0ad2-4ef4-90fe-9756554e2ac2",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/afd2bbf7-0ad2-4ef4-90fe-9756554e2ac2",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:30:20.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "afd2bbf7-0ad2-4ef4-90fe-9756554e2ac2", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:52Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:2d:05:db",
+        "version": 4, "addr": "188.42.163.221", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/866e4133-947d-496b-9090-7728b3846409",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/866e4133-947d-496b-9090-7728b3846409",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:30:18.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "866e4133-947d-496b-9090-7728b3846409", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:49Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:1e:fa:65",
+        "version": 4, "addr": "188.42.163.220", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/6ae49f3c-4606-4044-955e-e07a5ffca868",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/6ae49f3c-4606-4044-955e-e07a5ffca868",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:30:13.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "6ae49f3c-4606-4044-955e-e07a5ffca868", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:47Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:c1:81:ff",
+        "version": 4, "addr": "188.42.163.219", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/ae7b8a98-11b4-4886-a7ba-0c81197dbd2b",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/ae7b8a98-11b4-4886-a7ba-0c81197dbd2b",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:30:05.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "ae7b8a98-11b4-4886-a7ba-0c81197dbd2b", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:44Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:26:dc:f5",
+        "version": 4, "addr": "188.42.163.218", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/7eb32a83-56ee-4dc3-ae3c-d1cfdc9f6e06",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/7eb32a83-56ee-4dc3-ae3c-d1cfdc9f6e06",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:30:01.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "7eb32a83-56ee-4dc3-ae3c-d1cfdc9f6e06", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:42Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:cc:f4:9b",
+        "version": 4, "addr": "188.42.163.217", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/284bf239-ae70-4ccf-91ff-a82db825182e",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/284bf239-ae70-4ccf-91ff-a82db825182e",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:30:01.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "284bf239-ae70-4ccf-91ff-a82db825182e", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:39Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:31:b6:8f",
+        "version": 4, "addr": "188.42.163.215", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/618ca9b9-b7e1-4cd2-b087-8fbdc756bcb8",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/618ca9b9-b7e1-4cd2-b087-8fbdc756bcb8",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:29:56.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "618ca9b9-b7e1-4cd2-b087-8fbdc756bcb8", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:37Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:14:79:02",
+        "version": 4, "addr": "188.42.163.216", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/7117f89b-73e1-4c3a-8ae0-66983b624dec",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/7117f89b-73e1-4c3a-8ae0-66983b624dec",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:29:57.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "7117f89b-73e1-4c3a-8ae0-66983b624dec", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:35Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:8c:dd:2c",
+        "version": 4, "addr": "188.42.163.214", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/1756dd8b-99fa-4519-9329-71a6bef99fe4",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/1756dd8b-99fa-4519-9329-71a6bef99fe4",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:29:47.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "1756dd8b-99fa-4519-9329-71a6bef99fe4", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:32Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:90:04:72",
+        "version": 4, "addr": "188.42.163.200", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/b5928a28-699e-4b56-a4af-3a17e283e096",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/b5928a28-699e-4b56-a4af-3a17e283e096",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:29:45.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "b5928a28-699e-4b56-a4af-3a17e283e096", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:30Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:5e:76:c8",
+        "version": 4, "addr": "188.42.163.199", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/46c0d5d9-415e-4fc1-b5d4-50a5d7872f37",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/46c0d5d9-415e-4fc1-b5d4-50a5d7872f37",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:29:42.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "46c0d5d9-415e-4fc1-b5d4-50a5d7872f37", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:28Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:23:3a:9e",
+        "version": 4, "addr": "188.42.163.198", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/5994e919-f04e-4006-8fa2-6553dbad9ad1",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/5994e919-f04e-4006-8fa2-6553dbad9ad1",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:29:37.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "5994e919-f04e-4006-8fa2-6553dbad9ad1", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:25Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-08-03T15:37:31Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:7f:40:ec",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe7f:40ec", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:7f:40:ec", "version": 4, "addr":
+        "188.42.163.174", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/89a5293d-b48f-4857-9ca4-755c659cdf84",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/89a5293d-b48f-4857-9ca4-755c659cdf84",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:28:44.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "89a5293d-b48f-4857-9ca4-755c659cdf84", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:28:05Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
         [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
-        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-04-01T08:33:10Z",
-        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "OS-EXT-SRV-ATTR:host":
-        "compute2", "addresses": {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr":
-        "fa:16:3e:41:57:06", "version": 4, "addr": "188.42.163.195", "OS-EXT-IPS:type":
-        "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/4e632076f7004f908c8da67345a7592e/servers/4c580d3b-944c-4cb1-b50f-42c039466594",
-        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/servers/4c580d3b-944c-4cb1-b50f-42c039466594",
-        "rel": "bookmark"}], "key_name": "vills", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
-        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:28:43Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:d8:f8:cd",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fed8:f8cd", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:d8:f8:cd", "version": 4, "addr":
+        "188.42.163.173", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/001b62b1-6fa4-45ae-ad82-0ccedfcfb298",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/001b62b1-6fa4-45ae-ad82-0ccedfcfb298",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
-        "active", "OS-EXT-SRV-ATTR:instance_name": "4c580d3b-944c-4cb1-b50f-42c039466594",
-        "OS-SRV-USG:launched_at": "2017-04-01T08:09:10.000000", "OS-EXT-SRV-ATTR:hypervisor_hostname":
-        "compute2.nova-lab-1.servers.com", "flavor": {"id": "30", "links": [{"href":
-        "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/flavors/30",
-        "rel": "bookmark"}]}, "id": "4c580d3b-944c-4cb1-b50f-42c039466594", "OS-SRV-USG:terminated_at":
-        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "43dc6b9b73e64985b79261738a1c6c23",
-        "name": "test-migr-xenial", "created": "2017-04-01T08:09:03Z", "tenant_id":
-        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "AUTO", "os-extended-volumes:volumes_attached":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:28:42.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "001b62b1-6fa4-45ae-ad82-0ccedfcfb298", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:28:03Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
         [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
-        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-03-31T15:35:58Z",
-        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "OS-EXT-SRV-ATTR:host":
-        "compute1", "addresses": {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr":
-        "fa:16:3e:bc:c2:1f", "version": 4, "addr": "188.42.163.197", "OS-EXT-IPS:type":
-        "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/4e632076f7004f908c8da67345a7592e/servers/2796cf21-140d-4d14-a439-4c2b61fa935a",
-        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/servers/2796cf21-140d-4d14-a439-4c2b61fa935a",
-        "rel": "bookmark"}], "key_name": "aak", "image": {"id": "f1e57740-9d60-4da2-b96c-d054f04fd0b6",
-        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/images/f1e57740-9d60-4da2-b96c-d054f04fd0b6",
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:28:43Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:66:88:3d",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe66:883d", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:66:88:3d", "version": 4, "addr":
+        "188.42.163.172", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/7772d37f-2b0a-44fb-a35d-ae83f94f2e22",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/7772d37f-2b0a-44fb-a35d-ae83f94f2e22",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
-        "active", "OS-EXT-SRV-ATTR:instance_name": "2796cf21-140d-4d14-a439-4c2b61fa935a",
-        "OS-SRV-USG:launched_at": "2017-03-31T15:35:57.000000", "OS-EXT-SRV-ATTR:hypervisor_hostname":
-        "compute1.nova-lab-1.servers.com", "flavor": {"id": "30", "links": [{"href":
-        "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/flavors/30",
-        "rel": "bookmark"}]}, "id": "2796cf21-140d-4d14-a439-4c2b61fa935a", "OS-SRV-USG:terminated_at":
-        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "2ee763904e5a4ba5ba6d07cea1741fa8",
-        "name": "test", "created": "2017-03-31T15:35:50Z", "tenant_id": "4e632076f7004f908c8da67345a7592e",
-        "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached": [],
-        "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
-        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-04-06T10:55:01Z",
-        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "OS-EXT-SRV-ATTR:host":
-        "compute1", "addresses": {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr":
-        "fa:16:3e:15:1c:1d", "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe15:1c1d",
-        "OS-EXT-IPS:type": "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:15:1c:1d",
-        "version": 4, "addr": "188.42.163.171", "OS-EXT-IPS:type": "fixed"}]}, "links":
-        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/4e632076f7004f908c8da67345a7592e/servers/28cdcbb4-ae53-4997-ab45-38f8215f15c8",
-        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/servers/28cdcbb4-ae53-4997-ab45-38f8215f15c8",
-        "rel": "bookmark"}], "key_name": "cyberflow_default", "image": {"id": "28e4ce92-7acf-4cbb-ac68-d10f2322ae34",
-        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/images/28e4ce92-7acf-4cbb-ac68-d10f2322ae34",
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:28:42.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "7772d37f-2b0a-44fb-a35d-ae83f94f2e22", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:28:00Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:28:38Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:db:c2:24",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fedb:c224", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:db:c2:24", "version": 4, "addr":
+        "188.42.163.171", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/c2bf30fe-27ea-46f2-94ca-f1d5a58ac406",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/c2bf30fe-27ea-46f2-94ca-f1d5a58ac406",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
-        "active", "OS-EXT-SRV-ATTR:instance_name": "28cdcbb4-ae53-4997-ab45-38f8215f15c8",
-        "OS-SRV-USG:launched_at": "2017-03-31T14:20:35.000000", "OS-EXT-SRV-ATTR:hypervisor_hostname":
-        "compute1.nova-lab-1.servers.com", "flavor": {"id": "30", "links": [{"href":
-        "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/flavors/30",
-        "rel": "bookmark"}]}, "id": "28cdcbb4-ae53-4997-ab45-38f8215f15c8", "OS-SRV-USG:terminated_at":
-        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "b2864d65488b4a47ae977eb087a5d42c",
-        "name": "recover_cow", "created": "2017-03-31T14:20:10Z", "tenant_id": "4e632076f7004f908c8da67345a7592e",
-        "OS-DCF:diskConfig": "AUTO", "os-extended-volumes:volumes_attached": [], "accessIPv4":
-        "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state": 1, "config_drive":
-        "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-04-06T13:59:57Z",
-        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "OS-EXT-SRV-ATTR:host":
-        "compute1", "addresses": {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr":
-        "fa:16:3e:b7:44:42", "version": 6, "addr": "2a00:1178:3:101:f816:3eff:feb7:4442",
-        "OS-EXT-IPS:type": "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:b7:44:42",
-        "version": 4, "addr": "188.42.163.170", "OS-EXT-IPS:type": "fixed"}]}, "links":
-        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/4e632076f7004f908c8da67345a7592e/servers/c1f00073-a2b6-4d16-af76-556a58bb4eb4",
-        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/servers/c1f00073-a2b6-4d16-af76-556a58bb4eb4",
-        "rel": "bookmark"}], "key_name": "cyberflow_default", "image": {"id": "02bdad7f-248b-4357-9d85-9e71fc71c7eb",
-        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/images/02bdad7f-248b-4357-9d85-9e71fc71c7eb",
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:28:38.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "c2bf30fe-27ea-46f2-94ca-f1d5a58ac406", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:57Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:28:30Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:f1:c7:c3",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fef1:c7c3", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:f1:c7:c3", "version": 4, "addr":
+        "188.42.163.170", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/60e1f197-3070-451a-9f0c-4481522a9bac",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/60e1f197-3070-451a-9f0c-4481522a9bac",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
         "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
-        "active", "OS-EXT-SRV-ATTR:instance_name": "c1f00073-a2b6-4d16-af76-556a58bb4eb4",
-        "OS-SRV-USG:launched_at": "2017-03-31T08:51:32.000000", "OS-EXT-SRV-ATTR:hypervisor_hostname":
-        "compute1.nova-lab-1.servers.com", "flavor": {"id": "30", "links": [{"href":
-        "http://compute.nova-lab-1.mgm.servers.com:8774/4e632076f7004f908c8da67345a7592e/flavors/30",
-        "rel": "bookmark"}]}, "id": "c1f00073-a2b6-4d16-af76-556a58bb4eb4", "OS-SRV-USG:terminated_at":
-        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "b2864d65488b4a47ae977eb087a5d42c",
-        "name": "test_cow_images", "created": "2017-03-31T08:51:07Z", "tenant_id":
-        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "AUTO", "os-extended-volumes:volumes_attached":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:28:29.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "60e1f197-3070-451a-9f0c-4481522a9bac", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:55Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:28:28Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:27:5c:c0",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe27:5cc0", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:27:5c:c0", "version": 4, "addr":
+        "188.42.163.169", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/da0edead-0a83-45f9-aee4-d6a72dc1ceb0",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/da0edead-0a83-45f9-aee4-d6a72dc1ceb0",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:28:27.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "da0edead-0a83-45f9-aee4-d6a72dc1ceb0", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:53Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:28:25Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:a3:ea:6f",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fea3:ea6f", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:a3:ea:6f", "version": 4, "addr":
+        "188.42.163.168", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/d587bd25-052c-4e23-8d35-05649b128835",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/d587bd25-052c-4e23-8d35-05649b128835",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:28:25.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "d587bd25-052c-4e23-8d35-05649b128835", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:50Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-07T10:50:01Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:e1:e8:16",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fee1:e816", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:e1:e8:16", "version": 4, "addr":
+        "188.42.163.167", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/f9b32468-c3d3-424d-b790-78ada6f0c070",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/f9b32468-c3d3-424d-b790-78ada6f0c070",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:28:20.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "f9b32468-c3d3-424d-b790-78ada6f0c070", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:48Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:28:15Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:e1:9d:36",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fee1:9d36", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:e1:9d:36", "version": 4, "addr":
+        "188.42.163.166", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/51055c42-97eb-4ca2-bc7b-00f34203fd2d",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/51055c42-97eb-4ca2-bc7b-00f34203fd2d",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:28:14.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "51055c42-97eb-4ca2-bc7b-00f34203fd2d", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:45Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:28:15Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:0a:da:53",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe0a:da53", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:0a:da:53", "version": 4, "addr":
+        "188.42.163.165", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/5fa0fc9a-0051-4d2d-8389-3cc165df9bcc",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/5fa0fc9a-0051-4d2d-8389-3cc165df9bcc",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:28:14.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "5fa0fc9a-0051-4d2d-8389-3cc165df9bcc", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:43Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:28:06Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:d9:f9:bd",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fed9:f9bd", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:d9:f9:bd", "version": 4, "addr":
+        "188.42.163.164", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/98e5149b-b81e-40ed-b4d6-6256feb50160",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/98e5149b-b81e-40ed-b4d6-6256feb50160",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:28:06.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "98e5149b-b81e-40ed-b4d6-6256feb50160", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:40Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:27:59Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:04:bb:12",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe04:bb12", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:04:bb:12", "version": 4, "addr":
+        "188.42.163.163", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/a37b7452-e1d4-4983-9b6c-f772eb915923",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/a37b7452-e1d4-4983-9b6c-f772eb915923",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:27:58.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "a37b7452-e1d4-4983-9b6c-f772eb915923", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:38Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:27:53Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:4f:e3:f2",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe4f:e3f2", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:4f:e3:f2", "version": 4, "addr":
+        "188.42.163.162", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/e8dee7de-4c6e-4d4b-9ca0-dc2d5e696a8e",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/e8dee7de-4c6e-4d4b-9ca0-dc2d5e696a8e",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:27:53.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "e8dee7de-4c6e-4d4b-9ca0-dc2d5e696a8e", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:35Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:27:47Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:82:a8:b4",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe82:a8b4", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:82:a8:b4", "version": 4, "addr":
+        "188.42.163.190", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/8c18a778-0b96-4c10-bd49-147b6095c734",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/8c18a778-0b96-4c10-bd49-147b6095c734",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:27:46.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "8c18a778-0b96-4c10-bd49-147b6095c734", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:33Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:27:41Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:93:47:e3",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe93:47e3", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:93:47:e3", "version": 4, "addr":
+        "188.42.163.189", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/e69d4746-e245-46af-ab7c-08319ca546c9",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/e69d4746-e245-46af-ab7c-08319ca546c9",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:27:40.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "e69d4746-e245-46af-ab7c-08319ca546c9", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:31Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
         [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
         1, "config_drive": "", "metadata": {}}]}'}
     headers:
-      content-length: ['24475']
+      content-length: ['50100']
       content-type: [application/json]
-      date: ['Tue, 06 Jun 2017 12:22:53 GMT']
-      x-compute-request-id: [req-c6c93ebb-300d-46ce-bef4-fc9f3c12a7da]
+      date: ['Wed, 16 Aug 2017 13:40:17 GMT']
+      x-compute-request-id: [req-a5b653c3-954a-45b9-9f3f-dca22eeb6099]
     status: {code: 200, message: OK}
 - request:
     body: null
     headers:
       Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
       Content-Type: [application/octet-stream]
-      X-Auth-Token: [!!python/unicode d81e808b9f4e44f7988bf0ab359e0b89]
+      User-Agent: [python-glanceclient]
+      pytest-filtered: ['true']
     method: GET
     uri: https://images.nova-lab-1.mgm.servers.com:9292/v2/v1/images/detail?property-obsolete=true&limit=20
   response:
     body: {string: !!python/unicode '{"images": [{"status": "active", "deleted_at":
-        null, "name": "Obsolete Ubuntu 16.04 Xenial (x86_64)", "deleted": false, "container_format":
-        "bare", "created_at": "2017-05-26T15:20:20.000000", "disk_format": "qcow2",
-        "updated_at": "2017-06-01T14:44:06.000000", "min_disk": 0, "protected": false,
-        "id": "1f3a8a94-8330-44cc-9b82-880fc714ffa8", "min_ram": 0, "checksum": "4908b5fda3aaa5b152fbb639f376bfa5",
-        "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": true, "virtual_size":
-        null, "properties": {"display_order": "90", "obsolete": "True"}, "size": 558565888},
-        {"status": "active", "deleted_at": null, "name": "Obsolete Debian 7 Wheezy
-        (x86_64)", "deleted": false, "container_format": "bare", "created_at": "2017-05-26T15:17:25.000000",
-        "disk_format": "qcow2", "updated_at": "2017-06-02T14:01:18.000000", "min_disk":
-        0, "protected": false, "id": "8b52d0b9-a60f-48a5-aef3-d7e13272a506", "min_ram":
-        0, "checksum": "8fe36de19fbb6c33f0342724f619a380", "owner": "61ed529dc6024dc5968acf32b6f4142c",
-        "is_public": true, "virtual_size": null, "properties": {"display_order": "60",
-        "obsolete": "True"}, "size": 318570496}, {"status": "active", "deleted_at":
-        null, "name": "Obsolete Debian 8 Jessie (x86_64)", "deleted": false, "container_format":
-        "bare", "created_at": "2017-05-26T15:16:03.000000", "disk_format": "qcow2",
-        "updated_at": "2017-06-02T13:42:57.000000", "min_disk": 0, "protected": false,
-        "id": "a2b83581-cddf-438a-996d-50ae59ff783c", "min_ram": 0, "checksum": "e60c35136cfe9555416b0cb252db6661",
-        "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": true, "virtual_size":
-        null, "properties": {"display_order": "100", "obsolete": "True"}, "size":
-        399243264}, {"status": "active", "deleted_at": null, "name": "Obsolete Centos
-        7 (x86_64)", "deleted": false, "container_format": "bare", "created_at": "2017-05-26T14:55:29.000000",
-        "disk_format": "qcow2", "updated_at": "2017-06-02T14:06:30.000000", "min_disk":
-        0, "protected": false, "id": "551fbdcb-4c7b-49d7-8d09-4a07a708a397", "min_ram":
-        0, "checksum": "ec440e08804fe81efbb2026e95b64507", "owner": "61ed529dc6024dc5968acf32b6f4142c",
-        "is_public": true, "virtual_size": null, "properties": {"display_order": "80",
-        "obsolete": "True"}, "size": 654966784}, {"status": "active", "deleted_at":
-        null, "name": "Obsolete Ubuntu 14.04 Trusty (x86_64)", "deleted": false, "container_format":
-        "bare", "created_at": "2017-05-26T14:48:48.000000", "disk_format": "qcow2",
-        "updated_at": "2017-06-02T14:09:25.000000", "min_disk": 0, "protected": false,
-        "id": "ab08f460-90e9-4712-beff-c76c61639b2d", "min_ram": 0, "checksum": "086a063dd393a63f500990646629a5c0",
-        "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": true, "virtual_size":
-        null, "properties": {"display_order": "50", "obsolete": "True"}, "size": 446863872},
-        {"status": "active", "deleted_at": null, "name": "Obsolete Centos 6 (x86_64)",
-        "deleted": false, "container_format": "bare", "created_at": "2017-05-26T14:48:13.000000",
-        "disk_format": "qcow2", "updated_at": "2017-06-02T14:16:54.000000", "min_disk":
-        0, "protected": false, "id": "076dd4fd-10fa-49a2-9ccc-64ac32a21c4a", "min_ram":
-        0, "checksum": "1d79a0f86a4489495203a7458b82d8e7", "owner": "61ed529dc6024dc5968acf32b6f4142c",
-        "is_public": true, "virtual_size": null, "properties": {"display_order": "-1",
-        "obsolete": "True"}, "size": 466747392}, {"status": "active", "deleted_at":
-        null, "name": "Obsolete Debian 8 Jessie (x86_64)", "deleted": false, "container_format":
-        "bare", "created_at": "2017-05-15T11:59:08.000000", "disk_format": "qcow2",
-        "updated_at": "2017-05-26T15:16:15.000000", "min_disk": 0, "protected": false,
-        "id": "bce4590e-6433-4748-9c81-50feaa0a3bb0", "min_ram": 0, "checksum": "c4523908afc7b19920200ad5363be09b",
-        "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": true, "virtual_size":
-        null, "properties": {"display_order": "100", "obsolete": "True"}, "size":
-        399144448}, {"status": "active", "deleted_at": null, "name": "Obsolete Debian
-        7 Wheezy (x86_64)", "deleted": false, "container_format": "bare", "created_at":
-        "2017-04-28T14:32:04.000000", "disk_format": "qcow2", "updated_at": "2017-05-26T15:17:35.000000",
-        "min_disk": 0, "protected": false, "id": "c99a32bf-e9fd-4968-b6b7-1de1155830d2",
-        "min_ram": 0, "checksum": "88e80d9ef6f4fc7055afc43e819e8595", "owner": "61ed529dc6024dc5968acf32b6f4142c",
-        "is_public": true, "virtual_size": null, "properties": {"display_order": "60",
-        "obsolete": "True"}, "size": 303824896}, {"status": "active", "deleted_at":
-        null, "name": "Obsolete Ubuntu 16.04 Xenial (x86_64)", "deleted": false, "container_format":
-        "bare", "created_at": "2017-04-28T14:29:45.000000", "disk_format": "qcow2",
-        "updated_at": "2017-05-26T15:20:36.000000", "min_disk": 0, "protected": false,
-        "id": "1b5973f5-502e-4cbe-b482-bede9cfeae94", "min_ram": 0, "checksum": "2b3b6e951a6f0eb3360e4445ee973749",
-        "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": true, "virtual_size":
-        null, "properties": {"display_order": "90", "obsolete": "True"}, "size": 549912576},
-        {"status": "active", "deleted_at": null, "name": "Obsolete Debian 8 Jessie
-        (x86_64)", "deleted": false, "container_format": "bare", "created_at": "2017-04-28T14:21:02.000000",
-        "disk_format": "qcow2", "updated_at": "2017-05-15T11:59:20.000000", "min_disk":
-        0, "protected": false, "id": "14658f9d-f162-470f-a152-1655d0580ebc", "min_ram":
-        0, "checksum": "c4523908afc7b19920200ad5363be09b", "owner": "61ed529dc6024dc5968acf32b6f4142c",
-        "is_public": true, "virtual_size": null, "properties": {"display_order": "100",
-        "obsolete": "True"}, "size": 399144448}, {"status": "active", "deleted_at":
-        null, "name": "Obsolete Ubuntu 14.04 Trusty (x86_64)", "deleted": false, "container_format":
-        "bare", "created_at": "2017-04-28T14:14:46.000000", "disk_format": "qcow2",
-        "updated_at": "2017-05-26T14:49:02.000000", "min_disk": 0, "protected": false,
-        "id": "faa478aa-0ee3-4aa5-8016-2f2623814e19", "min_ram": 0, "checksum": "e0c8fdbea3c32b36153a10877018a7ff",
-        "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": true, "virtual_size":
-        null, "properties": {"display_order": "50", "obsolete": "True"}, "size": 453378048},
-        {"status": "active", "deleted_at": null, "name": "Obsolete Centos 6 (x86_64)",
-        "deleted": false, "container_format": "bare", "created_at": "2017-04-28T13:44:29.000000",
-        "disk_format": "qcow2", "updated_at": "2017-05-26T14:48:28.000000", "min_disk":
-        0, "protected": false, "id": "64e6dbcd-15d7-4940-8c4e-4b9135018e98", "min_ram":
-        0, "checksum": "6fd7d65004437e896aa1b67400cea395", "owner": "61ed529dc6024dc5968acf32b6f4142c",
-        "is_public": true, "virtual_size": null, "properties": {"display_order": "-1",
-        "obsolete": "True"}, "size": 464519168}, {"status": "active", "deleted_at":
-        null, "name": "Obsolete Centos 7 (x86_64)", "deleted": false, "container_format":
-        "bare", "created_at": "2017-04-28T13:43:47.000000", "disk_format": "qcow2",
-        "updated_at": "2017-05-26T14:55:50.000000", "min_disk": 0, "protected": false,
-        "id": "e96e25a4-a8f3-4931-b4ee-03fcaf7d0314", "min_ram": 0, "checksum": "8d77549f692da48b4641b701c9241b64",
-        "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": true, "virtual_size":
-        null, "properties": {"display_order": "80", "obsolete": "True"}, "size": 653656064},
-        {"status": "active", "deleted_at": null, "name": "Obsolete Debian 7 Wheezy
-        (x86_64)", "deleted": false, "container_format": "bare", "created_at": "2017-04-27T12:55:20.000000",
-        "disk_format": "qcow2", "updated_at": "2017-04-28T14:32:14.000000", "min_disk":
-        0, "protected": false, "id": "979b15b7-0abe-4ad2-a42d-956d8e2494e3", "min_ram":
-        0, "checksum": "88e80d9ef6f4fc7055afc43e819e8595", "owner": "61ed529dc6024dc5968acf32b6f4142c",
-        "is_public": true, "virtual_size": null, "properties": {"display_order": "7",
-        "obsolete": "True"}, "size": 303824896}, {"status": "active", "deleted_at":
-        null, "name": "Obsolete Ubuntu 16.04 Xenial (x86_64)", "deleted": false, "container_format":
-        "bare", "created_at": "2017-04-27T12:53:04.000000", "disk_format": "qcow2",
-        "updated_at": "2017-04-28T14:30:01.000000", "min_disk": 0, "protected": false,
-        "id": "86814f6f-9e46-470e-a2e9-4a7d5812ab51", "min_ram": 0, "checksum": "2b3b6e951a6f0eb3360e4445ee973749",
-        "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": true, "virtual_size":
-        null, "properties": {"display_order": "2", "obsolete": "True"}, "size": 549912576},
-        {"status": "active", "deleted_at": null, "name": "Obsolete Debian 8 Jessie
-        (x86_64)", "deleted": false, "container_format": "bare", "created_at": "2017-04-27T12:44:52.000000",
-        "disk_format": "qcow2", "updated_at": "2017-04-28T14:21:16.000000", "min_disk":
-        0, "protected": false, "id": "493e3c72-1d2d-4e24-bf22-4bd6db6d17ad", "min_ram":
-        0, "checksum": "c4523908afc7b19920200ad5363be09b", "owner": "61ed529dc6024dc5968acf32b6f4142c",
-        "is_public": true, "virtual_size": null, "properties": {"display_order": "1",
-        "obsolete": "True"}, "size": 399144448}, {"status": "active", "deleted_at":
-        null, "name": "Obsolete Ubuntu 14.04 Trusty (x86_64)", "deleted": false, "container_format":
-        "bare", "created_at": "2017-04-27T12:42:21.000000", "disk_format": "qcow2",
-        "updated_at": "2017-04-28T14:14:59.000000", "min_disk": 0, "protected": false,
-        "id": "8febd1e4-3d80-4a2a-b1e7-0b8ef575557b", "min_ram": 0, "checksum": "e0c8fdbea3c32b36153a10877018a7ff",
-        "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": true, "virtual_size":
-        null, "properties": {"display_order": "3", "obsolete": "True"}, "size": 453378048},
-        {"status": "active", "deleted_at": null, "name": "Obsolete Centos 6 (x86_64)",
-        "deleted": false, "container_format": "bare", "created_at": "2017-04-27T12:21:34.000000",
-        "disk_format": "qcow2", "updated_at": "2017-04-28T13:44:42.000000", "min_disk":
-        0, "protected": false, "id": "884d7286-19bb-4be0-b451-b96bf0fd578d", "min_ram":
-        0, "checksum": "6fd7d65004437e896aa1b67400cea395", "owner": "61ed529dc6024dc5968acf32b6f4142c",
-        "is_public": true, "virtual_size": null, "properties": {"display_order": "7",
-        "obsolete": "True"}, "size": 464519168}, {"status": "active", "deleted_at":
-        null, "name": "Obsolete Centos 7 (x86_64)", "deleted": false, "container_format":
-        "bare", "created_at": "2017-04-27T12:20:54.000000", "disk_format": "qcow2",
-        "updated_at": "2017-04-28T13:44:07.000000", "min_disk": 0, "protected": false,
-        "id": "33f0fd30-bd5d-428f-b220-ba42c47c5005", "min_ram": 0, "checksum": "8d77549f692da48b4641b701c9241b64",
-        "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": true, "virtual_size":
-        null, "properties": {"display_order": "4", "obsolete": "True"}, "size": 653656064},
-        {"status": "active", "deleted_at": null, "name": "Obsolete Ubuntu 16.04 Xenial
-        (x86_64)", "deleted": false, "container_format": "bare", "created_at": "2017-04-26T15:09:16.000000",
-        "disk_format": "qcow2", "updated_at": "2017-04-27T12:53:21.000000", "min_disk":
-        0, "protected": false, "id": "641c5a8f-3b79-42a6-8580-3466f976fe64", "min_ram":
-        0, "checksum": "49b06a2e219dd791e382e2c5a261257c", "owner": "61ed529dc6024dc5968acf32b6f4142c",
-        "is_public": true, "virtual_size": null, "properties": {"display_order": "2",
-        "obsolete": "True"}, "size": 545570816}]}'}
+        null, "name": "Obsolete Empty image", "deleted": false, "container_format":
+        "bare", "created_at": "2017-08-16T12:47:21.000000", "disk_format": "qcow2",
+        "updated_at": "2017-08-16T12:47:25.000000", "min_disk": 0, "protected": false,
+        "id": "7b055f53-3221-43b3-a047-9ad7ddebbb5f", "min_ram": 0, "checksum": "d8e8fca2dc0f896fd7cb4cb0031ba249",
+        "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": false, "virtual_size":
+        null, "properties": {"obsolete": "True"}, "size": 5}, {"status": "active",
+        "deleted_at": null, "name": "Obsolete Empty image", "deleted": false, "container_format":
+        "bare", "created_at": "2017-08-16T12:47:19.000000", "disk_format": "qcow2",
+        "updated_at": "2017-08-16T12:47:23.000000", "min_disk": 0, "protected": false,
+        "id": "0494029f-4fcb-4c69-8710-28778981fa4c", "min_ram": 0, "checksum": "d8e8fca2dc0f896fd7cb4cb0031ba249",
+        "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": false, "virtual_size":
+        null, "properties": {"obsolete": "True"}, "size": 5}, {"status": "active",
+        "deleted_at": null, "name": "Obsolete Empty image", "deleted": false, "container_format":
+        "bare", "created_at": "2017-08-16T12:16:38.000000", "disk_format": "raw",
+        "updated_at": "2017-08-16T12:47:20.000000", "min_disk": 0, "protected": false,
+        "id": "45d69b26-6c4b-48de-adc5-0a83183e01dd", "min_ram": 0, "checksum": "d8e8fca2dc0f896fd7cb4cb0031ba249",
+        "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": false, "virtual_size":
+        null, "properties": {"obsolete": "True"}, "size": 5}]}'}
     headers:
-      content-length: ['11034']
+      content-length: ['1537']
       content-type: [application/json; charset=UTF-8]
-      date: ['Tue, 06 Jun 2017 12:22:54 GMT']
-      x-openstack-request-id: [req-a612ba60-2864-4f2f-92b6-5246f07e9da7]
+      date: ['Wed, 16 Aug 2017 13:40:18 GMT']
+      x-openstack-request-id: [req-25ec27ca-3576-4722-8c2e-acabc79cea00]
     status: {code: 200, message: OK}
 - request:
     body: null
     headers:
       Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.12.4]
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://auth.nova-lab-1.mgm.servers.com:5000/v2.0
+  response:
+    body: {string: !!python/unicode '{"version": {"status": "stable", "updated": "2014-04-17T00:00:00Z",
+        "media-types": [{"base": "application/json", "type": "application/vnd.openstack.identity-v2.0+json"}],
+        "id": "v2.0", "links": [{"href": "https://auth.nova-lab-1.mgm.servers.com:5000/v2.0/",
+        "rel": "self"}, {"href": "http://docs.openstack.org/", "type": "text/html",
+        "rel": "describedby"}]}}'}
+    headers:
+      content-length: ['358']
+      content-type: [application/json]
+      date: ['Wed, 16 Aug 2017 13:40:19 GMT']
+      vary: [X-Auth-Token]
+      x-distribution: [Ubuntu]
+      x-openstack-request-id: [req-9e645701-74d9-466d-bf68-da337c9ca1b9]
+    status: {code: 200, message: OK}
+- request:
+    body: !!python/unicode '{"auth": "{\"tenantName\": \"pyvcr\", \"passwordCredentials\":
+      {\"username\": \"username\", \"password\": \"password\"}}"}'
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['120']
+      Content-Type: [application/json]
+      User-Agent: [dibctl keystoneauth1/2.20.0 python-requests/2.12.4 CPython/2.7.13]
+      pytest-filtered: ['true']
+    method: POST
+    uri: https://auth.nova-lab-1.mgm.servers.com:5000/v2.0/tokens
+  response:
+    body: {string: !!python/unicode '{"access": {"token": {"issued_at": "2017-08-16T13:40:19.000000Z",
+        "expires": "2038-01-15T16:17:18Z", "id": "consealed id", "tenant": {"id":
+        "61ed529dc6024dc5968acf32b6f4142c", "enabled": true, "description": "", "name":
+        "consealed name"}, "audit_ids": ["s0q87nUDQUinqsDdYYHOeg"]}, "serviceCatalog":
+        [{"endpoints": [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28774/v2/61ed529dc6024dc5968acf32b6f4142c",
+        "region": "lab-1", "internalURL": "http://nova-api.p.nova-lab-1.servers.com:28774/v2/61ed529dc6024dc5968acf32b6f4142c",
+        "id": "2e61ac6cc99345a1b152779600918c2e", "publicURL": "https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c"}],
+        "endpoints_links": [], "type": "compute", "name": "nova"}, {"endpoints": [{"adminURL":
+        "http://neutron-server.p.nova-lab-1.servers.com:29696", "region": "lab-1",
+        "internalURL": "http://neutron-server.p.nova-lab-1.servers.com:29696", "id":
+        "6ec649b0f7cc4554a041defadf552fc1", "publicURL": "https://network.nova-lab-1.mgm.servers.com:9696"}],
+        "endpoints_links": [], "type": "network", "name": "neutron"}, {"endpoints":
+        [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/61ed529dc6024dc5968acf32b6f4142c",
+        "region": "lab-1", "internalURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/61ed529dc6024dc5968acf32b6f4142c",
+        "id": "09d47ca5543b41849da1a7690acd5844", "publicURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v2/61ed529dc6024dc5968acf32b6f4142c"}],
+        "endpoints_links": [], "type": "volumev2", "name": "cinderv2"}, {"endpoints":
+        [{"adminURL": "http://glance-api.p.nova-lab-1.servers.com:29292/v2", "region":
+        "lab-1", "internalURL": "http://glance-api.p.nova-lab-1.servers.com:29292/v2",
+        "id": "2982f5e7320040acb9fe1dac441a8551", "publicURL": "https://images.nova-lab-1.mgm.servers.com:9292/v2"}],
+        "endpoints_links": [], "type": "image", "name": "glance"}, {"endpoints": [{"adminURL":
+        "http://ceilometer-api.p.nova-lab-1.servers.com:28777", "region": "lab-1",
+        "internalURL": "http://ceilometer-api.p.nova-lab-1.servers.com:28777", "id":
+        "1cc0a58b1bab45509ec3991bf7111a3f", "publicURL": "https://metering.nova-lab-1.mgm.servers.com:8777"}],
+        "endpoints_links": [], "type": "metering", "name": "ceilometer"}, {"endpoints":
+        [{"adminURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v1/61ed529dc6024dc5968acf32b6f4142c",
+        "region": "lab-1", "internalURL": "http://nova-api.p.nova-lab-1.servers.com:28776/v1/61ed529dc6024dc5968acf32b6f4142c",
+        "id": "6ae4b74962fc4b5abb4fed44dbf534a5", "publicURL": "https://volume.nova-lab-1.mgm.servers.com:8776/v1/61ed529dc6024dc5968acf32b6f4142c"}],
+        "endpoints_links": [], "type": "volume", "name": "cinder"}, {"endpoints":
+        [{"adminURL": "http://keystone.p.nova-lab-1.servers.com:35357/v2.0", "region":
+        "lab-1", "internalURL": "http://keystone.p.nova-lab-1.servers.com:5001/v2.0",
+        "id": "19226f12c0bb4438a6032b9c55c1a8e9", "publicURL": "https://auth.nova-lab-1.mgm.servers.com:5000/v2.0"}],
+        "endpoints_links": [], "type": "identity", "name": "keystone"}], "user": {"username":
+        "consealed username", "roles_links": [], "id": "155f21999dd34a679797a5eb86b0ee20",
+        "roles": [{"name": "images"}, {"name": "_member_"}], "name": "consealed name"},
+        "metadata": {"is_admin": 0, "roles": ["d80c47ca65a6448fb92b0b948178aa88",
+        "9fe2ff9ee4384b1894a90878d3e92bab"]}}}'}
+    headers:
+      content-length: ['3326']
+      content-type: [application/json]
+      date: ['Wed, 16 Aug 2017 13:40:19 GMT']
+      vary: [X-Auth-Token]
+      x-distribution: [Ubuntu]
+      x-openstack-request-id: [req-b88a7ead-e36f-482c-9c4c-35491e1076ef]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-novaclient]
+      pytest-filtered: ['true']
+    method: GET
+    uri: https://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/detail?all_tenants=1
+  response:
+    body: {string: !!python/unicode '{"servers": [{"status": "SHUTOFF", "updated":
+        "2017-08-02T10:51:02Z", "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46",
+        "addresses": {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:13:4b:46",
+        "version": 4, "addr": "188.42.163.197", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/648437c7-29d1-4e50-bb82-a795997217cd",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/648437c7-29d1-4e50-bb82-a795997217cd",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:30:26.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "648437c7-29d1-4e50-bb82-a795997217cd", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:59Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:cd:39:f9",
+        "version": 4, "addr": "188.42.163.195", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/b3d11e44-2ac4-4df9-a575-32c52718be7a",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/b3d11e44-2ac4-4df9-a575-32c52718be7a",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:30:24.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "b3d11e44-2ac4-4df9-a575-32c52718be7a", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:56Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:b5:c9:d4",
+        "version": 4, "addr": "188.42.163.194", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/0d1ab3e4-c36b-4c38-9a5a-69565b696359",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/0d1ab3e4-c36b-4c38-9a5a-69565b696359",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:30:24.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "0d1ab3e4-c36b-4c38-9a5a-69565b696359", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:54Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:b3:79:b7",
+        "version": 4, "addr": "188.42.163.222", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/afd2bbf7-0ad2-4ef4-90fe-9756554e2ac2",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/afd2bbf7-0ad2-4ef4-90fe-9756554e2ac2",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:30:20.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "afd2bbf7-0ad2-4ef4-90fe-9756554e2ac2", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:52Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:2d:05:db",
+        "version": 4, "addr": "188.42.163.221", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/866e4133-947d-496b-9090-7728b3846409",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/866e4133-947d-496b-9090-7728b3846409",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:30:18.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "866e4133-947d-496b-9090-7728b3846409", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:49Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:1e:fa:65",
+        "version": 4, "addr": "188.42.163.220", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/6ae49f3c-4606-4044-955e-e07a5ffca868",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/6ae49f3c-4606-4044-955e-e07a5ffca868",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:30:13.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "6ae49f3c-4606-4044-955e-e07a5ffca868", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:47Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:c1:81:ff",
+        "version": 4, "addr": "188.42.163.219", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/ae7b8a98-11b4-4886-a7ba-0c81197dbd2b",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/ae7b8a98-11b4-4886-a7ba-0c81197dbd2b",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:30:05.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "ae7b8a98-11b4-4886-a7ba-0c81197dbd2b", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:44Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:26:dc:f5",
+        "version": 4, "addr": "188.42.163.218", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/7eb32a83-56ee-4dc3-ae3c-d1cfdc9f6e06",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/7eb32a83-56ee-4dc3-ae3c-d1cfdc9f6e06",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:30:01.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "7eb32a83-56ee-4dc3-ae3c-d1cfdc9f6e06", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:42Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:cc:f4:9b",
+        "version": 4, "addr": "188.42.163.217", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/284bf239-ae70-4ccf-91ff-a82db825182e",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/284bf239-ae70-4ccf-91ff-a82db825182e",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:30:01.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "284bf239-ae70-4ccf-91ff-a82db825182e", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:39Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:31:b6:8f",
+        "version": 4, "addr": "188.42.163.215", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/618ca9b9-b7e1-4cd2-b087-8fbdc756bcb8",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/618ca9b9-b7e1-4cd2-b087-8fbdc756bcb8",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:29:56.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "618ca9b9-b7e1-4cd2-b087-8fbdc756bcb8", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:37Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:14:79:02",
+        "version": 4, "addr": "188.42.163.216", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/7117f89b-73e1-4c3a-8ae0-66983b624dec",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/7117f89b-73e1-4c3a-8ae0-66983b624dec",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:29:57.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "7117f89b-73e1-4c3a-8ae0-66983b624dec", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:35Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:8c:dd:2c",
+        "version": 4, "addr": "188.42.163.214", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/1756dd8b-99fa-4519-9329-71a6bef99fe4",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/1756dd8b-99fa-4519-9329-71a6bef99fe4",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:29:47.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "1756dd8b-99fa-4519-9329-71a6bef99fe4", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:32Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:90:04:72",
+        "version": 4, "addr": "188.42.163.200", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/b5928a28-699e-4b56-a4af-3a17e283e096",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/b5928a28-699e-4b56-a4af-3a17e283e096",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:29:45.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "b5928a28-699e-4b56-a4af-3a17e283e096", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:30Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:5e:76:c8",
+        "version": 4, "addr": "188.42.163.199", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/46c0d5d9-415e-4fc1-b5d4-50a5d7872f37",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/46c0d5d9-415e-4fc1-b5d4-50a5d7872f37",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:29:42.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "46c0d5d9-415e-4fc1-b5d4-50a5d7872f37", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:28Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-02T10:51:02Z",
+        "hostId": "2e7e1bbe1771c8d8b4d322a5d71514dc0f456a963309be16a91b6f46", "addresses":
+        {"internet_188.42.163.192/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:23:3a:9e",
+        "version": 4, "addr": "188.42.163.198", "OS-EXT-IPS:type": "fixed"}]}, "links":
+        [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/5994e919-f04e-4006-8fa2-6553dbad9ad1",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/5994e919-f04e-4006-8fa2-6553dbad9ad1",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:29:37.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "5994e919-f04e-4006-8fa2-6553dbad9ad1", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute1", "created": "2017-07-21T07:29:25Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-08-03T15:37:31Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:7f:40:ec",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe7f:40ec", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:7f:40:ec", "version": 4, "addr":
+        "188.42.163.174", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/89a5293d-b48f-4857-9ca4-755c659cdf84",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/89a5293d-b48f-4857-9ca4-755c659cdf84",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:28:44.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "89a5293d-b48f-4857-9ca4-755c659cdf84", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:28:05Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:28:43Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:d8:f8:cd",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fed8:f8cd", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:d8:f8:cd", "version": 4, "addr":
+        "188.42.163.173", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/001b62b1-6fa4-45ae-ad82-0ccedfcfb298",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/001b62b1-6fa4-45ae-ad82-0ccedfcfb298",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:28:42.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "001b62b1-6fa4-45ae-ad82-0ccedfcfb298", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:28:03Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:28:43Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:66:88:3d",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe66:883d", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:66:88:3d", "version": 4, "addr":
+        "188.42.163.172", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/7772d37f-2b0a-44fb-a35d-ae83f94f2e22",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/7772d37f-2b0a-44fb-a35d-ae83f94f2e22",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:28:42.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "7772d37f-2b0a-44fb-a35d-ae83f94f2e22", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:28:00Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:28:38Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:db:c2:24",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fedb:c224", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:db:c2:24", "version": 4, "addr":
+        "188.42.163.171", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/c2bf30fe-27ea-46f2-94ca-f1d5a58ac406",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/c2bf30fe-27ea-46f2-94ca-f1d5a58ac406",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:28:38.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "c2bf30fe-27ea-46f2-94ca-f1d5a58ac406", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:57Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:28:30Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:f1:c7:c3",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fef1:c7c3", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:f1:c7:c3", "version": 4, "addr":
+        "188.42.163.170", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/60e1f197-3070-451a-9f0c-4481522a9bac",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/60e1f197-3070-451a-9f0c-4481522a9bac",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:28:29.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "60e1f197-3070-451a-9f0c-4481522a9bac", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:55Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:28:28Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:27:5c:c0",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe27:5cc0", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:27:5c:c0", "version": 4, "addr":
+        "188.42.163.169", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/da0edead-0a83-45f9-aee4-d6a72dc1ceb0",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/da0edead-0a83-45f9-aee4-d6a72dc1ceb0",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:28:27.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "da0edead-0a83-45f9-aee4-d6a72dc1ceb0", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:53Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:28:25Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:a3:ea:6f",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fea3:ea6f", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:a3:ea:6f", "version": 4, "addr":
+        "188.42.163.168", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/d587bd25-052c-4e23-8d35-05649b128835",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/d587bd25-052c-4e23-8d35-05649b128835",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:28:25.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "d587bd25-052c-4e23-8d35-05649b128835", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:50Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "SHUTOFF", "updated": "2017-08-07T10:50:01Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:e1:e8:16",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fee1:e816", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:e1:e8:16", "version": 4, "addr":
+        "188.42.163.167", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/f9b32468-c3d3-424d-b790-78ada6f0c070",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/f9b32468-c3d3-424d-b790-78ada6f0c070",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "stopped", "OS-SRV-USG:launched_at": "2017-07-21T07:28:20.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "f9b32468-c3d3-424d-b790-78ada6f0c070", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:48Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "OS-EXT-STS:power_state": 0, "config_drive":
+        "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:28:15Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:e1:9d:36",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fee1:9d36", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:e1:9d:36", "version": 4, "addr":
+        "188.42.163.166", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/51055c42-97eb-4ca2-bc7b-00f34203fd2d",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/51055c42-97eb-4ca2-bc7b-00f34203fd2d",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:28:14.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "51055c42-97eb-4ca2-bc7b-00f34203fd2d", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:45Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:28:15Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:0a:da:53",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe0a:da53", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:0a:da:53", "version": 4, "addr":
+        "188.42.163.165", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/5fa0fc9a-0051-4d2d-8389-3cc165df9bcc",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/5fa0fc9a-0051-4d2d-8389-3cc165df9bcc",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:28:14.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "5fa0fc9a-0051-4d2d-8389-3cc165df9bcc", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:43Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:28:06Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:d9:f9:bd",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fed9:f9bd", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:d9:f9:bd", "version": 4, "addr":
+        "188.42.163.164", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/98e5149b-b81e-40ed-b4d6-6256feb50160",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/98e5149b-b81e-40ed-b4d6-6256feb50160",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:28:06.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "98e5149b-b81e-40ed-b4d6-6256feb50160", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:40Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:27:59Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:04:bb:12",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe04:bb12", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:04:bb:12", "version": 4, "addr":
+        "188.42.163.163", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/a37b7452-e1d4-4983-9b6c-f772eb915923",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/a37b7452-e1d4-4983-9b6c-f772eb915923",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:27:58.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "a37b7452-e1d4-4983-9b6c-f772eb915923", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:38Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:27:53Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:4f:e3:f2",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe4f:e3f2", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:4f:e3:f2", "version": 4, "addr":
+        "188.42.163.162", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/e8dee7de-4c6e-4d4b-9ca0-dc2d5e696a8e",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/e8dee7de-4c6e-4d4b-9ca0-dc2d5e696a8e",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:27:53.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "e8dee7de-4c6e-4d4b-9ca0-dc2d5e696a8e", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:35Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:27:47Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:82:a8:b4",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe82:a8b4", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:82:a8:b4", "version": 4, "addr":
+        "188.42.163.190", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/8c18a778-0b96-4c10-bd49-147b6095c734",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/8c18a778-0b96-4c10-bd49-147b6095c734",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:27:46.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "8c18a778-0b96-4c10-bd49-147b6095c734", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:33Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}, {"status": "ACTIVE", "updated": "2017-07-21T07:27:41Z",
+        "hostId": "78f1e821597c5e973eff7fad788a9a941e53573fb5db187cab364023", "addresses":
+        {"internet_188.42.163.160/27": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:93:47:e3",
+        "version": 6, "addr": "2a00:1178:3:101:f816:3eff:fe93:47e3", "OS-EXT-IPS:type":
+        "fixed"}, {"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:93:47:e3", "version": 4, "addr":
+        "188.42.163.189", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/v2/61ed529dc6024dc5968acf32b6f4142c/servers/e69d4746-e245-46af-ab7c-08319ca546c9",
+        "rel": "self"}, {"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/servers/e69d4746-e245-46af-ab7c-08319ca546c9",
+        "rel": "bookmark"}], "key_name": "dso", "image": {"id": "fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/images/fb929cf5-fac1-4d60-8318-58391f0e8ae9",
+        "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state":
+        "active", "OS-SRV-USG:launched_at": "2017-07-21T07:27:40.000000", "flavor":
+        {"id": "30", "links": [{"href": "http://compute.nova-lab-1.mgm.servers.com:8774/61ed529dc6024dc5968acf32b6f4142c/flavors/30",
+        "rel": "bookmark"}]}, "id": "e69d4746-e245-46af-ab7c-08319ca546c9", "OS-SRV-USG:terminated_at":
+        null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "ef33e7f637a145c38c06eac9019904e9",
+        "name": "for_test_compute2", "created": "2017-07-21T07:27:31Z", "tenant_id":
+        "4e632076f7004f908c8da67345a7592e", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached":
+        [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state":
+        1, "config_drive": "", "metadata": {}}]}'}
+    headers:
+      content-length: ['50100']
+      content-type: [application/json]
+      date: ['Wed, 16 Aug 2017 13:40:20 GMT']
+      x-compute-request-id: [req-08f36bf8-c55c-4ca0-a914-5f6375cc28ca]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
       Content-Type: [application/octet-stream]
-      X-Auth-Token: [!!python/unicode d81e808b9f4e44f7988bf0ab359e0b89]
+      User-Agent: [python-glanceclient]
+      pytest-filtered: ['true']
     method: GET
-    uri: https://images.nova-lab-1.mgm.servers.com:9292/v2/v1/images/detail?property-obsolete=true&marker=641c5a8f-3b79-42a6-8580-3466f976fe64&limit=20
+    uri: https://images.nova-lab-1.mgm.servers.com:9292/v2/v1/images/detail?property-obsolete=true&limit=20
   response:
     body: {string: !!python/unicode '{"images": [{"status": "active", "deleted_at":
-        null, "name": "Obsolete Ubuntu 14.04 Trusty (x86_64)", "deleted": false, "container_format":
-        "bare", "created_at": "2017-04-26T15:00:13.000000", "disk_format": "qcow2",
-        "updated_at": "2017-04-27T12:42:37.000000", "min_disk": 0, "protected": false,
-        "id": "c5a9491c-e875-45c3-9cab-b213d79db5ab", "min_ram": 0, "checksum": "e9480caea9da85bf96da7a88807d2cef",
-        "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": true, "virtual_size":
-        null, "properties": {"display_order": "3", "obsolete": "True"}, "size": 446666752},
-        {"status": "active", "deleted_at": null, "name": "Obsolete Centos 7 (x86_64)",
-        "deleted": false, "container_format": "bare", "created_at": "2017-04-26T14:44:21.000000",
-        "disk_format": "qcow2", "updated_at": "2017-04-27T12:21:14.000000", "min_disk":
-        0, "protected": false, "id": "0ed23e78-706f-45bb-a7d2-0543f20ac841", "min_ram":
-        0, "checksum": "afc52975b47dd767268db83bb03203c2", "owner": "61ed529dc6024dc5968acf32b6f4142c",
-        "is_public": true, "virtual_size": null, "properties": {"display_order": "4",
-        "obsolete": "True"}, "size": 648675328}, {"status": "active", "deleted_at":
-        null, "name": "Obsolete Debian Wheezy 7 (x86_64)", "deleted": false, "container_format":
-        "bare", "created_at": "2017-04-20T10:53:28.000000", "disk_format": "qcow2",
-        "updated_at": "2017-04-26T15:10:40.000000", "min_disk": 0, "protected": false,
-        "id": "b87d519b-2b29-4296-9a94-de96d07e881e", "min_ram": 0, "checksum": "a0a020d399e8961e22da53ae49130383",
-        "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": true, "virtual_size":
-        null, "properties": {"display_order": "7", "obsolete": "True"}, "size": 309002240},
-        {"status": "active", "deleted_at": null, "name": "Obsolete Ubuntu 16.04 Xenial
-        (x86_64)", "deleted": false, "container_format": "bare", "created_at": "2017-04-20T10:51:25.000000",
-        "disk_format": "qcow2", "updated_at": "2017-04-26T15:09:34.000000", "min_disk":
-        0, "protected": false, "id": "52addeaa-d0ec-448c-bf41-d5fa10450522", "min_ram":
-        0, "checksum": "49b06a2e219dd791e382e2c5a261257c", "owner": "61ed529dc6024dc5968acf32b6f4142c",
-        "is_public": true, "virtual_size": null, "properties": {"display_order": "2",
-        "obsolete": "True"}, "size": 545570816}, {"status": "active", "deleted_at":
-        null, "name": "Obsolete Centos 7 (x86_64)", "deleted": false, "container_format":
-        "bare", "created_at": "2017-04-20T10:41:35.000000", "disk_format": "qcow2",
-        "updated_at": "2017-04-26T14:44:40.000000", "min_disk": 0, "protected": false,
-        "id": "baa2f806-1fd9-4782-8d64-65df777026af", "min_ram": 0, "checksum": "6fb003fdf1463b03ce941b5461b0c47d",
-        "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": true, "virtual_size":
-        null, "properties": {"display_order": "4", "obsolete": "True"}, "size": 668139520},
-        {"status": "active", "deleted_at": null, "name": "Obsolete Debian Jessie 8
-        (x86_64)", "deleted": false, "container_format": "bare", "created_at": "2017-04-20T10:40:11.000000",
-        "disk_format": "qcow2", "updated_at": "2017-04-26T15:02:38.000000", "min_disk":
-        0, "protected": false, "id": "a16a32f5-071b-493f-a86c-2bfddfb3828c", "min_ram":
-        0, "checksum": "ef25eca396e5420a2a4e1801c70eec2e", "owner": "61ed529dc6024dc5968acf32b6f4142c",
-        "is_public": true, "virtual_size": null, "properties": {"display_order": "1",
-        "obsolete": "True"}, "size": 398893056}, {"status": "active", "deleted_at":
-        null, "name": "Obsolete Ubuntu 14.04 Trusty (x86_64)", "deleted": false, "container_format":
-        "bare", "created_at": "2017-04-20T10:37:09.000000", "disk_format": "qcow2",
-        "updated_at": "2017-04-26T15:00:27.000000", "min_disk": 0, "protected": false,
-        "id": "24dc36eb-85f4-4a8b-b63f-a611541340cc", "min_ram": 0, "checksum": "e9480caea9da85bf96da7a88807d2cef",
-        "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": true, "virtual_size":
-        null, "properties": {"display_order": "3", "obsolete": "True"}, "size": 446666752}]}'}
+        null, "name": "Obsolete Empty image", "deleted": false, "container_format":
+        "bare", "created_at": "2017-08-16T12:47:21.000000", "disk_format": "qcow2",
+        "updated_at": "2017-08-16T12:47:25.000000", "min_disk": 0, "protected": false,
+        "id": "7b055f53-3221-43b3-a047-9ad7ddebbb5f", "min_ram": 0, "checksum": "d8e8fca2dc0f896fd7cb4cb0031ba249",
+        "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": false, "virtual_size":
+        null, "properties": {"obsolete": "True"}, "size": 5}, {"status": "active",
+        "deleted_at": null, "name": "Obsolete Empty image", "deleted": false, "container_format":
+        "bare", "created_at": "2017-08-16T12:47:19.000000", "disk_format": "qcow2",
+        "updated_at": "2017-08-16T12:47:23.000000", "min_disk": 0, "protected": false,
+        "id": "0494029f-4fcb-4c69-8710-28778981fa4c", "min_ram": 0, "checksum": "d8e8fca2dc0f896fd7cb4cb0031ba249",
+        "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": false, "virtual_size":
+        null, "properties": {"obsolete": "True"}, "size": 5}, {"status": "active",
+        "deleted_at": null, "name": "Obsolete Empty image", "deleted": false, "container_format":
+        "bare", "created_at": "2017-08-16T12:16:38.000000", "disk_format": "raw",
+        "updated_at": "2017-08-16T12:47:20.000000", "min_disk": 0, "protected": false,
+        "id": "45d69b26-6c4b-48de-adc5-0a83183e01dd", "min_ram": 0, "checksum": "d8e8fca2dc0f896fd7cb4cb0031ba249",
+        "owner": "61ed529dc6024dc5968acf32b6f4142c", "is_public": false, "virtual_size":
+        null, "properties": {"obsolete": "True"}, "size": 5}]}'}
     headers:
-      content-length: ['3867']
+      content-length: ['1537']
       content-type: [application/json; charset=UTF-8]
-      date: ['Tue, 06 Jun 2017 12:22:54 GMT']
-      x-openstack-request-id: [req-a88d7103-590b-48ea-afc9-a1f45e84748a]
+      date: ['Wed, 16 Aug 2017 13:40:21 GMT']
+      x-openstack-request-id: [req-51023867-4b2c-4f9f-973b-c0a40d970b9d]
     status: {code: 200, message: OK}
 version: 1

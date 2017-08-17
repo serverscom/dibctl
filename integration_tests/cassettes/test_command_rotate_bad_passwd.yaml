@@ -3,7 +3,10 @@ interactions:
     body: null
     headers:
       Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
+      User-Agent: [python-requests/2.12.4]
+      pytest-filtered: ['true']
     method: GET
     uri: https://auth.servers.nl01.cloud.servers.com:5000/v2.0
   response:
@@ -15,18 +18,22 @@ interactions:
     headers:
       content-length: ['362']
       content-type: [application/json]
-      date: ['Tue, 06 Jun 2017 11:42:26 GMT']
+      date: ['Wed, 16 Aug 2017 12:41:22 GMT']
       vary: [X-Auth-Token]
       x-distribution: [Ubuntu]
-      x-openstack-request-id: [req-dda39c6c-03ff-4424-ba1e-a8f57aa250eb]
+      x-openstack-request-id: [req-2a626ad1-e029-48c3-ba3c-f0619e833f1c]
     status: {code: 200, message: OK}
 - request:
-    body: !!python/unicode '{"auth": {"tenantName": "bad_tenant", "passwordCredentials":
-      {"username": "username", "password": "password"}}}'
+    body: !!python/unicode '{"auth": "{\"tenantName\": \"pyvcr\", \"passwordCredentials\":
+      {\"username\": \"username\", \"password\": \"password\"}}"}'
     headers:
       Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
+      Content-Length: ['119']
       Content-Type: [application/json]
+      User-Agent: [dibctl keystoneauth1/2.20.0 python-requests/2.12.4 CPython/2.7.13]
+      pytest-filtered: ['true']
     method: POST
     uri: https://auth.servers.nl01.cloud.servers.com:5000/v2.0/tokens
   response:
@@ -35,10 +42,10 @@ interactions:
     headers:
       content-length: ['114']
       content-type: [application/json]
-      date: ['Tue, 06 Jun 2017 11:42:27 GMT']
+      date: ['Wed, 16 Aug 2017 12:41:23 GMT']
       vary: [X-Auth-Token]
       www-authenticate: ['Keystone uri="https://auth.servers.nl01.cloud.servers.com:5000"']
       x-distribution: [Ubuntu]
-      x-openstack-request-id: [req-10031186-b198-4c92-a81e-66de04e0e515]
+      x-openstack-request-id: [req-0649076a-fc56-4ec6-ad6d-480c5d98bf71]
     status: {code: 401, message: Unauthorized}
 version: 1

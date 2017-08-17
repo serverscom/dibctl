@@ -182,6 +182,9 @@ def test_upload_image_normal(prep_os):
         sentinel.filename,
         disk_format="qcow2",
         container_format="bare",
+        min_disk=0,
+        min_ram=0,
+        protected=False,
         meta=sentinel.meta
     )
 

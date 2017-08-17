@@ -1,32 +1,65 @@
 #!/usr/bin/python
-import sys
+'''
+    This script cleanup credentials:
+    - replaces passwords with word 'password'
+    - replaces usernames with name 'username'
+
+    It cleanup test.yaml and upload.yaml files.
+
+    Non cleaned files (originals) are moved to .secret:
+    - test.yaml -> test.yaml.secret
+    - upload.yaml -> upload.yaml.secret
+
+    Cleared copies stored in dibctl:
+    - dibctl/test.yaml
+    - dibctl/upload.yaml
+
+    Addtitionally it checks all cassetess for found passwords
+    and usernames in all cassettes. They shouldn't be there.
+'''
 import yaml
 import os
 
-in_name = sys.argv[1]
-out_name = sys.argv[2]
-cassette = sys.argv[3]
+CFG_LIST = ('test.yaml', 'upload.yaml')
 pw_replacements = []
 un_replacements = []
+CASSETTES_LOCATION = 'cassettes'
+PUBLIC_CONFIG_LOCATION = 'dibctl'
 
-obj = yaml.load(file(in_name, 'r'))
+for cfgname in CFG_LIST:
 
-for e in obj:
-    if 'username' in obj[e]['keystone']:
-        un_replacements.append(obj[e]['keystone']['username'])
-        obj[e]['keystone']['username'] = "username"
-    
-    if 'password' in obj[e]['keystone']:
-        pw_replacements.append(obj[e]['keystone']['password'])
-        obj[e]['keystone']['password'] = "password"
+    obj = yaml.load(open(cfgname, 'r'))
 
-file(out_name, 'w').write(yaml.dump(obj))
+    for e in obj:
+        if 'username' in obj[e]['keystone']:
+            un_replacements.append(obj[e]['keystone']['username'])
+            obj[e]['keystone']['username'] = "username"
 
-path = cassette
-rd = file(path, 'r').read()
-for item in pw_replacements:
-    new_data = rd.replace(item, 'password', 99999)
-for item in un_replacements:
-    new_data = new_data.replace(item, 'username', 99999)
-os.rename(path, path + '.old')
-file(path, 'w').write(new_data)
+        if 'password' in obj[e]['keystone']:
+            pw_replacements.append(obj[e]['keystone']['password'])
+            obj[e]['keystone']['password'] = "password"
+        if 'tenant_name' in obj[e]['keystone']:
+            obj[e]['keystone']['tenant_name'] = "pyvcr"
+    open(os.path.join(PUBLIC_CONFIG_LOCATION, cfgname), 'w').write(
+        yaml.dump(obj)
+    )
+    os.rename(cfgname, cfgname + '.secret')
+print("Cleared passwords: %s\nCleared usernames: %s" % (
+    pw_replacements,
+    un_replacements
+))
+
+
+def check_location(location, pw_list):
+    for f in os.listdir(location):
+        path = os.path.join(location, f)
+        cassette = open(path, 'r').read()
+        for item in pw_list:
+            if cassette.find(item) != -1:
+                print("CRITICAL!!!! Found password %s in %s" % (
+                    item, path
+                ))
+
+
+check_location(CASSETTES_LOCATION, pw_replacements)
+check_location(PUBLIC_CONFIG_LOCATION, pw_replacements)
