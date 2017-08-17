@@ -13,7 +13,27 @@ env_with_format_override:
     flavor: SSD.30
     nics:
     - {net_id: c7ccdf1c-e6c3-4257-8b2e-740748c14564}
+env_with_sizes:
+  glance: {min_disk: 20, min_ram: 2, protected: false}
+  keystone: {auth_url: 'https://auth.nova-lab-1.mgm.servers.com:5000/v2.0', password: password,
+    tenant_name: pyvcr, username: username}
+  nova:
+    flavor: SSD.50
+    main_nic_regexp: internet
+    nics:
+    - {net_id: 89e03f44-d874-4c79-bbb5-30d5c576fef3}
+  ssl_insecure: true
 lab1:
+  keystone: {auth_url: 'https://auth.nova-lab-1.mgm.servers.com:5000/v2.0', password: password,
+    tenant_name: pyvcr, username: username}
+  nova:
+    flavor: SSD.30
+    main_nic_regexp: internet
+    nics:
+    - {net_id: 89e03f44-d874-4c79-bbb5-30d5c576fef3}
+  ssl_insecure: true
+lab1-size-too-big:
+  glance: {min_disk: 50, min_ram: 16768}
   keystone: {auth_url: 'https://auth.nova-lab-1.mgm.servers.com:5000/v2.0', password: password,
     tenant_name: pyvcr, username: username}
   nova:

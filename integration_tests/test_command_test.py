@@ -99,6 +99,40 @@ def test_test_existing_image_success(quick_commands, happy_vcr, capfd):
         assert 'Clearing done' in out
 
 
+def test_test_image_with_sizes(quick_commands, happy_vcr, capfd):
+    '''
+        This test check if we can do test workflow with image
+        with sizes (min_disk/min_ram)
+
+            Please note: it does not upload real image (it's too slow to do),
+            Mocked functions:
+            - check if port is alive
+            - test successfull anyway (simple_success.bash)
+
+            To update this test:
+            - check if network uuids are vaild (in config)
+            - it need normal user priveleges
+    '''
+    def full_read(ignore_self, filename):
+        return open(filename, 'rb', buffering=65536).read()
+    with mock.patch.object(
+        quick_commands.do_tests.prepare_os.osclient.OSClient,
+        '_file_to_upload',
+        full_read
+    ):
+        with happy_vcr('test_test_image_with_sizes.yaml'):
+            assert quick_commands.main([
+                    'test',
+                    'xenial-sizes'
+                ]) == 0
+            out = capfd.readouterr()[0]
+            assert 'All tests passed successfully' in out
+            assert 'Removing instance' in out
+            assert 'Removing ssh key' in out
+            assert 'Removing image' in out
+            assert 'Clearing done' in out
+
+
 # SAD tests
 
 def test_test_imagetest_failed_code_80(quick_commands, happy_vcr, capfd):
@@ -231,3 +265,41 @@ def test_instance_in_error_state_code_70(quick_commands, happy_vcr, capfd):
             assert 'Removing instance' in out
             assert 'Removing ssh key' in out
             assert 'Removing image' in out
+
+
+def test_test_image_with_min_size_more_than_flavor_code_60(
+    quick_commands, happy_vcr, capfd
+):
+    '''
+        This test check behavior if environment has glance section with
+        min_size > flavor allows.
+
+            Please note: it does not upload real image (it's too slow to do),
+            Mocked functions:
+            - check if port is alive
+            - test successfull anyway (simple_success.bash)
+
+            To update this test:
+            - check if network uuids are vaild (in config)
+            - it need normal user priveleges
+    '''
+    def full_read(ignore_self, filename):
+        return open(filename, 'rb', buffering=65536).read()
+    with mock.patch.object(
+        quick_commands.do_tests.prepare_os.osclient.OSClient,
+        '_file_to_upload',
+        full_read
+    ):
+        with happy_vcr(
+            'test_test_image_with_min_size_more_than_flavor_code_60.yaml'
+        ):
+            assert quick_commands.main([
+                    'test',
+                    'xenial-sizes',
+                    '--environment',
+                    'lab1-size-too-big'
+                ]) == 60
+            out = capfd.readouterr()[0]
+            assert 'Removing ssh key' in out
+            assert 'Removing image' in out
+            assert 'Clearing done' in out

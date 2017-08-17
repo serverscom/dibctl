@@ -1,0 +1,3 @@
+example_env:
+  glance:
+    min-ram: 3
