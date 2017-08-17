@@ -376,10 +376,10 @@ class OSClient(object):
             name=name,
             is_public=str(public),
             disk_format=disk_format,
+            container_format=container_format,
             min_disk=min_disk,
             min_ram=min_ram,
             protected=protected,
-            container_format=container_format,
             data=self._file_to_upload(filename),
             properties=meta
         )
