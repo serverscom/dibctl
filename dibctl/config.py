@@ -232,6 +232,9 @@ class Config(object):
                 "Unable to find '%s' in %s" % (label, self.config_file)
             )
 
+    def items(self):
+        return self.config.items()
+
     def __iter__(self):
         return self.config.iteritems()
 
