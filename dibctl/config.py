@@ -116,8 +116,10 @@ SCHEMA_EXTERNAL_COMMAND = {
 
 class Config(object):
 
-    DEFAULT_CONFIG_NAME = None  # should be overrided in subclasses
+    DEFAULT_CONFIG_NAME = None  # should be overriden in subclasses
     CONFIG_SEARCH_PATH = ["./", "./dibctl/", "/etc/dibctl/"]
+    CONF_D_NAME = None   # should be overriden in subclasses
+    D_SUFFIX = '.yaml'
 
     SCHEMA = {  # each subclass should provide own schema
         "$schema": "http://json-schema.org/draft-04/schema#",
@@ -133,11 +135,49 @@ class Config(object):
         '''
         self.config = mock_config
         self.config_file = filename
+        self.config_list = [filename]
 
     def common_init(self, config_file=None):
         self.config_file = self.set_conf_name(config_file)
         print("Using %s" % self.config_file)
         self.config = self.read_and_validate_config(self.config_file)
+
+    def merge_config_snippet(self, snippet, snippet_filename):
+        for key in snippet:
+            if key in self.config:
+                print("Warning, %s redefines %s" % (snippet_filename, snippet))
+            self.config[key] = snippet[key]
+        print("%s is merged %s elememnts" % (snippet_filename, len(snippet)))
+
+    def add_config(self, config_filename):
+        '''
+            Merge new piece of config from file into existing config
+        '''
+        snippet_content = yaml.load(open(config_filename), 'r')
+        try:
+            jsonschema.validate(snippet_content, self.ELEMENT_SCHEMA)
+        except jsonschema.exceptions.ValidationError as e:
+            error_message = "There is an error in the file '%s': %s" % (
+                config_filename, e.message
+            )
+            raise InvaidConfigError(error_message)
+        self.config_list.append(config_filename)
+
+    def gather_snippets(directory):
+        content = [os.path.join(directory, f) for f in os.listdir(directory)]
+        files = filter(os.path.isfile, content)
+        files.sort()
+        return files
+
+    def find_all_configs(self):
+        for basepath in self.CONFIG_SEARCH_PATH:
+            candidate = os.path.join(basepath, self.DEFAULT_CONFIG_NAME)
+            if os.path.isfile(candidate):
+                yield candidate
+            dot_d_dir = os.path.join(basepath, self.CONF_D_NAME)
+            if os.path.isdir(dot_d_dir):
+                for snippet in self.gather_snippets(dot_d_dir):
+                    yield snippet
 
     def read_and_validate_config(self, name):
         content = yaml.load(open(name, "r"))
@@ -224,6 +264,7 @@ class Config(object):
 class ImageConfig(Config):
 
     DEFAULT_CONFIG_NAME = "images.yaml"
+    CONF_D_NAME = 'images.d'
     SCHEMA = {
         "$schema": "http://json-schema.org/draft-04/schema#",
         "type": "object",
@@ -324,6 +365,7 @@ class EnvConfig(Config):
 
 class TestEnvConfig(EnvConfig):
     DEFAULT_CONFIG_NAME = "test.yaml"
+    CONF_D_NAME = 'test.d'
     SCHEMA = {
         "$schema": "http://json-schema.org/draft-04/schema#",
         "type": "object",
@@ -390,6 +432,7 @@ class TestEnvConfig(EnvConfig):
 
 class UploadEnvConfig(EnvConfig):
     DEFAULT_CONFIG_NAME = "upload.yaml"
+    CONF_D_NAME = 'upload.d'
     SCHEMA = {
         "$schema": "http://json-schema.org/draft-04/schema#",
         "type": "object",
