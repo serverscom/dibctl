@@ -5,6 +5,8 @@ import sys
 import pytest
 import mock
 from mock import sentinel
+import tempfile
+import subprocess
 
 ourfilename = os.path.abspath(inspect.getfile(inspect.currentframe()))
 currentdir = os.path.dirname(ourfilename)
@@ -15,6 +17,130 @@ parentdir = os.path.dirname(currentdir)
 def config():
     from dibctl import config
     return config
+
+
+@pytest.mark.parametrize('file_val, res', [
+    [[False, False, False], []],
+    [[False, False, True], ['path/file2']],
+    [[True, True, True], [
+        'path/file1',
+        'path/file2',
+        'path/file3'
+    ]]
+])
+def test_gather_snippets(config, file_val, res):
+    with mock.patch.object(config.os, 'listdir', return_value=[
+        'file3', 'file1', 'file2'
+    ]):
+        with mock.patch.object(config.os.path, 'isfile', side_effect=file_val):
+            assert config.Config({}).gather_snippets('path') == res
+
+
+def test_gather_snippets_empty(config):
+    with mock.patch.object(config.os, 'listdir', return_value=[]):
+        assert config.Config({}).gather_snippets('path') == []
+
+
+class Test_find_all_configs():
+    'Semi integration test, as we create actual files and check search output'
+    def setup_method(self):
+        self.mock_root = tempfile.mkdtemp()
+        self.curdir = os.getcwd()
+        os.chdir(self.mock_root)
+
+    def teardown_method(self):
+        subprocess.check_call(['rm', '-r', '-f', self.mock_root])
+        os.chdir(self.curdir)
+
+    def _prep_file(self, dir, file):
+        full_dir = os.path.join(self.mock_root, dir)
+        subprocess.check_call(['mkdir', '-p', full_dir])  # bad makedirs in 2.7
+        if file:
+            open(os.path.join(full_dir, file), 'w').close()
+
+    def _prep_conf(self, config):
+        c = config.Config({})
+        c.CONFIG_SEARCH_PATH = ['./', './dibctl', 'etc/dibctl']
+        c.DEFAULT_CONFIG_NAME = 'config.yaml'
+        c.CONF_D_NAME = 'config.d'
+        return c
+
+    def test_empty(self, config):
+        c = self._prep_conf(config)
+        assert list(c.find_all_configs()) == []
+
+    @pytest.mark.parametrize('path, result', [
+        ['', './config.yaml'],
+        ['dibctl', './dibctl/config.yaml'],
+        ['etc/dibctl', 'etc/dibctl/config.yaml'],
+    ])
+    def test_one_config(self, config, path, result):
+        c = self._prep_conf(config)
+        self._prep_file(path, 'config.yaml')
+        assert list(c.find_all_configs()) == [result]
+
+    def test_three_config(self, config):
+        c = self._prep_conf(config)
+        self._prep_file('', 'config.yaml')
+        self._prep_file('dibctl', 'config.yaml')
+        self._prep_file('etc/dibctl', 'config.yaml')
+        assert list(c.find_all_configs()) == [
+            'etc/dibctl/config.yaml',
+            './dibctl/config.yaml',
+            './config.yaml'
+        ]
+
+    @pytest.mark.parametrize('path, result', [
+        ['config.d', './config.d/01-config.yaml'],
+        ['dibctl/config.d', './dibctl/config.d/01-config.yaml'],
+        ['etc/dibctl/config.d', 'etc/dibctl/config.d/01-config.yaml'],
+    ])
+    def test_d_one_snippet(self, config, path, result):
+        c = self._prep_conf(config)
+        self._prep_file(path, '01-config.yaml')
+        assert list(c.find_all_configs()) == [result]
+
+    def test_d_snippet_order(self, config):
+        c = self._prep_conf(config)
+        self._prep_file('config.d', '03-foo.yaml')
+        self._prep_file('config.d', '01-bar.yaml')
+        self._prep_file('config.d', '02-baz.yaml')
+        assert list(c.find_all_configs()) == [
+            './config.d/01-bar.yaml',
+            './config.d/02-baz.yaml',
+            './config.d/03-foo.yaml'
+        ]
+
+    def test_full_size_test_configs_and_snippets(self, config):
+        c = self._prep_conf(config)
+        self._prep_file('', 'config.yaml')
+        self._prep_file('dibctl', 'config.yaml')
+        self._prep_file('etc/dibctl', 'config.yaml')
+        self._prep_file('config.d', '60-foo.yaml')
+        self._prep_file('config.d', '70-foo.yaml')
+        self._prep_file('dibctl/config.d', '50-bar.yaml')
+        self._prep_file('dibctl/config.d', '80-bar.yaml')
+        self._prep_file('etc/dibctl/config.d', '40-baz.yaml')
+        self._prep_file('etc/dibctl/config.d', '90-baz.yaml')
+        assert list(c.find_all_configs()) == [
+            'etc/dibctl/config.yaml',
+            'etc/dibctl/config.d/40-baz.yaml',
+            'etc/dibctl/config.d/90-baz.yaml',
+            './dibctl/config.yaml',
+            './dibctl/config.d/50-bar.yaml',
+            './dibctl/config.d/80-bar.yaml',
+            './config.yaml',
+            './config.d/60-foo.yaml',
+            './config.d/70-foo.yaml'
+        ]
+
+    def test_with_wrong_file_type(self, config):
+        c = self._prep_conf(config)
+        self._prep_file('config.d/03-foo.yaml', 'boo')
+        self._prep_file('config.d', '01-bar.yaml')
+        assert list(c.find_all_configs()) == [
+            './config.d/01-bar.yaml'
+        ]
 
 
 def test_set_conf_name_not_found_forced(config):
@@ -207,6 +333,12 @@ def test_config_dict_conversion(config):
 def test_config_iteritems(config):
     d = {"a": 1}
     l = list(config.Config(d).iteritems())
+    assert l == [('a', 1)]
+
+
+def test_config_items(config):
+    d = {"a": 1}
+    l = list(config.Config(d).items())
     assert l == [('a', 1)]
 
 

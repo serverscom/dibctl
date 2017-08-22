@@ -163,14 +163,14 @@ class Config(object):
             raise InvaidConfigError(error_message)
         self.config_list.append(config_filename)
 
-    def gather_snippets(directory):
+    def gather_snippets(self, directory):
         content = [os.path.join(directory, f) for f in os.listdir(directory)]
         files = filter(os.path.isfile, content)
         files.sort()
         return files
 
     def find_all_configs(self):
-        for basepath in self.CONFIG_SEARCH_PATH:
+        for basepath in reversed(self.CONFIG_SEARCH_PATH):  # FIX THIS AFTER REFACTORING !!!!
             candidate = os.path.join(basepath, self.DEFAULT_CONFIG_NAME)
             if os.path.isfile(candidate):
                 yield candidate
