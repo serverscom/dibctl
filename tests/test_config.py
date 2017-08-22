@@ -47,7 +47,9 @@ def test_imageconfig_with_defaults(config):
 
 
 def test_imageconfig_filename(config):
-    mock_config = mock.mock_open(read_data='{"image1":{"filename": "bad"}, "image2":{"filename":"bad"}}')
+    mock_config = mock.mock_open(
+        read_data='{"image1":{"filename": "bad"}, "image2":{"filename":"bad"}}'
+    )
     with mock.patch.object(config, "open", mock_config):
         with mock.patch.object(config.os.path, "isfile", return_value=True):
             conf = config.ImageConfig(override_filename='new')
@@ -59,16 +61,21 @@ def test_imageconfig_filename(config):
     '{"foo": "bar"}',  # must be object
     '{"foo": {}}',  # no filename
     '{"foo": {random: junk}}',  # no unknown things should be here
-    '{"foo": {"filename": "x", "glance": {"upload_timeout": "3"}}}',  # timeout should be int
-    '{"foo": {"filename": "x", "glance": {"name": 1}}}',  # name should be string
+    # timeout should be int
+    '{"foo": {"filename": "x", "glance": {"upload_timeout": "3"}}}',
+    # name should be string
+    '{"foo": {"filename": "x", "glance": {"name": 1}}}',
     '{"foo": {"filename": "x", "dib": {}}}',  # no elements
     '{"foo": {"filename": "//"}}',  # bad path
     '{foo: {filename: x, dib: {elements: []}}}',  # elements shoudn't be empty
     '{foo: {filename: x, dib: {elements: [1]}}}',  # elements should be strings
-    '{foo: {filename: x, nova: {flavor: 3}}}',  # flavors are not allowed in images
-    '{foo: {filename: x, glance: {api_version: 2}}}',  # version 2 is not supported yet
+    # flavors are not allowed in images
+    '{foo: {filename: x, nova: {flavor: 3}}}',
+    # version 2 is not supported yet
+    '{foo: {filename: x, glance: {api_version: 2}}}',
     '{foo: {filename: x, glance: {name: 1}}}',  # name should be string
-    '{foo: {filename: x, glance: {properties:[foo, bar]}}}',  # properties should be an object
+    # properties should be an object
+    '{foo: {filename: x, glance: {properties:[foo, bar]}}}',
 ])
 def test_imageconfig_schema_bad(config, bad_config):
     mock_config = mock.mock_open(read_data=bad_config)
@@ -114,7 +121,8 @@ def test_config_get_simple(config):
     ['foo.glance.properties.foo', 'bar']
 ])
 def test_config_get_dotted(config, path, value):
-    good_config = '{foo: {filename: x, glance: {properties:{foo: bar}}}, baz: {filename: y}}'
+    good_config = '{foo: {filename: x, glance: {properties:{foo: bar}}},' \
+        ' baz: {filename: y}}'
     mock_config = mock.mock_open(read_data=good_config)
     with mock.patch.object(config, "open", mock_config):
         with mock.patch.object(config.os.path, "isfile", return_value=True):
@@ -130,7 +138,8 @@ def test_config_get_dotted(config, path, value):
     ['foo.glance.properties.foo', 'bar']
 ])
 def test_config_getitem_dotted(config, path, value):
-    good_config = '{foo: {filename: x, glance: {properties:{foo: bar}}}, baz: {filename: y}}'
+    good_config = '{foo: {filename: x, glance: {properties:{foo: bar}}}, '\
+        'baz: {filename: y}}'
     mock_config = mock.mock_open(read_data=good_config)
     with mock.patch.object(config, "open", mock_config):
         with mock.patch.object(config.os.path, "isfile", return_value=True):
@@ -178,7 +187,9 @@ def test_testenvconfig(config):
 
 
 def notest_get_environment_not_ok(config):
-    mock_config = mock.mock_open(read_data='{"env1":{ "os_tenant_name": "good_name"}}')
+    mock_config = mock.mock_open(
+        read_data='{"env1":{ "os_tenant_name": "good_name"}}'
+    )
     with mock.patch.object(config, "open", mock_config):
         with mock.patch.object(config.os.path, "isfile", return_value=True):
             conf = config.Config()
@@ -217,7 +228,8 @@ def test_config_repr(config):
     '{"foo": {keystone: {api_version: 4}}}',
     '{"foo": {keystone: {}, nova: {}}}',
     '{"foo": {keystone: {}, nova: {nics: [], flavor: foo}}}',
-    '{"foo": {keystone: {}, nova: {flavor: foo, nics: [{net_id: 27c642c-invalid-uuid}]}}}'
+    ('{"foo": {keystone: {}, nova: {flavor: foo, nics: '
+        '[{net_id: 27c642c-invalid-uuid}]}}}')
 ])
 def test_testenv_config_schema_bad(config, bad_config):
     mock_config = mock.mock_open(read_data=bad_config)
@@ -268,7 +280,7 @@ def test_non_zero_true(config):
     assert bool(config.Config({'a': 1})) is True
 
 
-def test_non_zero_false(config):
+def test_empty_is_false(config):
     assert bool(config.Config({})) is False
 
 
@@ -277,7 +289,7 @@ def test_non_zero_false(config):
     {'a': 1},
     {'a': 1, 'b': 2}
 ])
-def test_non_zero_false(config, data):
+def test_len(config, data):
     assert len(config.Config(data)) == len(data)
 
 
