@@ -1,3 +1,10 @@
+dibctl (0.6.0) xenial; urgency=medium
+
+  * Fix compatibility for newer glanceclient
+  * Now dibctl support .d style config naming
+
+ -- George Shuklin <george.shuklin@gmail.com>  Wed, 23 Aug 2017 17:17:46 +0300
+
 dibctl (0.5.7) xenial; urgency=medium
 
   * Glance section now supports min_size, max_size and protection flag
