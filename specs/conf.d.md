@@ -64,14 +64,3 @@ Each entry in configuration files will have a separate validation
 
 When element is overrided there going to be notification of override.
 
-Refactoring process
-===================
-
-* create `read_validate_and_merge_config` function
-* Change `read_and_validate_config` function to use it.
-* change `set_conf_name` info discovery code (yield configs)
-* Change schema and the moment of validation.
-[somewhere in between] Change validate command to work on per-config basis
-* Update documentation
-* Create test cases for doctests
-* Create at least one or two cases with superseeding

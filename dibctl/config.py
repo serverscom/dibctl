@@ -117,7 +117,7 @@ SCHEMA_EXTERNAL_COMMAND = {
 class Config(object):
 
     DEFAULT_CONFIG_NAME = None  # should be overriden in subclasses
-    CONFIG_SEARCH_PATH = ["./", "./dibctl/", "/etc/dibctl/"]
+    CONFIG_SEARCH_PATH = ["/etc/dibctl", "./dibctl", "./"]
     CONF_D_NAME = None   # should be overriden in subclasses
     D_SUFFIX = '.yaml'
 
@@ -127,41 +127,49 @@ class Config(object):
         "minItem": 1
     }
 
-    def __init__(self, mock_config, filename=None):
-        '''
-            This class shound't be called directly
-            in actual code, but may be used as
-            mock for configs without need to 'read' files
-        '''
-        self.config = mock_config
-        self.config_file = filename
-        self.config_list = [filename]
+    def __init__(self, config=None):
+        if config is None:
+            self.config = {}
+        else:
+            self.config = config
+        self.config_list = []
 
     def common_init(self, config_file=None):
-        self.config_file = self.set_conf_name(config_file)
-        print("Using %s" % self.config_file)
-        self.config = self.read_and_validate_config(self.config_file)
+        self.config = {}
+        self.config_list = []
+        if config_file:
+            self.add_config(config_file)
+        else:
+            for config in self.find_all_configs():
+                self.add_config(config)
+        if len(self.config_list) < 1:
+            raise ConfigNotFound(
+                "Unable to find %s anywhere" % str(self.DEFAULT_CONFIG_NAME)
+            )
 
     def merge_config_snippet(self, snippet, snippet_filename):
         for key in snippet:
             if key in self.config:
-                print("Warning, %s redefines %s" % (snippet_filename, snippet))
+                print("Warning, %s redefines %s" % (snippet_filename, key))
             self.config[key] = snippet[key]
-        print("%s is merged %s elememnts" % (snippet_filename, len(snippet)))
+        print("Using %s (%s items)" % (snippet_filename, len(snippet)))
 
     def add_config(self, config_filename):
         '''
             Merge new piece of config from file into existing config
         '''
-        snippet_content = yaml.load(open(config_filename), 'r')
+        if not os.path.isfile(config_filename):
+            raise ConfigNotFound("%s is not found" % config_filename)
+        snippet_content = yaml.load(open(config_filename, 'r'))
         try:
-            jsonschema.validate(snippet_content, self.ELEMENT_SCHEMA)
+            jsonschema.validate(snippet_content, self.SCHEMA)
         except jsonschema.exceptions.ValidationError as e:
             error_message = "There is an error in the file '%s': %s" % (
                 config_filename, e.message
             )
             raise InvaidConfigError(error_message)
         self.config_list.append(config_filename)
+        self.merge_config_snippet(snippet_content, config_filename)
 
     def gather_snippets(self, directory):
         content = [os.path.join(directory, f) for f in os.listdir(directory)]
@@ -170,7 +178,7 @@ class Config(object):
         return files
 
     def find_all_configs(self):
-        for basepath in reversed(self.CONFIG_SEARCH_PATH):  # FIX THIS AFTER REFACTORING !!!!
+        for basepath in self.CONFIG_SEARCH_PATH:
             candidate = os.path.join(basepath, self.DEFAULT_CONFIG_NAME)
             if os.path.isfile(candidate):
                 yield candidate
@@ -179,32 +187,6 @@ class Config(object):
                 for snippet in self.gather_snippets(dot_d_dir):
                     yield snippet
 
-    def read_and_validate_config(self, name):
-        content = yaml.load(open(name, "r"))
-        try:
-            jsonschema.validate(content, self.SCHEMA)
-        except jsonschema.exceptions.ValidationError as e:
-            error_message = "There is an error in the file '%s': %s" % (
-                name, e.message
-            )
-            raise InvaidConfigError(error_message)
-        return content
-
-    def set_conf_name(self, forced_name):
-        if forced_name:
-            if os.path.isfile(forced_name):
-                    return forced_name
-            else:
-                raise ConfigNotFound("%s is not a config file" % forced_name)
-        for location in self.CONFIG_SEARCH_PATH:
-            candidate = os.path.join(location, self.DEFAULT_CONFIG_NAME)
-            if os.path.isfile(candidate):
-                return candidate
-
-        raise ConfigNotFound("Unable to file %s in %s" % (
-            self.DEFAULT_CONFIG_NAME, ", ".join(self.CONFIG_SEARCH_PATH))
-        )
-
     def get(self, label, default_value=None):
         path = label.split('.')
         position = self.config
@@ -212,7 +194,7 @@ class Config(object):
             position = position.get(element, {})
         retval = position.get(path[-1], default_value)
         if type(retval) == dict:
-            return Config(retval, self.config_file)
+            return Config(retval)
         else:
             return retval
 
@@ -224,12 +206,14 @@ class Config(object):
                 position = position[element]
             retval = position[path[-1]]
             if type(retval) is dict:
-                return Config(retval, self.config_file)
+                return Config(retval)
             else:
                 return retval
         except KeyError:
             raise NotFoundInConfigError(
-                "Unable to find '%s' in %s" % (label, self.config_file)
+                "Unable to find '%s' in %s" % (
+                    label, ",".join(self.config_list)
+                )
             )
 
     def items(self):

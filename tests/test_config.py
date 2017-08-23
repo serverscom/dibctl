@@ -33,12 +33,12 @@ def test_gather_snippets(config, file_val, res):
         'file3', 'file1', 'file2'
     ]):
         with mock.patch.object(config.os.path, 'isfile', side_effect=file_val):
-            assert config.Config({}).gather_snippets('path') == res
+            assert config.Config().gather_snippets('path') == res
 
 
 def test_gather_snippets_empty(config):
     with mock.patch.object(config.os, 'listdir', return_value=[]):
-        assert config.Config({}).gather_snippets('path') == []
+        assert config.Config().gather_snippets('path') == []
 
 
 class Test_find_all_configs():
@@ -49,7 +49,7 @@ class Test_find_all_configs():
         os.chdir(self.mock_root)
 
     def teardown_method(self):
-        subprocess.check_call(['rm', '-r', '-f', self.mock_root])
+        subprocess.check_call(['rm', '-r', self.mock_root])
         os.chdir(self.curdir)
 
     def _prep_file(self, dir, file):
@@ -59,8 +59,8 @@ class Test_find_all_configs():
             open(os.path.join(full_dir, file), 'w').close()
 
     def _prep_conf(self, config):
-        c = config.Config({})
-        c.CONFIG_SEARCH_PATH = ['./', './dibctl', 'etc/dibctl']
+        c = config.Config()
+        c.CONFIG_SEARCH_PATH = ['etc/dibctl', './dibctl', './']
         c.DEFAULT_CONFIG_NAME = 'config.yaml'
         c.CONF_D_NAME = 'config.d'
         return c
@@ -143,11 +143,57 @@ class Test_find_all_configs():
         ]
 
 
-def test_set_conf_name_not_found_forced(config):
-    c = config.Config({}, sentinel.name)
+@pytest.mark.parametrize('old, new, result', [
+    [{}, {}, {}],
+    [{'a': 1}, {}, {'a': 1}],
+    [{}, {'a': 1}, {'a': 1}],
+    [{'b': 2}, {'a': 1}, {'a': 1, 'b': 2}],
+])
+def test_merge_config_snippet(config, old, new, result):
+    c = config.Config(old)
+    c.merge_config_snippet(new, 'new_name')
+    assert c.config == result
+
+
+def test_merge_config_snippet_with_overwrite(config, capfd):
+    c = config.Config({'a': 1, 'b': 2, 'c': 3})
+    c.merge_config_snippet({'a': 2}, 'new_name')
+    assert c.config == {'a': 2, 'b': 2, 'c': 3}
+    out = capfd.readouterr()[0]
+    assert 'redefines' in out
+
+
+def test_add_config_no_file(config):
     with mock.patch.object(config.os.path, "isfile", return_value=False):
+        c = config.Config()
         with pytest.raises(config.ConfigNotFound):
-            c.set_conf_name('foo')
+            c.add_config(sentinel.not_a_file)
+
+
+def test_add_config_simple(config):
+    with tempfile.NamedTemporaryFile() as mock_cfg:
+        mock_cfg.write('a: b')
+        mock_cfg.flush()
+        c = config.Config()
+        c.add_config(mock_cfg.name)
+        assert c.get('a') == 'b'
+        assert c.config_list == [mock_cfg.name]
+
+
+def test_add_config_double(config, capfd):
+    with tempfile.NamedTemporaryFile() as mock_cfg1:
+        mock_cfg1.write('some_label: bad!')
+        mock_cfg1.flush()
+        with tempfile.NamedTemporaryFile() as mock_cfg2:
+            mock_cfg2.write('some_label: good')
+            mock_cfg2.flush()
+            c = config.Config()
+            c.add_config(mock_cfg1.name)
+            c.add_config(mock_cfg2.name)
+            assert c.get('some_label') == 'good'
+            assert c.config_list == [mock_cfg1.name, mock_cfg2.name]
+    out = capfd.readouterr()[0]
+    assert "redefines some_label" in out
 
 
 def test_set_conf_name_not_found_natural(config):
@@ -377,7 +423,7 @@ def test_testenv_config_schema_bad(config, bad_config):
     [{'a': {'b': 2}}, "a.b", True]
 ])
 def test_config_in(config, input, query, result):
-    c = config.Config(input, sentinel.name)
+    c = config.Config(input)
     c.config_file = 'foo'
     assert (query in c) is result
 
@@ -403,8 +449,8 @@ def test_uploadenv_config_schema_bad(config, bad_config):
     [{'a': {'b': 2}}, {}, 'a.b', 2],
 ])
 def test_get_max(config, conf1, conf2, path, result):
-    c1 = config.Config(conf1, sentinel.name)
-    c2 = config.Config(conf2, sentinel.name)
+    c1 = config.Config(conf1)
+    c2 = config.Config(conf2)
     assert config.get_max(c1, c2, path, 99) == result
 
 
@@ -413,7 +459,7 @@ def test_non_zero_true(config):
 
 
 def test_empty_is_false(config):
-    assert bool(config.Config({})) is False
+    assert bool(config.Config()) is False
 
 
 @pytest.mark.parametrize('data', [
