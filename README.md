@@ -356,9 +356,7 @@ Special priority rules for `glance` section:
 - `protected` - max of all values (True > False)
 - `min_disk` - max of all values
 - `min_ram` - max of all values
-
-Special priority rules for all timeout values.
-For all timeout values maximum value is use.
+- all timeout values: max of all values
 
 For all other variables image has priority over environment.
 
