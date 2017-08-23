@@ -14,10 +14,10 @@ interactions:
     headers:
       content-length: ['362']
       content-type: [application/json]
-      date: ['Thu, 17 Aug 2017 09:29:26 GMT']
+      date: ['Thu, 17 Aug 2017 12:18:40 GMT']
       vary: [X-Auth-Token]
       x-distribution: [Ubuntu]
-      x-openstack-request-id: [req-5be526b5-0416-49a8-b43e-74358e315d53]
+      x-openstack-request-id: [req-551d9832-bba1-4ca9-89d3-b0fc690b3507]
     status: {code: 200, message: OK}
 - request:
     body: !!python/unicode '{"auth": "{\"tenantName\": \"pyvcr\", \"passwordCredentials\":
@@ -28,29 +28,29 @@ interactions:
     method: POST
     uri: https://auth.servers.nl01.cloud.servers.com:5000/v2.0/tokens
   response:
-    body: {string: !!python/unicode '{"access": {"token": {"issued_at": "2017-08-17T09:29:26.000000Z",
+    body: {string: !!python/unicode '{"access": {"token": {"issued_at": "2017-08-17T12:18:41.000000Z",
         "expires": "2038-01-15T16:17:18Z", "id": "consealed id", "tenant": {"id":
         "1d7f6604ebb54c69820f9d157bcea5f9", "enabled": true, "description": "", "name":
-        "consealed name"}, "audit_ids": ["HFUAMAB2T1WEjYXWezUsiQ"]}, "serviceCatalog":
+        "consealed name"}, "audit_ids": ["rzazFqPTQkSz9luujjTsBg"]}, "serviceCatalog":
         [{"endpoints": [{"adminURL": "http://glance-api.p.nova-ams-1.servers.com:29292/v2",
-        "region": "ams-1", "internalURL": "http://glance-api.p.nova-ams-1.servers.com:29292/v2",
-        "id": "50cef89163cc43ca8bda7e369cc52e43", "publicURL": "https://images.servers.nl01.cloud.servers.com:9292/v2"}],
+        "region": "ams-1", "id": "50cef89163cc43ca8bda7e369cc52e43", "internalURL":
+        "http://glance-api.p.nova-ams-1.servers.com:29292/v2", "publicURL": "https://images.servers.nl01.cloud.servers.com:9292/v2"}],
         "endpoints_links": [], "type": "image", "name": "glance"}, {"endpoints": [{"adminURL":
         "http://nova-api.p.nova-ams-1.servers.com:28774/v2/1d7f6604ebb54c69820f9d157bcea5f9",
-        "region": "ams-1", "internalURL": "http://nova-api.p.nova-ams-1.servers.com:28774/v2/1d7f6604ebb54c69820f9d157bcea5f9",
-        "id": "1728d1eb1fce49299f3b9af2b483ea07", "publicURL": "https://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9"}],
+        "region": "ams-1", "id": "1728d1eb1fce49299f3b9af2b483ea07", "internalURL":
+        "http://nova-api.p.nova-ams-1.servers.com:28774/v2/1d7f6604ebb54c69820f9d157bcea5f9",
+        "publicURL": "https://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9"}],
         "endpoints_links": [], "type": "compute", "name": "nova"}, {"endpoints": [{"adminURL":
         "http://ceilometer-api.p.nova-ams-1.servers.com:28777", "region": "ams-1",
-        "internalURL": "http://ceilometer-api.p.nova-ams-1.servers.com:28777", "id":
-        "1143aedd4705418dbefc5ca672f12371", "publicURL": "https://metering.servers.nl01.cloud.servers.com:8777"}],
-        "endpoints_links": [], "type": "metering", "name": "ceilometer"}, {"endpoints":
-        [{"adminURL": "http://keystone.p.nova-ams-1.servers.com:35357/v2.0", "region":
-        "ams-1", "internalURL": "http://keystone.p.nova-ams-1.servers.com:5001/v2.0",
-        "id": "50072ef2be7d4a23911ddfde497605bf", "publicURL": "https://auth.servers.nl01.cloud.servers.com:5000/v2.0"}],
-        "endpoints_links": [], "type": "identity", "name": "keystone"}, {"endpoints":
-        [{"adminURL": "http://neutron-server.p.nova-ams-1.servers.com:29696", "region":
-        "ams-1", "internalURL": "http://neutron-server.p.nova-ams-1.servers.com:29696",
-        "id": "604ba7d60702440ab82f7cccb01a63d7", "publicURL": "https://network.servers.nl01.cloud.servers.com:9696"}],
+        "id": "1143aedd4705418dbefc5ca672f12371", "internalURL": "http://ceilometer-api.p.nova-ams-1.servers.com:28777",
+        "publicURL": "https://metering.servers.nl01.cloud.servers.com:8777"}], "endpoints_links":
+        [], "type": "metering", "name": "ceilometer"}, {"endpoints": [{"adminURL":
+        "http://keystone.p.nova-ams-1.servers.com:35357/v2.0", "region": "ams-1",
+        "id": "50072ef2be7d4a23911ddfde497605bf", "internalURL": "http://keystone.p.nova-ams-1.servers.com:5001/v2.0",
+        "publicURL": "https://auth.servers.nl01.cloud.servers.com:5000/v2.0"}], "endpoints_links":
+        [], "type": "identity", "name": "keystone"}, {"endpoints": [{"adminURL": "http://neutron-server.p.nova-ams-1.servers.com:29696",
+        "region": "ams-1", "id": "604ba7d60702440ab82f7cccb01a63d7", "internalURL":
+        "http://neutron-server.p.nova-ams-1.servers.com:29696", "publicURL": "https://network.servers.nl01.cloud.servers.com:9696"}],
         "endpoints_links": [], "type": "network", "name": "neutron"}], "user": {"username":
         "consealed username", "roles_links": [], "id": "05678d47b3ce4c7bab64a729b39a63e0",
         "roles": [{"name": "_member_"}], "name": "consealed name"}, "metadata": {"is_admin":
@@ -58,10 +58,10 @@ interactions:
     headers:
       content-length: ['2400']
       content-type: [application/json]
-      date: ['Thu, 17 Aug 2017 09:29:26 GMT']
+      date: ['Thu, 17 Aug 2017 12:18:41 GMT']
       vary: [X-Auth-Token]
       x-distribution: [Ubuntu]
-      x-openstack-request-id: [req-3d2f2b01-74f5-4ab7-9e85-f6ac17dabaf6]
+      x-openstack-request-id: [req-659bfcb7-10f9-41bc-aab1-953a01e8d0ff]
     status: {code: 200, message: OK}
 - request:
     body: !!python/unicode '{"keypair": {"name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000"}}'
@@ -71,25 +71,24 @@ interactions:
     method: POST
     uri: https://compute.servers.nl01.cloud.servers.com:8774/v2/1d7f6604ebb54c69820f9d157bcea5f9/os-keypairs
   response:
-    body: {string: !!python/unicode '{"keypair": {"public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFw+4H6u7wuzRmTm5qcJ+CL1sk41YuJVJVpx+2YbyzfebRxJZUdb8dJgZrzcd5ck8qHojjYYdTB6we5/0lvh+viPHx3ufgoYoM+TT097uX0sv4BxZ2WSkUHcpajQvSY8BtTEmIDqTSXCohYUcgJf/ql58lXEt9fa5e3LQaEzy/eD05vLOw3MMurbZzsyH9awwPQBgph+F/CccoSQnjGWXoklL0WDJ4aLYlkDQrBOApVe8K82zfiuLdN+UYxE+u/jEGuml4u0//vyDUVGgcj1pPfkIKSEx4AyzxX820kgX7TUwSmmQMvw2qQQWymX0sWwJv2Igwlj0HfYUsdR4Wqe7f
-        Generated-by-Nova", "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIEqAIBAAKCAQEAxcPuB+ru8Ls0Zk5uanCfgi9bJONWLiVSVacftmG8s33m0cSW\nVHW/HSYGa83HeXJPKh6I42GHUwesHuf9Jb4fr4jx8d7n4KGKDPk09Pe7l9LL+AcW\ndlkpFB3KWo0L0mPAbUxJiA6k0lwqIWFHICX/6pefJVxLfX2uXty0GhM8v3g9Obyz\nsNzDLq22c7Mh/WsMD0AYKYfhfwnHKEkJ4xll6JJS9FgyeGi2JZA0KwTgKVXvCvNs\n34ri3TflGMRPrv4xBrppeLtP/78g1FRoHI9aT35CCkhMeAMs8V/NtJIF+01MEppk\nDL8NqkEFspl9LFsCb9iIMJY9B32FLHUeFqnu3wIDAQABAoIBABasoivyObcMH7Pj\nJjG5++/XMiIGlqjvyoLbiH1Gs3X453ABlCLW5TSYWYAetdIs0vrHSXaYhgV1Cbz5\naELdi5B6qRLMNdXBb6yRHgtAJBgCKTSky2SCUH1n9P1w0nwqx7NAXeXll+wueP4e\nwyLieHcTL0H/VQBsWoOx1kxvDDX/hYYx2Zc7ZDLB0fIGfeYq+SXrbVE7qixF/4wl\nHGyLAgq1NvLhhQFV4XoOSN269XQYaVKIL1sHpjxZTxnp3gctpwgbIX0NF2Qgjs5Q\nAQ24gf2SN3GwabiWUgotyzbZDILkJLANY78sUrE9YORYCmDj2xrJCnEJeCJaK0E1\n031Hx7ECggCBANQtus7+aSZJFaO4huPhDZNjXWRV/6nIpJeLrWyfX0SkTb5ZcCE5\nqlNf1mGu0yi4IYiadofjpkbRbr4UHvdfgJhxz0mNScYexhIKBliTS2vw0crcZSjj\nTm6tt7ONdVgM0/eU4+wa1XWaaW/nTIoP8bP9OmrMD7v4dpgrJyOzKkQbAoIAgQDu\nnCTJvsBbeleFakbAXvnOfyqdlyCHkvT3ZE1e7cEg3hWB//D/XQkbbrhKrsJ4/ZOc\nX6yYjudcMwyyhrDuP/c3w4UzrIfxAB1Gs/7nesQ/YozzVSP1sF6GglnDL1kSpMr5\nuP3RQbOQYIRQcAeyAY5xUDPGgx+BZ81t8jV9/xYEjQKCAIByinlFUxwKefu/lVbk\nX9LHVSXOi4pn6pPH57RoZiS01onNj1Sz6wBi3+LIeustGTGpH9GLDD7wDhFddVk+\nK4UtRosjZq2D0YsVo+nHGUTm8Wsfuxi1GPh3UTpRKLVHIi2vguYDyHyhbwkqStAL\n3A2cH8DQdHat/7Rt8yW+5PKVLwKCAIBOjRrTS7e5pcoAQt9t3xZv849M9/6egzOf\n6eZKtQyaTGJaPK7S8obYABgtheDBwgEBPsHsK0dhI/EvKIZAuNAjDHviag8KuNXq\ne8ET5WeL0l7CkKnY7SoBMBJq3kB9kcC8ezkb1XxOsGd+r5Lo9/gzt4qD9JC/ojOP\n2WfgxcQy1QKCAIEAvPbJo8svVQNZOZuFnhQO2gBSI97sH79m3Yc3CK6tu0acQmRn\nCcyGVBFdK6IJY+o++4rW0a8djucb9kCNPwva4lCs29v2w992Olza2H5IF3DhPton\nhMmvYJygieMehsWNTWdB42EWrEHZT2CzHuFHLMq4227sErYyJ17mupZB1p0=\n-----END
+    body: {string: !!python/unicode '{"keypair": {"public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDERl74f5WQdenAd6gtcCsXT0GkLUx02HMKN4npV7f/9hdZtQlIM8k/E44pF4fmKKC4S6rleiJXLtLc2deeBRoXYLLcHfL1+xf7LD5OIBxvyoCGg7cYECOvBPMxNGUMpUL5O41mtn+KszvNtAgbZ5iBaKyXT7yesNT1++rFPpxnTkgazxkDShtTASi2YQjxUna4FOGYNxYqz6bJ0HDFYIftTdRVhZltrNKOKRGc8Sx+Jw35hzf4BfgT+LG7tNsjWOovo0a92YI/CHXq3QB1pa4HvYLLY8lHG76EO+qT1sjvPsM84/nr5IAhZM3fMKHsX0sHUusO20kGbK8Jts16vSfN
+        Generated-by-Nova", "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIEqgIBAAKCAQEAxEZe+H+VkHXpwHeoLXArF09BpC1MdNhzCjeJ6Ve3//YXWbUJ\nSDPJPxOOKReH5iiguEuq5XoiVy7S3NnXngUaF2Cy3B3y9fsX+yw+TiAcb8qAhoO3\nGBAjrwTzMTRlDKVC+TuNZrZ/irM7zbQIG2eYgWisl0+8nrDU9fvqxT6cZ05IGs8Z\nA0obUwEotmEI8VJ2uBThmDcWKs+mydBwxWCH7U3UVYWZbazSjikRnPEsficN+Yc3\n+AX4E/ixu7TbI1jqL6NGvdmCPwh16t0AdaWuB72Cy2PJRxu+hDvqk9bI7z7DPOP5\n6+SAIWTN3zCh7F9LB1LrDttJBmyvCbbNer0nzQIDAQABAoIBAQDAzcfZH6tSPyIh\n+Ojxya/qs+ZtWjoyxbUsIiaNW6fZ/motqxK1JHnaRmFtqDnNM7e9kkcMKQ+2yL5G\nSI/wIF7i/BB2/cx/KesCxxFlOVH11tyuRpEDSEdlU915RljFNUo2/fMHJNrg6vQi\nO2mDUh6TcLmp4aAN2vM3uAGFRN3q81av56O4Ci3l7lGSP7dtwyLvtE2UldxjEd7e\nW+FIV4LBOLOawEVYzbwuKfpQykIKuutouyhKzEAlXS/QkdrdwzJxLfvV9ZmkLtau\ncHJnP8FboHDpqPGYUWzdYJUN2ChREaBQxTRZwoIZsWyrHUSB0jNa1lXOABTctXGz\nTWUQzoJZAoIAgQDL7BdoH5J1sUwroioJgD3iHacKASoyYfcTeE1yelZk3ER43yHR\nJDPQNrNIYOiaWIF0PMAMSIVi+PITtukAQydbnhde4iRbvzHj5BSE/O/GX4/BoLaH\nLdG6ocs+0dXAgheIs060PY5OCnp2sKjSqBAA3o+CR35dphfjHk0Riy1C8wKCAIEA\n9mZQ3B2RbtW6FJwWUfLQ3ZnJs9Rm+EikZVlXqqqJUUNFIQKH0znhZYxQtxEVuM2D\n+4d7hnxGUJd+Tj4twEQ16hMXeCZ12pSkMUfh00Ql/Aj5z6ooDEaPyEoP89OTTepB\nLIPBZCEaehhtqNVWajYaUV5WDXf+ASwiYXUXazg/Gj8CggCBAL8slsUG1EeB7+b4\nIHDHyTwykGbQsL6LGRcnsXOhPV1RIuAuT4XCatDId0tjjq0kTDisu17InkQrHsdc\nsxOL4VoC2+YYG/3nQN5k9Ne4SRGwhRUBlh0k13ogNGqwTbQsQePmNeLD0qVXLXgY\nJi1XYalu/Rsl61HgZISH47iOweABAoIAgBw0jiEESXeUg56EV5G95+bWCd7J+5eE\nST1Iwt5IczuYJbunnICzaXfEXiD2lbP34pnSYnN8mlfzX4P5XidaJ4nJ8a/RR0Bk\nL39sqQ8UB/0X0fDRm4/8K81TnQveNkh+/kLoOiUKHQvI7BSdhyzVUKHr2JHmIG9l\n6/GYA7xETgTlAoIAgQDAt/nH5RUpXflQLwcmwqi3Q2BeHgDk+FSt03N4NxniP7Qk\nKk0MqFUSS+6Q4ssS4hn6mXCWDy4Ertph8fpO9tfWrztxnVpaPNemzbt2uqMpW99s\nC3YKxNl2L8DCW2D9OqylpxTYlYbzjQjUJSlscU4t/ktQ1fTGWOzyWmjhBKPKmg==\n-----END
         RSA PRIVATE KEY-----\n", "user_id": "05678d47b3ce4c7bab64a729b39a63e0", "name":
-        "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "fingerprint": "8e:9c:5f:a7:02:ab:36:4d:0f:12:91:0b:e1:70:15:6c"}}'}
+        "DIBCTL-deadbeaf-4078-11e7-8228-000000000000", "fingerprint": "84:c9:e4:3b:61:79:08:0b:b1:1a:8d:0a:d5:45:3d:67"}}'}
     headers:
-      content-length: ['2326']
+      content-length: ['2330']
       content-type: [application/json]
-      date: ['Thu, 17 Aug 2017 09:29:27 GMT']
-      x-compute-request-id: [req-fb3d1d15-b74f-4ede-85b1-353ec90b3eea]
+      date: ['Thu, 17 Aug 2017 12:18:42 GMT']
+      x-compute-request-id: [req-192fd9d9-e695-4984-9b13-6d17cd194291]
     status: {code: 200, message: OK}
 - request:
     body: !!binary |
-      YzQNClFGSfsAAAADAAAAAAAAAAAAAAAAAAAAEAAAAAB2wwAAAAAAAAAAAAQAAAAAAAMAAAAAAAAA
-      AQAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAABoAAAAAAAA
-      AAAAAND3DeQVm741yh/e9/8DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-      AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANCjANCg0K
+      UUZJ+wAAAAMAAAAAAAAAAAAAAAAAAAAQAAAAAHbDAAAAAAAAAAAABAAAAAAAAwAAAAAAAAABAAAA
+      AAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAGgAAAAAAAAAAAAA
+      0PcN5BWbvjXKH973/wMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+      AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
     headers:
       Content-Type: [application/octet-stream]
-      Transfer-Encoding: [chunked]
       pytest-filtered: ['true']
       x-image-meta-container_format: [bare]
       x-image-meta-disk_format: [qcow2]
@@ -99,25 +98,24 @@ interactions:
       x-image-meta-name: [DIBCTL-deadbeaf-4078-11e7-8228-000000000000]
       x-image-meta-property-display_order: ['4']
       x-image-meta-protected: ['False']
-      x-image-meta-size: ['196']
     method: POST
     uri: https://images.servers.nl01.cloud.servers.com:9292/v2/v1/images
   response:
     body: {string: !!python/unicode '{"image": {"status": "active", "deleted": false,
-        "container_format": "bare", "min_ram": 0, "updated_at": "2017-08-17T09:29:35.000000",
+        "container_format": "bare", "min_ram": 0, "updated_at": "2017-08-17T12:18:49.000000",
         "owner": "1d7f6604ebb54c69820f9d157bcea5f9", "min_disk": 0, "is_public": false,
-        "deleted_at": null, "id": "59157055-cba2-4085-9339-2f7009275679", "size":
+        "deleted_at": null, "id": "9138e3b4-48a2-453a-a344-7673dd3a2922", "size":
         196, "virtual_size": null, "name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
-        "checksum": "5a6bd5f5a3d933d6cce528464ab13ffc", "created_at": "2017-08-17T09:29:34.000000",
+        "checksum": "5a6bd5f5a3d933d6cce528464ab13ffc", "created_at": "2017-08-17T12:18:48.000000",
         "disk_format": "qcow2", "properties": {"display_order": "4"}, "protected":
         false}}'}
     headers:
       content-length: ['545']
       content-type: [application/json]
-      date: ['Thu, 17 Aug 2017 09:29:34 GMT']
+      date: ['Thu, 17 Aug 2017 12:18:48 GMT']
       etag: [5a6bd5f5a3d933d6cce528464ab13ffc]
-      location: ['http://images.servers.nl01.cloud.servers.com:9292/v1/images/59157055-cba2-4085-9339-2f7009275679']
-      x-openstack-request-id: [req-81871ae2-7846-49d1-a8c9-188535a12eec]
+      location: ['http://images.servers.nl01.cloud.servers.com:9292/v1/images/9138e3b4-48a2-453a-a344-7673dd3a2922']
+      x-openstack-request-id: [req-b09f0c3c-984e-44e3-ac2d-350142c3f50d]
     status: {code: 201, message: Created}
 - request:
     body: null
@@ -167,8 +165,8 @@ interactions:
     headers:
       content-length: ['4261']
       content-type: [application/json]
-      date: ['Thu, 17 Aug 2017 09:29:34 GMT']
-      x-compute-request-id: [req-f465d3a8-9f03-43e5-8a40-e670adba8643]
+      date: ['Thu, 17 Aug 2017 12:18:49 GMT']
+      x-compute-request-id: [req-5a816982-59f6-4067-8f6e-ede89e313aeb]
     status: {code: 200, message: OK}
 - request:
     body: null
@@ -203,8 +201,8 @@ interactions:
     headers:
       content-length: ['2701']
       content-type: [application/json]
-      date: ['Thu, 17 Aug 2017 09:29:35 GMT']
-      x-compute-request-id: [req-06532458-abc0-4a43-850b-6ca86704601e]
+      date: ['Thu, 17 Aug 2017 12:18:49 GMT']
+      x-compute-request-id: [req-fb71157f-8a5f-4919-b924-5892e198b9db]
     status: {code: 200, message: OK}
 - request:
     body: null
@@ -222,12 +220,12 @@ interactions:
     headers:
       content-length: ['478']
       content-type: [application/json]
-      date: ['Thu, 17 Aug 2017 09:29:35 GMT']
-      x-compute-request-id: [req-180815ac-b3e9-4e21-b4c0-dc11b1242590]
+      date: ['Thu, 17 Aug 2017 12:18:49 GMT']
+      x-compute-request-id: [req-0d11fad4-728e-4464-9e56-715116971b02]
     status: {code: 200, message: OK}
 - request:
     body: !!python/unicode '{"server": {"name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
-      "imageRef": "59157055-cba2-4085-9339-2f7009275679", "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
+      "imageRef": "9138e3b4-48a2-453a-a344-7673dd3a2922", "key_name": "DIBCTL-deadbeaf-4078-11e7-8228-000000000000",
       "flavorRef": "30", "max_count": 1, "min_count": 1, "networks": [{"uuid": "deadbeaf-7577-4706-9a41-fc88d8bee945"}]}}'
     headers:
       Content-Type: [application/json]
@@ -240,8 +238,8 @@ interactions:
     headers:
       content-length: ['108']
       content-type: [application/json; charset=UTF-8]
-      date: ['Thu, 17 Aug 2017 09:29:35 GMT']
-      x-compute-request-id: [req-43dd3da1-7e20-4b70-aa00-eda4bfbbffc1]
+      date: ['Thu, 17 Aug 2017 12:18:49 GMT']
+      x-compute-request-id: [req-6d217c49-1745-4d3c-b440-fb8aa598abb3]
     status: {code: 400, message: Bad Request}
 - request:
     body: null
@@ -254,8 +252,8 @@ interactions:
     headers:
       content-length: ['0']
       content-type: [application/json]
-      date: ['Thu, 17 Aug 2017 09:29:35 GMT']
-      x-compute-request-id: [req-00d95c68-9373-478b-a2c3-7f19689a119c]
+      date: ['Thu, 17 Aug 2017 12:18:49 GMT']
+      x-compute-request-id: [req-5edebcb1-b2a5-4f0f-b41a-5f10e5e1c919]
     status: {code: 202, message: Accepted}
 - request:
     body: null
@@ -263,20 +261,20 @@ interactions:
       Content-Type: [application/octet-stream]
       pytest-filtered: ['true']
     method: HEAD
-    uri: https://images.servers.nl01.cloud.servers.com:9292/v2/v1/images/59157055-cba2-4085-9339-2f7009275679
+    uri: https://images.servers.nl01.cloud.servers.com:9292/v2/v1/images/9138e3b4-48a2-453a-a344-7673dd3a2922
   response:
     body: {string: !!python/unicode ''}
     headers:
       content-length: ['0']
       content-type: [text/html; charset=UTF-8]
-      date: ['Thu, 17 Aug 2017 09:29:36 GMT']
+      date: ['Thu, 17 Aug 2017 12:18:50 GMT']
       etag: [5a6bd5f5a3d933d6cce528464ab13ffc]
       x-image-meta-checksum: [5a6bd5f5a3d933d6cce528464ab13ffc]
       x-image-meta-container_format: [bare]
-      x-image-meta-created_at: ['2017-08-17T09:29:34.000000']
+      x-image-meta-created_at: ['2017-08-17T12:18:48.000000']
       x-image-meta-deleted: ['False']
       x-image-meta-disk_format: [qcow2]
-      x-image-meta-id: [59157055-cba2-4085-9339-2f7009275679]
+      x-image-meta-id: [9138e3b4-48a2-453a-a344-7673dd3a2922]
       x-image-meta-is_public: ['False']
       x-image-meta-min_disk: ['0']
       x-image-meta-min_ram: ['0']
@@ -286,8 +284,8 @@ interactions:
       x-image-meta-protected: ['False']
       x-image-meta-size: ['196']
       x-image-meta-status: [active]
-      x-image-meta-updated_at: ['2017-08-17T09:29:35.000000']
-      x-openstack-request-id: [req-57cd0a83-91de-4222-b677-8e9b2a15f97a]
+      x-image-meta-updated_at: ['2017-08-17T12:18:49.000000']
+      x-openstack-request-id: [req-27d42687-fc9d-4d0a-8d30-f8fc16b35aaf]
     status: {code: 200, message: OK}
 - request:
     body: null
@@ -295,13 +293,13 @@ interactions:
       Content-Type: [application/octet-stream]
       pytest-filtered: ['true']
     method: DELETE
-    uri: https://images.servers.nl01.cloud.servers.com:9292/v2/v1/images/59157055-cba2-4085-9339-2f7009275679
+    uri: https://images.servers.nl01.cloud.servers.com:9292/v2/v1/images/9138e3b4-48a2-453a-a344-7673dd3a2922
   response:
     body: {string: !!python/unicode ''}
     headers:
       content-length: ['0']
       content-type: [text/html; charset=UTF-8]
-      date: ['Thu, 17 Aug 2017 09:29:36 GMT']
-      x-openstack-request-id: [req-d327e487-0ad0-4102-875c-f71a21988ddf]
+      date: ['Thu, 17 Aug 2017 12:18:50 GMT']
+      x-openstack-request-id: [req-afb20499-0ca9-4384-813c-d1be3731c300]
     status: {code: 200, message: OK}
 version: 1

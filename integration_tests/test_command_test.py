@@ -45,24 +45,17 @@ def test_test_normal(quick_commands, happy_vcr, capfd):
             - check if network uuids are vaild (in config)
             - it need normal user priveleges
     '''
-    def full_read(ignore_self, filename):
-        return open(filename, 'rb', buffering=65536).read()
-    with mock.patch.object(
-        quick_commands.do_tests.prepare_os.osclient.OSClient,
-        '_file_to_upload',
-        full_read
-    ):
-        with happy_vcr('test_test_normal.yaml'):
-            assert quick_commands.main([
-                    'test',
-                    'xenial'
-                ]) == 0
-            out = capfd.readouterr()[0]
-            assert 'All tests passed successfully' in out
-            assert 'Removing instance' in out
-            assert 'Removing ssh key' in out
-            assert 'Removing image' in out
-            assert 'Clearing done' in out
+    with happy_vcr('test_test_normal.yaml'):
+        assert quick_commands.main([
+                'test',
+                'xenial'
+            ]) == 0
+        out = capfd.readouterr()[0]
+        assert 'All tests passed successfully' in out
+        assert 'Removing instance' in out
+        assert 'Removing ssh key' in out
+        assert 'Removing image' in out
+        assert 'Clearing done' in out
 
 
 def test_test_existing_image_success(quick_commands, happy_vcr, capfd):
@@ -113,24 +106,17 @@ def test_test_image_with_sizes(quick_commands, happy_vcr, capfd):
             - check if network uuids are vaild (in config)
             - it need normal user priveleges
     '''
-    def full_read(ignore_self, filename):
-        return open(filename, 'rb', buffering=65536).read()
-    with mock.patch.object(
-        quick_commands.do_tests.prepare_os.osclient.OSClient,
-        '_file_to_upload',
-        full_read
-    ):
-        with happy_vcr('test_test_image_with_sizes.yaml'):
-            assert quick_commands.main([
-                    'test',
-                    'xenial-sizes'
-                ]) == 0
-            out = capfd.readouterr()[0]
-            assert 'All tests passed successfully' in out
-            assert 'Removing instance' in out
-            assert 'Removing ssh key' in out
-            assert 'Removing image' in out
-            assert 'Clearing done' in out
+    with happy_vcr('test_test_image_with_sizes.yaml'):
+        assert quick_commands.main([
+                'test',
+                'xenial-sizes'
+            ]) == 0
+        out = capfd.readouterr()[0]
+        assert 'All tests passed successfully' in out
+        assert 'Removing instance' in out
+        assert 'Removing ssh key' in out
+        assert 'Removing image' in out
+        assert 'Clearing done' in out
 
 
 # SAD tests
@@ -216,24 +202,17 @@ def test_instance_is_not_answer_port_code_71(quick_commands, happy_vcr, capfd):
         - check if network uuids are vaild (in config)
         - it need normal user priveleges
     '''
-    def full_read(ignore_self, filename):
-        return open(filename, 'rb', buffering=65536).read()
     with happy_vcr('test_instance_is_not_answer_port_code_71.yaml'):
         quick_commands.prepare_os.socket.sequence = [None]
-        with mock.patch.object(
-            quick_commands.do_tests.prepare_os.osclient.OSClient,
-            '_file_to_upload',
-            full_read
-        ):
-            assert quick_commands.main([
-                    'test',
-                    'xenial'
-                ]) == 71
-            out = capfd.readouterr()[0]
-            assert 'Instance is not accepting connection' in out
-            assert 'Removing instance' in out
-            assert 'Removing ssh key' in out
-            assert 'Removing image' in out
+        assert quick_commands.main([
+                'test',
+                'xenial'
+            ]) == 71
+        out = capfd.readouterr()[0]
+        assert 'Instance is not accepting connection' in out
+        assert 'Removing instance' in out
+        assert 'Removing ssh key' in out
+        assert 'Removing image' in out
 
 
 def test_instance_in_error_state_code_70(quick_commands, happy_vcr, capfd):
@@ -246,25 +225,18 @@ def test_instance_in_error_state_code_70(quick_commands, happy_vcr, capfd):
             - check if network uuids are vaild (in config)
             - it need normal user priveleges
     '''
-    def full_read(ignore_self, filename):
-        return open(filename, 'rb', buffering=65536).read()
-    with mock.patch.object(
-        quick_commands.do_tests.prepare_os.osclient.OSClient,
-        '_file_to_upload',
-        full_read
-    ):
-        with happy_vcr('test_instance_in_error_state_code_70.yaml'):
-            assert quick_commands.main([
-                    'test',
-                    'xenial',
-                    '--input',
-                    'damaged.img.qcow2'
-                ]) == 70
-            out = capfd.readouterr()[0]
-            assert "is 'ERROR' (expected 'ACTIVE')" in out
-            assert 'Removing instance' in out
-            assert 'Removing ssh key' in out
-            assert 'Removing image' in out
+    with happy_vcr('test_instance_in_error_state_code_70.yaml'):
+        assert quick_commands.main([
+                'test',
+                'xenial',
+                '--input',
+                'damaged.img.qcow2'
+            ]) == 70
+        out = capfd.readouterr()[0]
+        assert "is 'ERROR' (expected 'ACTIVE')" in out
+        assert 'Removing instance' in out
+        assert 'Removing ssh key' in out
+        assert 'Removing image' in out
 
 
 def test_test_image_with_min_size_more_than_flavor_code_60(
@@ -283,23 +255,16 @@ def test_test_image_with_min_size_more_than_flavor_code_60(
             - check if network uuids are vaild (in config)
             - it need normal user priveleges
     '''
-    def full_read(ignore_self, filename):
-        return open(filename, 'rb', buffering=65536).read()
-    with mock.patch.object(
-        quick_commands.do_tests.prepare_os.osclient.OSClient,
-        '_file_to_upload',
-        full_read
+    with happy_vcr(
+        'test_test_image_with_min_size_more_than_flavor_code_60.yaml'
     ):
-        with happy_vcr(
-            'test_test_image_with_min_size_more_than_flavor_code_60.yaml'
-        ):
-            assert quick_commands.main([
-                    'test',
-                    'xenial-sizes',
-                    '--environment',
-                    'lab1-size-too-big'
-                ]) == 60
-            out = capfd.readouterr()[0]
-            assert 'Removing ssh key' in out
-            assert 'Removing image' in out
-            assert 'Clearing done' in out
+        assert quick_commands.main([
+                'test',
+                'xenial-sizes',
+                '--environment',
+                'lab1-size-too-big'
+            ]) == 60
+        out = capfd.readouterr()[0]
+        assert 'Removing ssh key' in out
+        assert 'Removing image' in out
+        assert 'Clearing done' in out

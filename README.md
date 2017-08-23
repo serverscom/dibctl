@@ -259,26 +259,52 @@ TODO: set up ppa with dependencies
 Configuration
 -------------
 
-Dibctl may use system-wide configuration files (/etc/dibctl/)
-or local configuration files (./dibctl). Local configuration files usually
-used within git repository, containing custom image and enviroment
-configs, custom diskimage-builder elements and custom tests.
+Every configration file is consists of independent entities. When dibctl scans
+for configuration it works with all possible configuration file locations
+in a spefic order. Every found configuration file is merged into
+common configuration (separately for each type). If configuration file
+with higher priority has entity with same label as in files with less
+priority, it is replaced with newer entity, and warning is logged to
+console.
 
-## Configuration file priority
-Dibctl stops searching file as soon as file is found.
-Each file is searched independently
-(f.e. /etc/dibctl/images.yaml and ./dibctl/test.yaml)
+There are 3 places where configuration are searched: local directory,
+'dibctl' calalog in current directory and '/etc/dibctl'.
 
-Lookup order:
+There are 2 types of configuration files: monolythic and 'conf.d' style.
+Files from '.d' catalogs are loaded in alphabetical order.
+All together that gives 6 different configuration file locations for
+earch configuration type.
 
-- `./` (config file in the current directory)
-- `./dibctl` (config file in the dibctl directory in the current directory)
-- `/etc/dibctl` (system-wide configs)
+There are three different types of configuration files: images (`images.yaml`),
+test environments (`test.yaml`) and uploads (`upload.yaml`)
 
-Configuration file names:
-- `images.yaml`
-- `test.yaml` (test environments)
-- `upload.yaml` (upload environments)
+### Lookup order for image configuration
+(sorting is from the least priority to the highest priority)
+- `/etc/dibctl/images.yaml`
+- `/etc/dibctl/images.d/*.yaml`
+- `./dibctl/images.yaml`
+- `./dibctl/images.d/*.yaml`
+- `./images.yaml`
+- `./images.d/*.yaml`
+
+### Lookup order for test environment configuration
+(sorting is from the least priority to the highest priority)
+- `/etc/dibctl/test.yaml`
+- `/etc/dibctl/test.d/*.yaml`
+- `./dibctl/test.yaml`
+- `./dibctl/test.d/*.yaml`
+- `./test.yaml`
+- `./test.d/*.yaml`
+
+### Lookup order for upload environment configuration
+(sorting is from the least priority to the highest priority)
+- `/etc/dibctl/upload.yaml`
+- `/etc/dibctl/upload.d/*.yaml`
+- `./dibctl/upload.yaml`
+- `./dibctl/upload.d/*.yaml`
+- `./upload.yaml`
+- `./upload.d/*.yaml`
+
 
 If pytest-based tests are in use, than tox.ini and other pytest-related
 configuration files may influence tests discovery.
@@ -330,9 +356,7 @@ Special priority rules for `glance` section:
 - `protected` - max of all values (True > False)
 - `min_disk` - max of all values
 - `min_ram` - max of all values
-
-Special priority rules for all timeout values.
-For all timeout values maximum value is use.
+- all timeout values: max of all values
 
 For all other variables image has priority over environment.
 
