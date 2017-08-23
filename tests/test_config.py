@@ -43,12 +43,12 @@ def test_gather_snippets_empty(config):
 
 class Test_find_all_configs():
     'Semi integration test, as we create actual files and check search output'
-    def setup_method(self):
+    def setup_method(self, request):
         self.mock_root = tempfile.mkdtemp()
         self.curdir = os.getcwd()
         os.chdir(self.mock_root)
 
-    def teardown_method(self):
+    def teardown_method(self, request):
         subprocess.check_call(['rm', '-r', self.mock_root])
         os.chdir(self.curdir)
 
