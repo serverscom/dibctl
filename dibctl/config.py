@@ -144,7 +144,11 @@ class Config(object):
                 self.add_config(config)
         if len(self.config_list) < 1:
             raise ConfigNotFound(
-                "Unable to find %s anywhere" % str(self.DEFAULT_CONFIG_NAME)
+                "Unable to find %s or %s/*%s anywhere" % (
+                    str(self.DEFAULT_CONFIG_NAME),
+                    str(self.CONF_D_NAME),
+                    str(self.D_SUFFIX)
+                )
             )
 
     def merge_config_snippet(self, snippet, snippet_filename):
