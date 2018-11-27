@@ -8,6 +8,7 @@ import os
 import json
 import config
 import ssh
+import ipaddress
 
 
 class TimeoutError(EnvironmentError):
@@ -395,8 +396,19 @@ class PrepOS(object):
 
     def ips(self):
         result = []
-        for ips in self.os_instance.networks.values():
+        for ips in self.os_instance.networks.values():                
             result.extend(ips)
+        return result
+
+    def ips_by_version(self, version=4):
+        result = []
+        for ip in self.ips():
+            # Convert string to unicode object in Python 2.x
+            if sys.version_info < (3, 0):
+                ip = unicode(ip)
+            ipaddr = ipaddress.ip_address(ip)
+            if ipaddr.version == version:
+                result.append(str(ip))
         return result
 
     def network(self):

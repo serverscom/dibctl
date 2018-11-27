@@ -453,6 +453,35 @@ def test_get_env_config(prepare_os, prep_os):
     assert env['flavor_meta_sentinel.name2'] == 'sentinel.value2'
 
 
+def test_ips(prep_os):
+    prep_os.os_instance.networks = {
+        'net1': [sentinel.ip1],
+        'net2': [sentinel.ip2, sentinel.ip3]
+    }
+    ips = prep_os.ips()
+    assert ips.sort() == [sentinel.ip1, sentinel.ip2, sentinel.ip3].sort()
+
+
+@pytest.mark.parametrize('arg', [None, "somevalue", ''])
+def test_ips_by_version_without_version(prep_os, arg):
+    with mock.patch.object(prep_os, 'ips', return_value=['192.168.0.1', 'fc00::1']):
+        assert prep_os.ips_by_version(arg) == []
+
+
+@pytest.mark.parametrize('version, output', [
+    [4, '192.168.0.1'],
+    [6, 'fc00::1'],
+])
+def test_ips_by_version_valid_version(prep_os, version, output):
+    with mock.patch.object(prep_os, 'ips', return_value=['192.168.0.1', 'fc00::1']):
+        assert prep_os.ips_by_version(version=version) == [output]
+
+
+def test_ips_by_version_invalid_version(prep_os):
+    with mock.patch.object(prep_os, 'ips', return_value=['192.168.0.1', 'fc00::1']):
+        assert prep_os.ips_by_version(version='invalid') == []
+
+
 def test_wait_for_port_never(prepare_os, prep_os, MockSocket):
     with mock.patch.object(prepare_os.time, "time", mock.MagicMock(side_effect=[0, 10, 60, 80])):
         with mock.patch.object(prepare_os, "socket", MockSocket([None])):
