@@ -2,7 +2,7 @@ Source: dibctl
 Maintainer: George Shuklin <george.shuklin@gmail.com>
 Section: contrib/python
 Priority: optional
-Build-Depends: python-setuptools, python-all, debhelper, dh-python, python-yaml, python-pytest, python-mock, python-glanceclient, python-keystoneclient, python-novaclient, python-testinfra, python-pytest-timeout, python-jsonschema, python-semantic-version, python-diskimage-builder
+Build-Depends: python-setuptools, python-all, debhelper, dh-python, python-yaml, python-pytest, python-mock, python-glanceclient, python-keystoneclient, python-novaclient, python-testinfra, python-pytest-timeout, python-jsonschema, python-semantic-version, python-diskimage-builder, python-ipaddress
 X-Python-Version: >= 2.7
 Standards-Version: 3.9.8
 Homepage: https://github.com/amarao
@@ -10,7 +10,7 @@ Vcs-Browser: https://github.com/amarao
 
 Package: python-dibctl
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}, python-pkg-resources, python-diskimage-builder, python-glanceclient, python-keystoneclient, python-novaclient, python-jsonschema, python-semantic-version
+Depends: ${misc:Depends}, ${python:Depends}, python-pkg-resources, python-diskimage-builder, python-glanceclient, python-keystoneclient, python-novaclient, python-jsonschema, python-semantic-version, python-ipaddress
 Recommends: python-testinfra, python-pytest-timeout
 Description: Diskimage-builder management utility
  Dibctl allows one to manage images, integration tests,
