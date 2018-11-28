@@ -2,11 +2,11 @@ Dibctl
 ------
 
 Dibctl is a software for image lifecycle management.
-It help to build, test, upload and delete images in multipies
+It helps to build, test, upload and delete images in multipie
 openstack regions in a consitent way.
 
-It uses diskimage-builder to build images, pytest and testinfra
-to test them.
+Internally it uses diskimage-builder to build images and pytest
+with testinfra to test them.
 
 Dibctl uses configuration files to describe how to build image,
 which name it should have after upload, what properties (if any)
@@ -15,12 +15,12 @@ provide list of tests for each image, plus name of environment
 where tests should happen.
 
 Testing happens under directives from `test.yaml`. It contains
-information how to run test instance: region authorization URL,
+information how to run a test instance: region authorization URL,
 credentials, flavor, network list, availability zone, security
 groups and other nova parameters.
 
 Third configuration file (`upload.yaml`) provides information
-for uploading into any number of Openstack installations.
+for uploading that image into Openstack installations.
 
 Image Lifecycle
 ---------------
@@ -44,15 +44,17 @@ about image,it properties, created instance (it flavor, network
 settings, credentials to access instance SSH, etc).
 Test frameworks:
 - 'shell': each test is a simple shell script, which is executed
-outside test VM
+outside test VM. It is provided with all information on how
+to connect to the test VM.
 - 'pytest' - tests are implemented by means of py.test, with optional
 support for testinfra (python library for server verification, similar to
-ServerSpec). Dibctl provides wast set of fixtures with all available
-information about image and instance, plus few handy operations
-(wait\_for\_port), and direct access to nova object for testing instance
-reactions on nova operations (hard reboot, rebuild, etc).
+ServerSpec). Dibctl provides vast set of fixture containing all available
+information about the image and the instance, plus few handy operations
+(wait\_for\_port), and a direct access to 'nova' object of openstack
+client for testing instance reactions on nova operations
+(hard reboot, rebuild, etc).
 - 'ssh': each test is a simple shell script, which is executed
-inside guest machine (not yet implemented)
+inside a guest machine (not yet implemented)
 - 'image': passive check of the image content (not implemented yet)
 
 Dibctl comes with some generic tests (which should be applicable

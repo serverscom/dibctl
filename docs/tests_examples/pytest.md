@@ -11,6 +11,8 @@ List of available fixtures:
 - flavor - information about flavor used to run test instance.
 - flavor_meta - meta information for flavor
 - ips - list of all ips  on all interfaces of instance
+- ips_v4 - list of all IPv4 addresses on all interfaces
+- ips_v6 - same as above with IPv6 addresses
 - main_ip - single value with IPv4, selected according to main_nic_regexp.
 - network - additional information about all interfaces, including expected MAC addresses, subnets, etc.
 - ssh - information about ssh connection to test instance. Includes main ip, path to the private key, username to connect to instance
@@ -31,9 +33,17 @@ flavor_meta fixture
 ---
 It is a dict with key:value structure, containing all metadata for flavor used to start test instance.
 
+ips
+---
+It is a list of all (IPv4 and IPv6) addresses allocated by neutron/nova. Does not include any floatingIPs.
+
 ips_v4
 ---
-It is a list of all ipv4 addresses on allocated by neutron/nova. Do not include any floatingIPs.
+It is a list of all IPv4 addresses on allocated by neutron/nova. Does not include any floatingIPs.
+
+ips_v6
+---
+It is a list of all IPv6 addresses on allocated by neutron/nova. Does not include any floatingIPs.
 
 main_ip
 ---
@@ -67,3 +77,9 @@ Contains:
 - port (int)
 - timeout (int) - expected maximum timeout
 - delay (float) - who long was wait process before instance replied on the given port
+
+nova
+---
+A fixture to have access to nova client (python-novaclient) with established credentials to
+openstack.
+
