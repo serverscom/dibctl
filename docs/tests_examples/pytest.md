@@ -77,3 +77,9 @@ Contains:
 - port (int)
 - timeout (int) - expected maximum timeout
 - delay (float) - who long was wait process before instance replied on the given port
+
+nova
+---
+A fixture to have access to nova client (python-novaclient) with established credentials to
+openstack.
+

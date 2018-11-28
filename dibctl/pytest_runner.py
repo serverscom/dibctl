@@ -67,7 +67,10 @@ class DibCtlPlugin(object):
             raise ValueError("no ssh settings available in image config")
         if not self.cached_ssh_backend:
             if not self.testinfra:
-                raise ImportError("ssh_backend is unavailable because testinfra module is not found.")
+                raise ImportError(
+                    "ssh_backend is unavailable because testinfra module"
+                    "is not found."
+                )
             self.cached_ssh_backend = self.testinfra.get_backend(
                 self.ssh_data.connector(),
                 ssh_config=self.ssh_data.config()
@@ -82,6 +85,10 @@ class DibCtlPlugin(object):
     def port(self, request):
         raise NotImplementedError
         return {'ip': 0, 'port': 0, 'timeout': 0, 'delay': 0.0}
+
+    @pytest.fixture
+    def nova(self, request):
+        return self.os.nova
 
 
 def runner(path, ssh, tos, environment_variables, timeout_val, continue_on_fail):
