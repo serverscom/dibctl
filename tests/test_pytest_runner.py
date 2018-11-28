@@ -20,6 +20,12 @@ def ssh():
 
 
 @pytest.fixture
+def prepare_os():
+    from dibctl import prepare_os
+    return prepare_os
+
+
+@pytest.fixture
 def dcp(pytest_runner, ssh):
     tos = mock.MagicMock()
     tos.ip = '192.168.0.1'
@@ -28,6 +34,7 @@ def dcp(pytest_runner, ssh):
     tos.key_name = 'foo-key-name'
     tos.os_key_private_file = 'private-file'
     tos.ips.return_value = [sentinel.ip1, sentinel.ip2]
+    tos.ips_by_version.return_value = [sentinel.ip3, sentinel.ip4]
     s = ssh.SSH('192.168.0.1', 'root', 'secret')
     dcp = pytest_runner.DibCtlPlugin(s, tos, {})
     return dcp
@@ -116,8 +123,12 @@ def test_DibCtlPlugin_wait_for_port_fixture(dcp):
     assert dcp.tos.wait_for_port.call_args == mock.call(22, 60)
 
 
+def test_DibCtlPlugin_ips_fixture(dcp):
+    assert dcp.ips(sentinel.request) == [sentinel.ip1, sentinel.ip2]
+
+
 def test_DibCtlPlugin_ips_v4_fixture(dcp):
-    assert dcp.ips_v4(sentinel.request) == [sentinel.ip1, sentinel.ip2]
+    assert dcp.ips_v4(sentinel.request) == [sentinel.ip3, sentinel.ip4]
 
 
 def test_DibCtlPlugin_main_ip_fixture(dcp):

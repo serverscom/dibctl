@@ -24,8 +24,16 @@ class DibCtlPlugin(object):
         return self.tos.flavor().get_keys()
 
     @pytest.fixture
-    def ips_v4(self, request):
+    def ips(self, request):
         return self.tos.ips()
+
+    @pytest.fixture
+    def ips_v4(self, request):
+        return self.tos.ips_by_version(version=4)
+
+    @pytest.fixture
+    def ips_v6(self, request):
+        return self.tos.ips_by_version(version=6)
 
     @pytest.fixture
     def main_ip(self, request):
