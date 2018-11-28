@@ -396,7 +396,7 @@ class PrepOS(object):
 
     def ips(self):
         result = []
-        for ips in self.os_instance.networks.values():                
+        for ips in self.os_instance.networks.values():
             result.extend(ips)
         return result
 

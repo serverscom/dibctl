@@ -126,8 +126,10 @@ def test_DibCtlPlugin_wait_for_port_fixture(dcp):
 def test_DibCtlPlugin_ips_fixture(dcp):
     assert dcp.ips(sentinel.request) == [sentinel.ip1, sentinel.ip2]
 
+
 def test_DibCtlPlugin_ips_v4_fixture(dcp):
     assert dcp.ips_v4(sentinel.request) == [sentinel.ip3, sentinel.ip4]
+
 
 def test_DibCtlPlugin_main_ip_fixture(dcp):
     assert dcp.main_ip(sentinel.request) == '192.168.0.1'
