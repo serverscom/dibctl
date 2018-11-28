@@ -1,3 +1,11 @@
+dibctl (6.0.1) xenial; urgency=medium
+
+  * New fixtures ipv4/ipv6
+  * nova fixture
+  * minor fixes
+
+ -- George Shuklin <george.shuklin@gmail.com>  Wed, 27 Nov 2018 14:46:30 +0200
+
 dibctl (0.6.0) xenial; urgency=medium
 
   * Fix compatibility for newer glanceclient
