@@ -240,6 +240,12 @@ class PrepOS(object):
         )
         return self.ip
 
+    def get_image_info(self):
+        self.image_info = self.get_image(
+            self.os_instance.image['id']
+        )
+        return self.image_info
+
     def wait_for_instance(self, timeout_s):
         print(
             "Waiting for instance to become active (time limit is %s s)" %
