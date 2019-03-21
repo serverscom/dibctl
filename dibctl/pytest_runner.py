@@ -90,6 +90,22 @@ class DibCtlPlugin(object):
     def nova(self, request):
         return self.os.nova
 
+    @pytest.fixture
+    def glance(self, request):
+        return self.os.glance
+
+    @pytest.fixture
+    def image_info(self, request):
+        return self.tos.get_image_info()
+
+    @pytest.fixture
+    def image_config(self, request):
+        return self.tos.image
+
+    @pytest.fixture
+    def console_output(self, request):
+        return self.tos.os_instance.get_console_output()
+
 
 def runner(path, ssh, tos, environment_variables, timeout_val, continue_on_fail):
     cmdline = [path, '-v', '-s']
