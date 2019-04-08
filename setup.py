@@ -3,6 +3,7 @@ from setuptools import setup, find_packages, Command
 import sys
 from dibctl import version
 
+
 class PyTest(Command):
     user_options = [('pytest-args=', 'a', "Arguments to pass to py.test")]
 
@@ -16,11 +17,11 @@ class PyTest(Command):
         import pytest
         print("Running unit tests")
         error_code = pytest.main([
-			'build',
-			'--ignore', 'build/doctests',
-			'--ignore', 'build/tests/test_bad_configs.py',
-			'--ignore', 'build/integration_tests'
-		])
+            'build',
+            '--ignore', 'build/doctests',
+            '--ignore', 'build/tests/test_bad_configs.py',
+            '--ignore', 'build/integration_tests'
+        ])
         if error_code:
             sys.exit(error_code)
         print("Running integration tests for docs examples")
@@ -48,10 +49,11 @@ setup(
         'python-novaclient',
         'pytest-timeout',
         'jsonschema',
-        'pytest', # not a mistake - we use pytest as a part of the app
+        'pytest',  # not a mistake - we use pytest as a part of the app
         'semantic_version',
         'requests',
-        'urllib3'
+        'urllib3',
+        'paramiko'
     ],
     entry_points="""
         [console_scripts]
