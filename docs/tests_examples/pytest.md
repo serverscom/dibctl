@@ -98,3 +98,8 @@ Dictionary of current image configuration items from `image.yaml`.
 console_output
 ---
 Text full console log of an instance, stored by OpenStack.
+
+ssh_client
+---
+Unconfigured instance of [paramiko.SSHClient()](https://docs.paramiko.org/en/stable/api/client.html#paramiko.client.SSHClient).
+May be used for testing user authentication with password.

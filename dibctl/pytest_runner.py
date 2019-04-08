@@ -1,5 +1,6 @@
 import sys
 import pytest
+import paramiko
 
 
 class DibCtlPlugin(object):
@@ -15,6 +16,7 @@ class DibCtlPlugin(object):
         except ImportError:
             print("Warning: no testinfra installed, ssh_backend fixture is unavaiable")
             self.testinfra = None
+        self.sshclient = paramiko.SSHClient()
 
     @pytest.fixture
     def flavor(self, request):
@@ -105,6 +107,11 @@ class DibCtlPlugin(object):
     @pytest.fixture
     def console_output(self, request):
         return self.tos.os_instance.get_console_output()
+
+    @pytest.fixture
+    def ssh_client(self):
+        self.sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        return self.sshclient
 
 
 def runner(path, ssh, tos, environment_variables, timeout_val, continue_on_fail):

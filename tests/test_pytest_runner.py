@@ -5,6 +5,7 @@ import os
 import inspect
 import sys
 from mock import sentinel
+import paramiko
 
 
 @pytest.fixture
@@ -148,6 +149,10 @@ def test_DibCtlPlugin_image_config_fixture(dcp):
 
 def test_DibCtlPlugin_console_output_fixture(dcp):
     assert dcp.console_output(sentinel.request) == sentinel.console_out
+
+
+def test_DibCtlPlugin_ssh_client_fixture(dcp):
+    assert isinstance(dcp.ssh_client(), paramiko.client.SSHClient)
 
 
 @pytest.mark.parametrize('key, value', [
