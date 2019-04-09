@@ -1,3 +1,12 @@
+dibctl (6.0.2) xenial; urgency=medium
+
+  * Image-related fixtures - glance, image_info, image_config
+  * console_output fixture
+  * ssh_client fixture
+  * Minor fixes
+
+ -- Dmitriy Nartov <stampit.vbg@gmail.com>  Tue, 09 Apr 2019 11:10:30 +0300
+
 dibctl (6.0.1) xenial; urgency=medium
 
   * New fixtures ipv4/ipv6
