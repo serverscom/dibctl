@@ -290,6 +290,15 @@ def test_get_instance_main_ip(prep_os):
     assert prep_os.ip == sentinel.ip
 
 
+def test_get_image_info(prep_os):
+    image_info = {'id': sentinel.image, 'filename': sentinel.filename}
+    instance_info = {'id': sentinel.instance, 'image': sentinel.image}
+    prep_os.os_instance.image = instance_info
+    with mock.patch.object(prep_os, 'get_image', return_value=image_info):
+        prep_os.get_image_info()
+    assert prep_os.image_info['id'] == sentinel.image
+
+
 def test_wait_for_instance_error(prepare_os, prep_os):
     prep_os.os_instance = mock.MagicMock(status='ERROR')
     with pytest.raises(prepare_os.InstanceError):

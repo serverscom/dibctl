@@ -5,6 +5,7 @@ import os
 import inspect
 import sys
 from mock import sentinel
+import paramiko
 
 
 @pytest.fixture
@@ -35,6 +36,9 @@ def dcp(pytest_runner, ssh):
     tos.os_key_private_file = 'private-file'
     tos.ips.return_value = [sentinel.ip1, sentinel.ip2]
     tos.ips_by_version.return_value = [sentinel.ip3, sentinel.ip4]
+    tos.get_image_info.return_value = sentinel.image_info
+    tos.image = sentinel.image
+    tos.os_instance.get_console_output.return_value = sentinel.console_out
     s = ssh.SSH('192.168.0.1', 'root', 'secret')
     dcp = pytest_runner.DibCtlPlugin(s, tos, {})
     return dcp
@@ -133,6 +137,22 @@ def test_DibCtlPlugin_ips_v4_fixture(dcp):
 
 def test_DibCtlPlugin_main_ip_fixture(dcp):
     assert dcp.main_ip(sentinel.request) == '192.168.0.1'
+
+
+def test_DibCtlPlugin_image_info_fixture(dcp):
+    assert dcp.image_info(sentinel.request) == sentinel.image_info
+
+
+def test_DibCtlPlugin_image_config_fixture(dcp):
+    assert dcp.image_config(sentinel.request) == sentinel.image
+
+
+def test_DibCtlPlugin_console_output_fixture(dcp):
+    assert dcp.console_output(sentinel.request) == sentinel.console_out
+
+
+def test_DibCtlPlugin_ssh_client_fixture(dcp):
+    assert isinstance(dcp.ssh_client(), paramiko.client.SSHClient)
 
 
 @pytest.mark.parametrize('key, value', [

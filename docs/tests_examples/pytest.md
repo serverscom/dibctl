@@ -83,3 +83,23 @@ nova
 A fixture to have access to nova client (python-novaclient) with established credentials to
 openstack.
 
+glance
+---
+Fixture returns configured glance client (python-glanceclient) with established session.
+
+image_info
+---
+Glance metadata of the instance's boot image.
+
+image_config
+---
+Dictionary of current image configuration items from `image.yaml`.
+
+console_output
+---
+Text full console log of an instance, stored by OpenStack.
+
+ssh_client
+---
+Unconfigured instance of [paramiko.SSHClient()](https://docs.paramiko.org/en/stable/api/client.html#paramiko.client.SSHClient).
+May be used for testing user authentication with password.

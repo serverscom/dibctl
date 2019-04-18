@@ -2,6 +2,7 @@ PyYAML>=3.1.0
 diskimage-builder
 python-glanceclient
 python-novaclient
+ipaddress
 keystoneauth1
 pytest
 pytest-timeout
@@ -9,3 +10,4 @@ testinfra
 jsonschema
 urllib3
 semantic_version
+paramiko
