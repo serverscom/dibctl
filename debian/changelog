@@ -1,4 +1,12 @@
-dibctl (6.0.2) xenial; urgency=medium
+dibctl (0.6.3) xenial; urgency=medium
+
+  * Fix nova and glance fixtures
+  * Set ubuntu as gbp debian-branch
+  * Fix typo in versioning
+
+ -- Dmitriy Nartov <stampit.vbg@gmail.com>  Tue, 14 Oct 2019 17:55:30 +0300
+
+dibctl (0.6.1) xenial; urgency=medium
 
   * Image-related fixtures - glance, image_info, image_config
   * console_output fixture
@@ -7,7 +15,7 @@ dibctl (6.0.2) xenial; urgency=medium
 
  -- Dmitriy Nartov <stampit.vbg@gmail.com>  Tue, 09 Apr 2019 11:10:30 +0300
 
-dibctl (6.0.1) xenial; urgency=medium
+dibctl (0.6.1) xenial; urgency=medium
 
   * New fixtures ipv4/ipv6
   * nova fixture
