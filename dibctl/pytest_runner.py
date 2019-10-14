@@ -90,11 +90,11 @@ class DibCtlPlugin(object):
 
     @pytest.fixture
     def nova(self, request):
-        return self.os.nova
+        return self.tos.os.nova
 
     @pytest.fixture
     def glance(self, request):
-        return self.os.glance
+        return self.tos.os.glance
 
     @pytest.fixture
     def image_info(self, request):
