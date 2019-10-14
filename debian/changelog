@@ -6,7 +6,7 @@ dibctl (0.6.3) xenial; urgency=medium
 
  -- Dmitriy Nartov <stampit.vbg@gmail.com>  Tue, 14 Oct 2019 17:55:30 +0300
 
-dibctl (0.6.1) xenial; urgency=medium
+dibctl (0.6.2) xenial; urgency=medium
 
   * Image-related fixtures - glance, image_info, image_config
   * console_output fixture
