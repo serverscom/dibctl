@@ -378,7 +378,10 @@ class TestEnvConfig(EnvConfig):
                                     'type': 'object',
                                     'properties': {
                                         'net_id': SCHEMA_UUID,
-                                        'fixed_ip': {'type': 'string'}
+                                        'v4_fixed_ip': {'type': 'string'},
+                                        'v6_fixed_ip': {'type': 'string'},
+                                        'port_id': {'type': 'string'},
+                                        'tag': {'type': 'string'}
                                     },
                                     'required': ['net_id'],
                                     "additionalProperties": False
