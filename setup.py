@@ -43,7 +43,6 @@ setup(
     packages=find_packages(),
     install_requires=[
         'PyYAML',
-        'diskimage-builder',
         'keystoneauth1',
         'python-glanceclient',
         'python-novaclient',

@@ -175,7 +175,14 @@ class PrepOS(object):
             response = {}
             if 'net_id' in nic:
                 response['net-id'] = nic['net_id']
-            # TODO add fixed IP/mac/etc
+            if 'v4_fixed_ip' in nic:
+                response['v4-fixed-ip'] = nic['v4_fixed_ip']
+            if 'v6_fixed_ip' in nic:
+                response['v6-fixed-ip'] = nic['v6_fixed_ip']
+            if 'port_id' in nic:
+                response['port-id'] = nic['port_id']
+            if 'tag' in nic:
+                response['tag'] = nic['tag']
             yield response
 
     @staticmethod
