@@ -1,3 +1,11 @@
+dibctl (0.6.5) xenial; urgency=medium
+
+  * Add new option to config mapping
+  * Add nics optins for nova
+  * Removed diskimage-builder from depends
+
+ -- Dmitry Shkuratov <dshkuratov@gmail.com>  Wed, 29 Jan 2020 16:11:00 +0200
+
 dibctl (0.6.3) xenial; urgency=medium
 
   * Fix nova and glance fixtures
