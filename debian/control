@@ -10,7 +10,7 @@ Vcs-Browser: https://github.com/amarao
 
 Package: python-dibctl
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}, python-pkg-resources, python-diskimage-builder, python-glanceclient, python-keystoneclient, python-novaclient, python-jsonschema, python-semantic-version, python-ipaddress, python-paramiko
+Depends: ${misc:Depends}, ${python:Depends}, python-pkg-resources, python-glanceclient, python-keystoneclient, python-novaclient, python-jsonschema, python-semantic-version, python-ipaddress, python-paramiko
 Recommends: python-testinfra, python-pytest-timeout, python3-diskimage-builder | python-diskimage-builder
 Description: Diskimage-builder management utility
  Dibctl allows one to manage images, integration tests,
