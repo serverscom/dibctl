@@ -14,9 +14,12 @@ example_env:
     # api_version: 2 #not implemented yet
     flavor: "30" # fuzzy search, try use it as id, then as name. Use flavor_id to use only flavor_id
     nics:
-     - net_id: fe2acef0-4383-4432-8fca-f9e23f835dd5
+      - net_id: fe2acef0-4383-4432-8fca-f9e23f835dd5
+        v4_fixed_ip: '192.168.0.1'
+      - net_id: 631a37ed-8ab5-4463-aae0-eb06d841ee6a
+        port_id: 4c7d017c-6d98-4ce3-b547-2c30be70bab1
+      - net_id: db26f178-c617-47d2-928e-5ed3c0f34b43
     userdata_file: path/to/file
-       #fixed_ip: '192.168.0.1' # not implemented yet
     #security_group: # not implemented yet
     # - default
     # - allow_everything
