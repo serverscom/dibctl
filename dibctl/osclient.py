@@ -81,7 +81,7 @@ def _smart_merge(target, key, orig1, orig2, policy='second'):
             target[key].update(orig2.get(key, {}))
     elif policy == 'max':  # (num types only), use the maximum value
         if key in orig1 or key in orig2:
-            target[key] = max(orig1.get(key, None), orig2.get(key, None))
+            target[key] = max(orig1.get(key, 0), orig2.get(key, 0))
     else:
         raise UnknownPolicy("Policy %s is unknown, can't merge" % policy)
 
@@ -482,7 +482,7 @@ class OSClient(object):
                 if re.search(regexp, network_name):
                     found.append(ip)
         else:
-            found = instance.networks.values()
+            found = list(instance.networks.values())
 
         if len(found) > 1:
                 raise MultipleIPError(
@@ -493,7 +493,7 @@ class OSClient(object):
                     )
                 )
         elif len(found) == 1:
-                return found[0][0]
+            return found[0][0]
         else:
             raise NoIPFoundError(
                 "No matching IP found. Search regexp: %s, networks: %s" % (
