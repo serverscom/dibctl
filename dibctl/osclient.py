@@ -9,7 +9,7 @@ import urllib3
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import simplejson
 import copy
-import config
+from . import config
 
 
 class UnknownPolicy(ValueError):

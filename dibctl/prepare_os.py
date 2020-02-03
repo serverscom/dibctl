@@ -1,13 +1,13 @@
-import osclient
-import timeout
+from . import osclient
+from . import timeout
 import sys
 import uuid
 import socket
 import time
 import os
 import json
-import config
-import ssh
+from . import config
+from . import ssh
 import ipaddress
 
 

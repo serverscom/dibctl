@@ -1,13 +1,13 @@
 import argparse
-import config
+from . import config
 import os
-import dib
+from . import dib
 import sys
-import osclient
-import do_tests
-import prepare_os
-import version
-import image_preprocessing
+from . import osclient
+from . import do_tests
+from . import prepare_os
+from . import version
+from . import image_preprocessing
 from keystoneauth1 import exceptions as keystone_exceptions
 from novaclient import exceptions as novaclient_exceptions
 from glanceclient import exc as glanceclient_exceptions

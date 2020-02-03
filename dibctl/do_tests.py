@@ -1,7 +1,7 @@
-import prepare_os
-import pytest_runner
-import shell_runner
-import config
+from . import prepare_os
+from . import pytest_runner
+from . import shell_runner
+from . import config
 import os
 
 
