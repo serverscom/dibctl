@@ -13,7 +13,7 @@ class DibCtlPlugin(object):
         try:
             import testinfra
             self.testinfra = testinfra
-        except ImportError:
+        except (ImportError,ModuleNotFoundError):
             print("Warning: no testinfra installed, ssh_backend fixture is unavaiable")
             self.testinfra = None
         self.sshclient = paramiko.SSHClient()
