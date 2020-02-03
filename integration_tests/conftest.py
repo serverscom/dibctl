@@ -73,7 +73,7 @@ class HappyVCR(object):
                 self.log.debug("old creds %s" % str(unsafe['auth']))
                 unsafe['auth'] = replacement
                 safe = unsafe
-            request.body = json.dumps(safe)
+            request.body = json.dumps(safe).encode()
             self.log.debug('Consealing request credentials in %s (%s)' % (
                 request.uri, id(request)
             ))
@@ -81,8 +81,8 @@ class HappyVCR(object):
             if len(request.body) > 256:
                 self.log.debug("Body is too large (%s bytes), truncating" % (
                     len(request.body)))
-                request.body = "'1f\r\nBody was too large, " + \
-                    "truncated.\n\r\n0\r\n\r\n'"
+                request.body = b"'1f\r\nBody was too large, " + \
+                    b"truncated.\n\r\n0\r\n\r\n'"
         return request
 
     def filter_response(self, response):
@@ -111,7 +111,7 @@ class HappyVCR(object):
                     self.log.debug("Consealing username")
                     access['user']['name'] = 'consealed name'
                     self.log.debug("Consealing user name")
-                response['body']['string'] = json.dumps({'access': access})
+                response['body']['string'] = json.dumps({'access': access}).encode()
             else:
                 self.log.debug("no access section in the body, ignoring")
         return response
