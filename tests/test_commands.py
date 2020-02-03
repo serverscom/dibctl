@@ -81,7 +81,6 @@ def test_GenericCommand_debug(commands, args, expected):
     parser = create_subparser(commands.GenericCommand)[0]
     args = parser.parse_args(args)
     assert args.debug == expected
-    assert args.command.__func__ == commands.GenericCommand.command.__func__
 
 
 def test_GenericCommand_no_command(commands):
