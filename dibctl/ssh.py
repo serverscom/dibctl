@@ -51,7 +51,7 @@ class SSH(object):
         if self.private_key_file:
             del self.private_key_file
         self.private_key_file = tempfile.NamedTemporaryFile(prefix='saved_dibctl_key_', delete=False)
-        self.private_key_file.write(self.private_key)
+        self.private_key_file.write(self.private_key.encode())
         self.private_key_file.close()
         return self.private_key_file.name
 

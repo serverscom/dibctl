@@ -37,7 +37,7 @@ def test_key_file(ssh):
         mock_tmp.return_value.name = sentinel.filename
         s = ssh.SSH(sentinel.ip, sentinel.user, "secret", sentinel.port)
         assert s.key_file() == sentinel.filename
-        assert mock_tmp.return_value.write.call_args == mock.call('secret')
+        assert mock_tmp.return_value.write.call_args == mock.call(b'secret')
 
 
 def test_key_file_name(ssh):
@@ -164,12 +164,12 @@ def test_shell_simple_run(ssh):
     with mock.patch.object(ssh.SSH, "COMMAND_NAME", "echo"):
         s = ssh.SSH('192.168.0.1', 'user', 'secret')
         rfd, wfd = os.pipe()
-        w = os.fdopen(wfd, 'w', 0)
+        w = os.fdopen(wfd, 'w', 1)
         with mock.patch.multiple(ssh.sys, stdout=w, stderr=w, stdin=None):
             s.shell({}, 'test message')
         output = os.read(rfd, 1000)
-        assert 'echo' in output  # should be ssh, but test demands
-        assert 'user@192.168.0.1' in output
+        assert b'echo' in output  # should be ssh, but test demands
+        assert b'user@192.168.0.1' in output
 
 
 @pytest.mark.parametrize('key, value', [
