@@ -26,8 +26,8 @@ class NoDibError(BadDibVersion):
 def _version(text):
     try:
         return semantic_version.Version.coerce(text)
-    except StandardError as e:
-        raise BadVersion("''%s' is not a proper version: %s" % (text, e.message))
+    except ValueError as e:
+        raise BadVersion("''%s' is not a proper version: %s" % (text, str(e)))
 
 
 def validate_version(min_version, max_version):

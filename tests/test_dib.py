@@ -98,11 +98,6 @@ def test_get_installed_version_no(dib):
         with pytest.raises(dib.NoDibError):
             dib.get_installed_version()
 
-
-def test_get_installed_version_actual(dib):
-    assert dib.get_installed_version() is not None
-
-
 def test_version_good(dib):
     assert dib._version('1.0.0') == dib.semantic_version.Version('1.0.0')
 
@@ -123,7 +118,9 @@ def test_version_bad(dib):
     ['0.0.1', '999.99.999']
 ])
 def test_validate_version_pass(dib, min_version, max_version):
-    assert dib.validate_version(min_version, max_version) is True
+    with mock.patch.object(dib.pkg_resources, 'get_distribution') as mock_gd:
+        mock_gd.return_value.version = '1.0.0'
+        assert dib.validate_version(min_version, max_version) is True
 
 
 @pytest.mark.parametrize('min_version, max_version', [
