@@ -468,7 +468,7 @@ def test_ips(prep_os):
         'net2': [sentinel.ip2, sentinel.ip3]
     }
     ips = prep_os.ips()
-    assert ips.sort() == [sentinel.ip1, sentinel.ip2, sentinel.ip3].sort()
+    assert set(ips) == set([sentinel.ip1, sentinel.ip2, sentinel.ip3])
 
 
 @pytest.mark.parametrize('arg', [None, "somevalue", ''])
