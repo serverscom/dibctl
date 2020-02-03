@@ -444,7 +444,7 @@ class HelpCommand():
         else:
             print("Use help [name] to show help for given command")
             print("List of available commands:")
-            print("\n".join(list(self.subparsers.choices.iterkeys())))
+            print("\n".join(list(self.subparsers.choices.keys())))
 
 
 class Main(object):
@@ -452,7 +452,9 @@ class Main(object):
         self.parser = argparse.ArgumentParser()
         self.parser.add_argument('--debug', help='Display this message', action='store_true', default=False)
         self.parser.add_argument('--version', help='Display version', action='version', version=version.VERSION_STRING)
-        subparsers = self.parser.add_subparsers(title='commands')
+        subparsers = self.parser.add_subparsers(title='commands',  dest='command')
+        # https://stackoverflow.com/questions/22990977/why-does-this-argparse-code-behave-differently-between-python-2-and-3
+        subparsers.required = True
         BuildCommand(subparsers)
         TestCommand(subparsers)
         ShellCommand(subparsers)
