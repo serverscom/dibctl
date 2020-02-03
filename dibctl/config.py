@@ -224,10 +224,10 @@ class Config(object):
         return self.config.items()
 
     def __iter__(self):
-        return self.config.iteritems()
+        yield from self.config.items()
 
-    def iteritems(self):
-        return self.config.iteritems()
+    # def iteritems(self):
+    #     return self.config.items()
 
     def __contains__(self, key):
         try:
