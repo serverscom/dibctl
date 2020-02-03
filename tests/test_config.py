@@ -376,12 +376,6 @@ def test_config_dict_conversion(config):
     assert y == d
 
 
-def test_config_iteritems(config):
-    d = {"a": 1}
-    l = list(config.Config(d).iteritems())
-    assert l == [('a', 1)]
-
-
 def test_config_items(config):
     d = {"a": 1}
     l = list(config.Config(d).items())

@@ -253,7 +253,7 @@ class OSClient(object):
     @staticmethod
     def map_creds(creds, version, global_mapping):
         new_creds = {}
-        for target_name, cred_name in global_mapping[version].iteritems():
+        for target_name, cred_name in global_mapping[version].items():
             new_creds[target_name] = creds[cred_name]
         return new_creds
 
@@ -264,7 +264,7 @@ class OSClient(object):
         creds = {}
         for name in filtered_overrides.keys():
             print("Found %s in the environment, will use it" % name)
-        for target, cfg in self.OPTION_NAMINGS.iteritems():
+        for target, cfg in self.OPTION_NAMINGS.items():
             creds.update(self._get_generic_field(
                 keystone_data,
                 filtered_overrides,
@@ -478,7 +478,7 @@ class OSClient(object):
         'return IP for instance in a ginven network'
         found = []
         if regexp:
-            for network_name, ip in instance.networks.iteritems():
+            for network_name, ip in instance.networks.items():
                 if re.search(regexp, network_name):
                     found.append(ip)
         else:

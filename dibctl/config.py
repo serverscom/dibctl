@@ -226,9 +226,6 @@ class Config(object):
     def __iter__(self):
         yield from self.config.items()
 
-    # def iteritems(self):
-    #     return self.config.items()
-
     def __contains__(self, key):
         try:
             self.__getitem__(key)
