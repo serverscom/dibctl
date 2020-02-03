@@ -82,8 +82,8 @@ def test_gather_tests_single_file_exec(shell_runner):
     os.mkdir(tdir3)
     tmp1 = os.path.join(tdir, uuid2)
     tmp2 = os.path.join(tdir3, uuid3)
-    file(tmp1, 'w').write(b'pytest')
-    file(tmp2, 'w').write(b'pytest')
+    open(tmp1, 'w').write('pytest')
+    open(tmp2, 'w').write('pytest')
     os.chmod(tmp1, 0o600)
     os.chmod(tmp2, 0o700)
     assert shell_runner.gather_tests(tdir) == [tmp2]
@@ -149,7 +149,7 @@ def test_runner_all_with_continue(shell_runner, ssh):
 
 
 if __name__ == "__main__":
-    ourfilename = os.path.abspath(inspect.getfile(inspect.currentframe()))
+    ourfilename = os.path.abspath(inspect.getopen(inspect.currentframe()))
     currentdir = os.path.dirname(ourfilename)
     parentdir = os.path.dirname(currentdir)
     file_to_test = os.path.join(
