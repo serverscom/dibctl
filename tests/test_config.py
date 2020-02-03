@@ -172,7 +172,7 @@ def test_add_config_no_file(config):
 
 def test_add_config_simple(config):
     with tempfile.NamedTemporaryFile() as mock_cfg:
-        mock_cfg.write('a: b')
+        mock_cfg.write(b'a: b')
         mock_cfg.flush()
         c = config.Config()
         c.add_config(mock_cfg.name)
@@ -182,10 +182,10 @@ def test_add_config_simple(config):
 
 def test_add_config_double(config, capfd):
     with tempfile.NamedTemporaryFile() as mock_cfg1:
-        mock_cfg1.write('some_label: bad!')
+        mock_cfg1.write(b'some_label: bad!')
         mock_cfg1.flush()
         with tempfile.NamedTemporaryFile() as mock_cfg2:
-            mock_cfg2.write('some_label: good')
+            mock_cfg2.write(b'some_label: good')
             mock_cfg2.flush()
             c = config.Config()
             c.add_config(mock_cfg1.name)

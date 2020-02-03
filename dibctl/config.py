@@ -178,8 +178,7 @@ class Config(object):
     def gather_snippets(self, directory):
         content = [os.path.join(directory, f) for f in os.listdir(directory)]
         files = filter(os.path.isfile, content)
-        files.sort()
-        return files
+        return sorted(files)
 
     def find_all_configs(self):
         for basepath in self.CONFIG_SEARCH_PATH:
