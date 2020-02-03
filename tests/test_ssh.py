@@ -25,7 +25,7 @@ def test_user_host_and_port(ssh, ip, port, user, output):
 
 def test_key_file_with_override(ssh):
     t = tempfile.NamedTemporaryFile()
-    t.write('secret')
+    t.write(b'secret')
     t.flush()
     s = ssh.SSH(sentinel.ip, sentinel.user, None, sentinel.port, override_ssh_key_filename=t.name)
     assert s.key_file() == t.name
@@ -62,7 +62,7 @@ def test_key_file_remove_afterwards(ssh):
 
 def test_keep_key_file_with_override(ssh):
     t = tempfile.NamedTemporaryFile()
-    t.write('secret')
+    t.write(b'secret')
     t.flush()
     s = ssh.SSH(sentinel.ip, sentinel.user, None, sentinel.port, override_ssh_key_filename=t.name)
     assert s.keep_key_file() == t.name

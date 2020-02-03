@@ -82,8 +82,8 @@ def test_gather_tests_single_file_exec(shell_runner):
     os.mkdir(tdir3)
     tmp1 = os.path.join(tdir, uuid2)
     tmp2 = os.path.join(tdir3, uuid3)
-    file(tmp1, 'w').write('pytest')
-    file(tmp2, 'w').write('pytest')
+    file(tmp1, 'w').write(b'pytest')
+    file(tmp2, 'w').write(b'pytest')
     os.chmod(tmp1, 0o600)
     os.chmod(tmp2, 0o700)
     assert shell_runner.gather_tests(tdir) == [tmp2]

@@ -116,7 +116,7 @@ def test_context_delete_after_upload_no_use_existing(i_p):
 def test_context_file_existed_before_upload(i_p):
     with tempfile.NamedTemporaryFile(delete=False) as t:
         tempname = t.name
-        t.write("no!")
+        t.write(b"no!")
     del t
     with i_p.Preprocess(
         tempname,

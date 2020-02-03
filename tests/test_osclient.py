@@ -162,7 +162,7 @@ def test_find_local_version(osclient, versions, out_versions):
     for version in versions:
         mock_identity.__setattr__(version, True)
     with mock.patch.object(osclient, 'identity', mock_identity):
-        assert osclient.OSClient._find_local_versions() == out_versions
+        assert list(osclient.OSClient._find_local_versions()) == out_versions
 
 
 def test_find_local_real_v2_or_v3(osclient):

@@ -242,7 +242,7 @@ def test__userdata_with_text_userdata(prepare_os, mock_image_cfg, mock_env_cfg_w
 
 def test__userdata_with_userdata_file(prepare_os, mock_image_cfg, config):
     with tempfile.NamedTemporaryFile() as t:
-        t.write('{"foo":"bar"}')
+        t.write(b'{"foo":"bar"}')
         t.flush()
         env = config.Config({
             'keystone': {
