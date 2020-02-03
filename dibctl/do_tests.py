@@ -76,7 +76,7 @@ class DoTests(object):
             'shell': shell_runner.runner
         }
         found = False
-        for runner_name, runner_func in RUNNERS.iteritems():
+        for runner_name, runner_func in RUNNERS.items():
             if runner_name in test:
                 if found:
                     raise BadTestConfigError("Duplicate runner name in  %s" % str(test))
