@@ -460,8 +460,10 @@ class UploadEnvConfig(EnvConfig):
 def get_max(config1, config2, path, default_value):
     value1 = config1.get(path, None)
     value2 = config2.get(path, None)
-    guess = max(value1, value2)
-    if guess is None:
+    if value1 is None and value2 is None:
         return default_value
-    else:
-        return guess
+    if value1 is None and value2 is not None:
+        return value2
+    if value1 is not None and value2 is None:
+        return value1
+    return max(value1, value2)
