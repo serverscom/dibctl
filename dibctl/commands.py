@@ -502,7 +502,7 @@ def main(line=None):
         glanceclient_exceptions.HTTPNotFound,
         IOError
     ) as e:
-        print("Error: %s (%s)" % (str(e.message), e.__class__))
+        print("Error: %s (%s)" % (str(e), e.__class__))
         code = 1
     except Exception as e:
         print("Bad exception: %s %s" % (e, e.__class__))
