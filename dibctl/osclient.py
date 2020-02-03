@@ -340,7 +340,7 @@ class OSClient(object):
             KeyError,
             simplejson.scanner.JSONDecodeError
         ) as e:
-            raise DiscoveryError(e.message)
+            raise DiscoveryError(str(e))
 
         message = "Unable to find common version to use for keystone " \
                   "authorization. keystoneauth1 library " \

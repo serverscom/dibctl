@@ -14,7 +14,7 @@ def unwrap_config(prefix, config):
     'returns linear key-value list from a tree'
     return_value = {}
     if type(config) is dict:
-        for key, value in config.iteritems():
+        for key, value in config.items():
             new_prefix = prefix + '_' + str(key).upper()
             return_value.update(unwrap_config(new_prefix, value))
     elif type(config) is list:

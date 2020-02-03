@@ -23,7 +23,7 @@ class Preprocess(object):
             raise config.InvaidConfigError(
                 'Invalid string interpolation in output filename: %s: %s' % (
                     self.preprocessing_settings["output_filename"],
-                    e.message
+                    str(e)
                 )
             )
 
@@ -34,7 +34,7 @@ class Preprocess(object):
             raise config.InvaidConfigError(
                 'Invalid string interpolation in cmdline: %s: %s' % (
                         self.preprocessing_settings["cmdline"],
-                        e.message
+                        str(e)
                     )
                 )
 

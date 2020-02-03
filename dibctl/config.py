@@ -169,7 +169,7 @@ class Config(object):
             jsonschema.validate(snippet_content, self.SCHEMA)
         except jsonschema.exceptions.ValidationError as e:
             error_message = "There is an error in the file '%s': %s" % (
-                config_filename, e.message
+                config_filename, str(e)
             )
             raise InvaidConfigError(error_message)
         self.config_list.append(config_filename)
