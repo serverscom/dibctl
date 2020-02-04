@@ -60,7 +60,7 @@ class GenericCommand(object):
                 help='Outut filename for image (overrides default)',
                 dest='filename'
             )
-        if 'img-config' in self.options:
+        if 'img-config' in self.options or 'img-config-no-file' in self.options:
             self.parser.add_argument('--images-config', help='Use specific file instead of images.yaml')
         if 'upload-config' in self.options:
             self.parser.add_argument('--upload-config', help='Use specific file instead of upload.yaml')
@@ -79,6 +79,10 @@ class GenericCommand(object):
             self.image_config = config.ImageConfig(
                 config_file=self.args.images_config,
                 override_filename=self.args.filename
+            )
+        if 'img-config-no-file' in self.options:
+            self.image_config = config.ImageConfig(
+                config_file=self.args.images_config
             )
         if 'upload-config' in self.options:
             self.upload_config = config.UploadEnvConfig(
@@ -354,7 +358,7 @@ class UploadCommand(GenericCommand):
 
 class RotateCommand(GenericCommand):
     name = 'rotate'
-    help = 'Remove unused obsolete images'
+    help = 'Remove all unused obsolete images'
     options = ['upload-config', 'uploadlabel']
 
     def add_options(self):
@@ -366,6 +370,34 @@ class RotateCommand(GenericCommand):
 
     def _command(self):
         candidate_list = self.os.find_obsolete_unused_candidates()
+        if not candidate_list:
+            print("No unused obsolete images found.")
+            return 0
+        if self.args.dry_run:
+            print("Images are obsolete and unused, but wouldn't be removed per --dry-run:")
+        else:
+            print("Images are obsolete and unused and will be removed:")
+        for candidate in candidate_list:
+            print("%s" % (candidate,))
+            if not self.args.dry_run:
+                self.os.delete_image(candidate)
+        return 0
+
+class CleanupCommand(GenericCommand):
+    name = 'cleanup'
+    help = 'Remove unused obsolete images for a specific label'
+    options = ['upload-config', 'uploadlabel', 'imagelabel', 'img-config-no-file']
+
+    def add_options(self):
+        self.parser.add_argument(
+            '--dry-run',
+            action='store_true',
+            help="Do not delete anything, just print candidates"
+        )
+
+    def _command(self):
+        name = self.glance_data['name']
+        candidate_list = self.os.find_obsolete_unused_candidates(name)
         if not candidate_list:
             print("No unused obsolete images found.")
             return 0
@@ -458,6 +490,7 @@ class Main(object):
         ShellCommand(subparsers)
         UploadCommand(subparsers)
         RotateCommand(subparsers)
+        CleanupCommand(subparsers)
         ObsoleteCommand(subparsers)
         TransferCommand(subparsers)
         ValidateCommand(subparsers)

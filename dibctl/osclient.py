@@ -449,10 +449,15 @@ class OSClient(object):
             # else:
                 # print("Image for instance %s has been deleted" % instance)
 
-    def find_obsolete_unused_candidates(self):
-        all_obsolete_images = self.glance.images.list(
-            filters={"properties": {'obsolete': 'true'}}
-        )
+    def find_obsolete_unused_candidates(self, namefilter=None):
+        if namefilter:
+            all_obsolete_images = self.glance.images.list(
+                filters={"properties": {'obsolete': 'true'}, 'name': namefilter}
+            )
+        else:
+            all_obsolete_images = self.glance.images.list(
+                filters={"properties": {'obsolete': 'true'}}
+            )
         used_images_set = set(self._all_used_images())
         obsolete_images_set = set(image.id for image in all_obsolete_images)
         return obsolete_images_set - used_images_set
