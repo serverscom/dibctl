@@ -1,4 +1,5 @@
 import glanceclient
+import logging
 from keystoneauth1 import identity
 from keystoneauth1 import session
 import novaclient.client
@@ -189,9 +190,20 @@ class OSClient(object):
         overrides={},
         ca_path='/etc/ssl/certs',
         insecure=False,
-        disable_warnings=False
+        disable_warnings=False,
+        debug=False
     ):
-
+        self.debug = debug
+        if debug:
+            logging.basicConfig(level=logging.DEBUG)
+            glancelog = logging.getLogger('glanceclient')
+            glancelog.addHandler(logging.StreamHandler())
+            glancelog.setLevel(logging.DEBUG)
+            novalog = logging.getLogger('novaclient')
+            novalog.addHandler(logging.StreamHandler())
+            novalog.setLevel(logging.DEBUG)
+        else:
+            self.logger = None
         if disable_warnings:
             requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
             urllib3.disable_warnings()
