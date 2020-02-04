@@ -464,7 +464,10 @@ class OSClient(object):
     def find_obsolete_unused_candidates(self, namefilter=None):
         if namefilter:
             all_obsolete_images = self.glance.images.list(
-                filters={"properties": {'obsolete': 'true'}, 'name': namefilter}
+                filters={
+                    "properties": {'obsolete': 'true'},
+                    'name': self.OBSOLETE_PREFIX + " " + namefilter
+                }
             )
         else:
             all_obsolete_images = self.glance.images.list(
