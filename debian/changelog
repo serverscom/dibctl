@@ -1,3 +1,10 @@
+dibctl (0.7.0) xenial; urgency=medium
+
+  * new command rotate-single to perform rotate for a given label from image config.
+  * --debug now enable glance/nova logs
+
+ -- Dmitry Shkuratov <dshkuratov@gmail.com>  Wed, 03 Feb 2020 16:31:00 +0200
+
 dibctl (0.6.5) xenial; urgency=medium
 
   * Add new option to config mapping
