@@ -1,4 +1,5 @@
 import glanceclient
+import logging
 from keystoneauth1 import identity
 from keystoneauth1 import session
 import novaclient.client
@@ -189,9 +190,20 @@ class OSClient(object):
         overrides={},
         ca_path='/etc/ssl/certs',
         insecure=False,
-        disable_warnings=False
+        disable_warnings=False,
+        debug=False
     ):
-
+        self.debug = debug
+        if debug:
+            logging.basicConfig(level=logging.DEBUG)
+            glancelog = logging.getLogger('glanceclient')
+            glancelog.addHandler(logging.StreamHandler())
+            glancelog.setLevel(logging.DEBUG)
+            novalog = logging.getLogger('novaclient')
+            novalog.addHandler(logging.StreamHandler())
+            novalog.setLevel(logging.DEBUG)
+        else:
+            self.logger = None
         if disable_warnings:
             requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
             urllib3.disable_warnings()
@@ -449,10 +461,18 @@ class OSClient(object):
             # else:
                 # print("Image for instance %s has been deleted" % instance)
 
-    def find_obsolete_unused_candidates(self):
-        all_obsolete_images = self.glance.images.list(
-            filters={"properties": {'obsolete': 'true'}}
-        )
+    def find_obsolete_unused_candidates(self, namefilter=None):
+        if namefilter:
+            all_obsolete_images = self.glance.images.list(
+                filters={
+                    "properties": {'obsolete': 'true'},
+                    'name': self.OBSOLETE_PREFIX + " " + namefilter
+                }
+            )
+        else:
+            all_obsolete_images = self.glance.images.list(
+                filters={"properties": {'obsolete': 'true'}}
+            )
         used_images_set = set(self._all_used_images())
         obsolete_images_set = set(image.id for image in all_obsolete_images)
         return obsolete_images_set - used_images_set
