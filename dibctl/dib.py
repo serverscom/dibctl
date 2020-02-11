@@ -31,7 +31,8 @@ def _version(text):
 
 
 def validate_version(min_version, max_version):
-    dib_version = get_installed_version()
+    if min_version or max_version:
+        dib_version = get_installed_version()
     if min_version:
         if dib_version < _version(min_version):
             raise BadDibVersion(
