@@ -410,19 +410,19 @@ def test_osclient_upload_image_all_args(osclient, mock_os):
             min_disk=sentinel.disk_size,
             min_ram=sentinel.min_ram,
             protected=sentinel.protected,
-            meta={sentinel.key: sentinel.value}
+            meta={"key": "value"}
         )
         assert mock_os.glance.images.create.call_args == mock.call(
             name=sentinel.name,
             is_public='True',
             container_format=sentinel.container_format,
             disk_format=sentinel.disk_format,
-            data=sentinel.opened_file,
             min_disk=sentinel.disk_size,
             min_ram=sentinel.min_ram,
             protected=sentinel.protected,
-            properties={sentinel.key: sentinel.value}
         )
+        assert mock_os.glance.images.upload.called
+        assert mock_os.glance.images.update.called
 
 
 def test_osclient_older_images(osclient, mock_os):
@@ -435,7 +435,7 @@ def test_osclinet_mark_image_obsolete(osclient, mock_os):
     assert mock_os.glance.images.update.call_args == mock.call(
             sentinel.uuid,
             name="Obsolete Name",
-            properties={"obsolete": "True"}
+            obsolete="true"
         )
 
 
