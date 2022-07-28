@@ -33,7 +33,8 @@ def prep_os(prepare_os):
     prep_os.cleanup_timeout = 1
     prep_os.keypair_timeout = 1
     prep_os.create_timeout = 1
-    prep_os.os_image = sentinel.image
+    prep_os.os_image = mock.MagicMock()
+    prep_os.os_image.id = sentinel.image_id
     prep_os.os_instance = sentinel.instance
     prep_os.os_key = sentinel.key
     prep_os.ssh = None
