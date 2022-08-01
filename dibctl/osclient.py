@@ -393,7 +393,8 @@ class OSClient(object):
             protected=protected,
 
         )
-        self.glance.images.update(img.id, **dict(meta))
+        cleanup_meta = dict((str(k),str(v)) for (k,v) in meta.items())  # force everything to stringify
+        self.glance.images.update(img.id, **dict(cleanup_meta))
         self.glance.images.upload(img.id, self._file_to_upload(filename))
 
 
