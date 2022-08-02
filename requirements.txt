@@ -4,7 +4,7 @@ python-glanceclient
 python-novaclient
 ipaddress
 keystoneauth1
-pytest
+pytest < 4.0.0
 pytest-timeout
 testinfra
 jsonschema

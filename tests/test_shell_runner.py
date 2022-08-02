@@ -57,7 +57,7 @@ def test_gather_tests_bad_file(shell_runner):
 
 def test_gather_tests_single_file_no_exec(shell_runner):
     ftmp = tempfile.NamedTemporaryFile(delete=False)
-    os.chmod(ftmp.name, 0600)
+    os.chmod(ftmp.name, 0o600)
     assert shell_runner.gather_tests(ftmp.name) is None
     ftmp.close()
     os.remove(ftmp.name)
@@ -65,7 +65,7 @@ def test_gather_tests_single_file_no_exec(shell_runner):
 
 def test_gather_tests_single_file_exec(shell_runner):
     ftmp = tempfile.NamedTemporaryFile(delete=False)
-    os.chmod(ftmp.name, 0700)
+    os.chmod(ftmp.name, 0o700)
     assert shell_runner.gather_tests(ftmp.name) == ftmp.name
     ftmp.close()
     os.remove(ftmp.name)
@@ -84,8 +84,8 @@ def test_gather_tests_single_file_exec(shell_runner):
     tmp2 = os.path.join(tdir3, uuid3)
     file(tmp1, 'w').write('pytest')
     file(tmp2, 'w').write('pytest')
-    os.chmod(tmp1, 0600)
-    os.chmod(tmp2, 0700)
+    os.chmod(tmp1, 0o600)
+    os.chmod(tmp2, 0o700)
     assert shell_runner.gather_tests(tdir) == [tmp2]
     os.remove(tmp1)
     os.remove(tmp2)

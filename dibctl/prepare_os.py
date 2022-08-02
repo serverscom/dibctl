@@ -320,7 +320,7 @@ class PrepOS(object):
     def cleanup_image(self):
         self._cleanup(
             'image',
-            obj=self.os_image,
+            obj=self.os_image.id,
             flag=self.delete_image,
             call=self.os.delete_image
         )

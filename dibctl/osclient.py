@@ -118,7 +118,6 @@ def smart_join_glance_config(img_conf, env_conf):
 class OSClient(object):
     OS_CACERT = '/etc/ssl/certs'
     OBSOLETE_PREFIX = "Obsolete"
-    OBSOLETE_PROP = "obsolete"
     SUPPORTED_VERSIONS = set(('v2', 'v3'))
     OPTION_NAMINGS = {
         'username': {
@@ -243,8 +242,8 @@ class OSClient(object):
 
     @staticmethod
     def get_glance(session):
-        # TODO support for 'v2'
-        return glanceclient.client.Client('1', session=session)
+        # TODO support for 'v3'
+        return glanceclient.client.Client('2', session=session)
 
     @staticmethod
     def _get_generic_field(lowpriority, hipriority, target, cfg):
@@ -392,9 +391,12 @@ class OSClient(object):
             min_disk=min_disk,
             min_ram=min_ram,
             protected=protected,
-            data=self._file_to_upload(filename),
-            properties=meta
+
         )
+        cleanup_meta = dict((str(k),str(v)) for (k,v) in meta.items())  # force everything to stringify
+        self.glance.images.update(img.id, **dict(cleanup_meta))
+        self.glance.images.upload(img.id, self._file_to_upload(filename))
+
 
         if share_with_tenants:
             self.share_image(img, share_with_tenants)
@@ -412,18 +414,17 @@ class OSClient(object):
 
     def mark_image_obsolete(self, name, uuid):
         obsoleted_name = self.OBSOLETE_PREFIX + " " + name
-        meta = {self.OBSOLETE_PROP: str(True)}
         return self.glance.images.update(
             uuid,
             name=obsoleted_name,
-            properties=meta
+            obsolete="true"
         )
 
     def get_image(self, uuid):
         return self.glance.images.get(uuid)
 
-    def delete_image(self, image):
-        self.glance.images.delete(image)
+    def delete_image(self, image_id):
+        self.glance.images.delete(image_id)
 
     def new_keypair(self, name):
         return self.nova.keypairs.create(name)
@@ -465,13 +466,13 @@ class OSClient(object):
         if namefilter:
             all_obsolete_images = self.glance.images.list(
                 filters={
-                    "properties": {'obsolete': 'true'},
+                    'obsolete': 'true',
                     'name': self.OBSOLETE_PREFIX + " " + namefilter
                 }
             )
         else:
             all_obsolete_images = self.glance.images.list(
-                filters={"properties": {'obsolete': 'true'}}
+                filters={'obsolete': 'true'}
             )
         used_images_set = set(self._all_used_images())
         obsolete_images_set = set(image.id for image in all_obsolete_images)
