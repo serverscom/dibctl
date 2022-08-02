@@ -1,3 +1,9 @@
+dibctl (0.8.1) xenial; urgency=medium
+
+  * Support for glance API v2
+
+ -- amarao <george.shuklin@gmail.com>  Tue, 02 Aug 2022 12:24:21 +0300
+
 dibctl (0.7.0) xenial; urgency=medium
 
   * new command rotate-single to perform rotate for a given label from image config.
