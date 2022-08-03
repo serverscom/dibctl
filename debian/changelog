@@ -1,3 +1,9 @@
+dibctl (0.8.2) xenial; urgency=medium
+
+  * Fix public image upload (visiblity=public)
+
+ -- amarao <george.shuklin@gmail.com>  Wed, 03 Aug 2022 12:16:00 +0300
+
 dibctl (0.8.1) xenial; urgency=medium
 
   * Support for glance API v2
