@@ -414,7 +414,7 @@ def test_osclient_upload_image_all_args(osclient, mock_os):
         )
         assert mock_os.glance.images.create.call_args == mock.call(
             name=sentinel.name,
-            is_public='True',
+            visibility="public",
             container_format=sentinel.container_format,
             disk_format=sentinel.disk_format,
             min_disk=sentinel.disk_size,

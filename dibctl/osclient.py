@@ -383,9 +383,13 @@ class OSClient(object):
         share_with_tenants=[],
         meta={}
     ):
+        if public:
+            visibility = "public"
+        else:
+            visibility = "shared"
         img = self.glance.images.create(
             name=name,
-            is_public=str(public),
+            visibility=visibility,
             disk_format=disk_format,
             container_format=container_format,
             min_disk=min_disk,
